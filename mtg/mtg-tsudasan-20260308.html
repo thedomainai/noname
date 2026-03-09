@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTG 中林×津田 — 論点整理 2026-03-08</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040;  --ink-600: #525252; --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a;  --ink-300: #a3a3a3; --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0;  --ink-50:  #f0f0f0;
+
+  --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155;
+
+  --paper-50:  #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600: #e8e7e3; --paper-700: #e3e2de;
+
+  --ink-blue:  #2563eb;
+  --ink-green: #16a34a;
+  --ink-amber: #d97706;
+  --ink-red:   #dc2626;
+  --wash-blue:  #dbeafe;
+  --wash-green: #dcfce7;
+  --wash-amber: #fef3c7;
+  --wash-red:   #fee2e2;
+
+  --bg-page: var(--paper-50);
+  --bg-surface: var(--paper-100);
+  --bg-recessed: var(--paper-300);
+  --border-default: var(--slate-200);
+  --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000);
+  --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900);
+  --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500);
+  --text-muted: var(--slate-400);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── Page Header ─── */
+.page-header {
+  background: var(--paper-50);
+  border-bottom: 2px solid var(--ink-1000);
+  padding: 48px 0 32px;
+}
+.page-header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.header-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.header-date {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.page-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 720px;
+}
+.participants {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.participant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--paper-300);
+  border: 1px solid var(--border-default);
+  font-size: 12px;
+  color: var(--text-primary);
+}
+.participant-chip .role {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ─── Sticky Nav ─── */
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(253, 253, 252, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default);
+  z-index: 10;
+}
+.sticky-nav-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.nav-item {
+  display: block;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nav-item:hover,
+.nav-item.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--ink-blue);
+}
+
+/* ─── Main ─── */
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 64px 48px;
+}
+
+/* ─── Section ─── */
+.section {
+  margin-bottom: 64px;
+}
+.section-header {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ink-1000);
+}
+.section-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+}
+.section-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ─── Block types ─── */
+.block {
+  margin-bottom: 24px;
+}
+.block-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding: 3px 8px;
+}
+.block-label.fact   { background: var(--paper-300); color: var(--ink-600); border: 1px solid var(--border-strong); }
+.block-label.tradeoff { background: var(--wash-amber); color: var(--ink-amber); border: 1px solid var(--ink-amber); }
+.block-label.conclusion { background: var(--wash-blue); color: var(--ink-blue); border: 1px solid var(--ink-blue); }
+.block-label.analysis { background: var(--wash-green); color: var(--ink-green); border: 1px solid var(--ink-green); }
+.block-label.open { background: var(--wash-red); color: var(--ink-red); border: 1px solid var(--ink-red); }
+
+.block-content {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 16px 20px;
+}
+.block-content.fact-block { border-left: 3px solid var(--ink-400); }
+.block-content.tradeoff-block { border-left: 3px solid var(--ink-amber); }
+.block-content.conclusion-block { border-left: 3px solid var(--ink-blue); }
+.block-content.analysis-block { border-left: 3px solid var(--ink-green); }
+.block-content.open-block { border-left: 3px solid var(--ink-red); }
+
+.block-content ul, .block-content ol {
+  padding-left: 20px;
+}
+.block-content li {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.block-content p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.block-content p:last-child { margin-bottom: 0; }
+
+/* ─── Tradeoff 2-col ─── */
+.tradeoff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tradeoff-card {
+  padding: 14px 16px;
+  background: var(--paper-100);
+}
+.tradeoff-card.vs-low { border: 1px solid var(--border-default); border-top: 3px solid var(--ink-400); }
+.tradeoff-card.vs-high { border: 1px solid var(--border-default); border-top: 3px solid var(--ink-blue); }
+.tradeoff-card .tc-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.tradeoff-card .tc-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.tradeoff-card ul { padding-left: 16px; }
+.tradeoff-card li {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* ─── Table ─── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: var(--paper-300);
+  border-bottom: 1.5px solid var(--ink-900);
+  padding: 10px 12px;
+  text-align: left;
+}
+.data-table td {
+  padding: 10px 12px;
+  border-bottom: 0.5px solid var(--ink-100);
+  color: var(--text-primary);
+  line-height: 1.5;
+  vertical-align: top;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--paper-300); }
+.data-table .badge-low { padding: 2px 7px; font-size: 11px; font-weight: 600; background: var(--wash-green); color: var(--ink-green); border: 1px solid var(--ink-green); }
+.data-table .badge-mid { padding: 2px 7px; font-size: 11px; font-weight: 600; background: var(--wash-amber); color: var(--ink-amber); border: 1px solid var(--ink-amber); }
+.data-table .badge-high { padding: 2px 7px; font-size: 11px; font-weight: 600; background: var(--wash-red); color: var(--ink-red); border: 1px solid var(--ink-red); }
+.data-table .badge-pilot { padding: 2px 7px; font-size: 11px; font-weight: 600; background: var(--wash-blue); color: var(--ink-blue); border: 1px solid var(--ink-blue); }
+
+/* ─── Action table ─── */
+.action-table-wrap {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+}
+.action-date-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--paper-300);
+  color: var(--text-primary);
+  padding: 2px 6px;
+}
+
+/* ─── Remaining issues ─── */
+.issue-list { display: flex; flex-direction: column; gap: 10px; }
+.issue-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-left: 3px solid var(--ink-red);
+}
+.issue-num {
+  font-size: 18px;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  color: var(--ink-red);
+  line-height: 1.2;
+  min-width: 20px;
+}
+.issue-body {}
+.issue-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.issue-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ─── Callout ─── */
+.callout {
+  padding: 14px 18px;
+  border: 1px solid var(--border-default);
+  border-left: 3px solid var(--ink-blue);
+  background: var(--wash-blue);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* ─── Section row layouts ─── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+/* ─── Metric box ─── */
+.metric-box {
+  padding: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  text-align: center;
+}
+.metric-val {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--text-heading);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.metric-lbl {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ─── Timeline bar ─── */
+.timeline-bar {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 24px;
+  height: 8px;
+}
+.tbar-seg {
+  height: 8px;
+  border-radius: 0;
+}
+
+/* ─── Divider ─── */
+.divider { border: none; border-top: 1px solid var(--border-default); margin: 32px 0; }
+
+/* ─── Footer ─── */
+footer {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 48px;
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer .copy { font-size: 12px; color: var(--text-muted); }
+footer .conf { font-size: 12px; color: var(--text-muted); }
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .page-header-inner, .sticky-nav-inner, main, footer { padding-left: 20px; padding-right: 20px; }
+  .two-col, .three-col, .tradeoff-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Page Header -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="header-meta">
+      <span class="header-label">MTG MEMO · カーニー連携検討</span>
+      <span class="header-date">2026-03-08</span>
+    </div>
+    <h1 class="page-title">カーニー DD × AI — 論点整理</h1>
+    <p class="page-desc">三者ミーティング（中林・関・津田）の発話から論点を構造的に抽出・分析したレポート。【事実】と【推論・分析】を明示的に区分している。</p>
+    <div class="participants">
+      <span class="participant-chip">中林 佑太 <span class="role">/ AIコンサル・実装 (noname)</span></span>
+      <span class="participant-chip">関 Kei <span class="role">/ AIコンサル・実装 (noname)</span></span>
+      <span class="participant-chip">津田 直人 <span class="role">/ AT カーニー PM、副業：インターン求人サイト</span></span>
+    </div>
+  </div>
+</header>
+
+<!-- Sticky Nav -->
+<nav class="sticky-nav">
+  <div class="sticky-nav-inner">
+    <a href="#s1" class="nav-item">1. 提案アプローチ</a>
+    <a href="#s2" class="nav-item">2. DD 業務領域</a>
+    <a href="#s3" class="nav-item">3. 競合・時間優位</a>
+    <a href="#s4" class="nav-item">4. ビジネスモデル</a>
+    <a href="#s5" class="nav-item">5. 中長期ビジョン</a>
+    <a href="#s6" class="nav-item">6. アクション・残論点</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ======== Section 1 ======== -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">論点 01</div>
+      <h2 class="section-title">カーニーへの提案アプローチ — 誰を窓口にするか</h2>
+      <p class="section-subtitle">津田氏個人経由 vs. カーニー・パートナー直接提案 のトレードオフ</p>
+    </div>
+
+    <!-- Fact -->
+    <div class="block">
+      <div class="block-label fact">事実</div>
+      <div class="block-content fact-block">
+        <ul>
+          <li>当初、津田氏個人の業務をAIで効率化し、その成果を社内に上げていくアプローチが検討された。</li>
+          <li>津田氏は「個人でやるのはリスクが高い」「秘密保持の観点で、誰に見せてもいいデータの整形程度になり、広がりがない」と指摘した。</li>
+          <li>代替案として「パートナー（カーニーの上級職）に直接繋いで、パートナーの権限のもとで支援する」方が現実的だと津田氏が提案した。</li>
+          <li>津田氏はカーニー社内の <strong>AIチーム（委員会制）</strong> に所属しており、3月末のプロジェクト終了後にパートナーへの橋渡しが可能と述べた。</li>
+          <li>現在AIチームはギブリ（Givery）に外注しているが、社内メンバーが忙しすぎて自走できていない状況。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tradeoff -->
+    <div class="block">
+      <div class="block-label tradeoff">トレードオフ</div>
+      <div class="tradeoff-grid">
+        <div class="tradeoff-card vs-low">
+          <div class="tc-label">Option A</div>
+          <div class="tc-title">津田氏個人経由</div>
+          <ul>
+            <li>機密データに触れられない</li>
+            <li>成果の社内展開に追加ステップが必要</li>
+            <li>リスク低・リターン低</li>
+          </ul>
+        </div>
+        <div class="tradeoff-card vs-high">
+          <div class="tc-label">Option B — 採用</div>
+          <div class="tc-title">パートナー直接提案</div>
+          <ul>
+            <li>高リターン（直接発注を狙える）</li>
+            <li>津田氏の橋渡しで参入障壁↓</li>
+            <li>提案品質と信頼構築が必要</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conclusion -->
+    <div class="block">
+      <div class="block-label conclusion">結論</div>
+      <div class="block-content conclusion-block">
+        <p>津田氏個人を実験台にするのではなく、<strong>パートナーに直接提案する方針で合意</strong>。津田氏が橋渡し役を担い、4月上旬〜中旬に初回接触を設ける。</p>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="block">
+      <div class="block-label analysis">推論・分析</div>
+      <div class="block-content analysis-block">
+        <ul>
+          <li>AT・カーニーには委員会制が存在し全員が横断活動に参加する文化がある。これは外部からの提案が通りやすい構造的要因である。大手ファーム（MBB等）では専任AI部隊が存在するため参入が困難だが、カーニー規模のファームはAI専任リソースが不足しており、外部支援の需要と受容性が高い。</li>
+          <li>津田氏が「コンプラ的な観点で全社展開できない弱みがある」と述べた点は重要で、ファーム内部よりも外部ベンダーの方が横断的なツール提供がしやすいことを示唆している。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Section 2 ======== -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">論点 02</div>
+      <h2 class="section-title">対象業務領域 — DDワークフローの分解</h2>
+      <p class="section-subtitle">3領域のAI適用難易度・現状・参入シナリオの整理</p>
+    </div>
+
+    <!-- Fact: table -->
+    <div class="block">
+      <div class="block-label fact">事実 — 業務領域マップ</div>
+      <div class="action-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>業務</th>
+              <th>内容</th>
+              <th>AI適用難易度</th>
+              <th>現状</th>
+              <th>初手候補</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>提案書作成</strong></td>
+              <td>市場・競合データを基にファンドへのDD提案書を作成</td>
+              <td><span class="badge-low">低</span></td>
+              <td>ギブリに外注中</td>
+              <td>差別化が必要</td>
+            </tr>
+            <tr>
+              <td><strong>エキスパートインタビュー</strong></td>
+              <td>アジェンダ作成 → インタビュー実施 → 構造化メモ作成</td>
+              <td><span class="badge-mid">中</span></td>
+              <td>手作業</td>
+              <td>◎ 最有力初手</td>
+            </tr>
+            <tr>
+              <td><strong>中計モデリング</strong></td>
+              <td>財務三表からDCF・シナリオ分析モデルを構築</td>
+              <td><span class="badge-high">高</span></td>
+              <td>手作業（1名フル稼働）</td>
+              <td>3番目以降で検討</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Fact: data input -->
+    <div class="block">
+      <div class="block-label fact">事実 — DDのデータインプット 3類型</div>
+      <div class="block-content fact-block">
+        <div class="three-col" style="margin-bottom:0;">
+          <div style="padding:12px 14px; background:var(--paper-300); border:1px solid var(--border-default);">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:6px;">Type 1</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text-heading);margin-bottom:4px;">対象会社データ</div>
+            <div style="font-size:13px;color:var(--text-secondary);">対象会社から直接受領。機密度高・取り扱い制約あり</div>
+          </div>
+          <div style="padding:12px 14px; background:var(--paper-300); border:1px solid var(--border-default);">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:6px;">Type 2</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text-heading);margin-bottom:4px;">デスクトップリサーチ</div>
+            <div style="font-size:13px;color:var(--text-secondary);">ネット上の公開情報。AI自動収集との相性が最も高い</div>
+          </div>
+          <div style="padding:12px 14px; background:var(--paper-300); border:1px solid var(--border-default);">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:6px;">Type 3</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text-heading);margin-bottom:4px;">エキスパートインタビュー</div>
+            <div style="font-size:13px;color:var(--text-secondary);">業界専門家へのヒアリング。構造化が工数の主因</div>
+          </div>
+        </div>
+        <p style="margin-top:12px; font-size:13px; color:var(--text-secondary);">津田氏: 「これら3種を統合できるプラットフォームがあれば良さそう」</p>
+      </div>
+    </div>
+
+    <!-- Conclusion -->
+    <div class="block">
+      <div class="block-label conclusion">結論</div>
+      <div class="block-content conclusion-block">
+        <ul>
+          <li>初回提案は「<strong>全体ワークフローの再設計ビジョン</strong>」を示し、その中の一部から着手するアプローチを採る（津田氏・関氏双方が同意）。</li>
+          <li>初手はモデリングではなく、<strong>エキスパートインタビューの自動化</strong>が最有力（難易度中・即時感動体験を作りやすい）。</li>
+          <li>提案書作成はギブリとの差別化が必要なため、同じ土俵ではなくワークフロー統合という上位視点で提案する。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="block">
+      <div class="block-label analysis">推論・分析</div>
+      <div class="block-content analysis-block">
+        <ul>
+          <li>エキスパートインタビューは「音声 → テキスト → 構造化メモ」の一連パイプラインをスキルとして提供できれば、コンサルタントの即時工数削減効果が高く、初期の「すごそう」体験を生みやすい。</li>
+          <li>提案書作成でギブリが提供しているのはプロンプトベースの個別最適に留まると推察される。noname側はClaude Codeを用いたローカル統合・スキル化・ワークフロー全体設計という上位レイヤーで差別化できる可能性がある。</li>
+          <li>データ統合プラットフォームという構想は、単発ツール提供からSaaS的な継続収益モデルへの発展可能性を示唆している。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Section 3 ======== -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">論点 03</div>
+      <h2 class="section-title">競合環境と時間的優位性</h2>
+      <p class="section-subtitle">参入ウィンドウの見立てと競合ファームとの比較</p>
+    </div>
+
+    <!-- Metrics -->
+    <div class="three-col">
+      <div class="metric-box">
+        <div class="metric-val">1.5×</div>
+        <div class="metric-lbl">現時点での中林 vs MBB社内AI担当の能力差（中林推計）</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val">〜1年</div>
+        <div class="metric-lbl">その差がほぼゼロになるまでの推計期間</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val">Tier 2以下</div>
+        <div class="metric-lbl">参入余地のあるファームセグメント（カーニー以下）</div>
+      </div>
+    </div>
+
+    <!-- Fact -->
+    <div class="block">
+      <div class="block-label fact">事実</div>
+      <div class="block-content fact-block">
+        <ul>
+          <li>中林氏は「今なら自分とMBB専任AI担当者との間に1.5倍程度の能力差がある。夏〜1年以内であればMBB級にも提案可能」と見積もっている。</li>
+          <li>1年後にはその差がほぼなくなるとの見立て。</li>
+          <li>ロゴスパートナーズについては、津田氏の知人情報で「AIは何もやっていない」、中林氏（X投稿を見る限り）「社長がやや消極的ではないか」との仮説。</li>
+          <li>中林氏の立場: 「AIは前提として、戦略・オペレーションをどうすべきか？（トップダウン）」。一方、同社は「どこにAIを使えるか？（ボトムアップ）」という発想で根本が逆。</li>
+          <li>カーニー以下の規模のファームにはAI支援の余地がある点で、津田氏・中林氏の認識が一致。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="block">
+      <div class="block-label analysis">推論・分析</div>
+      <div class="block-content analysis-block">
+        <ul>
+          <li>AIツールの民主化スピードを考えると「1年後には差がなくなる」は妥当。これは典型的なfirst-mover advantageの問題であり、早期に実績と信頼関係を構築し、ワークフロー自体に組み込まれることがロックインの鍵となる。</li>
+          <li>市場セグメンテーションとして「MBB級（専任AI部隊あり・参入困難）」vs「カーニー以下（リソース不足・参入余地あり）」の二分法は実務的に正しい。ただし、カーニー以下でも早期に自走できれば外部支援需要は縮小するため、プラットフォーム化による切り替えコストの構築が中期的には重要。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Section 4 ======== -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">論点 04</div>
+      <h2 class="section-title">ビジネスモデルと収益構造</h2>
+      <p class="section-subtitle">家庭教師型からプラットフォームへの発展経路、および津田氏との利益分配設計</p>
+    </div>
+
+    <!-- Fact -->
+    <div class="block">
+      <div class="block-label fact">事実</div>
+      <div class="block-content fact-block">
+        <ul>
+          <li>中林氏の現在のモデルは「<strong>家庭教師型</strong>」。投資先の社長等にClaude Codeを導入し、ローカル環境セットアップ → スキル作成 → 業務自動化を段階的に支援。</li>
+          <li>ROIが非常に高い（月50万円の発注に対し、顧客の年間工数削減が数千万円規模）ため、決裁がほぼ不要で受注しやすい。</li>
+          <li>直近の受注率が非常に高いことからPMFを確信し、「ターゲットをこちらが選ぶ」立場へと認識を転換。ショボい案件は断っていく方針。</li>
+          <li>会社は3名体制（中林氏・関氏・梅本氏）。</li>
+          <li>津田氏への報酬については「キックバック」ではなく、別途プロジェクト単位で正式に設計する方針。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Conclusion -->
+    <div class="block">
+      <div class="block-label conclusion">結論</div>
+      <div class="block-content conclusion-block">
+        <p>「家庭教師型コンサル（モジュール）→ ワークフロー全体設計（フィールドプロジェクト）→ プラットフォーム化」という3段階の発展経路を描いており、カーニー案件はその「フィールドプロジェクト」フェーズに位置付けられる。</p>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="block">
+      <div class="block-label analysis">推論・分析</div>
+      <div class="block-content analysis-block">
+        <ul>
+          <li>個人コンサルで業務の解像度を高め、そこから得られた知見をモジュール化・プロダクト化するアプローチはPMF探索として合理的。カーニー案件は業務解像度の取得とエンタープライズ実績の両方を狙えるため、投資対効果が高い。</li>
+          <li>津田氏への報酬設計は、コンサルファーム所属者の副業コンプライアンスに抵触しないよう慎重な設計が必要。「紹介料」ではなく「共同プロジェクトへの参画報酬」という建付けが示唆されている。法人間契約として整理することが現実的。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Section 5 ======== -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">論点 05</div>
+      <h2 class="section-title">PE / バリューアップ業界へのAIインパクト（中長期ビジョン）</h2>
+      <p class="section-subtitle">DDツール提供は入口に過ぎない — 本丸はAIによるバリューアップ加速</p>
+    </div>
+
+    <!-- Callout -->
+    <div class="callout">
+      関氏: 「最終的にはPEファンドが会社を買って、AIで人を減らし、株主価値を向上させて次に回す ── というのが今後10〜20年の主要産業になる」
+    </div>
+
+    <!-- Fact -->
+    <div class="block">
+      <div class="block-label fact">事実</div>
+      <div class="block-content fact-block">
+        <ul>
+          <li>関氏のビジョン（上記）に対し、中林・津田両氏も同様の中長期観を持っていると表明。</li>
+          <li>ミダスの投資先は現時点では「PL的に割安な所を買ってくっつけて伸ばし、短期で上場させる」がメイン戦略。バリューアップチームは頑張っているがAIを活用したパッケージ化されたサポートはまだ不十分。</li>
+          <li>津田氏: 「DDは今後人間がやることがだいぶ減っていく。むしろバリューアップや現場との交渉がメインになる」と予測。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="block">
+      <div class="block-label analysis">推論・分析</div>
+      <div class="block-content analysis-block">
+        <ul>
+          <li>DD業務のAI代替は「コスト削減」の話だが、PE業界全体で見ると「AIによるバリューアップ加速 → 投資リターン向上」という攻めの活用が本丸。中林氏らのビジョンはここを見据えており、DDツールはあくまで入口（トロイの木馬）としてのポジショニングと理解できる。</li>
+          <li>津田氏の「DDは減るがバリューアップと交渉は残る」という見立ては、コンサルのバリューチェーンにおいてAIが「分析・作業」を代替し「判断・交渉」が人間に残るという一般的な予測と整合する。これはnoname側の中長期ビジョンとも一致しており、今後の連携を深める共通言語となり得る。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Section 6 ======== -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">アクション &amp; 残論点</div>
+      <h2 class="section-title">ネクストアクションと残論点</h2>
+      <p class="section-subtitle">次回ミーティングまでのTO-DOと、次回以降で議論すべき未解決論点</p>
+    </div>
+
+    <!-- Action table -->
+    <div class="block">
+      <div class="block-label conclusion">ネクストアクション</div>
+      <div class="action-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>アクション</th>
+              <th>担当</th>
+              <th>期限</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>DDワークフロー全体設計の提案資料を準備</td>
+              <td>中林氏</td>
+              <td><span class="action-date-badge">3月末</span></td>
+            </tr>
+            <tr>
+              <td>パートナーへの提案に必要な要件を整理・共有</td>
+              <td>津田氏</td>
+              <td><span class="action-date-badge">3月末（チャット随時）</span></td>
+            </tr>
+            <tr>
+              <td><strong>次回ミーティング</strong></td>
+              <td>両者</td>
+              <td><span class="action-date-badge">4月1日（火）20:00</span></td>
+            </tr>
+            <tr>
+              <td>津田氏への報酬設計の議論</td>
+              <td>中林氏・関氏</td>
+              <td><span class="action-date-badge">次回以降で別途</span></td>
+            </tr>
+            <tr>
+              <td>パートナーへの初回提案（無料トライアル提案）</td>
+              <td>津田氏（橋渡し）</td>
+              <td><span class="action-date-badge">4月上旬〜中旬</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Remaining issues -->
+    <div class="block">
+      <div class="block-label open">残論点</div>
+      <div class="issue-list">
+        <div class="issue-item">
+          <div class="issue-num">1</div>
+          <div class="issue-body">
+            <div class="issue-title">パートナーへの提案内容の具体化</div>
+            <div class="issue-desc">「全体ワークフロー再設計 + 初手の実行領域」をどの粒度で提案するか。ギブリとの差別化ポイントの明確化が必要。</div>
+          </div>
+        </div>
+        <div class="issue-item">
+          <div class="issue-num">2</div>
+          <div class="issue-body">
+            <div class="issue-title">セキュリティ・コンプライアンス要件の確認</div>
+            <div class="issue-desc">カーニーの情報セキュリティポリシーに対し、Claude Code等のローカルLLM活用がどこまで許容されるか。パートナーとの初回会話で確認必須。</div>
+          </div>
+        </div>
+        <div class="issue-item">
+          <div class="issue-num">3</div>
+          <div class="issue-body">
+            <div class="issue-title">津田氏の関与形態と報酬設計</div>
+            <div class="issue-desc">カーニー所属のまま副業として関与する場合のコンプライアンス整理。法人間契約の建付けを次回以降で詰める。</div>
+          </div>
+        </div>
+        <div class="issue-item">
+          <div class="issue-num">4</div>
+          <div class="issue-body">
+            <div class="issue-title">中計モデリング自動化の実現可能性</div>
+            <div class="issue-desc">財務モデルのAI自動化は「難易度が高い」とされたが、どの程度まで自動化できるかの技術検証。中期的な差別化要因になり得る。</div>
+          </div>
+        </div>
+        <div class="issue-item">
+          <div class="issue-num">5</div>
+          <div class="issue-body">
+            <div class="issue-title">ミダス本体への直接提案</div>
+            <div class="issue-desc">中林氏が示唆した「ファンド本体側への提案」はカーニー経由とは別ルートの可能性。優先順位と進め方の整理が必要。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="copy">© 2026 noname — internal use only</span>
+  <span class="conf">CONFIDENTIAL</span>
+</footer>
+
+<script>
+// Sticky nav scroll highlight
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(item => item.classList.remove('active'));
+      const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

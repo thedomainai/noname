@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(paper)",
+      "Bash(git -C /Users/yuta/workspace/projects/noname rev-parse:*)"
+    ]
+  }
+}

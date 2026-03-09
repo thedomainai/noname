@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGI/ASI時代の組織OS設計</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040;  --ink-600: #525252; --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a;  --ink-300: #a3a3a3; --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0;  --ink-50:  #f0f0f0;
+  --slate-500: #64748b; --slate-400: #94a3b8; --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0; --slate-100: #f1f5f9;
+  --paper-50:   #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300:  #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600:  #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+  --ink-blue:  #2563eb; --ink-green: #16a34a; --ink-amber: #d97706; --ink-red: #dc2626;
+  --wash-blue: #dbeafe; --wash-green: #dcfce7; --wash-amber: #fef3c7; --wash-red: #fee2e2;
+  --bg-page: var(--paper-50); --bg-surface: var(--paper-100);
+  --border-default: var(--slate-200); --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000); --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900); --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500); --text-muted: var(--slate-400);
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --shadow-flat: 2px 2px 0 var(--ink-50);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sticky Nav ── */
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(253,253,252,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default);
+}
+.nav-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.nav-logo {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-heading);
+  padding: 14px 24px 14px 0;
+  border-right: 1px solid var(--border-default);
+  margin-right: 24px;
+  white-space: nowrap;
+}
+.nav-items { display: flex; gap: 0; }
+.nav-item {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 14px 16px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.nav-item:hover, .nav-item.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--ink-blue);
+}
+
+/* ── Page Header ── */
+.page-header {
+  background-color: var(--paper-50);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  border-bottom: 2px solid var(--border-heavy);
+  padding: 64px 0 48px;
+}
+.page-header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.page-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+.page-title {
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: var(--text-heading);
+  margin-bottom: 16px;
+}
+.page-desc {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 720px;
+}
+.page-meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-default);
+}
+.page-meta-item { font-size: 12px; color: var(--text-muted); }
+.page-meta-item strong { color: var(--text-primary); font-weight: 600; display: block; margin-bottom: 2px; }
+
+/* ── Layout ── */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+section { padding: 80px 0; }
+.section-sep { height: 1px; background: var(--border-default); }
+
+.section-header { margin-bottom: 48px; }
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink-blue);
+  display: block; margin-bottom: 12px;
+}
+.section-title {
+  font-size: 28px; font-weight: 600; line-height: 1.3;
+  letter-spacing: -0.3px; color: var(--text-heading);
+  border-bottom: 2px solid var(--border-heavy);
+  padding-bottom: 12px; margin-bottom: 12px;
+}
+.section-desc { font-size: 14px; color: var(--text-secondary); max-width: 720px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--paper-100);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+  transition: border-color 0.15s ease;
+}
+.card:hover { border-color: var(--slate-300); }
+
+/* ── Part indicator ── */
+.part-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--paper-300); border: 1px solid var(--border-default);
+  padding: 4px 12px; margin-bottom: 32px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ── PART 1: 10 Layers ── */
+#part1 { background: var(--paper-50); }
+
+.layer-domain {
+  margin-bottom: 32px;
+}
+.domain-label {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px;
+}
+.domain-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 10px; border: 1px solid;
+}
+.domain-a { color: var(--ink-blue); border-color: var(--ink-blue); background: var(--wash-blue); }
+.domain-b { color: var(--ink-green); border-color: var(--ink-green); background: var(--wash-green); }
+.domain-c { color: var(--ink-amber); border-color: var(--ink-amber); background: var(--wash-amber); }
+.domain-desc { font-size: 12px; color: var(--text-secondary); }
+
+.layers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.layer-row {
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border-default);
+  margin-bottom: -1px;
+  transition: background 0.1s ease;
+}
+.layer-row:hover { background: var(--paper-300); z-index: 1; position: relative; }
+
+.layer-num {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px; font-weight: 500;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border-default);
+  padding: 14px 8px;
+  flex-shrink: 0;
+}
+.layer-a .layer-num { background: var(--wash-blue); }
+.layer-b .layer-num { background: var(--wash-green); }
+.layer-c .layer-num { background: var(--wash-amber); }
+
+.layer-name {
+  padding: 14px 16px;
+  border-right: 1px solid var(--border-default);
+  font-size: 13px; font-weight: 600; color: var(--text-heading);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.layer-name-sub { font-size: 11px; font-weight: 400; color: var(--text-secondary); margin-top: 2px; }
+
+.layer-question {
+  padding: 14px 16px;
+  border-right: 1px solid var(--border-default);
+  font-size: 12px; color: var(--text-secondary);
+  display: flex; align-items: center;
+}
+.layer-failure {
+  padding: 14px 16px;
+  font-size: 12px; color: var(--ink-red);
+  display: flex; align-items: center;
+}
+.layer-header {
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr 1fr;
+  background: var(--paper-500);
+  border: 1px solid var(--border-default);
+  margin-bottom: -1px;
+}
+.layer-header span {
+  padding: 8px 16px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-secondary);
+  border-right: 1px solid var(--border-default);
+}
+.layer-header span:last-child { border-right: none; }
+
+/* ── Domain summary box ── */
+.domain-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+.domain-box {
+  border: 1px solid var(--border-default);
+  padding: 20px;
+}
+.domain-box-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.domain-box-title { font-size: 16px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px; }
+.domain-box-layers { font-size: 12px; color: var(--text-muted); }
+.domain-box-desc { font-size: 13px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5; }
+
+/* ── Part 2: 5 Levels ── */
+#part2 { background: var(--paper-50); }
+
+.pyramid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 40px;
+}
+.pyramid-row {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--border-default);
+  margin-bottom: -1px;
+  transition: background 0.1s ease;
+  cursor: default;
+}
+.pyramid-row:hover { z-index: 1; position: relative; }
+
+.pyramid-level {
+  width: 80px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-right: 1px solid var(--border-default);
+  font-family: var(--font-mono);
+}
+.level-num {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-heading);
+  line-height: 1;
+}
+.level-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.pyramid-info {
+  flex: 1;
+  padding: 16px 20px;
+  border-right: 1px solid var(--border-default);
+}
+.pyramid-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.pyramid-name-en {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+}
+.pyramid-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.pyramid-props {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 16px;
+  border-right: 1px solid var(--border-default);
+}
+.pyramid-prop {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: flex;
+  gap: 6px;
+}
+.pyramid-prop-key { font-weight: 600; color: var(--text-secondary); }
+
+.pyramid-mode {
+  width: 140px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.mode-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border: 1px solid;
+  text-align: center;
+}
+.mode-hitl  { color: var(--ink-blue);  border-color: var(--ink-blue);  background: var(--wash-blue); }
+.mode-hotl  { color: var(--ink-amber); border-color: var(--ink-amber); background: var(--wash-amber); }
+.mode-hutl  { color: var(--ink-green); border-color: var(--ink-green); background: var(--wash-green); }
+.mode-scope { color: var(--text-muted); border-color: var(--border-default); background: var(--paper-300); }
+
+.lv1 { background: var(--paper-100); }
+.lv2 { background: var(--paper-100); }
+.lv3 { background: var(--paper-100); }
+.lv4 { background: var(--wash-blue); }
+.lv5 { background: var(--paper-100); }
+
+/* ceiling diagram */
+.ceiling-diagram {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 32px;
+}
+.ceiling-box {
+  border: 1px solid var(--border-default);
+  padding: 24px;
+  background: var(--paper-100);
+}
+.ceiling-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-default);
+}
+
+/* relationship diagram using SVG */
+.rel-diagram { margin: 24px 0; }
+
+/* ── Part 3: Level 4 Implementation ── */
+#part3 { background: var(--paper-50); }
+
+/* 5 structures */
+.structures-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  border: 1px solid var(--border-default);
+  margin-bottom: 32px;
+}
+.struct-col {
+  border-right: 1px solid var(--border-default);
+  padding: 0;
+}
+.struct-col:last-child { border-right: none; }
+.struct-header {
+  padding: 12px 16px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  border-bottom: 2px solid var(--border-default);
+}
+.struct-h-human  { background: var(--paper-300); color: var(--text-heading); }
+.struct-h-mixed  { background: var(--wash-amber); color: var(--ink-amber); }
+.struct-h-ai     { background: var(--wash-blue);  color: var(--ink-blue); }
+.struct-h-exec   { background: var(--wash-green); color: var(--ink-green); }
+.struct-h-reflex { background: var(--paper-600);  color: var(--text-secondary); }
+.struct-body {
+  padding: 16px;
+}
+.struct-role { font-size: 15px; font-weight: 600; color: var(--text-heading); margin-bottom: 6px; }
+.struct-tag  { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; font-family: var(--font-mono); }
+.struct-items { list-style: none; }
+.struct-items li {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.struct-items li:last-child { border-bottom: none; }
+
+/* Flow diagram */
+.flow-diagram {
+  margin: 32px 0;
+}
+.flow-title {
+  font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-secondary); margin-bottom: 16px;
+}
+
+.flow-steps {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  border: 1px solid var(--border-default);
+}
+.flow-step {
+  flex: 1;
+  min-width: 120px;
+  border-right: 1px solid var(--border-default);
+  padding: 16px 12px;
+  transition: background 0.1s ease;
+}
+.flow-step:last-child { border-right: none; }
+.flow-step:hover { background: var(--paper-300); }
+.flow-step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.flow-step-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+}
+.flow-step-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.flow-step-tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border: 1px solid;
+}
+
+/* Autonomy Mode */
+.autonomy-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  border: 1px solid var(--border-default);
+}
+.auto-cell {
+  border-right: 1px solid var(--border-default);
+  padding: 20px 12px;
+  text-align: center;
+  transition: background 0.1s ease;
+}
+.auto-cell:last-child { border-right: none; }
+.auto-cell:hover { background: var(--paper-300); }
+.auto-code {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+}
+.auto-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+.auto-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.auto-indicator {
+  height: 4px;
+  margin-bottom: 12px;
+  border-radius: 2px;
+}
+.auto-0 .auto-indicator { background: var(--paper-500); }
+.auto-1 .auto-indicator { background: var(--ink-green); }
+.auto-2 .auto-indicator { background: #4ade80; }
+.auto-3 .auto-indicator { background: var(--ink-amber); }
+.auto-4 .auto-indicator { background: #fb923c; }
+.auto-5 .auto-indicator { background: var(--ink-red); }
+
+/* 6-face data arch */
+.data-arch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border-default);
+  border: 1px solid var(--border-default);
+  margin-top: 24px;
+}
+.data-plane {
+  background: var(--paper-100);
+  padding: 20px;
+}
+.data-plane-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.data-plane-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.data-plane-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.data-plane-tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: var(--paper-300);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+/* Work type table */
+.work-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border-default);
+  margin-top: 24px;
+}
+.work-table th {
+  background: var(--paper-500);
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  border-bottom: 1.5px solid var(--ink-900);
+  border-right: 1px solid var(--border-default);
+}
+.work-table th:last-child { border-right: none; }
+.work-table td {
+  padding: 10px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-default);
+  border-right: 1px solid var(--border-default);
+  vertical-align: top;
+}
+.work-table td:last-child { border-right: none; }
+.work-table tr:last-child td { border-bottom: none; }
+.work-table tr:hover td { background: var(--paper-300); }
+.type-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Human roles */
+.human-roles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--border-default);
+}
+.role-card {
+  border-right: 1px solid var(--border-default);
+  padding: 20px;
+  border-bottom: 1px solid var(--border-default);
+}
+.role-card:nth-child(3), .role-card:nth-child(6) { border-right: none; }
+.role-card:nth-child(4), .role-card:nth-child(5), .role-card:nth-child(6) { border-bottom: none; }
+.role-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.role-title { font-size: 14px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px; }
+.role-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+/* OS principles callout */
+.principles-box {
+  border: 2px solid var(--border-heavy);
+  padding: 24px;
+  background: var(--paper-100);
+  margin-top: 32px;
+}
+.principles-box-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-secondary); margin-bottom: 16px;
+}
+.principles-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.principles-list li {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  padding-left: 16px;
+  position: relative;
+}
+.principles-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--ink-blue);
+  font-weight: 600;
+}
+
+/* rhythm table */
+.rhythm-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border-default);
+  margin-top: 16px;
+}
+.rhythm-table th {
+  background: var(--paper-500);
+  padding: 8px 14px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-secondary); text-align: left;
+  border-bottom: 1.5px solid var(--ink-900);
+  border-right: 1px solid var(--border-default);
+}
+.rhythm-table th:last-child { border-right: none; }
+.rhythm-table td {
+  padding: 8px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-default);
+  border-right: 1px solid var(--border-default);
+}
+.rhythm-table td:last-child { border-right: none; }
+.rhythm-table tr:last-child td { border-bottom: none; }
+
+/* footnote quote */
+.quote-box {
+  border-left: 3px solid var(--ink-blue);
+  padding: 12px 20px;
+  background: var(--wash-blue);
+  margin: 24px 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* 2-col */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+/* footer */
+footer {
+  border-top: 1px solid var(--border-default);
+  padding: 32px 0;
+  background: var(--paper-300);
+}
+.footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-copy { font-size: 12px; color: var(--text-muted); }
+.footer-meta { font-size: 12px; color: var(--text-muted); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .structures-grid { grid-template-columns: 1fr; }
+  .autonomy-grid { grid-template-columns: repeat(3, 1fr); }
+  .flow-steps { flex-direction: column; }
+  .flow-step { border-right: none; border-bottom: 1px solid var(--border-default); }
+  .two-col { grid-template-columns: 1fr; }
+  .human-roles { grid-template-columns: 1fr 1fr; }
+  .domain-summary { grid-template-columns: 1fr; }
+  .data-arch { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .container { padding: 0 16px; }
+  .page-title { font-size: 28px; }
+  .layer-row { grid-template-columns: 40px 1fr; }
+  .layer-question, .layer-failure { display: none; }
+  .pyramid-props, .pyramid-mode { display: none; }
+  .human-roles { grid-template-columns: 1fr; }
+  .data-arch { grid-template-columns: 1fr; }
+  .autonomy-grid { grid-template-columns: repeat(2, 1fr); }
+  .principles-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     STICKY NAVIGATION
+     ============================================================ -->
+<nav class="sticky-nav">
+  <div class="nav-inner">
+    <div class="nav-logo">AGI/ASI 組織OS</div>
+    <div class="nav-items">
+      <a href="#part1" class="nav-item">第1部: OSフレームワーク</a>
+      <a href="#part2" class="nav-item">第2部: 成熟度レベル</a>
+      <a href="#part3" class="nav-item">第3部: Level 4 実装設計</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     PAGE HEADER
+     ============================================================ -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-label">組織設計フレームワーク — 統合版</div>
+    <h1 class="page-title">AGI/ASI時代の組織OS設計</h1>
+    <p class="page-desc">
+      超高度知能と人間と社会が、何のために、どのような権力と分配のもとで、どう共存し、どう学習し続けるかを定義する多層的秩序の設計フレームワーク。3つの視点（全体概念地図・現在地と目標地図・詳細設計図）を統合した文書。
+    </p>
+    <div class="page-meta">
+      <div class="page-meta-item"><strong>第1部</strong>10レイヤー OSフレームワーク</div>
+      <div class="page-meta-item"><strong>第2部</strong>組織AI成熟度 5レベル</div>
+      <div class="page-meta-item"><strong>第3部</strong>Level 4 実装設計</div>
+      <div class="page-meta-item"><strong>対象読者</strong>経営者・組織設計者・CTO</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PART 1: 10-LAYER OS FRAMEWORK
+     ============================================================ -->
+<section id="part1">
+  <div class="container">
+    <div class="part-badge">第1部 — 全体概念地図</div>
+    <div class="section-header">
+      <span class="section-label">OS Framework</span>
+      <h2 class="section-title">AGI/ASI時代のOS — 10レイヤー定義</h2>
+      <p class="section-desc">知能の能力が上がるほど、「誰のためか」「誰が決めるか」「誰が利益を得るか」がOSの本体になる。認知アーキテクチャは中下位レイヤーに過ぎない。</p>
+    </div>
+
+    <!-- 3 Domain Summary -->
+    <div class="domain-summary">
+      <div class="domain-box">
+        <div class="domain-box-label" style="color: var(--ink-blue);">Domain A — L1〜L3</div>
+        <div class="domain-box-title">組織は何者か</div>
+        <div class="domain-box-layers">存在理由と統治原理</div>
+        <div class="domain-box-desc">AGI/ASI段階でボトルネックになる最上位領域。能力が高まるほどここが支配的になる。</div>
+      </div>
+      <div class="domain-box">
+        <div class="domain-box-label" style="color: var(--ink-green);">Domain B — L4〜L6</div>
+        <div class="domain-box-title">組織はどう生きるか</div>
+        <div class="domain-box-layers">Lived Reality（人間の日常）</div>
+        <div class="domain-box-desc">上位理念を人間のリアリティに落とし込む変換層。ここが弱いと理念は現場で壊れる。</div>
+      </div>
+      <div class="domain-box">
+        <div class="domain-box-label" style="color: var(--ink-amber);">Domain C — L7〜L10</div>
+        <div class="domain-box-title">組織はどう知り、行動し、進化するか</div>
+        <div class="domain-box-layers">知能的実装と変化能力</div>
+        <div class="domain-box-desc">既存のAI組織論の多くがここだけを扱う。しかし上位なき下位最適化はOSにならない。</div>
+      </div>
+    </div>
+
+    <!-- Layer Table -->
+    <div style="margin-top: 32px;">
+      <div class="layer-header">
+        <span></span>
+        <span>レイヤー名</span>
+        <span>中心問い</span>
+        <span>欠落時の典型的失敗</span>
+      </div>
+
+      <!-- Domain A -->
+      <div class="layer-row layer-a">
+        <div class="layer-num">L1</div>
+        <div class="layer-name">存在目的・外部正当性<span class="layer-name-sub">Purpose &amp; Legitimacy</span></div>
+        <div class="layer-question">そもそも何のために存在するのか</div>
+        <div class="layer-failure">強いが正当性のないシステム</div>
+      </div>
+      <div class="layer-row layer-a">
+        <div class="layer-num">L2</div>
+        <div class="layer-name">憲法・権力・責任<span class="layer-name-sub">Constitution &amp; Power</span></div>
+        <div class="layer-question">誰が何を決め、誰が責任を負うのか</div>
+        <div class="layer-failure">ガバナンス演出、責任の空洞化</div>
+      </div>
+      <div class="layer-row layer-a">
+        <div class="layer-num">L3</div>
+        <div class="layer-name">経済・分配・資源配分<span class="layer-name-sub">Economics &amp; Distribution</span></div>
+        <div class="layer-question">何を最適化し、価値をどう配るのか</div>
+        <div class="layer-failure">最適化はするが不公平になる</div>
+      </div>
+
+      <!-- Domain B -->
+      <div class="layer-row layer-b">
+        <div class="layer-num">L4</div>
+        <div class="layer-name">社会・文化・信頼<span class="layer-name-sub">Society &amp; Culture</span></div>
+        <div class="layer-question">共同体としてどう成立するのか</div>
+        <div class="layer-failure">協働は動くが社会が壊れる</div>
+      </div>
+      <div class="layer-row layer-b">
+        <div class="layer-num">L5</div>
+        <div class="layer-name">人間の主体性・成長・意味<span class="layer-name-sub">Human Agency &amp; Growth</span></div>
+        <div class="layer-question">人間はどう残るかではなく、どう強くなるか</div>
+        <div class="layer-failure">Deskilling、疎外、依存</div>
+      </div>
+      <div class="layer-row layer-b">
+        <div class="layer-num">L6</div>
+        <div class="layer-name">仕事・役割・運用モデル<span class="layer-name-sub">Work &amp; Operations</span></div>
+        <div class="layer-question">日々どう働き、どう協働するのか</div>
+        <div class="layer-failure">通知地獄、責任不明、疲弊</div>
+      </div>
+
+      <!-- Domain C -->
+      <div class="layer-row layer-c">
+        <div class="layer-num">L7</div>
+        <div class="layer-name">認知・知識・意思決定<span class="layer-name-sub">Cognition &amp; Decision</span></div>
+        <div class="layer-question">どう知覚し、理解し、判断するのか</div>
+        <div class="layer-failure">賢く見える誤作動</div>
+      </div>
+      <div class="layer-row layer-c">
+        <div class="layer-num">L8</div>
+        <div class="layer-name">エージェント実行・インターフェース<span class="layer-name-sub">Agent Execution</span></div>
+        <div class="layer-question">どう行動し、人間と接続するのか</div>
+        <div class="layer-failure">危険な自動化、実務不整合</div>
+      </div>
+      <div class="layer-row layer-c">
+        <div class="layer-num">L9</div>
+        <div class="layer-name">技術基盤・安全・可観測性<span class="layer-name-sub">Infrastructure &amp; Safety</span></div>
+        <div class="layer-question">どう安全に、安定して動かすのか</div>
+        <div class="layer-failure">見えない故障、重大事故</div>
+      </div>
+      <div class="layer-row layer-c">
+        <div class="layer-num">L10</div>
+        <div class="layer-name">学習・適応・メタガバナンス<span class="layer-name-sub">Meta-governance</span></div>
+        <div class="layer-question">OS自体をどう改定するのか</div>
+        <div class="layer-failure">強いが硬直化、または暴走</div>
+      </div>
+    </div>
+
+    <!-- Key insight -->
+    <div class="quote-box" style="margin-top: 32px;">
+      能力が低い時代には下位レイヤーがボトルネックになる。能力が高い時代には上位レイヤーがボトルネックになる。AGI段階ではL5〜L8が前景化し、ASI段階ではL1〜L3とL10が支配的になる。
+    </div>
+
+    <!-- 5 Design Principles -->
+    <div class="principles-box">
+      <div class="principles-box-title">OSを設計するときの5原則</div>
+      <ul class="principles-list">
+        <li><strong>上位レイヤーなき下位最適化を禁止する</strong> — 認知・エージェント・実行だけを設計してもOSにはならない</li>
+        <li><strong>人間は「残余タスク処理者」ではなく設計対象そのもの</strong> — 主体性・熟達・成長・意味・関係性を設計する</li>
+        <li><strong>反省は出力改善だけでなく制度改善へ拡張</strong> — ポリシー・権限・文化設計の修正まで含める</li>
+        <li><strong>分配の設計を後回しにしない</strong> — 分配はOSの最初から含めるべき後工程ではない</li>
+        <li><strong>速度より正当性、正当性より更新可能性</strong> — 長期的に「正当性があるか」「改定できるか」が重要</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- ============================================================
+     PART 2: 5-LEVEL MATURITY
+     ============================================================ -->
+<section id="part2" style="background: var(--paper-100);">
+  <div class="container">
+    <div class="part-badge">第2部 — 現在地と目標の地図</div>
+    <div class="section-header">
+      <span class="section-label">Maturity Model</span>
+      <h2 class="section-title">組織AI成熟度 — 5レベル分類</h2>
+      <p class="section-desc">組織がどのようなAI統治構造を持つかを横断的に分類する。個々の業務プロセスの自律度（縦断面）とは問いが異なる。</p>
+    </div>
+
+    <!-- Pyramid / Level rows -->
+    <div class="pyramid-container">
+      <div style="display: grid; grid-template-columns: 80px 1fr 220px 140px; background: var(--paper-500); border: 1px solid var(--border-default); margin-bottom: -1px;">
+        <div style="padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); border-right: 1px solid var(--border-default);">Lv</div>
+        <div style="padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); border-right: 1px solid var(--border-default);">レベル名称 / 定義</div>
+        <div style="padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); border-right: 1px solid var(--border-default);">特性</div>
+        <div style="padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary);">人間関与</div>
+      </div>
+
+      <div class="pyramid-row lv5">
+        <div class="pyramid-level">
+          <div class="level-num">5</div>
+          <div class="level-label">射程</div>
+        </div>
+        <div class="pyramid-info">
+          <div class="pyramid-name">Inter-organizational Intelligence</div>
+          <div class="pyramid-name-en">組織間調整インテリジェンス</div>
+          <div class="pyramid-desc">複数の組織OSが連携し、組織を超えた調整を行う層。現時点では設計射程として定義。サプライチェーン全体の自律最適化・業界標準の自律形成などが想定領域。</div>
+        </div>
+        <div class="pyramid-props">
+          <div class="pyramid-prop"><span class="pyramid-prop-key">スコープ</span>組織間・産業全体</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">自律性</span>高（組織を超えた調整）</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">実装状況</span>定義保留</div>
+        </div>
+        <div class="pyramid-mode">
+          <span class="mode-badge mode-scope">定義保留</span>
+        </div>
+      </div>
+
+      <div class="pyramid-row lv4">
+        <div class="pyramid-level">
+          <div class="level-num" style="color: var(--ink-blue);">4</div>
+          <div class="level-label">設計対象</div>
+        </div>
+        <div class="pyramid-info">
+          <div class="pyramid-name" style="color: var(--ink-blue);">Neural Organization OS</div>
+          <div class="pyramid-name-en">神経組織OS ← 第3部の設計対象</div>
+          <div class="pyramid-desc">Level 3の業務AIすべてを統治し、「何をどこまで自律させ、どう統治するか」を決める組織全体のOS。Purpose Council・Governance Kernel・Domain Cells・Execution Fabric・Reflection Engineの5構造。</div>
+        </div>
+        <div class="pyramid-props">
+          <div class="pyramid-prop"><span class="pyramid-prop-key">スコープ</span>組織全体・時間軸全体</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">記憶</span>組織世界モデル（6面）</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">人間の重心</span>Purpose-level</div>
+        </div>
+        <div class="pyramid-mode">
+          <span class="mode-badge mode-hutl">HUTL</span>
+        </div>
+      </div>
+
+      <div class="pyramid-row lv3">
+        <div class="pyramid-level">
+          <div class="level-num">3</div>
+          <div class="level-label">業務AI</div>
+        </div>
+        <div class="pyramid-info">
+          <div class="pyramid-name">Domain Intelligence</div>
+          <div class="pyramid-name-en">業務領域インテリジェンス（Symphony型・Data Agent型）</div>
+          <div class="pyramid-desc">業務領域を自律的に運営するAIシステム。記憶・推論・学習を持ち、定義された権限範囲内で自律判断・実行する。Level 2との本質的違いは「AIが状況を判断してプロセスを変える」こと。</div>
+        </div>
+        <div class="pyramid-props">
+          <div class="pyramid-prop"><span class="pyramid-prop-key">スコープ</span>業務領域単位</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">自律性</span>あり（状況適応的）</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">記憶</span>ドメインコンテキスト</div>
+        </div>
+        <div class="pyramid-mode">
+          <span class="mode-badge mode-hotl">HOTL</span>
+        </div>
+      </div>
+
+      <div class="pyramid-row lv2">
+        <div class="pyramid-level">
+          <div class="level-num">2</div>
+          <div class="level-label">ワークフロー</div>
+        </div>
+        <div class="pyramid-info">
+          <div class="pyramid-name">AI Workflow</div>
+          <div class="pyramid-name-en">AIワークフロー（n8n / Zapier + LLM等）</div>
+          <div class="pyramid-desc">複数ステップの業務フローをAIが実行するシステム。プロセス設計権は人間にあり、AIは人間が設計したフローに沿って動く。新しい状況への適応には人間が必要。</div>
+        </div>
+        <div class="pyramid-props">
+          <div class="pyramid-prop"><span class="pyramid-prop-key">スコープ</span>特定業務フロー単位</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">自律性</span>フロー内のみ</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">記憶</span>フロー実行スコープ</div>
+        </div>
+        <div class="pyramid-mode">
+          <span class="mode-badge mode-hitl" style="background: var(--paper-300); color: var(--text-secondary); border-color: var(--border-default);">部分HITL</span>
+        </div>
+      </div>
+
+      <div class="pyramid-row lv1">
+        <div class="pyramid-level">
+          <div class="level-num">1</div>
+          <div class="level-label">ツール</div>
+        </div>
+        <div class="pyramid-info">
+          <div class="pyramid-name">AI Tool</div>
+          <div class="pyramid-name-en">単能AIツール（LLM API / コード補完 / 翻訳 / 要約）</div>
+          <div class="pyramid-desc">単一タスクに特化した個別AI機能・API。人間がプロンプトを与え出力を受け取る対話型補助ツール。人間の作業を「速く」するが、人間がボトルネックになり続ける。</div>
+        </div>
+        <div class="pyramid-props">
+          <div class="pyramid-prop"><span class="pyramid-prop-key">スコープ</span>1タスク・1回入出力</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">自律性</span>なし</div>
+          <div class="pyramid-prop"><span class="pyramid-prop-key">記憶</span>なし（セッション）</div>
+        </div>
+        <div class="pyramid-mode">
+          <span class="mode-badge mode-hitl">HITL 常時</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ceiling diagram -->
+    <div class="ceiling-diagram">
+      <div class="ceiling-box">
+        <div class="ceiling-title">組織Lvが業務Lvの「安全な天井」を決める</div>
+        <table class="rhythm-table">
+          <thead><tr><th>組織Lv</th><th>業務の自動運転Lv（安全上限）</th></tr></thead>
+          <tbody>
+            <tr><td style="font-family: var(--font-mono); color: var(--ink-blue); font-weight: 700;">Lv 4（Neural OS）</td><td>業務Lv 4（通常範囲で完全自律）まで安全に運用可</td></tr>
+            <tr><td style="font-family: var(--font-mono);">Lv 3（Domain AI）</td><td>業務Lv 3まで。Lv 4は統治不在のリスク</td></tr>
+            <tr><td style="font-family: var(--font-mono);">Lv 2（Workflow）</td><td>業務Lv 2まで。それ以上は「誰も止められない判断」が量産</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ceiling-box">
+        <div class="ceiling-title">典型的な失敗パターン</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="padding: 12px; background: var(--wash-red); border: 1px solid var(--ink-red);">
+            <div style="font-size: 12px; font-weight: 700; color: var(--ink-red); margin-bottom: 4px;">Level 3をLevel 4として扱う</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">Symphony等の業務AIを「会社全体のAI」と位置づけると、統治なき自律化が進む。複数業務AIが矛盾した判断を下しても調停できない。</div>
+          </div>
+          <div style="padding: 12px; background: var(--wash-amber); border: 1px solid var(--ink-amber);">
+            <div style="font-size: 12px; font-weight: 700; color: var(--ink-amber); margin-bottom: 4px;">Level 4のないLevel 3の増殖</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">部署ごとに業務AIを導入するが、全社の目的・価値・禁則との整合を誰も担保しない。「高速なAIの上に低速な官僚制を載せたもの」になる。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Human focus shift -->
+    <div style="margin-top: 32px; border: 1px solid var(--border-default); padding: 24px; background: var(--paper-100);">
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">人間の関与がシフトする方向</div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--border-default);">
+        <div style="padding: 16px; border-right: 1px solid var(--border-default); text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Level 1</div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-heading); margin-bottom: 6px;">Query-level</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">人間がすべての入力を与える</div>
+        </div>
+        <div style="padding: 16px; border-right: 1px solid var(--border-default); text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Level 2</div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-heading); margin-bottom: 6px;">Process-level</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">人間が業務プロセスを設計する</div>
+        </div>
+        <div style="padding: 16px; border-right: 1px solid var(--border-default); text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Level 3</div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-heading); margin-bottom: 6px;">Domain-level</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">人間が業務設計と例外対応をする</div>
+        </div>
+        <div style="padding: 16px; text-align: center; background: var(--wash-blue);">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--ink-blue); margin-bottom: 6px;">Level 4</div>
+          <div style="font-size: 13px; font-weight: 700; color: var(--ink-blue); margin-bottom: 6px;">Purpose-level</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">人間が目的・価値・境界・進化を担う</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-sep"></div>
+
+<!-- ============================================================
+     PART 3: LEVEL 4 IMPLEMENTATION
+     ============================================================ -->
+<section id="part3">
+  <div class="container">
+    <div class="part-badge">第3部 — 目標地点の詳細設計図</div>
+    <div class="section-header">
+      <span class="section-label">Implementation Design</span>
+      <h2 class="section-title">Level 4 実装設計 — Neural Organization OS</h2>
+      <p class="section-desc">AIが標準運転し、人間が目的・価値・境界・例外・関係・進化を担う組織。管理をプロセスから憲法へ移すことが中核思想。</p>
+    </div>
+
+    <!-- 6 Principles of this OS -->
+    <div style="margin-bottom: 48px;">
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">このOSを駆動する6原理</div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border-default);">
+        <div style="padding: 16px; border-right: 1px solid var(--border-default); border-bottom: 1px solid var(--border-default);">
+          <div style="font-size: 12px; font-weight: 700; color: var(--ink-blue); margin-bottom: 4px;">Purpose first</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">KPIは目的の代理変数にすぎない。目的・非目的・禁則を先に定義する</div>
+        </div>
+        <div style="padding: 16px; border-right: 1px solid var(--border-default); border-bottom: 1px solid var(--border-default);">
+          <div style="font-size: 12px; font-weight: 700; color: var(--ink-blue); margin-bottom: 4px;">Governance by design</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">承認は後付けの会議ではなく、権限・リスク・評価に埋め込む</div>
+        </div>
+        <div style="padding: 16px; border-bottom: 1px solid var(--border-default);">
+          <div style="font-size: 12px; font-weight: 700; color: var(--ink-blue); margin-bottom: 4px;">AI as default operator</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">標準作業はAIが回す。人間は例外と進化を担う</div>
+        </div>
+        <div style="padding: 16px; border-right: 1px solid var(--border-default);">
+          <div style="font-size: 12px; font-weight: 700; color: var(--ink-blue); margin-bottom: 4px;">Human as constitutional authority</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">人間は手順を実行するのでなく、手順が従うべき原理を定める</div>
+        </div>
+        <div style="padding: 16px; border-right: 1px solid var(--border-default);">
+          <div style="font-size: 12px; font-weight: 700; color: var(--ink-blue); margin-bottom: 4px;">Selective human intervention</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">常時HITLではなく、HUTLを標準にし、HOTL/HITLを条件付きで使う</div>
+        </div>
+        <div style="padding: 16px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--ink-blue); margin-bottom: 4px;">Agency preservation as a KPI</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">人間が意味ある異議申立て・停止・再定義をできること自体を性能指標にする</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 OS Structures -->
+    <div style="margin-bottom: 48px;">
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">OSの上位構造（5コンポーネント）</div>
+      <div class="structures-grid">
+        <div class="struct-col">
+          <div class="struct-header struct-h-human">A — Purpose Council</div>
+          <div class="struct-body">
+            <div class="struct-role">目的評議会</div>
+            <div class="struct-tag">人間中心</div>
+            <ul class="struct-items">
+              <li>組織の存在理由を定義</li>
+              <li>価値・禁則の策定</li>
+              <li>ステークホルダー順位</li>
+              <li>資本配分原理</li>
+              <li>原則として人間が主権</li>
+            </ul>
+          </div>
+        </div>
+        <div class="struct-col">
+          <div class="struct-header struct-h-mixed">B — Governance Kernel</div>
+          <div class="struct-body">
+            <div class="struct-role">統治カーネル</div>
+            <div class="struct-tag">人間優位</div>
+            <ul class="struct-items">
+              <li>リスク分類・Trust Score</li>
+              <li>Composite Risk算出</li>
+              <li>承認ポリシー</li>
+              <li>権限・停止条件</li>
+              <li>監査基準・判例</li>
+            </ul>
+          </div>
+        </div>
+        <div class="struct-col">
+          <div class="struct-header" style="background: var(--paper-400); color: var(--text-secondary);">C — Domain Cells</div>
+          <div class="struct-body">
+            <div class="struct-role">業務ドメインセル</div>
+            <div class="struct-tag">人間 + AI</div>
+            <ul class="struct-items">
+              <li>Domain Governor（人間）</li>
+              <li>AIエージェント群</li>
+              <li>Product / GTM / Finance</li>
+              <li>Legal / People / Ops</li>
+              <li>各セルが境界・評価基準を持つ</li>
+            </ul>
+          </div>
+        </div>
+        <div class="struct-col">
+          <div class="struct-header struct-h-ai">D — Execution Fabric</div>
+          <div class="struct-body">
+            <div class="struct-role">実行ファブリック</div>
+            <div class="struct-tag">AI中心</div>
+            <ul class="struct-items">
+              <li>Symphony型実行エージェント</li>
+              <li>Data Agent型分析エージェント</li>
+              <li>業務自動化エージェント</li>
+              <li>実際の作業の主戦場</li>
+              <li>Level 3が稼働する層</li>
+            </ul>
+          </div>
+        </div>
+        <div class="struct-col">
+          <div class="struct-header struct-h-reflex">E — Reflection Engine</div>
+          <div class="struct-body">
+            <div class="struct-role">反省・進化エンジン</div>
+            <div class="struct-tag">AI中心・人間裁定</div>
+            <ul class="struct-items">
+              <li>評価・インシデント分析</li>
+              <li>メモリ更新</li>
+              <li>Trust Score更新</li>
+              <li>ポリシー改訂提案</li>
+              <li>最終裁定は人間が持つ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Human 6 Roles -->
+    <div style="margin-bottom: 48px;">
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">人間の6職能</div>
+      <div class="human-roles">
+        <div class="role-card">
+          <div class="role-num">01</div>
+          <div class="role-title">Purpose Owner</div>
+          <div class="role-desc">何のために存在するか、何を最適化しないかを定義する</div>
+        </div>
+        <div class="role-card">
+          <div class="role-num">02</div>
+          <div class="role-title">Domain Governor</div>
+          <div class="role-desc">各業務領域の制約・評価基準・外部説明責任・リスク許容度を定義する</div>
+        </div>
+        <div class="role-card">
+          <div class="role-num">03</div>
+          <div class="role-title">Exception Commander</div>
+          <div class="role-desc">新規性・高リスク・不可逆性・価値衝突がある案件を裁く</div>
+        </div>
+        <div class="role-card">
+          <div class="role-num">04</div>
+          <div class="role-title">Relationship Steward</div>
+          <div class="role-desc">顧客・規制当局・パートナー・社会との関係を引き受ける</div>
+        </div>
+        <div class="role-card">
+          <div class="role-num">05</div>
+          <div class="role-title">Sensemaker / Extractor</div>
+          <div class="role-desc">データに現れない盲点・タブー・暗黙知・現場感覚を注入する</div>
+        </div>
+        <div class="role-card">
+          <div class="role-num">06</div>
+          <div class="role-title">Red Team / Auditor</div>
+          <div class="role-desc">モデル崇拝を壊し、停止権を行使し、制度疲労を発見する</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8-step Flow Diagram -->
+    <div class="flow-diagram" style="margin-bottom: 48px;">
+      <div class="flow-title">業務フロー — 8ステップ（Sense → Evolve）</div>
+      <div class="flow-steps">
+        <div class="flow-step" style="background: var(--paper-100);">
+          <div class="flow-step-num">Step 0</div>
+          <div class="flow-step-name">Constitution Load</div>
+          <div class="flow-step-desc">AIがPurpose / Values / Non-negotiables / Risk policy / Tool permissionsを読み込む。HUTLの本体。</div>
+          <span class="flow-step-tag" style="color: var(--ink-blue); border-color: var(--ink-blue); background: var(--wash-blue);">HUTL基盤</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 1</div>
+          <div class="flow-step-name">Sense</div>
+          <div class="flow-step-desc">新しいsignalを受け取る（苦情・売上低下・バグ・規制変更）。AIがeventとして正規化。</div>
+          <span class="flow-step-tag" style="color: var(--ink-green); border-color: var(--ink-green); background: var(--wash-green);">AI主導</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 2</div>
+          <div class="flow-step-name">Understand</div>
+          <div class="flow-step-desc">AIがdomain graphとmemoryを引き、世界状態を再構成。不足文脈はActive Extractionで取得。</div>
+          <span class="flow-step-tag" style="color: var(--ink-green); border-color: var(--ink-green); background: var(--wash-green);">AI主導</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 3</div>
+          <div class="flow-step-name">Deliberate</div>
+          <div class="flow-step-desc">AIが複数案を作成。各案に前提・期待便益・副作用・失敗条件・rollback案・必要権限を付ける。</div>
+          <span class="flow-step-tag" style="color: var(--ink-green); border-color: var(--ink-green); background: var(--wash-green);">AI主導</span>
+        </div>
+        <div class="flow-step" style="background: var(--wash-amber);">
+          <div class="flow-step-num">Step 4</div>
+          <div class="flow-step-name">Gate</div>
+          <div class="flow-step-desc">Autonomy Mode = f(Trust Score, Composite Risk, Novelty, Uncertainty, Agency Impact)を計算。</div>
+          <span class="flow-step-tag" style="color: var(--ink-amber); border-color: var(--ink-amber); background: var(--wash-amber);">判定</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 5</div>
+          <div class="flow-step-name">Act</div>
+          <div class="flow-step-desc">canary rollout / rate limit / kill switch / rollbackを必須にして実行。権限・行動範囲・可逆性で統制。</div>
+          <span class="flow-step-tag" style="color: var(--ink-green); border-color: var(--ink-green); background: var(--wash-green);">実行</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 6</div>
+          <div class="flow-step-name">Observe</div>
+          <div class="flow-step-desc">結果だけでなく副作用と二次影響も観測（顧客離反・問合せ増・監査フラグ・チーム負荷）。</div>
+          <span class="flow-step-tag" style="color: var(--ink-green); border-color: var(--ink-green); background: var(--wash-green);">AI主導</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">Step 7</div>
+          <div class="flow-step-name">Reflect</div>
+          <div class="flow-step-desc">4軸評価: Output accuracy / Assumption validity / Value alignment / Agency preservation。</div>
+          <span class="flow-step-tag" style="color: var(--text-secondary); border-color: var(--border-default);">評価</span>
+        </div>
+        <div class="flow-step" style="background: var(--wash-blue);">
+          <div class="flow-step-num">Step 8</div>
+          <div class="flow-step-name">Evolve</div>
+          <div class="flow-step-desc">Memoryを更新し、Trust Scoreを更新し、Policy改訂案を作る。「学習してよいこと」は人間が決める。</div>
+          <span class="flow-step-tag" style="color: var(--ink-blue); border-color: var(--ink-blue); background: var(--wash-blue);">人間裁定</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Autonomy Mode -->
+    <div style="margin-bottom: 48px;">
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">Autonomy Mode — 6段階</div>
+      <div class="autonomy-grid">
+        <div class="auto-cell auto-0">
+          <div class="auto-indicator"></div>
+          <div class="auto-code">A0</div>
+          <div class="auto-name">Sandbox Only</div>
+          <div class="auto-desc">本番禁止。テスト環境のみ。</div>
+        </div>
+        <div class="auto-cell auto-1">
+          <div class="auto-indicator"></div>
+          <div class="auto-code">A1</div>
+          <div class="auto-name">Full Auto</div>
+          <div class="auto-desc">内部・可逆・低リスクの完全自律実行。</div>
+        </div>
+        <div class="auto-cell auto-2">
+          <div class="auto-indicator"></div>
+          <div class="auto-code">A2</div>
+          <div class="auto-name">Auto + Post-audit</div>
+          <div class="auto-desc">自動実行するが事後監査が必須。</div>
+        </div>
+        <div class="auto-cell auto-3">
+          <div class="auto-indicator"></div>
+          <div class="auto-code">A3</div>
+          <div class="auto-name">HOTL</div>
+          <div class="auto-desc">監視者にveto windowを与える。</div>
+        </div>
+        <div class="auto-cell auto-4">
+          <div class="auto-indicator"></div>
+          <div class="auto-code">A4</div>
+          <div class="auto-name">HITL</div>
+          <div class="auto-desc">事前承認が必要。人間がゲート。</div>
+        </div>
+        <div class="auto-cell auto-5">
+          <div class="auto-indicator"></div>
+          <div class="auto-code">A5</div>
+          <div class="auto-name">Human-only</div>
+          <div class="auto-desc">AIは提案のみ。実行は人間。</div>
+        </div>
+      </div>
+
+      <!-- Work type table -->
+      <table class="work-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>業務の性質</th>
+            <th>例</th>
+            <th>対応Autonomy Mode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="type-num">Type 1</span></td>
+            <td>低リスク・可逆・内部作業</td>
+            <td>定型分析・レポート生成・コード修正</td>
+            <td><span style="color: var(--ink-green); font-weight: 600;">A1 / A2（完全自律または事後監査）</span></td>
+          </tr>
+          <tr>
+            <td><span class="type-num">Type 2</span></td>
+            <td>低〜中リスク・判断支援</td>
+            <td>需要予測・価格案・採用スクリーニング</td>
+            <td><span style="color: var(--ink-amber); font-weight: 600;">A3（AI主導 + HOTL / veto可能）</span></td>
+          </tr>
+          <tr>
+            <td><span class="type-num">Type 3</span></td>
+            <td>外部影響あり・中〜高リスク</td>
+            <td>契約提案・価格変更・重要顧客対応</td>
+            <td><span style="color: var(--ink-amber); font-weight: 600;">A4（HITL / AIが作り人間が裁定）</span></td>
+          </tr>
+          <tr>
+            <td><span class="type-num">Type 4</span></td>
+            <td>価値衝突・不可逆・権利影響</td>
+            <td>人事処分・解雇・法的争点</td>
+            <td><span style="color: var(--ink-red); font-weight: 600;">A5（Human-led / AIは選択肢のみ）</span></td>
+          </tr>
+          <tr>
+            <td><span class="type-num">Type 5</span></td>
+            <td>危機・未知・制度改定</td>
+            <td>インシデント・炎上・規制変更</td>
+            <td><span style="color: var(--ink-red); font-weight: 600;">Human command mode（A5強制）</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6-face Data Architecture -->
+    <div style="margin-bottom: 48px;">
+      <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px;">データアーキテクチャ — 6面構造（組織世界モデル）</div>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0;">このOSは単なるRAG付きチャットでは動かない。6面構造の組織世界モデルが必要。</p>
+      <div class="data-arch">
+        <div class="data-plane">
+          <div class="data-plane-num">Plane 1</div>
+          <div class="data-plane-name">Reality Plane</div>
+          <div class="data-plane-desc">ERP/CRM/プロダクトログ/会話/市場データ等の現実データ。immutable event logで保持。</div>
+          <span class="data-plane-tag">Event Log</span>
+        </div>
+        <div class="data-plane">
+          <div class="data-plane-num">Plane 2</div>
+          <div class="data-plane-name">Semantic Plane</div>
+          <div class="data-plane-desc">顧客・契約・案件・機能・規制等のエンティティと関係。Knowledge Graphを中心に置く。</div>
+          <span class="data-plane-tag">Knowledge Graph</span>
+        </div>
+        <div class="data-plane">
+          <div class="data-plane-num">Plane 3</div>
+          <div class="data-plane-name">Memory Plane</div>
+          <div class="data-plane-desc">Semantic / Episodic / Procedural / Evaluative / Normative の5種類の組織記憶を格納。</div>
+          <span class="data-plane-tag">5種記憶</span>
+        </div>
+        <div class="data-plane">
+          <div class="data-plane-num">Plane 4</div>
+          <div class="data-plane-name">Decision Plane</div>
+          <div class="data-plane-desc">Goal・仮説・前提・シミュレーション・候補案・選択理由を保持。「思考の可観測化」。</div>
+          <span class="data-plane-tag">Decision Ledger</span>
+        </div>
+        <div class="data-plane">
+          <div class="data-plane-num">Plane 5</div>
+          <div class="data-plane-name">Action Plane</div>
+          <div class="data-plane-desc">ツール実行・APIコール・通知・デプロイ等。Workflow stateとrollback planを持つ。</div>
+          <span class="data-plane-tag">Action Log</span>
+        </div>
+        <div class="data-plane" style="background: var(--wash-blue);">
+          <div class="data-plane-num" style="color: var(--ink-blue);">Plane 6</div>
+          <div class="data-plane-name" style="color: var(--ink-blue);">Governance Plane</div>
+          <div class="data-plane-desc">権限・ポリシー・Trust Score・Composite Risk・監査証跡。OSのcontrol plane。</div>
+          <span class="data-plane-tag" style="background: var(--wash-blue); color: var(--ink-blue); border-color: var(--ink-blue);">Control Plane</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operation Rhythm -->
+    <div class="two-col" style="margin-bottom: 48px;">
+      <div>
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">運用リズム</div>
+        <table class="rhythm-table">
+          <thead>
+            <tr><th>頻度</th><th>活動</th><th>主体</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 600; color: var(--text-heading);">常時</td>
+              <td>Sense / Understand / Act / Observe</td>
+              <td style="color: var(--ink-green);">AI</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 600; color: var(--text-heading);">毎日</td>
+              <td>Exception Councilが高リスク案件を裁く</td>
+              <td style="color: var(--ink-blue);">人間</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 600; color: var(--text-heading);">毎週</td>
+              <td>Domain GovernorがpolicyとevalをUpdate</td>
+              <td style="color: var(--ink-blue);">人間</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 600; color: var(--text-heading);">毎月</td>
+              <td>Purpose Councilが資源配分と大方針を見直す</td>
+              <td style="color: var(--ink-blue);">人間</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 600; color: var(--text-heading);">四半期</td>
+              <td>Purpose / Values / Non-goalsを再定義</td>
+              <td style="color: var(--ink-blue);">人間</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 12px; font-size: 12px; color: var(--text-muted);">
+          定例会議の中心を「状況共有」から「例外裁定と制度更新」へ移す。状況共有はAIが常時出せるため、会議でやる必要はない。
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">最小OS構成（ディレクトリ設計）</div>
+        <div style="background: var(--paper-900); border: 1px solid var(--border-default); padding: 16px; font-family: var(--font-mono); font-size: 12px; line-height: 1.8; color: var(--ink-300);">
+          <span style="color: var(--ink-blue);">org-os/</span><br>
+          &nbsp;&nbsp;<span style="color: var(--ink-amber);">constitution/</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;purpose.md<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;values.yaml<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;non_negotiables.yaml<br>
+          &nbsp;&nbsp;<span style="color: var(--ink-amber);">governance/</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;risk_matrix.yaml<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;trust_register.yaml<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;approval_policy.yaml<br>
+          &nbsp;&nbsp;<span style="color: var(--ink-amber);">domains/</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;ontology.graph<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;data_contracts/<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;playbooks/<br>
+          &nbsp;&nbsp;<span style="color: var(--ink-amber);">agents/</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;agent_registry.yaml<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;agent_cards/<br>
+          &nbsp;&nbsp;<span style="color: var(--ink-amber);">evals/ &nbsp;audit/</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final quote -->
+    <div class="quote-box" style="border-color: var(--ink-900); background: var(--paper-300); font-style: normal; font-size: 15px; font-weight: 600;">
+      Symphony型のrunnerとOpenAI Data Agent型のreasoning/context engineは、単体では不十分である。必要なのは、それらを包む<strong>目的統治型のNeural Organization OS</strong>である。Symphony型 → Execution Fabricに配置。Data Agent型 → Perception/Understandingに配置。その上位 → Constitution / Governance / Reflection。これが、AGI/ASI前提で「今すぐ動ける」企業OSの基本形。
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copy">AGI/ASI時代の組織OS設計 — 統合設計文書</span>
+    <span class="footer-meta">第1部: OSフレームワーク &nbsp;/&nbsp; 第2部: 成熟度モデル &nbsp;/&nbsp; 第3部: Level 4 実装設計</span>
+  </div>
+</footer>
+
+<script>
+// IntersectionObserver によるナビゲーションの自動ハイライト
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('href') === '#' + entry.target.id) {
+          item.classList.add('active');
+        }
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+
+sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>
