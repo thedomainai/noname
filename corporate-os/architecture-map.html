@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-native Institution / OS — Architecture Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040; --ink-600: #525252; --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a; --ink-300: #a3a3a3; --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0; --ink-50: #f0f0f0;
+  --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155;
+  --paper-50: #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600: #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+  --ink-blue: #2563eb; --ink-green: #16a34a; --ink-amber: #d97706; --ink-red: #dc2626;
+  --wash-blue: #dbeafe; --wash-green: #dcfce7; --wash-amber: #fef3c7; --wash-red: #fee2e2;
+  --bg-page: var(--paper-50); --bg-surface: var(--paper-100);
+  --bg-surface-raised: var(--paper-50); --bg-recessed: var(--paper-300);
+  --border-default: var(--slate-200); --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000); --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900); --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500); --text-muted: var(--slate-400);
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --separator: 1px solid var(--border-default);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px; font-weight: 400; line-height: 1.6;
+  color: var(--text-primary); background: var(--bg-page);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── i18n ── */
+html[lang="ja"] .en { display: none; }
+html[lang="en"] .ja { display: none; }
+
+/* ── Layout ── */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+/* ── Header ── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(253, 253, 252, 0.95);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--border-heavy);
+}
+.header-inner {
+  max-width: 1120px; margin: 0 auto; padding: 16px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.header-title {
+  font-size: 18px; font-weight: 700; color: var(--text-heading);
+  letter-spacing: -0.3px;
+}
+.header-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.lang-toggle {
+  display: inline-flex; border: 1px solid var(--border-default);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  background: var(--bg-surface-raised);
+}
+.lang-toggle span {
+  padding: 4px 10px; transition: all 80ms ease;
+}
+.lang-toggle span.active {
+  background: var(--ink-900); color: var(--paper-50);
+}
+
+/* ── Section Nav ── */
+.section-nav {
+  position: sticky; top: 60px; z-index: 90;
+  background: rgba(253, 253, 252, 0.95);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default);
+}
+.section-nav-inner {
+  max-width: 1120px; margin: 0 auto; padding: 0 32px;
+  display: flex; gap: 0; overflow-x: auto;
+}
+.section-nav a {
+  padding: 12px 16px; font-size: 13px; font-weight: 400;
+  color: var(--text-muted); text-decoration: none;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap; transition: all 80ms ease;
+}
+.section-nav a:hover, .section-nav a.active {
+  color: var(--text-primary); border-bottom-color: var(--ink-blue);
+}
+
+/* ── Sections ── */
+section { padding: 64px 0; }
+.section-label {
+  font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink-blue); margin-bottom: 8px;
+}
+.section-title {
+  font-size: 28px; font-weight: 600; line-height: 1.3;
+  letter-spacing: -0.3px; color: var(--text-heading);
+  border-bottom: 2px solid var(--ink-1000);
+  padding-bottom: 12px; margin-bottom: 8px;
+}
+.section-desc {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 24px; transition: border-color 80ms ease;
+}
+.card:hover { border-color: var(--ink-blue); }
+.card-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px;
+}
+.card-title {
+  font-size: 16px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 6px; letter-spacing: -0.2px;
+}
+.card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── File Tree ── */
+.file-tree { display: flex; flex-direction: column; gap: 2px; }
+.file-row {
+  display: grid; grid-template-columns: 280px 1fr 120px;
+  gap: 16px; align-items: center;
+  padding: 10px 16px; font-size: 13px;
+  border: 1px solid transparent; transition: all 80ms ease;
+}
+.file-row:hover { background: var(--paper-300); border-color: var(--border-default); }
+.file-name {
+  font-family: var(--font-mono); font-size: 12px; color: var(--text-primary);
+  font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.file-role { font-size: 13px; color: var(--text-secondary); }
+.file-badge {
+  display: inline-block; height: 20px; padding: 0 8px;
+  font-size: 10px; font-weight: 700; line-height: 20px;
+  letter-spacing: 0.5px; text-transform: uppercase; text-align: center;
+}
+.badge-core { background: var(--ink-900); color: var(--paper-50); }
+.badge-module { background: var(--wash-blue); color: var(--ink-blue); border: 1px solid var(--ink-blue); }
+.badge-rationale { background: var(--wash-amber); color: #92400e; border: 1px solid var(--ink-amber); }
+.badge-appendix { background: var(--paper-300); color: var(--ink-600); border: 1px solid var(--ink-200); }
+.badge-reference { background: var(--wash-green); color: #166534; border: 1px solid var(--ink-green); }
+.badge-context { background: var(--paper-300); color: var(--ink-500); border: 1px solid var(--border-default); }
+.badge-archive { background: var(--paper-300); color: var(--ink-400); border: 1px solid var(--border-default); }
+.file-header {
+  display: grid; grid-template-columns: 280px 1fr 120px; gap: 16px;
+  padding: 8px 16px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-secondary);
+  border-bottom: 1.5px solid var(--ink-900);
+}
+
+/* ── Dimension Grid ── */
+.dim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.dim-card {
+  background: var(--bg-surface-raised); border: 1px solid var(--border-default);
+  padding: 16px; transition: all 80ms ease; cursor: default;
+}
+.dim-card:hover { border-color: var(--ink-blue); }
+.dim-id { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 4px; }
+.dim-name { font-size: 13px; font-weight: 600; color: var(--text-heading); line-height: 1.3; margin-bottom: 4px; }
+.dim-module { font-size: 11px; font-weight: 600; letter-spacing: 0.3px; padding: 2px 6px; display: inline-block; }
+.mod-10 { background: var(--wash-blue); color: var(--ink-blue); }
+.mod-11 { background: var(--wash-green); color: #166534; }
+
+/* ── Layer Stack ── */
+.layer-stack { display: flex; flex-direction: column; gap: 0; }
+.layer-row {
+  display: grid; grid-template-columns: 48px 1fr;
+  gap: 16px; align-items: stretch;
+  border-bottom: 1px solid var(--border-default);
+}
+.layer-row:last-child { border-bottom: none; }
+.layer-id {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+  color: var(--ink-blue); display: flex; align-items: center; justify-content: center;
+  background: var(--wash-blue); border-right: 1px solid var(--border-default);
+  padding: 12px 0;
+}
+.layer-content { padding: 12px 16px; }
+.layer-name { font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: 2px; }
+.layer-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+.layer-dims { margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; }
+.layer-dim-tag {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  padding: 1px 6px; background: var(--paper-300); color: var(--ink-600);
+  border: 1px solid var(--border-default);
+}
+
+/* ── Causal Chain ── */
+.chain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.chain-card {
+  background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;
+}
+.chain-card:hover { border-color: var(--ink-blue); }
+.chain-label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--ink-blue); letter-spacing: 0.5px; margin-bottom: 4px; }
+.chain-title { font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: 12px; }
+.chain-claim {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--border-default);
+}
+
+/* ── Relation Map (HTML/CSS) ── */
+.rel-tier-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-muted);
+  padding-bottom: 8px; border-bottom: 1px solid var(--border-default);
+  margin-bottom: 16px;
+}
+.rel-box { background: var(--bg-surface-raised); padding: 20px 24px; position: relative; }
+.rel-box-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+.rel-box-title { font-size: 15px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px; }
+.rel-box-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+.rel-connector {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 0; color: var(--text-muted); gap: 2px;
+}
+.rel-connector-label { font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
+.rel-connector-arrow { font-size: 18px; line-height: 1; }
+.rel-flow-arrow {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px; flex-shrink: 0;
+}
+.rel-ref-group { border: 1.5px dashed var(--ink-green); padding: 20px 16px 16px; position: relative; }
+.rel-ref-group-label {
+  position: absolute; top: -10px; left: 16px;
+  background: var(--bg-surface); padding: 0 8px;
+  font-size: 11px; font-weight: 600; color: #166534;
+}
+.rel-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
+.rel-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); }
+.rel-legend-line { width: 28px; height: 0; border-top-width: 2px; border-top-style: solid; }
+.rel-legend-line.dashed { border-top-style: dashed; }
+.rel-edit-rules { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
+.rel-edit-rule {
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+}
+.rel-edit-rule-dot { width: 8px; height: 8px; flex-shrink: 0; margin-top: 4px; }
+.rel-edit-rule strong { color: var(--text-primary); font-weight: 600; }
+.rel-return-path { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+.rel-return-line { flex: 1; height: 0; border-top: 1.5px dashed; }
+.rel-return-label { font-size: 11px; font-weight: 600; white-space: nowrap; }
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border-default);
+  padding: 32px 0; background: var(--bg-surface);
+}
+.footer-inner {
+  max-width: 1120px; margin: 0 auto; padding: 0 32px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-text { font-size: 12px; color: var(--text-muted); }
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .chain-grid { grid-template-columns: 1fr; }
+  .file-row { grid-template-columns: 1fr; gap: 4px; }
+  .file-header { display: none; }
+  .dim-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+@media (max-width: 639px) {
+  .container { padding: 0 16px; }
+  section { padding: 48px 0; }
+  .section-title { font-size: 22px; }
+  .rel-modules-grid { grid-template-columns: 1fr !important; }
+  .rel-ref-flow { flex-direction: column !important; }
+  .rel-flow-arrow { transform: rotate(90deg); }
+  .rel-edit-rules { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="header-title">AI-native Institution / OS</div>
+      <div class="header-sub">
+        <span class="ja">アーキテクチャマップ &mdash; corporate-os/ ドキュメント関係図</span>
+        <span class="en">Architecture Map &mdash; corporate-os/ Document Relationships</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="lang-toggle" id="langToggle">
+        <span id="langJa" class="active">JA</span>
+        <span id="langEn">EN</span>
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted);">2026-03-11</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── Section Nav ── -->
+<nav class="section-nav">
+  <div class="section-nav-inner">
+    <a href="#files" class="active">
+      <span class="ja">ファイル</span><span class="en">Files</span>
+    </a>
+    <a href="#relations">
+      <span class="ja">関係図</span><span class="en">Relations</span>
+    </a>
+    <a href="#dimensions">
+      <span class="ja">13 次元</span><span class="en">13 Dimensions</span>
+    </a>
+    <a href="#layers">
+      <span class="ja">10 レイヤー</span><span class="en">10 Layers</span>
+    </a>
+    <a href="#chains">
+      <span class="ja">因果連鎖</span><span class="en">Causal Chains</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1: File Structure
+     ═══════════════════════════════════════════════════════════ -->
+<section id="files">
+  <div class="container">
+    <div class="section-label">
+      <span class="ja">ファイル構成</span><span class="en">FILE STRUCTURE</span>
+    </div>
+    <div class="section-title">
+      <span class="ja">ドキュメント一覧と役割</span>
+      <span class="en">Document List &amp; Roles</span>
+    </div>
+    <div class="section-desc">
+      <span class="ja">ファイル名のプレフィックス（00- / 10- / 20- / 30- / 40-）が役割と読み順を兼ねる。本体はフラット、ノイズだけ分離。</span>
+      <span class="en">File name prefixes (00- / 10- / 20- / 30- / 40-) encode both role and reading order. Core files are flat; noise is separated into subdirectories.</span>
+    </div>
+
+    <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); overflow: hidden;">
+      <div class="file-header">
+        <span>File</span>
+        <span><span class="ja">役割</span><span class="en">Role</span></span>
+        <span><span class="ja">種別</span><span class="en">Type</span></span>
+      </div>
+      <div class="file-tree">
+        <div class="file-row">
+          <span class="file-name">00-core-...complete-spec.md</span>
+          <span class="file-role">
+            <span class="ja">全体仕様の正本（SSOT）。10 Layer / 13 Dimension / 5 Element / 4 Causal Chain</span>
+            <span class="en">Canonical full spec (SSOT). 10 Layers / 13 Dimensions / 5 Elements / 4 Causal Chains</span>
+          </span>
+          <span><span class="file-badge badge-core">CORE</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">10-module-governance-...md</span>
+          <span class="file-role">
+            <span class="ja">D1-D8 + D13 平時の詳細正本。制度・人間参加・分配・文化・運用</span>
+            <span class="en">Detailed canonical for D1-D8 + D13. Governance, human participation, incentives, culture, operations</span>
+          </span>
+          <span><span class="file-badge badge-module">MODULE</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">11-module-information-...md</span>
+          <span class="file-role">
+            <span class="ja">D9-D12 の詳細正本。情報入口・状態・検索・可観測性</span>
+            <span class="en">Detailed canonical for D9-D12. Information ingress, state, retrieval, observability</span>
+          </span>
+          <span><span class="file-badge badge-module">MODULE</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">20-rationale-agi-era-...md</span>
+          <span class="file-role">
+            <span class="ja">理論的背景と広域構想。AGI/ASI 時代の組織 OS 設計根拠</span>
+            <span class="en">Theoretical background and broader vision. Design rationale for AGI/ASI-era organization OS</span>
+          </span>
+          <span><span class="file-badge badge-rationale">RATIONALE</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">30-appendix-neural-...md</span>
+          <span class="file-role">
+            <span class="ja">neural-organization 設計評価（比較分析）</span>
+            <span class="en">neural-organization design evaluation (comparative analysis)</span>
+          </span>
+          <span><span class="file-badge badge-appendix">APPENDIX</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">31-appendix-...v2-issues.md</span>
+          <span class="file-role">
+            <span class="ja">v1 の構造的問題抽出と v2 転換方針</span>
+            <span class="en">Structural issues in v1 and v2 transition strategy</span>
+          </span>
+          <span><span class="file-badge badge-appendix">APPENDIX</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">32-appendix-...v3-structure.md</span>
+          <span class="file-role">
+            <span class="ja">v3 構造設計書</span>
+            <span class="en">v3 structural design document</span>
+          </span>
+          <span><span class="file-badge badge-appendix">APPENDIX</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">40-reference-org-profile.md</span>
+          <span class="file-role">
+            <span class="ja">参照組織のプロフィール（前提・顧客・規模・リスク）</span>
+            <span class="en">Reference organization profile (context, customers, scale, risks)</span>
+          </span>
+          <span><span class="file-badge badge-reference">REFERENCE</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">41-reference-org-instantiation.md</span>
+          <span class="file-role">
+            <span class="ja">D1-D13 を参照組織に具体化した最初の実例</span>
+            <span class="en">First concrete instantiation of D1-D13 for the reference organization</span>
+          </span>
+          <span><span class="file-badge badge-reference">REFERENCE</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">42-reference-org-...audit.md</span>
+          <span class="file-role">
+            <span class="ja">具体化インスタンスの整合性監査</span>
+            <span class="en">Integrity audit of the concrete instance</span>
+          </span>
+          <span><span class="file-badge badge-reference">REFERENCE</span></span>
+        </div>
+        <div class="file-row" style="border-top: 1px solid var(--border-default);">
+          <span class="file-name">context/</span>
+          <span class="file-role">
+            <span class="ja">外部市場・基盤モデル戦略の参照資料（OS 本体ではない）</span>
+            <span class="en">External market &amp; foundation model strategy references (not part of the OS itself)</span>
+          </span>
+          <span><span class="file-badge badge-context">CONTEXT</span></span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">archive/</span>
+          <span class="file-role">
+            <span class="ja">旧版・HTML 書き出し・再構築前の素材（編集不可）</span>
+            <span class="en">Legacy versions, HTML exports, pre-restructure source material (read-only)</span>
+          </span>
+          <span><span class="file-badge badge-archive">ARCHIVE</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2: Document Relations
+     ═══════════════════════════════════════════════════════════ -->
+<section id="relations" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="section-label">
+      <span class="ja">ドキュメント関係</span><span class="en">DOCUMENT RELATIONS</span>
+    </div>
+    <div class="section-title">
+      <span class="ja">正本関係と参照フロー</span>
+      <span class="en">Canonical Hierarchy &amp; Reference Flow</span>
+    </div>
+    <div class="section-desc">
+      <span class="ja">正本チェーン（Core &rarr; Module &rarr; Reference）が上から下へ流れる。支援文書は最下段に配置。矢印の方向は「詳細化・具体化」の方向を示す。</span>
+      <span class="en">The canonical chain (Core &rarr; Module &rarr; Reference) flows top to bottom. Supporting documents are placed at the bottom. Arrows indicate the direction of refinement and instantiation.</span>
+    </div>
+
+    <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 40px 32px;">
+
+      <!-- Legend -->
+      <div class="rel-legend">
+        <div class="rel-legend-item">
+          <div class="rel-legend-line" style="border-color: #1a1a1a;"></div>
+          <span class="ja">正本 &rarr; 詳細正本（詳細化）</span>
+          <span class="en">Canonical &rarr; Detailed canonical (refinement)</span>
+        </div>
+        <div class="rel-legend-item">
+          <div class="rel-legend-line" style="border-color: #16a34a;"></div>
+          <span class="ja">抽象仕様 &rarr; 具体化</span>
+          <span class="en">Abstract spec &rarr; Instantiation</span>
+        </div>
+        <div class="rel-legend-item">
+          <div class="rel-legend-line dashed" style="border-color: #d97706;"></div>
+          <span class="ja">理由づけ・背景（参照）</span>
+          <span class="en">Rationale / background (reference)</span>
+        </div>
+        <div class="rel-legend-item">
+          <div class="rel-legend-line dashed" style="border-color: #94a3b8;"></div>
+          <span>source archive</span>
+        </div>
+      </div>
+
+      <!-- ── TIER 0: CORE SPEC ── -->
+      <div class="rel-tier-label" style="display: flex; align-items: baseline; gap: 12px;">
+        <span>CANONICAL CORE SPEC (SSOT)</span>
+        <span style="font-size: 9px; font-weight: 400; letter-spacing: 0; color: var(--text-muted);">
+          <span class="ja">読み順 1</span><span class="en">Read order 1</span>
+        </span>
+      </div>
+      <div class="rel-box" style="background: #1a1a1a; border: none; margin-bottom: 0;">
+        <div class="rel-box-label" style="color: #a3a3a3;">00-core-ai-native-institution-os-complete-spec.md</div>
+        <div class="rel-box-title" style="color: #fdfdfc;">
+          <span class="ja">正本仕様（SSOT）</span>
+          <span class="en">Canonical Core Spec</span>
+        </div>
+        <div class="rel-box-desc" style="color: #a3a3a3;">10 Layers / 13 Dimensions / 5 Elements / 4 Causal Chains</div>
+      </div>
+
+      <!-- Connector: Core -> Modules -->
+      <div class="rel-connector" style="color: #1a1a1a;">
+        <div class="rel-connector-arrow">&darr;</div>
+        <div class="rel-connector-label">
+          <span class="ja">詳細化</span><span class="en">Refinement</span>
+        </div>
+      </div>
+
+      <!-- ── TIER 1: DETAILED MODULES ── -->
+      <div class="rel-tier-label" style="display: flex; align-items: baseline; gap: 12px;">
+        <span><span class="ja">詳細正本モジュール</span><span class="en">DETAILED MODULES</span></span>
+        <span style="font-size: 9px; font-weight: 400; letter-spacing: 0; color: var(--text-muted);">
+          <span class="ja">読み順 2</span><span class="en">Read order 2</span>
+        </span>
+      </div>
+      <div class="rel-modules-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 0;">
+        <!-- Module 10 -->
+        <div class="rel-box" style="border: 1.5px solid #2563eb; border-top: 4px solid #2563eb;">
+          <div class="rel-box-label" style="color: #2563eb;">10-module</div>
+          <div class="rel-box-title">Governance &amp; Human Participation</div>
+          <div class="rel-box-desc">
+            <span class="ja">D1-D8 + D13（平時の制度設計）</span>
+            <span class="en">D1-D8 + D13 (peacetime institutional design)</span>
+          </div>
+          <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+            D1 Objective &middot; D2 Legitimacy &middot; D3 Membership &middot; D4 Decision<br>
+            D5 Incentive &middot; D6 Culture &middot; D7 Human Dev &middot; D8 Operating &middot; D13 Meta-Gov
+          </div>
+        </div>
+        <!-- Module 11 -->
+        <div class="rel-box" style="border: 1.5px solid #16a34a; border-top: 4px solid #16a34a;">
+          <div class="rel-box-label" style="color: #166534;">11-module</div>
+          <div class="rel-box-title">Information Ingress &amp; Observability</div>
+          <div class="rel-box-desc">
+            <span class="ja">D9-D12（情報入口・状態・可観測性）</span>
+            <span class="en">D9-D12 (information ingress, state, observability)</span>
+          </div>
+          <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+            D9 World Model &middot; D10 Deliberation<br>
+            D11 Actuation &middot; D12 Safety &amp; Observability
+          </div>
+        </div>
+      </div>
+
+      <!-- Connector: Core -> Reference -->
+      <div class="rel-connector" style="color: #16a34a;">
+        <div class="rel-connector-arrow">&darr;</div>
+        <div class="rel-connector-label">
+          <span class="ja">具体化</span><span class="en">Instantiation</span>
+        </div>
+      </div>
+
+      <!-- ── TIER 2: REFERENCE INSTANCES ── -->
+      <div class="rel-tier-label" style="display: flex; align-items: baseline; gap: 12px;">
+        <span><span class="ja">参照実例</span><span class="en">REFERENCE INSTANCES</span></span>
+        <span style="font-size: 9px; font-weight: 400; letter-spacing: 0; color: var(--text-muted);">
+          <span class="ja">読み順 3</span><span class="en">Read order 3</span>
+        </span>
+      </div>
+      <div class="rel-ref-group" style="margin-bottom: 0;">
+        <div class="rel-ref-group-label">
+          <span class="ja">参照実例群（40-42 を一組として扱う）</span>
+          <span class="en">Reference instance set (40-42 treated as a unit)</span>
+        </div>
+        <div class="rel-ref-flow" style="display: flex; align-items: stretch; gap: 0;">
+          <!-- 40- Profile -->
+          <div class="rel-box" style="flex: 1; border: 1px solid #16a34a;">
+            <div class="rel-box-label" style="color: #166534;">40-reference</div>
+            <div class="rel-box-title">Org Profile</div>
+            <div class="rel-box-desc">
+              <span class="ja">前提・顧客・規模<br>リスク定義</span>
+              <span class="en">Context, customers, scale<br>Risk definitions</span>
+            </div>
+          </div>
+          <!-- Arrow 40 -> 41 -->
+          <div class="rel-flow-arrow" style="color: #16a34a; position: relative; min-width: 40px;">
+            <span style="font-size: 9px; font-weight: 600; position: absolute; top: 8px; white-space: nowrap; color: #16a34a;">
+              <span class="ja">前提</span><span class="en">context</span>
+            </span>
+            <span style="font-size: 20px;">&rarr;</span>
+          </div>
+          <!-- 41- Instantiation -->
+          <div class="rel-box" style="flex: 1; border: 1px solid #16a34a;">
+            <div class="rel-box-label" style="color: #166534;">41-reference</div>
+            <div class="rel-box-title">Instantiation</div>
+            <div class="rel-box-desc">
+              <span class="ja">D1-D13 を参照組織の<br>具体値で記入</span>
+              <span class="en">D1-D13 filled with concrete<br>values for the reference org</span>
+            </div>
+          </div>
+          <!-- Arrow 41 -> 42 -->
+          <div class="rel-flow-arrow" style="color: #16a34a; position: relative; min-width: 40px;">
+            <span style="font-size: 9px; font-weight: 600; position: absolute; top: 8px; white-space: nowrap; color: #16a34a;">
+              <span class="ja">検証</span><span class="en">audit</span>
+            </span>
+            <span style="font-size: 20px;">&rarr;</span>
+          </div>
+          <!-- 42- Audit -->
+          <div class="rel-box" style="flex: 1; border: 1px solid #16a34a;">
+            <div class="rel-box-label" style="color: #166534;">42-reference</div>
+            <div class="rel-box-title">Integrity Audit</div>
+            <div class="rel-box-desc">
+              <span class="ja">Profile &times; Core Spec<br>との整合性監査</span>
+              <span class="en">Consistency audit against<br>Profile &times; Core Spec</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connector to Supporting -->
+      <div style="padding: 16px 0 0;"></div>
+
+      <!-- ── TIER 3: SUPPORTING DOCUMENTS ── -->
+      <div class="rel-tier-label" style="display: flex; align-items: baseline; gap: 12px;">
+        <span><span class="ja">支援文書</span><span class="en">SUPPORTING DOCUMENTS</span></span>
+        <span style="font-size: 9px; font-weight: 400; letter-spacing: 0; color: var(--text-muted);">
+          <span class="ja">読み順 4</span><span class="en">Read order 4</span>
+        </span>
+      </div>
+
+      <!-- Rationale return path -->
+      <div class="rel-return-path" style="margin-bottom: 12px;">
+        <div class="rel-return-line" style="border-color: #d97706;"></div>
+        <div class="rel-return-label" style="color: #d97706;">
+          <span class="ja">&uarr; 理由づけ &rarr; Core Spec へ</span>
+          <span class="en">&uarr; rationale &rarr; feeds Core Spec</span>
+        </div>
+        <div class="rel-return-line" style="border-color: #d97706;"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <!-- 20-Rationale -->
+        <div class="rel-box" style="border: 1.5px dashed #d97706; border-top: 3px solid #d97706;">
+          <div class="rel-box-label" style="color: #92400e;">20-rationale</div>
+          <div class="rel-box-title" style="font-size: 13px;">
+            <span class="ja">AGI 時代の組織 OS 設計根拠</span>
+            <span class="en">AGI-era Organization OS Design Rationale</span>
+          </div>
+          <div class="rel-box-desc">
+            <span class="ja">理論的背景と広域構想</span>
+            <span class="en">Theoretical background and broader vision</span>
+          </div>
+        </div>
+        <!-- 30- Appendices -->
+        <div class="rel-box" style="border: 1px solid var(--border-default); background: var(--paper-300);">
+          <div class="rel-box-label" style="color: var(--ink-600);">30- / 31- / 32-</div>
+          <div class="rel-box-title" style="font-size: 13px;">Appendices</div>
+          <div class="rel-box-desc">
+            <span class="ja">比較分析・論点ログ・構造設計書</span>
+            <span class="en">Comparative analysis, issue logs, structural design docs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Archive return path -->
+      <div class="rel-return-path" style="margin-bottom: 12px;">
+        <div class="rel-return-line" style="border-color: #94a3b8;"></div>
+        <div class="rel-return-label" style="color: #94a3b8;">
+          <span class="ja">source &rarr; Module 11 へ</span>
+          <span class="en">source &rarr; feeds Module 11</span>
+        </div>
+        <div class="rel-return-line" style="border-color: #94a3b8;"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
+        <!-- context/ -->
+        <div class="rel-box" style="border: 1px dashed var(--border-default); background: var(--paper-300);">
+          <div class="rel-box-label" style="color: var(--ink-600);">context/</div>
+          <div class="rel-box-desc">
+            <span class="ja">外部市場・基盤モデル戦略</span>
+            <span class="en">External market &amp; foundation model strategy</span>
+          </div>
+        </div>
+        <!-- archive/ -->
+        <div class="rel-box" style="border: 1px dashed var(--border-default); background: var(--paper-300);">
+          <div class="rel-box-label" style="color: var(--ink-600);">archive/</div>
+          <div class="rel-box-desc">
+            <span class="ja">旧版・HTML・素材</span>
+            <span class="en">Legacy versions, HTML exports, source material</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EDIT RULES ── -->
+      <div style="background: var(--paper-200); padding: 20px 24px;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--slate-700); letter-spacing: 0.5px; margin-bottom: 12px;">
+          <span class="ja">編集ルール</span><span class="en">EDIT RULES</span>
+        </div>
+        <div class="rel-edit-rules">
+          <div class="rel-edit-rule">
+            <div class="rel-edit-rule-dot" style="background: #1a1a1a;"></div>
+            <span class="ja">全体構造の変更 <strong>&rarr; 00-core を先に更新</strong></span>
+            <span class="en">Structural changes <strong>&rarr; update 00-core first</strong></span>
+          </div>
+          <div class="rel-edit-rule">
+            <div class="rel-edit-rule-dot" style="background: #2563eb;"></div>
+            <span class="ja">詳細運用の変更 <strong>&rarr; 10- / 11-module を更新</strong></span>
+            <span class="en">Operational details <strong>&rarr; update 10- / 11-module</strong></span>
+          </div>
+          <div class="rel-edit-rule">
+            <div class="rel-edit-rule-dot" style="background: #d97706;"></div>
+            <span class="ja">理由づけの更新 <strong>&rarr; 20-rationale を更新</strong></span>
+            <span class="en">Rationale updates <strong>&rarr; update 20-rationale</strong></span>
+          </div>
+          <div class="rel-edit-rule">
+            <div class="rel-edit-rule-dot" style="background: #16a34a;"></div>
+            <span class="ja">参照実例の更新 <strong>&rarr; 40-42 を一組で扱う</strong></span>
+            <span class="en">Reference updates <strong>&rarr; treat 40-42 as a unit</strong></span>
+          </div>
+        </div>
+        <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; font-size: 11px; color: var(--text-muted);">
+          <span class="ja">変更は上位から伝播する</span>
+          <span class="en">Changes propagate top-down</span>
+          <span class="ja">module は core の制約内で更新可能</span>
+          <span class="en">Modules update within core constraints</span>
+          <span class="ja">正本ではないが core の正当性根拠</span>
+          <span class="en">Not canonical, but justifies core</span>
+          <span class="ja">41- 更新後は 42- で整合性を再監査</span>
+          <span class="en">After updating 41-, re-audit with 42-</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3: 13 Dimensions
+     ═══════════════════════════════════════════════════════════ -->
+<section id="dimensions">
+  <div class="container">
+    <div class="section-label">
+      <span class="ja">13 設計次元</span><span class="en">13 DIMENSIONS</span>
+    </div>
+    <div class="section-title">
+      <span class="ja">設計次元とモジュール割当</span>
+      <span class="en">Design Dimensions &amp; Module Assignment</span>
+    </div>
+    <div class="section-desc">
+      <span class="ja">各次元は Invariant / Allocation / Protocol / Exception / Metric の 5 要素で定義される。
+      <span style="display: inline-block; padding: 1px 6px; background: var(--wash-blue); color: var(--ink-blue); font-size: 11px; font-weight: 600;">Module 10</span>
+      は制度・人間参加、
+      <span style="display: inline-block; padding: 1px 6px; background: var(--wash-green); color: #166534; font-size: 11px; font-weight: 600;">Module 11</span>
+      は情報・可観測性を扱う。</span>
+      <span class="en">Each dimension is defined by 5 elements: Invariant / Allocation / Protocol / Exception / Metric.
+      <span style="display: inline-block; padding: 1px 6px; background: var(--wash-blue); color: var(--ink-blue); font-size: 11px; font-weight: 600;">Module 10</span>
+      covers institutional &amp; human participation,
+      <span style="display: inline-block; padding: 1px 6px; background: var(--wash-green); color: #166534; font-size: 11px; font-weight: 600;">Module 11</span>
+      covers information &amp; observability.</span>
+    </div>
+
+    <div class="dim-grid">
+      <div class="dim-card"><div class="dim-id">D1</div><div class="dim-name">Objective Function</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D2</div><div class="dim-name">Legitimacy &amp; Boundary</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D3</div><div class="dim-name">Membership &amp; Participation</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D4</div><div class="dim-name">Decision Rights &amp; Accountability</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D5</div><div class="dim-name">Political Economy &amp; Incentives</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D6</div><div class="dim-name">Social Order, Culture &amp; Trust</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D7</div><div class="dim-name">Human Development &amp; Meaning</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D8</div><div class="dim-name">Operating Model &amp; Role Contracts</div><div class="dim-module mod-10">Module 10</div></div>
+      <div class="dim-card"><div class="dim-id">D9</div><div class="dim-name">World Model, State &amp; Memory</div><div class="dim-module mod-11">Module 11</div></div>
+      <div class="dim-card"><div class="dim-id">D10</div><div class="dim-name">Deliberation &amp; Epistemics</div><div class="dim-module mod-11">Module 11</div></div>
+      <div class="dim-card"><div class="dim-id">D11</div><div class="dim-name">Actuation Surface</div><div class="dim-module mod-11">Module 11</div></div>
+      <div class="dim-card"><div class="dim-id">D12</div><div class="dim-name">Safety &amp; Observability</div><div class="dim-module mod-11">Module 11</div></div>
+      <div class="dim-card"><div class="dim-id">D13</div><div class="dim-name">Meta-Governance &amp; Evolution</div><div class="dim-module mod-10">Module 10</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 4: 10 Layers
+     ═══════════════════════════════════════════════════════════ -->
+<section id="layers" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="section-label">
+      <span class="ja">10 レイヤー</span><span class="en">10 LAYERS</span>
+    </div>
+    <div class="section-title">
+      <span class="ja">抽象的完全性地図</span>
+      <span class="en">Abstract Completeness Map</span>
+    </div>
+    <div class="section-desc">
+      <span class="ja">13 次元が「何を具体的に決めるか」を問うのに対し、10 レイヤーは「その論点が制度のどの種類の現実に属するか」を整理する座標系。</span>
+      <span class="en">While the 13 dimensions ask "what to decide concretely," the 10 layers provide a coordinate system for "which type of institutional reality each issue belongs to."</span>
+    </div>
+
+    <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); overflow: hidden;">
+      <div class="layer-stack">
+        <div class="layer-row">
+          <div class="layer-id">L1</div>
+          <div class="layer-content">
+            <div class="layer-name">Purpose &amp; Legitimacy</div>
+            <div class="layer-desc">
+              <span class="ja">制度が何のために存在し、誰に対して正当化されるか</span>
+              <span class="en">Why the institution exists and to whom it is justified</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D1</span><span class="layer-dim-tag">D2</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L2</div>
+          <div class="layer-content">
+            <div class="layer-name">Membership, Rights &amp; Constitutional Governance</div>
+            <div class="layer-desc">
+              <span class="ja">誰が参加主体で、誰がどの決定権を持つか</span>
+              <span class="en">Who participates and who holds which decision rights</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D3</span><span class="layer-dim-tag">D4</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L3</div>
+          <div class="layer-content">
+            <div class="layer-name">Political Economy &amp; Incentives</div>
+            <div class="layer-desc">
+              <span class="ja">価値・コスト・報酬・compute・attention をどう配分するか</span>
+              <span class="en">How to allocate value, cost, rewards, compute, and attention</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D5</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L4</div>
+          <div class="layer-content">
+            <div class="layer-name">Culture, Trust &amp; Social Order</div>
+            <div class="layer-desc">
+              <span class="ja">継続可能な社会秩序として成立する条件</span>
+              <span class="en">Conditions for sustaining social order</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D6</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L5</div>
+          <div class="layer-content">
+            <div class="layer-name">Human Agency, Development &amp; Meaning</div>
+            <div class="layer-desc">
+              <span class="ja">人間がどう強くなり、どう作者であり続けるか</span>
+              <span class="en">How humans grow stronger and remain authors of their own story</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D7</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L6</div>
+          <div class="layer-content">
+            <div class="layer-name">Operating Model &amp; Role Topology</div>
+            <div class="layer-desc">
+              <span class="ja">日々の仕事のループ・役割・引き継ぎ・ケイデンス</span>
+              <span class="en">Daily work loops, roles, handoffs, and cadence</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D8</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L7</div>
+          <div class="layer-content">
+            <div class="layer-name">World Model, Knowledge &amp; Deliberation</div>
+            <div class="layer-desc">
+              <span class="ja">制度が何を現実とみなし、どう理解し、どう判断案を作るか</span>
+              <span class="en">What the institution treats as reality, how it understands, and how it forms proposals</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D9</span><span class="layer-dim-tag">D10</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L8</div>
+          <div class="layer-content">
+            <div class="layer-name">Actuation &amp; Interface</div>
+            <div class="layer-desc">
+              <span class="ja">判断がどの経路で現実の組織を変えるか</span>
+              <span class="en">Through which pathways decisions alter the real organization</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D11</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L9</div>
+          <div class="layer-content">
+            <div class="layer-name">Safety, Resilience &amp; Observability</div>
+            <div class="layer-desc">
+              <span class="ja">観測でき、停止でき、回復できる条件</span>
+              <span class="en">Conditions for being observable, stoppable, and recoverable</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D12</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L10</div>
+          <div class="layer-content">
+            <div class="layer-name">Meta-Governance &amp; Evolution</div>
+            <div class="layer-desc">
+              <span class="ja">OS 自体をどう更新し、何を改定不能にするか</span>
+              <span class="en">How to update the OS itself and what remains unamendable</span>
+            </div>
+            <div class="layer-dims"><span class="layer-dim-tag">D13</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 5: Causal Chains
+     ═══════════════════════════════════════════════════════════ -->
+<section id="chains">
+  <div class="container">
+    <div class="section-label">
+      <span class="ja">因果連鎖</span><span class="en">CAUSAL CHAINS</span>
+    </div>
+    <div class="section-title">
+      <span class="ja">4 つの因果連鎖</span>
+      <span class="en">4 Causal Chains</span>
+    </div>
+    <div class="section-desc">
+      <span class="ja">次元は独立ではなく、4 つの因果チェーンで接続される。いずれかの次元が欠落すると、チェーン全体が機能しない。</span>
+      <span class="en">Dimensions are not independent&mdash;they are connected through 4 causal chains. If any dimension is missing, the entire chain fails.</span>
+    </div>
+
+    <div class="chain-grid">
+      <!-- Chain A -->
+      <div class="chain-card">
+        <div class="chain-label">CHAIN A</div>
+        <div class="chain-title">Objective &rarr; Decision &rarr; Actuation &rarr; Incentives</div>
+        <svg viewBox="0 0 380 60" style="width: 100%; display: block;">
+          <defs><marker id="ca" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#2563eb"/></marker></defs>
+          <rect x="0" y="15" width="60" height="30" fill="var(--wash-blue)" stroke="#2563eb"/>
+          <text x="30" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#2563eb">D1</text>
+          <line x1="62" y1="30" x2="96" y2="30" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ca)"/>
+          <rect x="100" y="15" width="60" height="30" fill="var(--wash-blue)" stroke="#2563eb"/>
+          <text x="130" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#2563eb">D4</text>
+          <line x1="162" y1="30" x2="196" y2="30" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ca)"/>
+          <rect x="200" y="15" width="60" height="30" fill="var(--wash-blue)" stroke="#2563eb"/>
+          <text x="230" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#2563eb">D11</text>
+          <line x1="262" y1="30" x2="296" y2="30" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ca)"/>
+          <rect x="300" y="15" width="60" height="30" fill="var(--wash-blue)" stroke="#2563eb"/>
+          <text x="330" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#2563eb">D5</text>
+        </svg>
+        <div class="chain-claim">
+          <span class="ja">目的境界 &rarr; 決定権限 &rarr; 実行面 &rarr; インセンティブ設計。OS が現実を一貫して動かすための最短経路。</span>
+          <span class="en">Objective &rarr; Decision rights &rarr; Actuation &rarr; Incentive design. The shortest path for the OS to consistently drive reality.</span>
+        </div>
+      </div>
+
+      <!-- Chain B -->
+      <div class="chain-card">
+        <div class="chain-label">CHAIN B</div>
+        <div class="chain-title">Membership &rarr; Decision &rarr; Operating &rarr; Human Dev &rarr; Legitimacy</div>
+        <svg viewBox="0 0 380 60" style="width: 100%; display: block;">
+          <defs><marker id="cb" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#16a34a"/></marker></defs>
+          <rect x="0" y="15" width="52" height="30" fill="var(--wash-green)" stroke="#16a34a"/>
+          <text x="26" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#166534">D3</text>
+          <line x1="54" y1="30" x2="72" y2="30" stroke="#16a34a" stroke-width="1.5" marker-end="url(#cb)"/>
+          <rect x="76" y="15" width="52" height="30" fill="var(--wash-green)" stroke="#16a34a"/>
+          <text x="102" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#166534">D4</text>
+          <line x1="130" y1="30" x2="148" y2="30" stroke="#16a34a" stroke-width="1.5" marker-end="url(#cb)"/>
+          <rect x="152" y="15" width="52" height="30" fill="var(--wash-green)" stroke="#16a34a"/>
+          <text x="178" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#166534">D8</text>
+          <line x1="206" y1="30" x2="224" y2="30" stroke="#16a34a" stroke-width="1.5" marker-end="url(#cb)"/>
+          <rect x="228" y="15" width="52" height="30" fill="var(--wash-green)" stroke="#16a34a"/>
+          <text x="254" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#166534">D7</text>
+          <line x1="282" y1="30" x2="300" y2="30" stroke="#16a34a" stroke-width="1.5" marker-end="url(#cb)"/>
+          <rect x="304" y="15" width="52" height="30" fill="var(--wash-green)" stroke="#16a34a"/>
+          <text x="330" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#166534">D2</text>
+        </svg>
+        <div class="chain-claim">
+          <span class="ja">権利付与 &rarr; 権限設計 &rarr; 日常の運用 &rarr; 人間の成長 &rarr; 正当性維持。人間参加が象徴に堕さないための連鎖。</span>
+          <span class="en">Rights &rarr; Authority design &rarr; Daily operations &rarr; Human growth &rarr; Legitimacy. The chain that prevents human participation from becoming symbolic.</span>
+        </div>
+      </div>
+
+      <!-- Chain C -->
+      <div class="chain-card">
+        <div class="chain-label">CHAIN C</div>
+        <div class="chain-title">World Model &rarr; Deliberation &rarr; Decision &rarr; Actuation &rarr; Safety &rarr; Meta-Gov</div>
+        <svg viewBox="0 0 380 60" style="width: 100%; display: block;">
+          <defs><marker id="cc" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#d97706"/></marker></defs>
+          <rect x="0" y="15" width="44" height="30" fill="var(--wash-amber)" stroke="#d97706"/>
+          <text x="22" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#92400e">D9</text>
+          <line x1="46" y1="30" x2="60" y2="30" stroke="#d97706" stroke-width="1.5" marker-end="url(#cc)"/>
+          <rect x="64" y="15" width="44" height="30" fill="var(--wash-amber)" stroke="#d97706"/>
+          <text x="86" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#92400e">D10</text>
+          <line x1="110" y1="30" x2="124" y2="30" stroke="#d97706" stroke-width="1.5" marker-end="url(#cc)"/>
+          <rect x="128" y="15" width="44" height="30" fill="var(--wash-amber)" stroke="#d97706"/>
+          <text x="150" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#92400e">D4</text>
+          <line x1="174" y1="30" x2="188" y2="30" stroke="#d97706" stroke-width="1.5" marker-end="url(#cc)"/>
+          <rect x="192" y="15" width="44" height="30" fill="var(--wash-amber)" stroke="#d97706"/>
+          <text x="214" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#92400e">D11</text>
+          <line x1="238" y1="30" x2="252" y2="30" stroke="#d97706" stroke-width="1.5" marker-end="url(#cc)"/>
+          <rect x="256" y="15" width="44" height="30" fill="var(--wash-amber)" stroke="#d97706"/>
+          <text x="278" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#92400e">D12</text>
+          <line x1="302" y1="30" x2="316" y2="30" stroke="#d97706" stroke-width="1.5" marker-end="url(#cc)"/>
+          <rect x="320" y="15" width="44" height="30" fill="var(--wash-amber)" stroke="#d97706"/>
+          <text x="342" y="35" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#92400e">D13</text>
+        </svg>
+        <div class="chain-claim">
+          <span class="ja">正規状態 &rarr; 推論 &rarr; 承認 &rarr; 実行 &rarr; 観測 &rarr; OS 更新。制度知能が成立するための認知ループ。</span>
+          <span class="en">World model &rarr; Reasoning &rarr; Approval &rarr; Execution &rarr; Observation &rarr; OS update. The cognitive loop for institutional intelligence.</span>
+        </div>
+      </div>
+
+      <!-- Chain D -->
+      <div class="chain-card">
+        <div class="chain-label">CHAIN D</div>
+        <div class="chain-title">Legitimacy &rarr; Objective &rarr; Political Economy &rarr; Social Order &rarr; Legitimacy</div>
+        <svg viewBox="0 0 380 100" style="width: 100%; display: block;">
+          <defs><marker id="cd" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#dc2626"/></marker></defs>
+          <rect x="0" y="10" width="60" height="30" fill="var(--wash-red)" stroke="#dc2626"/>
+          <text x="30" y="30" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#b91c1c">D2</text>
+          <line x1="62" y1="25" x2="96" y2="25" stroke="#dc2626" stroke-width="1.5" marker-end="url(#cd)"/>
+          <rect x="100" y="10" width="60" height="30" fill="var(--wash-red)" stroke="#dc2626"/>
+          <text x="130" y="30" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#b91c1c">D1</text>
+          <line x1="162" y1="25" x2="196" y2="25" stroke="#dc2626" stroke-width="1.5" marker-end="url(#cd)"/>
+          <rect x="200" y="10" width="60" height="30" fill="var(--wash-red)" stroke="#dc2626"/>
+          <text x="230" y="30" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#b91c1c">D5</text>
+          <line x1="262" y1="25" x2="296" y2="25" stroke="#dc2626" stroke-width="1.5" marker-end="url(#cd)"/>
+          <rect x="300" y="10" width="60" height="30" fill="var(--wash-red)" stroke="#dc2626"/>
+          <text x="330" y="30" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="#b91c1c">D6</text>
+          <line x1="330" y1="42" x2="330" y2="70" stroke="#dc2626" stroke-width="1.5"/>
+          <line x1="330" y1="70" x2="30" y2="70" stroke="#dc2626" stroke-width="1.5"/>
+          <line x1="30" y1="70" x2="30" y2="44" stroke="#dc2626" stroke-width="1.5" marker-end="url(#cd)"/>
+          <text x="180" y="86" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#b91c1c" font-style="italic">feedback loop</text>
+        </svg>
+        <div class="chain-claim">
+          <span class="ja">正当性 &rarr; 目的 &rarr; 分配 &rarr; 社会秩序 &rarr; 正当性。正当性は入力でも出力でもある循環構造。</span>
+          <span class="en">Legitimacy &rarr; Objective &rarr; Distribution &rarr; Social order &rarr; Legitimacy. A feedback loop where legitimacy is both input and output.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cross-chain dimension participation -->
+    <div style="margin-top: 48px;">
+      <div style="font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: 16px;">
+        <span class="ja">次元のチェーン参加回数</span>
+        <span class="en">Dimension Chain Participation</span>
+      </div>
+      <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
+        <span class="ja">D4（Decision Rights）が 3 チェーンに参加し、制度全体のハブとして機能する。</span>
+        <span class="en">D4 (Decision Rights) participates in 3 chains, serving as the hub of the entire institution.</span>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--bg-surface-raised); border: 1px solid var(--border-default); font-size: 12px;">
+          <span style="font-family: var(--font-mono); font-weight: 600; color: var(--ink-blue);">D4</span>
+          <span style="color: var(--text-secondary);">3 chains</span>
+          <span style="display: flex; gap: 2px;">
+            <span style="width: 8px; height: 8px; background: var(--ink-blue);"></span>
+            <span style="width: 8px; height: 8px; background: var(--ink-green);"></span>
+            <span style="width: 8px; height: 8px; background: var(--ink-amber);"></span>
+          </span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--bg-surface-raised); border: 1px solid var(--border-default); font-size: 12px;">
+          <span style="font-family: var(--font-mono); font-weight: 600; color: var(--ink-blue);">D11</span>
+          <span style="color: var(--text-secondary);">2 chains</span>
+          <span style="display: flex; gap: 2px;">
+            <span style="width: 8px; height: 8px; background: var(--ink-blue);"></span>
+            <span style="width: 8px; height: 8px; background: var(--ink-amber);"></span>
+          </span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--bg-surface-raised); border: 1px solid var(--border-default); font-size: 12px;">
+          <span style="font-family: var(--font-mono); font-weight: 600; color: var(--ink-blue);">D1</span>
+          <span style="color: var(--text-secondary);">2 chains</span>
+          <span style="display: flex; gap: 2px;">
+            <span style="width: 8px; height: 8px; background: var(--ink-blue);"></span>
+            <span style="width: 8px; height: 8px; background: var(--ink-red);"></span>
+          </span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--bg-surface-raised); border: 1px solid var(--border-default); font-size: 12px;">
+          <span style="font-family: var(--font-mono); font-weight: 600; color: var(--ink-blue);">D2</span>
+          <span style="color: var(--text-secondary);">2 chains</span>
+          <span style="display: flex; gap: 2px;">
+            <span style="width: 8px; height: 8px; background: var(--ink-green);"></span>
+            <span style="width: 8px; height: 8px; background: var(--ink-red);"></span>
+          </span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--bg-surface-raised); border: 1px solid var(--border-default); font-size: 12px;">
+          <span style="font-family: var(--font-mono); font-weight: 600; color: var(--ink-blue);">D5</span>
+          <span style="color: var(--text-secondary);">2 chains</span>
+          <span style="display: flex; gap: 2px;">
+            <span style="width: 8px; height: 8px; background: var(--ink-blue);"></span>
+            <span style="width: 8px; height: 8px; background: var(--ink-red);"></span>
+          </span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--bg-surface-raised); border: 1px solid var(--border-default); font-size: 12px;">
+          <span style="font-family: var(--font-mono); font-weight: 600; color: var(--ink-600);">D3 D6 D7 D8 D9 D10 D12 D13</span>
+          <span style="color: var(--text-secondary);">
+            <span class="ja">各 1 チェーン</span><span class="en">1 chain each</span>
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-text">AI-native Institution / OS &mdash; Architecture Map</span>
+    <span class="footer-text">Generated 2026-03-11</span>
+  </div>
+</footer>
+
+<!-- ── Scripts ── -->
+<script>
+(function() {
+  // Language toggle
+  var toggle = document.getElementById('langToggle');
+  var btnJa = document.getElementById('langJa');
+  var btnEn = document.getElementById('langEn');
+
+  toggle.addEventListener('click', function() {
+    var html = document.documentElement;
+    if (html.getAttribute('lang') === 'ja') {
+      html.setAttribute('lang', 'en');
+      btnJa.classList.remove('active');
+      btnEn.classList.add('active');
+    } else {
+      html.setAttribute('lang', 'ja');
+      btnEn.classList.remove('active');
+      btnJa.classList.add('active');
+    }
+  });
+
+  // Scroll spy
+  var nav = document.querySelector('.section-nav-inner');
+  var links = nav.querySelectorAll('a');
+  var sections = [];
+  links.forEach(function(a) {
+    var id = a.getAttribute('href').replace('#', '');
+    var el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: a });
+  });
+
+  function update() {
+    var scrollY = window.scrollY + 140;
+    var current = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].el.offsetTop <= scrollY) current = sections[i];
+    }
+    links.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
+
+</body>
+</html>

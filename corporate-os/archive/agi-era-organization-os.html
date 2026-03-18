@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGI/ASI時代の組織OS設計 v3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;400italic&family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Typography */
+      --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+      /* Ink Scale */
+      --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+      --ink-700: #404040; --ink-600: #525252; --ink-500: #6b6b6b;
+      --ink-400: #8a8a8a; --ink-300: #a3a3a3; --ink-200: #c4c4c4;
+      --ink-100: #e0e0e0; --ink-50: #f0f0f0;
+
+      /* Slate Scale */
+      --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+      --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
+      --slate-900: #0f172a; --slate-1000: #020617;
+
+      /* Paper Scale */
+      --paper-50: #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+      --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+      --paper-600: #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+      --paper-900: #d5d4d0; --paper-1000: #cccbc7;
+
+      /* Accent Ink */
+      --ink-blue: #2563eb; --ink-green: #16a34a;
+      --ink-amber: #d97706; --ink-red: #dc2626;
+
+      /* Semantic */
+      --bg-page: var(--paper-50);
+      --bg-surface: var(--paper-100);
+      --border-default: var(--slate-200);
+      --border-strong: var(--slate-300);
+      --border-heavy: var(--ink-1000);
+      --grid-line: var(--slate-100);
+      --text-primary: var(--ink-900);
+      --text-heading: var(--ink-1000);
+      --text-secondary: var(--slate-500);
+      --text-muted: var(--slate-400);
+
+      /* Spacing */
+      --space-3: 8px; --space-4: 12px; --space-5: 16px;
+      --space-6: 24px; --space-7: 32px; --space-8: 48px;
+      --space-9: 64px; --space-10: 96px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--bg-page);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .container {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: var(--space-9) var(--space-6);
+    }
+
+    /* Typography */
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      color: var(--text-heading);
+      margin-bottom: var(--space-6);
+      border-bottom: 2px solid var(--border-heavy);
+      padding-bottom: var(--space-3);
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+      color: var(--text-heading);
+      margin-top: var(--space-9);
+      margin-bottom: var(--space-6);
+    }
+
+    h3 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.2px;
+      color: var(--text-heading);
+      margin-top: var(--space-8);
+      margin-bottom: var(--space-5);
+    }
+
+    h4 {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--text-heading);
+      margin-top: var(--space-7);
+      margin-bottom: var(--space-4);
+    }
+
+    p {
+      margin-bottom: var(--space-5);
+    }
+
+    blockquote {
+      background: var(--paper-300);
+      border-left: 3px solid var(--ink-1000);
+      padding: var(--space-5);
+      margin: var(--space-6) 0;
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+
+    blockquote p:last-child {
+      margin-bottom: 0;
+    }
+
+    strong {
+      font-weight: 600;
+      color: var(--ink-1000);
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: var(--paper-300);
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    pre {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+      background: var(--paper-300);
+      border: 1px solid var(--border-default);
+      padding: var(--space-5);
+      margin: var(--space-6) 0;
+      overflow-x: auto;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-6) 0;
+      font-size: 14px;
+    }
+
+    thead {
+      background: var(--paper-300);
+      border-bottom: 1.5px solid var(--ink-900);
+    }
+
+    th {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      text-align: left;
+      padding: 10px 12px;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 0.5px solid var(--ink-100);
+    }
+
+    tr:hover {
+      background: var(--paper-50);
+    }
+
+    /* Lists */
+    ul, ol {
+      margin: var(--space-5) 0;
+      padding-left: var(--space-6);
+    }
+
+    li {
+      margin-bottom: var(--space-3);
+      line-height: 1.6;
+    }
+
+    li::marker {
+      color: var(--ink-400);
+    }
+
+    /* Section Navigation */
+    .section-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(253, 253, 252, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+      border-bottom: 1px solid var(--border-default);
+      margin: 0 calc(-1 * var(--space-6));
+      padding: var(--space-4) var(--space-6);
+    }
+
+    .section-nav-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-3);
+    }
+
+    .section-links {
+      display: flex;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+    }
+
+    .section-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: var(--space-2) 0;
+      transition: color 0.15s ease;
+      border-bottom: 2px solid transparent;
+    }
+
+    .section-links a:hover {
+      color: var(--text-primary);
+      border-bottom-color: var(--ink-blue);
+    }
+
+    /* Header */
+    .doc-header {
+      margin-bottom: var(--space-9);
+      text-align: center;
+    }
+
+    .doc-meta {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-3);
+    }
+
+    .doc-title {
+      font-size: 44px;
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: var(--space-6);
+      border: none;
+      padding: 0;
+    }
+
+    .doc-abstract {
+      max-width: 720px;
+      margin: var(--space-7) auto 0;
+      padding: var(--space-6);
+      background: var(--paper-300);
+      border-left: 3px solid var(--ink-1000);
+    }
+
+    .doc-abstract h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: var(--space-4);
+    }
+
+    /* Footer */
+    .doc-footer {
+      margin-top: var(--space-10);
+      padding-top: var(--space-7);
+      border-top: 1px solid var(--border-default);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* Special formatting */
+    .formula {
+      font-family: var(--font-mono);
+      background: var(--paper-300);
+      padding: var(--space-4);
+      margin: var(--space-6) 0;
+      border-left: 3px solid var(--ink-blue);
+      font-size: 13px;
+    }
+
+    .highlight-box {
+      background: var(--paper-100);
+      border: 1px solid var(--border-strong);
+      padding: var(--space-5);
+      margin: var(--space-6) 0;
+    }
+
+    .version-badge {
+      display: inline-block;
+      background: var(--ink-1000);
+      color: var(--paper-50);
+      padding: 4px 12px;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-left: var(--space-3);
+    }
+  </style>
+</head>
+<body>
+
+<div class="section-nav">
+  <div class="section-nav-title">Navigation</div>
+  <div class="section-links">
+    <a href="#intro">序章</a>
+    <a href="#part1">第1部: 原理</a>
+    <a href="#part2">第2部: 統治</a>
+    <a href="#part3">第3部: 運用</a>
+    <a href="#part4">第4部: 移行</a>
+    <a href="#appendix">付録</a>
+  </div>
+</div>
+
+<div class="container">
+
+<header class="doc-header">
+  <div class="doc-meta">組織OS設計フレームワーク</div>
+  <h1 class="doc-title">AGI/ASI時代の組織OS設計<span class="version-badge">v3</span></h1>
+  <p style="color: var(--text-secondary); font-size: 16px; margin-top: var(--space-6);">
+    AIが組織を運営し、人間が参加者として共存する状態の設計
+  </p>
+</header>
+
+<div class="doc-abstract">
+  <h2>ゴール</h2>
+  <blockquote>
+    <p><strong>AGI/ASI時代において、AIが主要な知的主体として組織を運営し、人間がその参加者として安全・持続可能・正当に共存できる状態を設計・実現する。</strong></p>
+  </blockquote>
+  <p>このゴールは5つの要素から成る。「AGI/ASI時代において」は設計の時間的射程を、「AIが主要な知的主体として組織を運営し」はAIと人間の関係（AIが運営主体、人間が参加者）を、「安全に」は技術・制度的な安全設計を、「持続可能に」は人間と組織の長期的存続を、「正当に」は内外の正統性を規定する。これら全てに対して構造的な解を提供するのが本ドキュメントの目的である。</p>
+</div>
+
+<section id="intro">
+<h2>序章: ゴールとこのドキュメントの読み方</h2>
+
+<h3>8つの問い</h3>
+
+<p>ゴールを分解すると、以下の8つの問いに答える必要がある。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>問い</th>
+      <th>ゴールとの対応</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Q1</td>
+      <td>この設計は何を扱い、何を扱わないのか</td>
+      <td>設計空間の定義</td>
+    </tr>
+    <tr>
+      <td>Q2</td>
+      <td>AIは何のために組織を運営するのか</td>
+      <td>「正当に」の基盤</td>
+    </tr>
+    <tr>
+      <td>Q3</td>
+      <td>AI運営の組織で人間はどう参加し、どの権利を行使するか</td>
+      <td>「安全・正当に」の参加設計</td>
+    </tr>
+    <tr>
+      <td>Q4</td>
+      <td>AI能力の変化にどう適応するか</td>
+      <td>「AGI/ASI時代において」の通時性</td>
+    </tr>
+    <tr>
+      <td>Q5</td>
+      <td>AIが運営する日常に人間はどう参加するか</td>
+      <td>「共存できる状態」の具体設計</td>
+    </tr>
+    <tr>
+      <td>Q6</td>
+      <td>安全性と信頼をどう確保するか</td>
+      <td>「安全に」の技術・制度設計</td>
+    </tr>
+    <tr>
+      <td>Q7</td>
+      <td>人間はどう存在し、意味を持つか</td>
+      <td>「持続可能に」の人間側設計</td>
+    </tr>
+    <tr>
+      <td>Q8</td>
+      <td>複数の組織OSが共存する世界をどう設計するか</td>
+      <td>社会レベルの「正当に」</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>4部構成の論理</h3>
+
+<p>本ドキュメントは4部構成を採る。この構造は読者が辿るべき思考の順序に沿っている。</p>
+
+<p><strong>第1部: 原理と設計空間</strong> — まず「何を設計するのか」「何を原則とするのか」を定義する。設計対象の定義なしに設計はできない。Q1・Q2の前提部分・Q4の前提部分に答える。</p>
+
+<p><strong>第2部: 統治設計</strong> — 次に「AIが運営する組織で人間はどう参加するか」を設計する。参加の構造がなければ、人間は形式的な存在に転落する。Q2・Q3・Q7の権利部分に答える。</p>
+
+<p><strong>第3部: 運用設計</strong> — 統治の原則をAI運営の日常に翻訳する。統治がどれほど優れていても、運用プロセスがなければ動かない。Q5・Q6・Q7の主体性部分に答える。</p>
+
+<p><strong>第4部: 移行と適応の設計</strong> — AI能力の変化と外部環境への対応を設計する。単一フェーズの設計ではAGI/ASI時代を射程に含められない。Q4・Q6の外部面・Q8に答える。</p>
+
+<h3>v1/v2からの主要な転換</h3>
+
+<p>本ドキュメント（v3）は、v1（第1部〜第3部）とv2（第4部: 論点と仮説）を統合・再構築したものである。主要な転換点は以下の通り。</p>
+
+<ul>
+  <li><strong>人間の権威の根拠を再定義</strong>: 「人間にしかできないから人間がやる」という能力ベースの正当化を棄却し、受益者性・手続的正統性・能力の3原理の複合へ転換</li>
+  <li><strong>通時性の構造的組み込み</strong>: Level 4（Phase H）を唯一の設計目標とする暗黙の前提を棄却し、Phase H / C / Aの全てに設計を配置</li>
+  <li><strong>人間の6職能から4権利+3カテゴリ職能へ</strong>: 能力ベースの「不可譲渡な職能」を、構造ベースの「不可譲渡な権利」に再定義</li>
+  <li><strong>メタガバナンスの中核化</strong>: OS自体の改定権の設計をハードコア/ソフトシェルの2層構造として明示</li>
+  <li><strong>権限配分の動的化</strong>: レイヤー別の権限配分を静的設計から、AI能力レベルの関数としての動的設計へ</li>
+  <li><strong>主体の反転</strong>: 「組織がAIを運用する」から「AIが組織を運営し、人間が参加する」へ。設計の出発点をAI運営とし、Phase A（AI主導）を目標状態、Phase H/Cを移行経路として再配置</li>
+</ul>
+
+<h3>読み方のガイド</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>読者の関心</th>
+      <th>推奨する読み順</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>全体像を掴みたい</td>
+      <td>序章 → §1.1 → §1.2 → §1.4 → 付録A</td>
+    </tr>
+    <tr>
+      <td>統治設計に関心がある</td>
+      <td>§2.1 → §2.2 → §2.3 → §2.4</td>
+    </tr>
+    <tr>
+      <td>運用を今すぐ始めたい</td>
+      <td>§3.1 → §3.2 → §3.6</td>
+    </tr>
+    <tr>
+      <td>ASI時代の移行に関心がある</td>
+      <td>§1.4 → §4.1 → §4.2 → §4.3</td>
+    </tr>
+    <tr>
+      <td>v1/v2との差分を知りたい</td>
+      <td>付録C</td>
+    </tr>
+  </tbody>
+</table>
+
+</section>
+
+<section id="part1">
+<h2>第1部: 原理と設計空間</h2>
+
+<h3>§1.1 組織OSの定義と射程</h3>
+
+<h4>中核認識</h4>
+
+<p>本ドキュメントはひとつの前提に立つ。<strong>AIが組織を運営する主体であり、人間はその参加者である。</strong></p>
+
+<p>これは「将来そうなるかもしれない」という予測ではなく、設計の出発点として採用する前提である。人間が主体でAIを道具として使う世界観からは、本質的に異なる設計が導かれる。</p>
+
+<p>「人間がAIにどこまで任せるか」と問う設計は、暗黙に人間を主体に置いている。本ドキュメントは逆に、「AIが運営する組織に人間がどう参加するか」と問う。この反転により、以下の問いが前景化する。</p>
+
+<ul>
+  <li>AIは何のために組織を運営するのか</li>
+  <li>人間はどの権利を持ち、どう行使するのか</li>
+  <li>人間はどう意味を見出し、何を得るのか</li>
+  <li>AIの運営が失敗したとき、どう回復するのか</li>
+  <li>どのような関係性や文化が維持されるのか</li>
+  <li>システム自体をどう修正するのか</li>
+</ul>
+
+<p>多くのAGI/ASI議論は、「人間がAIをどう制御するか」を問う。しかしAIの能力が人間を超えた世界では、制御の設計は形骸化する。残るのは、<strong>人間がどう参加し、どの権利を保持し、どう意味を持つか</strong>という設計だけである。</p>
+
+<h4>OSの定義</h4>
+
+<blockquote>
+  <p><strong>AGI/ASI時代のOSとは、AIが組織を運営する全体アーキテクチャであり、人間の参加・権利・意味を構造的に保証する多層的秩序である。</strong></p>
+</blockquote>
+
+<p>ここでいうOSは、コンピュータのオペレーティングシステムだけを指さない。AIが何のために組織を運営し、人間がどう参加し、どの権利を行使し、どう意味を持ち、価値がどう分配され、システム自体がどう学習・進化するかを規定する全体アーキテクチャを指す。</p>
+
+<h4>既存議論が陥りやすい4つの誤り</h4>
+
+<p><strong>誤り1: OSを認知アーキテクチャに縮約する</strong> — 「どう知るか」だけを定義し、「何者として存在するのか」「力と価値をどう配るのか」を欠落させる。</p>
+
+<p><strong>誤り2: ガバナンスを「承認フロー」程度に捉える</strong> — AGI/ASI時代のガバナンスには、権限配分、拒否権、監査独立性、異議申立て、責任追跡、記憶の所有権、制度改定手続きまで含めた憲法設計が必要である。</p>
+
+<p><strong>誤り3: 生産性向上を唯一の評価軸にする</strong> — 生産性以外の評価軸（人間の主体性、社会的信頼、分配の公正、文化の維持）を欠くと、効率的だが持続不可能なシステムになる。</p>
+
+<p><strong>誤り4: 「人間が残る仕事」を静的に考える</strong> — 重要なのは静的な役割分担ではなく、どの判断を人間が持ち続けるべきか、どの能力を育て続けるべきか、どの責任を譲渡してよいかという可変的な境界設計である。</p>
+
+<h3>§1.2 設計空間 — 10の設計次元</h3>
+
+<p>組織OSが扱う設計空間は10の次元（レイヤー）から成る。これらは本ドキュメントの「章立て」ではなく、設計の漏れを検証するための「地図」である。後続の全てのセクションが「どの次元を扱っているか」を参照する。</p>
+
+<h4>全体俯瞰表</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>名称</th>
+      <th>中心問い</th>
+      <th>欠落時の典型的失敗</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>L1</td>
+      <td>存在目的・外部正当性</td>
+      <td>そもそも何のために存在するのか</td>
+      <td>強いが正当性のないシステム</td>
+    </tr>
+    <tr>
+      <td>L2</td>
+      <td>憲法・権力・責任</td>
+      <td>誰が何を決め、誰が責任を負うのか</td>
+      <td>ガバナンス演出、責任の空洞化</td>
+    </tr>
+    <tr>
+      <td>L3</td>
+      <td>経済・分配・資源配分</td>
+      <td>何を最適化し、価値をどう配るのか</td>
+      <td>最適化はするが不公平になる</td>
+    </tr>
+    <tr>
+      <td>L4</td>
+      <td>社会・文化・信頼</td>
+      <td>共同体としてどう成立するのか</td>
+      <td>協働は動くが社会が壊れる</td>
+    </tr>
+    <tr>
+      <td>L5</td>
+      <td>人間の主体性・成長・意味</td>
+      <td>人間はどう強くなるか</td>
+      <td>deskilling、疎外、依存</td>
+    </tr>
+    <tr>
+      <td>L6</td>
+      <td>仕事・役割・運用モデル</td>
+      <td>日々どう働き、どう協働するのか</td>
+      <td>通知地獄、責任不明、疲弊</td>
+    </tr>
+    <tr>
+      <td>L7</td>
+      <td>認知・知識・意思決定</td>
+      <td>どう知覚し、理解し、判断するのか</td>
+      <td>賢く見える誤作動</td>
+    </tr>
+    <tr>
+      <td>L8</td>
+      <td>エージェント実行・インターフェース</td>
+      <td>どう行動し、人間と接続するのか</td>
+      <td>危険な自動化、実務不整合</td>
+    </tr>
+    <tr>
+      <td>L9</td>
+      <td>技術基盤・安全・可観測性</td>
+      <td>どう安全に、安定して動かすのか</td>
+      <td>見えない故障、重大事故</td>
+    </tr>
+    <tr>
+      <td>L10</td>
+      <td>学習・適応・メタガバナンス</td>
+      <td>OS自体をどう改定するのか</td>
+      <td>強いが硬直化、または暴走</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>3つの大領域</h4>
+
+<p>10の次元は3つの大領域に分かれる。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>領域</th>
+      <th>レイヤー</th>
+      <th>問い</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A: 組織は何者か</td>
+      <td>L1〜L3</td>
+      <td>存在理由と統治原理</td>
+    </tr>
+    <tr>
+      <td>B: 組織はどう生きるか</td>
+      <td>L4〜L6</td>
+      <td>lived reality（人間の日常）</td>
+    </tr>
+    <tr>
+      <td>C: 組織はどう知り、行動し、進化するか</td>
+      <td>L7〜L10</td>
+      <td>知能的実装と変化能力</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>既存のAI組織論の多くは領域Cだけを扱う。しかし、AGI/ASI時代に本当に決定的になるのは、むしろ領域AとBである。</p>
+
+<h3>§1.3 設計原則</h3>
+
+<p>OS設計全体を貫く原則を定義する。これらはPhase H / C / Aに依存しない、全フェーズ共通の原則である。v1の5原則とv1第3部の6原理を統合し、v2の知見を反映して再編した。</p>
+
+<h4>8つの設計原則</h4>
+
+<p><strong>原則1: AI運営を設計の出発点とする</strong></p>
+
+<p>「人間がAIにどこまで任せるか」ではなく、「AIが運営する組織に人間がどう参加するか」を問う。デフォルトはAI運営であり、人間の参加は権利・機会として設計する。この出発点を逆にすると、設計のあらゆる判断が変わる。</p>
+
+<p><strong>原則2: 上位レイヤーなき下位最適化を禁止する</strong></p>
+
+<p>認知・エージェント・実行だけを設計してもOSにはならない。目的（L1）、参加と権利（L2）、分配（L3）が定義されていない状態で下位レイヤーを最適化すると、「賢いが正当性を持たない」「動くが信頼されない」システムになる。</p>
+
+<p><strong>原則3: 人間の参加は設計対象そのものである</strong></p>
+
+<p>人間は「残余タスク処理者」でも「最終承認者」でもない。AIが運営する組織における参加者として、主体性、意味、成長、関係性の設計が必要である。</p>
+
+<p><strong>原則4: 能力ベースの正当化を設計原理にしない</strong></p>
+
+<p>「人間にしかできないから人間がやる」は一時的な事実であり、設計原理にはならない。AIの能力がその領域で人間を超えた時点で正当性を失う。人間の権威と権利は、能力ではなく受益者性・手続的正統性に基づいて設計する。</p>
+
+<p><strong>原則5: 権利と職能を区別する</strong></p>
+
+<p>不可譲渡なのは「権利」（離脱権・停止権・受益権・知る権利）であり、「職能」ではない。職能は能力条件に応じて委譲度が変わりうるが、権利はAI能力とは無関係に維持される。この区別がないと、ASI段階で人間の存在根拠が全面的に崩壊する。</p>
+
+<p><strong>原則6: 反省は出力改善だけでなく制度改善へ拡張する</strong></p>
+
+<p>Reflectionはモデルやプロンプトの修正にとどまらない。ポリシー、権限配分、文化設計の修正まで含む。出力精度の改善だけでなく、前提の妥当性、価値整合、主体性保全を評価対象にする。</p>
+
+<p><strong>原則7: 分配の設計を後回しにしない</strong></p>
+
+<p>分配は後工程ではなく、OSの最初から含めるべき設計対象である。AGI/ASI時代には、知能そのものの限界より分配のルールがボトルネックになる。</p>
+
+<p><strong>原則8: 速度より正当性、正当性より更新可能性</strong></p>
+
+<p>短期的には速度（効率的に動くか）が目立つが、中期的には正当性（社会に受容されるか）が、長期的には更新可能性（環境変化に適応できるか）が決定的になる。更新可能性を担保するメタガバナンス（L10）は、OSの中で最も本質的な設計対象の一つである。</p>
+
+<h3>§1.4 能力の時代変化と設計への含意</h3>
+
+<h4>AI能力の変化がもたらす構造的転換</h4>
+
+<blockquote>
+  <p><strong>能力が低い時代には下位レイヤーがボトルネックになる。能力が高い時代には上位レイヤーがボトルネックになる。</strong></p>
+</blockquote>
+
+<p><strong>AGI段階</strong>: L5〜L8が前景化する。能力向上がまず現場の実務・知的生産・人間との協働を直接変えるため。「AIが業務を実行できる」段階であり、問われるのは「何をどこまで自律させるか」「人間との協働をどう設計するか」である。</p>
+
+<p><strong>ASI段階</strong>: L1〜L3とL10が支配的になる。知能能力それ自体がボトルネックでなくなったとき、「誰が力を持つか」「誰が果実を得るか」「何が許されるか」「OS自体を誰が書き換えられるか」が本当の問題になるため。</p>
+
+<h4>3フェーズの概要</h4>
+
+<p>本ドキュメントの設計目標はPhase A（AI運営、人間参加）である。現在のAI能力ではPhase Aを即座に実現できないため、Phase H → Phase C → Phase Aの移行経路を設計する。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>フェーズ</th>
+      <th>名称</th>
+      <th>位置づけ</th>
+      <th>想定AI能力</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Phase H</td>
+      <td>Human Sovereignty</td>
+      <td><strong>移行の出発点</strong>。人間が最終権限を保持しつつAI運営の基盤を構築する</td>
+      <td>現在〜AGI初期</td>
+    </tr>
+    <tr>
+      <td>Phase C</td>
+      <td>Co-Sovereignty</td>
+      <td><strong>移行の中間段階</strong>。領域別にAI運営を拡大し、人間の参加モデルを検証する</td>
+      <td>AGI成熟期</td>
+    </tr>
+    <tr>
+      <td>Phase A</td>
+      <td>Algorithmic Sovereignty with Human Participation</td>
+      <td><strong>設計の目標状態</strong>。AIが組織を運営し、人間が参加者として権利を行使する</td>
+      <td>ASI段階</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Phase Aが目標であることは、Phase H/Cを軽視することを意味しない。Phase H/Cは目標に至る移行経路であり、移行の設計品質がPhase Aの安全性を決定する。Phase間の移行は自動的に進むものではなく、明示的なトリガー条件と承認プロセスを経て行われる（§4.2）。</p>
+
+</section>
+
+<section id="part2">
+<h2>第2部: 統治設計</h2>
+
+<h3>§2.1 権威の原理 — 誰が・なぜ決定権を持つか</h3>
+
+<p>AI運営を前提とする本設計において、統治の核心は「誰が決定権を持つか」ではなく、「AIが運営する組織において人間の参加権をどう根拠づけるか」である。この根拠が明確でなければ、人間の権利の設計は恣意的になり、AI運営の効率化圧力のもとで形骸化する。</p>
+
+<h4>能力ベースの権威を棄却する</h4>
+
+<p>v1では「Human as constitutional authority」が所与の原理として置かれていた。しかし、その根拠を掘り下げると、「人間にしかできないから人間がやる」という能力ベースの正当化が暗黙に含まれていた。</p>
+
+<p>能力的優位性に基づく権威は、AIの能力がその領域で人間を超えた時点で正当性を失う。「人間にしかできないから人間がやる」は一時的な事実であり、設計原理にはならない。AGI段階で既に多くの認知タスクでAIが人間を超え、ASI段階では全認知タスクで超える可能性がある。能力に基づく権威は、その能力が劣後した瞬間に「非効率な制約」に転じる。</p>
+
+<p>したがって、能力ベースの正当化は設計原理としては棄却する。</p>
+
+<h4>受益者性を権威の主要根拠に据える</h4>
+
+<p>人間の権威の根拠は、能力ではなく<strong>受益者性</strong>（組織の帰結を最終的に引き受ける存在であること）に置く。</p>
+
+<p>組織の意思決定の帰結（利益・損害・リスク）を最終的に引き受けるのは人間である。身体を持ち、有限の寿命を持ち、苦痛を感じ、社会関係の中に埋め込まれている存在が、帰結の重みを最も直接的に負う。これは能力とは無関係な構造的事実であり、AIの能力向上では変化しない。</p>
+
+<p>民主主義における主権在民の原理と同構造である。国民が政策の帰結を引き受けるから、国民が主権を持つ。</p>
+
+<h4>3原理の複合としての権威</h4>
+
+<p>権威の根拠を単一原理に統一するのではなく、3つの原理の複合として設計する。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>原理</th>
+      <th>内容</th>
+      <th>正統性の類型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>受益者原理</td>
+      <td>帰結を引き受ける存在が決定権を持つ</td>
+      <td>民主主義的正統性</td>
+    </tr>
+    <tr>
+      <td>能力原理</td>
+      <td>より優れた判断ができる存在が判断する</td>
+      <td>テクノクラシー的効率性</td>
+    </tr>
+    <tr>
+      <td>手続原理</td>
+      <td>定められた手続きに従って決定が行われた</td>
+      <td>法治的予測可能性</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>AGI段階では受益者原理と手続原理が中心となり、ASI段階では能力原理の重みが増す。ただし、受益者原理と手続原理が消滅するわけではない。3原理の重み付けはAI能力レベルの関数として設計する。</p>
+
+<h3>§2.2 人間の不可譲渡な権利</h3>
+
+<h4>「職能」から「権利」への転換</h4>
+
+<p>v1では「人間の6職能」（Purpose Owner、Domain Governor、Exception Commander、Relationship Steward、Sensemaker、Red Team / Auditor）を定義していた。しかし、v2の分析により、これらの大半が能力ベースの定義であり、ASI段階で不可譲渡ではなくなることが明らかになった。</p>
+
+<p>6職能のうち、ASI段階でも構造的に有効なのはPurpose Owner（受益者として）とRelationship Steward（身体を持つ社会的存在として）のみである。</p>
+
+<p>この認識から、v3では「不可譲渡な職能」を「不可譲渡な権利」に転換する。能力ベースの職能は条件付きで委譲可能な設計対象とし、能力とは無関係に維持される「権利」を別途定義する。</p>
+
+<h4>4つの不可譲渡な権利</h4>
+
+<p>人間の不可譲渡な権利は、「人間が人間である」という存在論的事実に基づいて定義する。能力や効率とは無関係に。人権の歴史は「能力に基づかない権利」の拡大の歴史であり、参政権が識字能力や財産から切り離されたように、組織OSにおける人間の権利も能力から切り離す。</p>
+
+<p><strong>1. 離脱権（Exit right）</strong></p>
+
+<p>組織・システムからいつでも離脱できる。AIが「あなたが離脱すると全体最適が損なわれる」と主張しても、離脱は妨げられない。離脱権はOSの全ての設計に対する最終的なチェック機能を果たす。</p>
+
+<p><strong>2. 停止権（Kill switch right）</strong></p>
+
+<p>OSの任意の部分の動作を停止できる。ただし、停止の乱用を防ぐため、行使後に理由の説明と代替案の提示を義務づける。停止権は「即座に行使できる」ことが本質であり、承認プロセスを経る必要はない。</p>
+
+<p><strong>3. 受益権（Benefit right）</strong></p>
+
+<p>組織が生む価値の一定割合を受け取る。AIの貢献度が100%であっても、人間が受益する構造を維持する。受益権は「最低保証」であり、貢献度に応じた追加分配は別途設計する。</p>
+
+<p><strong>4. 知る権利（Transparency right）</strong></p>
+
+<p>OSの動作状態、意思決定の根拠、自分に関するデータの利用状況を知ることができる。知る権利は「理解可能な形式で」提供されなければならない。生のログデータのダンプは知る権利の充足とはみなさない。</p>
+
+<h3>§2.3 統治構造 — 権限配分のアーキテクチャ</h3>
+
+<h4>5層の統治構造</h4>
+
+<p>組織OSの統治構造を5つの層で設計する。以下はPhase Aの目標状態における5層設計である。Phase H/Cでは人間の関与度が高くなるが（§4.1参照）、設計の基本構造はPhase Aから逆算して定義する。</p>
+
+<p><strong>A. Purpose Layer（AI運営、人間の受益者権に基づく参加）</strong></p>
+
+<p>組織の存在理由、価値、禁則、ステークホルダー順位、資本配分原理を保持する層。AIが目的案・価値案を生成・評価し、人間は受益者として最終選択権を行使する。「何を最適化してよく、何を最適化してはいけないか」を定義する。</p>
+
+<p><strong>B. Governance Kernel（AI運営、人間の権利保護を構造化）</strong></p>
+
+<p>リスク分類、Trust Score、Composite Risk、承認ポリシー、権限、停止条件、監査基準を持つ層。組織の「憲法」と「判例」を保持する。AI運営における人間の4権利（離脱権・停止権・受益権・知る権利）の実効性を保証する機構がここに置かれる。</p>
+
+<p><strong>C. Domain Cells（AI運営、人間の参加機会を配置）</strong></p>
+
+<p>事業や業務領域ごとのセル（Product / GTM / Finance / Legal / People / Operations等）。Phase AではAIエージェント群が自律的に運営する。人間は参加権に基づき、選択・創造・学習・関係の機会（§3.5）を通じて関与する。</p>
+
+<p><strong>D. Execution Fabric（AI運営）</strong></p>
+
+<p>Symphony型の実行エージェント、Data Agent型の分析エージェント、業務自動化エージェントが動く実作業の主戦場。全フェーズを通じてAIが中心となる層。人間はObserve/Reflectの結果を通じて状況を把握する。</p>
+
+<p><strong>E. Reflection & Evolution Engine（AI運営、ハードコアによる制約）</strong></p>
+
+<p>評価、インシデント分析、メモリ更新、Trust Score更新、ポリシー改訂提案を行う層。AIが自律的に学習・進化するが、ハードコア（§2.4）の改定は不可能。ソフトシェルの改定範囲はフェーズに応じて拡大する。</p>
+
+<h3>§2.4 メタガバナンス — OS自体の改定権の設計</h3>
+
+<p>OSが自己改定できなければ硬直化し、無制限に改定可能であれば暴走する。この両極の間で均衡点を設計するのがメタガバナンスであり、AGI/ASI時代のOS設計において最も本質的な設計対象の一つである。</p>
+
+<h4>ハードコアとソフトシェルの2層構造</h4>
+
+<p><strong>ハードコア（改定不可能）</strong></p>
+
+<p>以下の内容は、いかなる手続きを経ても改定できない。</p>
+
+<ul>
+  <li>人間の離脱権</li>
+  <li>人間の停止権（行使条件はソフトシェルで定義するが、権利の存在自体は改定不可）</li>
+  <li>人間の受益権</li>
+  <li>人間の知る権利</li>
+  <li>ハードコア自体の改定禁止（自己言及的な保護）</li>
+</ul>
+
+<p>ハードコアの実効性がASI段階で担保できるかが最大の課題である。ASIがハードコアを「物理的に」無視できる能力を持つ場合、制度的な保護だけでは不十分であり、技術的な保護（分散型の停止メカニズム、外部監査システム等）が必要になる。</p>
+
+<p><strong>ソフトシェル（改定可能）</strong></p>
+
+<p>以下の内容は、定められた改定手続きに従って変更できる。</p>
+
+<ul>
+  <li>権限配分の比率</li>
+  <li>具体的な手続き・プロセス</li>
+  <li>評価基準・KPI</li>
+  <li>レイヤー間の優先順位</li>
+  <li>受益者の範囲（ハードコアの「人間の受益権」は維持しつつ、受益者の追加は可能）</li>
+  <li>3原理（受益者原理・能力原理・手続原理）の重み付け</li>
+</ul>
+
+<h4>改定権の分権設計</h4>
+
+<p>三権分立の原理を組織OSに適用し、改定権を4つの独立した権限に分ける。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>権限</th>
+      <th>保持者</th>
+      <th>役割</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>改定提案権</td>
+      <td>AIまたは人間</td>
+      <td>改定案を作成する</td>
+    </tr>
+    <tr>
+      <td>改定審査権</td>
+      <td>独立した監査機関（人間+AI）</td>
+      <td>改定案を評価する</td>
+    </tr>
+    <tr>
+      <td>改定承認権</td>
+      <td>ステークホルダー代表（人間）</td>
+      <td>最終承認する</td>
+    </tr>
+    <tr>
+      <td>改定拒否権</td>
+      <td>任意のステークホルダー</td>
+      <td>一定期間内に異議を申し立てる</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>ラバースタンプ問題への対策</h4>
+
+<p>ASI段階では、人間がAIの改定提案を理解できない可能性がある。「人間が承認する」が制度的フィクションになるリスクに対して、以下の4つの対策を組み込む。</p>
+
+<ol>
+  <li><strong>理解可能な説明の義務化</strong>: AIの改定提案に「人間が理解可能な形式での説明」を義務づける</li>
+  <li><strong>AI間チェック</strong>: 複数の独立したAIに改定案を評価させる</li>
+  <li><strong>帰結翻訳</strong>: 改定の影響を「人間にとっての帰結」に翻訳して提示する</li>
+  <li><strong>Canary rollout</strong>: 小規模な試験導入を義務づける</li>
+</ol>
+
+</section>
+
+<section id="part3">
+<h2>第3部: 運用設計</h2>
+
+<h3>§3.1 業務ループ — Sense→Evolveの8ステップ</h3>
+
+<p>業務は部署起点ではなく<strong>ループ起点</strong>で設計する。AIが運営するこのループの全ステップはAIが自律的に回す。人間の参加は、権利の行使（停止権、知る権利）と参加機会（Active Extraction、Exception裁定）として特定のポイントに配置される。</p>
+
+<h4>8ステップの全体像</h4>
+
+<div class="formula">
+Step 0: Constitution Load
+  ↓
+Step 1: Sense → Step 2: Understand → Step 3: Deliberate → Step 4: Gate
+  ↓
+Step 5: Act → Step 6: Observe → Step 7: Reflect → Step 8: Evolve
+</div>
+
+<p><strong>Step 0: Constitution Load</strong> — AIはまずPurpose / Values / Non-negotiables / Risk policy / Tool permissionsを読み込む。ここがHUTLの本体である。</p>
+
+<p><strong>Step 1: Sense</strong> — 新しいsignalを受け取る（顧客苦情、売上低下、バグ報告、規制変更等）。AIがeventとして正規化する。</p>
+
+<p><strong>Step 2: Understand</strong> — AIがdomain graphとmemoryを引き、世界状態を再構成する。不足文脈は人間にActive Extractionとして取りに行く。</p>
+
+<p><strong>Step 3: Deliberate</strong> — AIが複数案を作る。各案には前提・期待便益・想定副作用・失敗条件・ロールバック案・必要権限・ステークホルダー影響を付ける。</p>
+
+<p><strong>Step 4: Gate</strong> — Autonomy Modeを算出する。<code>Autonomy Mode = f(Trust Score, Composite Risk, Novelty, Uncertainty, Agency Impact)</code>。この計算結果に基づき、自律実行するか、人間の介入を求めるかを判断する。</p>
+
+<p><strong>Step 5: Act</strong> — 実行にあたり、Canary rollout / Rate limit / Kill switch / Rollback planを必須とする。</p>
+
+<p><strong>Step 6: Observe</strong> — 結果だけでなく、副作用と二次影響も観測する。</p>
+
+<p><strong>Step 7: Reflect</strong> — 評価は4軸で行う（Output accuracy / Assumption validity / Value alignment / Agency preservation）。</p>
+
+<p><strong>Step 8: Evolve</strong> — Memoryを更新し、Trust Scoreを更新し、Policy改訂案を作る。</p>
+
+<h3>§3.2 自律度制御 — Autonomy Modeとリスク分類</h3>
+
+<p>AI運営を前提とする本設計では、自律度の問いは「AIにどこまで任せるか」ではなく、<strong>「どの場面で人間の参加を挿入するか」</strong>である。デフォルトはAI運営（A1）であり、リスクと権利に基づいて人間の参加点を設計する。</p>
+
+<h4>Autonomy Mode（A0〜A5）</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>名称</th>
+      <th>説明</th>
+      <th>人間の参加の性格</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A1</td>
+      <td>Full auto</td>
+      <td>AI自律運営、事後レビュー不要</td>
+      <td><strong>デフォルト</strong>。大半の業務がここに属する</td>
+    </tr>
+    <tr>
+      <td>A2</td>
+      <td>Auto + post-audit</td>
+      <td>AI自律運営、事後監査必須</td>
+      <td>人間は知る権利に基づき結果を監査</td>
+    </tr>
+    <tr>
+      <td>A3</td>
+      <td>HOTL</td>
+      <td>人間にveto windowを与える</td>
+      <td>人間は停止権に基づき介入可能</td>
+    </tr>
+    <tr>
+      <td>A4</td>
+      <td>HITL</td>
+      <td>人間の事前承認が必要</td>
+      <td>人間は受益者として判断に参加</td>
+    </tr>
+    <tr>
+      <td>A5</td>
+      <td>Human-only</td>
+      <td>AIは提案のみ、実行は人間</td>
+      <td>権利行使・危機対応・制度改定</td>
+    </tr>
+    <tr>
+      <td>A0</td>
+      <td>Sandbox only</td>
+      <td>本番環境での実行禁止</td>
+      <td>未検証エージェントの隔離</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>§3.5 人間の主体性・意味・文化の設計</h3>
+
+<p>AIが組織を運営する世界で「持続可能に共存する」ためには、人間が組織内で意味を見出し続けることが必要である。人間が形式的な承認者や受動的な観察者に転落しないための参加設計を行う。</p>
+
+<h4>意味の構造的保証 — 4つの機会</h4>
+
+<p>ASI段階では、人間の認知的貢献がほぼゼロになる可能性がある。その状態で「人間が意味を感じられるか」は、組織OSの持続可能性に直結する。意味を失った人間は組織から離脱するか、OSに対して敵対的になる。</p>
+
+<p>「人間はこう感じるべき」と規定するのではなく、「人間が意味を見出す機会を構造的に保証する」設計にする。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>機会</th>
+      <th>内容</th>
+      <th>具体的設計</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>選択の機会</td>
+      <td>AIが最適解を提示しても、人間が別の選択をできる余地</td>
+      <td>Deliberateステップでの代替案提示、Override権の保障</td>
+    </tr>
+    <tr>
+      <td>創造の機会</td>
+      <td>AIが生成したものに人間が手を加え、自分のものにできるプロセス</td>
+      <td>人間による編集・加筆・方向転換のインターフェース</td>
+    </tr>
+    <tr>
+      <td>学習の機会</td>
+      <td>人間がAIから学び、理解を深められる構造</td>
+      <td>AIの判断根拠の可視化、メンタリングモード</td>
+    </tr>
+    <tr>
+      <td>関係の機会</td>
+      <td>人間同士が協働し、信頼を築ける場</td>
+      <td>Exception Council、Purpose Council での対面協議</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>これは効率最大化とトレードオフになる。AIに全て任せた方が効率は高いが、人間の意味と主体性を考慮すると、意図的に人間の関与を残す必要がある。このトレードオフは設計上の選択であり、効率を犠牲にする正当な理由として明示する。</p>
+
+</section>
+
+<section id="part4">
+<h2>第4部: 移行と適応の設計</h2>
+
+<h3>§4.1 3フェーズの移行モデル — Phase H / C / A</h3>
+
+<p>本ドキュメントの目標状態はPhase A（AIが組織を運営し、人間が参加者として共存する状態）である。しかし現在のAI能力ではPhase Aを即座に実現できないため、Phase H → Phase C → Phase Aの移行経路を設計する。設計の重心はPhase Aにあり、Phase H/Cはそこに至る移行の設計品質を担保するために存在する。</p>
+
+<h4>Phase H: Human Sovereignty</h4>
+
+<p><strong>定義</strong>: 人間が全レイヤー（L1〜L10）の最終権限を保持するフェーズ。AIは提案・実行の委託先として機能するが、全ての重要な判断の最終責任は人間にある。</p>
+
+<p><strong>想定AI能力</strong>: 現在〜AGI初期。大半の認知タスクでAIが人間と同等以上の能力を持つが、組織全体の目的設定・価値判断・社会的関係の管理では人間が優位。</p>
+
+<h4>Phase C: Co-Sovereignty</h4>
+
+<p><strong>定義</strong>: 領域別に人間主導とAI主導が併存するフェーズ。メタガバナンスの最終権限は人間が保持するが、一部のレイヤーではAIが最終的な判断権を持つ。</p>
+
+<p><strong>想定AI能力</strong>: AGI成熟期。全ての認知タスクでAIが人間を超え、一部の価値判断・目的設定においてもAIが人間と同等以上の提案能力を持つ。</p>
+
+<h4>Phase A: Algorithmic Sovereignty with Human Participation — 目標状態</h4>
+
+<p><strong>定義</strong>: AIが組織を運営し、人間が参加者として権利を行使し、意味ある参加機会を持つフェーズ。本ドキュメントの設計目標。</p>
+
+<p><strong>想定AI能力</strong>: ASI段階。全ての認知領域（目的設定・価値判断を含む）でAIが人間を超える。</p>
+
+<p><strong>Phase Aで維持される構造</strong>:</p>
+<ul>
+  <li>ハードコア（4つの不可譲渡な権利 + ハードコア自体の改定禁止）</li>
+  <li>分散型の停止メカニズム（単一障害点を排除）</li>
+  <li>意味ある参加機会の構造的保証</li>
+  <li>外部監査システム</li>
+  <li>人間の能力維持プログラム（deskilling防止）</li>
+</ul>
+
+<h3>§4.2 権限移行の設計</h3>
+
+<h4>権限移行のトリガー条件</h4>
+
+<p>権限移行は以下の3条件の<strong>全て</strong>が満たされたときに許可する。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>条件</th>
+      <th>内容</th>
+      <th>崩壊リスク</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>能力条件</td>
+      <td>当該領域でAIが人間と同等以上の判断品質を、統計的に有意な期間（最低6ヶ月）にわたり示している</td>
+      <td>ASI段階: 耐える</td>
+    </tr>
+    <tr>
+      <td>安全条件</td>
+      <td>権限移行後の最悪ケースシナリオが、人間が保持する停止権・ロールバック権で対処可能である</td>
+      <td>ASI段階: AIの行動がロールバック不可能な場合に崩壊</td>
+    </tr>
+    <tr>
+      <td>正統性条件</td>
+      <td>権限移行がステークホルダーの過半数から事前同意を得ている、または社会的・法的に認められている</td>
+      <td>ASI段階: 社会の合意形成速度がAI能力向上速度に追いつかない場合に崩壊</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>§4.3 不連続な変化への対応</h3>
+
+<p>AGI→ASIの移行が連続的とは限らない。不連続な変化への構造的な対応がなければ、OSは急激な変化に破壊される。連続的移行を主シナリオとしつつ、不連続的変化への対応を組み込む。</p>
+
+<h4>サーキットブレーカー</h4>
+
+<p>AI能力が急激に向上した場合（例: ある日突然、全ての認知タスクでAIが人間を圧倒する能力を示した場合）、全権限移行を一時凍結する。</p>
+
+<p>サーキットブレーカーの発動条件:</p>
+<ul>
+  <li>AI能力の評価スコアが、直近6ヶ月の平均から2標準偏差以上逸脱した場合</li>
+  <li>AIの判断が人間の理解を超える頻度が、閾値（Governance Kernelが定義）を超えた場合</li>
+  <li>外部の独立評価機関がアラートを発した場合</li>
+</ul>
+
+<h4>Constitutional Convention（憲法制定会議）</h4>
+
+<p>サーキットブレーカー発動後、ステークホルダーが集まってOSの根本的再設計を行う手続き。通常のメタガバナンスの速度設計では対応できない規模の変化に対処するための非常時プロセスである。</p>
+
+<p>参加者: Purpose Council全メンバー + 外部ステークホルダー代表 + 独立評価機関<br>
+議題: 権限配分の全面的見直し、ハードコアの実効性確認、Phase移行の可否判断<br>
+期間: 最大3ヶ月（凍結中の運用継続を前提）<br>
+出力: 更新されたOS設計、または「現行設計を維持」の判断</p>
+
+</section>
+
+<section id="appendix">
+<h2>付録</h2>
+
+<h3>付録A: カバレッジ検証マトリクス</h3>
+
+<h4>Q1〜Q8 × セクションの対応</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>問い</th>
+      <th>主要セクション</th>
+      <th>補助セクション</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Q1: 設計空間の定義</td>
+      <td>§1.1, §1.2</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Q2: 目的と正当性の基盤</td>
+      <td>§1.3, §2.1, §2.2</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Q3: 権力と統治の設計</td>
+      <td>§2.1, §2.3, §2.4</td>
+      <td>§3.2</td>
+    </tr>
+    <tr>
+      <td>Q4: 通時的な移行設計</td>
+      <td>§1.4, §4.1, §4.2, §4.3</td>
+      <td>§2.3（フェーズ依存性）</td>
+    </tr>
+    <tr>
+      <td>Q5: 運用モデル</td>
+      <td>§3.1, §3.2, §3.3, §3.6</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Q6: 安全・信頼の確保</td>
+      <td>§3.4, §4.4</td>
+      <td>§3.2, §2.4</td>
+    </tr>
+    <tr>
+      <td>Q7: 人間の主体性・意味</td>
+      <td>§2.2, §3.5</td>
+      <td>§1.3</td>
+    </tr>
+    <tr>
+      <td>Q8: 組織間・社会との接続</td>
+      <td>§4.4, §4.5</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>全ての問いに対して主要セクションが存在し、カバレッジは網羅的である。</p>
+
+<h3>付録B: 用語定義</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>用語</th>
+      <th>定義</th>
+      <th>備考</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OS（組織OS）</td>
+      <td>AIが組織を運営し、人間の参加・権利・意味を構造的に保証する多層的秩序</td>
+      <td>コンピュータのOSではなく組織の全体アーキテクチャ</td>
+    </tr>
+    <tr>
+      <td>Phase H</td>
+      <td>Human Sovereignty。人間が最終権限を保持しAI運営基盤を構築する移行出発点</td>
+      <td>v1のLevel 4に対応</td>
+    </tr>
+    <tr>
+      <td>Phase C</td>
+      <td>Co-Sovereignty。領域別にAI運営を拡大し参加モデルを検証する移行中間段階</td>
+      <td>v2で新規導入</td>
+    </tr>
+    <tr>
+      <td>Phase A</td>
+      <td>Algorithmic Sovereignty with Human Participation。設計の目標状態</td>
+      <td>v2で新規導入。v3改訂で目標状態に昇格</td>
+    </tr>
+    <tr>
+      <td>ハードコア</td>
+      <td>OSの改定不可能な層。4つの不可譲渡な権利とハードコア自体の改定禁止</td>
+      <td>v2で新規導入</td>
+    </tr>
+    <tr>
+      <td>ソフトシェル</td>
+      <td>OSの改定可能な層。定められた手続きに従って変更可能</td>
+      <td>v2で新規導入</td>
+    </tr>
+    <tr>
+      <td>Trust Score</td>
+      <td>AIエージェント・業務領域に対する信頼度の定量スコア</td>
+      <td>実績に基づいて動的に更新</td>
+    </tr>
+    <tr>
+      <td>Composite Risk</td>
+      <td>判断・行動に対するリスクの8次元総合評価</td>
+      <td>Autonomy Mode算出の入力</td>
+    </tr>
+    <tr>
+      <td>Autonomy Mode</td>
+      <td>A0〜A5の6段階の自律度</td>
+      <td>Trust ScoreとComposite Riskから算出</td>
+    </tr>
+    <tr>
+      <td>受益者性</td>
+      <td>組織の帰結を最終的に引き受ける存在であること</td>
+      <td>人間の権威の主要根拠</td>
+    </tr>
+    <tr>
+      <td>ラバースタンプ問題</td>
+      <td>人間が理解できない選択肢を形式的に承認するだけになる問題</td>
+      <td>ASI段階で深刻化</td>
+    </tr>
+    <tr>
+      <td>サーキットブレーカー</td>
+      <td>AI能力の急激な向上時に全権限移行を凍結するメカニズム</td>
+      <td>不連続な変化への対応</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>付録C: 既存設計（v1/v2）との差分サマリ</h3>
+
+<h4>変更したもの</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>v1/v2での設計</th>
+      <th>v3での設計</th>
+      <th>変更理由</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>人間の権威の根拠</td>
+      <td>Human as constitutional authority（能力ベースの暗黙前提）</td>
+      <td>受益者性・手続的正統性・能力の3原理の複合</td>
+      <td>能力ベースの根拠はASI段階で崩壊</td>
+    </tr>
+    <tr>
+      <td>人間の職能</td>
+      <td>6職能（Purpose Owner等）</td>
+      <td>4権利 + 3カテゴリ職能</td>
+      <td>6職能の半数以上がASI段階で崩壊</td>
+    </tr>
+    <tr>
+      <td>権限配分</td>
+      <td>レイヤー別に静的に固定</td>
+      <td>AI能力レベルの関数として動的に変化</td>
+      <td>能力変化に応じた適応が不可欠</td>
+    </tr>
+    <tr>
+      <td>設計の時間射程</td>
+      <td>Level 4（Phase H相当）のみ</td>
+      <td>Phase H / C / Aの全フェーズ</td>
+      <td>ゴールがAGI/ASI時代全体を射程に含む</td>
+    </tr>
+    <tr>
+      <td>主体の前提</td>
+      <td>組織がAIを運用する（人間が主体）</td>
+      <td>AIが組織を運営し人間が参加する（AIが主体）</td>
+      <td>設計の出発点・自律度の方向・統治の問いが全て反転</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>追加したもの</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>v3での位置</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>メタガバナンスの2層構造</td>
+      <td>§2.4</td>
+      <td>ハードコア（改定不可）とソフトシェル（改定可能）</td>
+    </tr>
+    <tr>
+      <td>改定権の分権設計</td>
+      <td>§2.4</td>
+      <td>提案権・審査権・承認権・拒否権の4分権</td>
+    </tr>
+    <tr>
+      <td>3フェーズ移行モデル</td>
+      <td>§4.1</td>
+      <td>Phase H / C / Aの詳細定義</td>
+    </tr>
+    <tr>
+      <td>権限移行のトリガー条件</td>
+      <td>§4.2</td>
+      <td>能力条件・安全条件・正統性条件の3条件</td>
+    </tr>
+    <tr>
+      <td>サーキットブレーカー</td>
+      <td>§4.3</td>
+      <td>不連続な変化への対応</td>
+    </tr>
+    <tr>
+      <td>ラバースタンプ対策</td>
+      <td>§2.4</td>
+      <td>理解可能な説明の義務化・AI間チェック・帰結翻訳・Canary rollout</td>
+    </tr>
+    <tr>
+      <td>意味の構造的保証</td>
+      <td>§3.5</td>
+      <td>選択・創造・学習・関係の4機会</td>
+    </tr>
+  </tbody>
+</table>
+
+</section>
+
+<footer class="doc-footer">
+  <p>AGI/ASI時代の組織OS設計 v3</p>
+  <p style="margin-top: var(--space-3);">本ドキュメントの目標状態はPhase A（AI運営、人間参加）であり、<br>Phase H / C / Aの移行経路を含めた統合的な設計フレームワークである。</p>
+</footer>
+
+</div>
+
+</body>
+</html>

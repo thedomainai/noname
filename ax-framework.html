@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AX Consulting Framework — Phase Structure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   AX Consulting Framework — Paper Design System
+   Web App context: --font-sans (Instrument Sans) only.
+   ============================================================ */
+
+:root {
+  --ink-1000: #000000;
+  --ink-900:  #1a1a1a;
+  --ink-800:  #2d2d2d;
+  --ink-700:  #404040;
+  --ink-600:  #525252;
+  --ink-500:  #6b6b6b;
+  --ink-400:  #8a8a8a;
+  --ink-300:  #a3a3a3;
+  --ink-200:  #c4c4c4;
+  --ink-100:  #e0e0e0;
+  --ink-50:   #f0f0f0;
+
+  --slate-50:   #f8fafc;
+  --slate-100:  #f1f5f9;
+  --slate-200:  #e2e8f0;
+  --slate-300:  #cbd5e1;
+  --slate-400:  #94a3b8;
+  --slate-500:  #64748b;
+  --slate-600:  #475569;
+
+  --paper-50:   #fdfdfc;
+  --paper-100:  #faf9f7;
+  --paper-200:  #f8f7f4;
+  --paper-300:  #f5f4f0;
+  --paper-400:  #f1f0ec;
+  --paper-500:  #eeedea;
+  --paper-600:  #e8e7e3;
+  --paper-700:  #e3e2de;
+  --paper-800:  #dddcd8;
+
+  --ink-blue:  #2563eb;
+  --ink-green: #16a34a;
+  --ink-amber: #d97706;
+  --ink-red:   #dc2626;
+
+  --wash-blue:  #dbeafe;
+  --wash-green: #dcfce7;
+  --wash-amber: #fef3c7;
+  --wash-red:   #fee2e2;
+
+  --bg-page:           var(--paper-50);
+  --bg-surface:        var(--paper-100);
+  --bg-surface-raised: var(--paper-50);
+  --bg-recessed:       var(--paper-300);
+  --border-default:    var(--slate-200);
+  --border-strong:     var(--slate-300);
+  --border-heavy:      var(--ink-1000);
+  --grid-line:         var(--slate-100);
+  --text-primary:      var(--ink-900);
+  --text-heading:      var(--ink-1000);
+  --text-secondary:    var(--slate-500);
+  --text-muted:        var(--slate-400);
+
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Grid Background ── */
+.grid-bg {
+  background-color: var(--paper-50);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Layout ── */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ── Header ── */
+.page-header {
+  padding: 64px 0 48px;
+  border-bottom: 2px solid var(--border-heavy);
+}
+.page-header .label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  display: block;
+}
+.page-header h1 {
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: var(--text-heading);
+  margin-bottom: 12px;
+}
+.page-header .subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ── Premise ── */
+.premise-section {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.premise-card {
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-default);
+  padding: 24px 32px;
+}
+.premise-card .premise-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.premise-card p {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+/* ── Phase Flow ── */
+.phase-flow {
+  padding: 64px 0;
+}
+
+.phase-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.phase-number-col {
+  flex: 0 0 80px;
+  text-align: center;
+  position: relative;
+}
+
+.phase-number {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-blue);
+  background: var(--wash-blue);
+  border: 1px solid #bfdbfe;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Vertical connector line */
+.phase-connector {
+  width: 2px;
+  background: var(--border-default);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.phase-content-col {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 48px;
+}
+
+.phase-card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 24px 32px;
+  transition: border-color 0.15s ease;
+}
+.phase-card:hover {
+  border-color: var(--border-strong);
+}
+
+.phase-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.phase-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+}
+
+.phase-duration {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.phase-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Phase inner grid */
+.phase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.phase-detail-block {
+  padding: 16px;
+  background: var(--paper-300);
+  border: 1px solid var(--border-default);
+}
+.phase-detail-block .detail-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.phase-detail-block p,
+.phase-detail-block li {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+.phase-detail-block ul {
+  list-style: none;
+  padding: 0;
+}
+.phase-detail-block ul li {
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.phase-detail-block ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-400);
+}
+
+/* Re-order arrow */
+.reorder-arrow {
+  background: var(--wash-amber);
+  border: 1px solid #fde68a;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--ink-amber);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Cross-cutting layer ── */
+.cross-layer {
+  border-top: 2px solid var(--border-heavy);
+  border-bottom: 2px solid var(--border-heavy);
+  padding: 32px 0;
+  margin: 0 0 64px;
+}
+.cross-layer-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.cross-layer-badge {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--paper-50);
+  background: var(--ink-900);
+  padding: 6px 12px;
+}
+.cross-layer-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+.cross-layer-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ── Stakeholder Map ── */
+.stakeholder-section {
+  padding: 0 0 64px;
+}
+.stakeholder-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-heavy);
+}
+
+.stakeholder-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stakeholder-card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 20px;
+}
+.stakeholder-card .role {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.stakeholder-card .concern {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.stakeholder-card .phase-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.phase-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  background: var(--wash-blue);
+  color: var(--ink-blue);
+  border: 1px solid #bfdbfe;
+}
+
+/* ── Revenue curve ── */
+.revenue-section {
+  padding: 0 0 64px;
+}
+.revenue-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-heavy);
+}
+
+/* ── SVG Flow Diagram ── */
+.flow-section {
+  padding: 0 0 64px;
+}
+.flow-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-heavy);
+}
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border-default);
+  padding: 32px 0;
+}
+footer .footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .phase-grid { grid-template-columns: 1fr; }
+  .stakeholder-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 639px) {
+  .container { padding: 0 16px; }
+  .phase-row { flex-direction: column; gap: 12px; }
+  .phase-number-col { flex: 0 0 auto; }
+  .phase-connector { display: none; }
+  .stakeholder-grid { grid-template-columns: 1fr; }
+  .page-header h1 { font-size: 28px; }
+}
+</style>
+</head>
+<body class="grid-bg">
+
+<!-- ============================================================
+     PAGE HEADER
+     ============================================================ -->
+<div class="container">
+  <div class="page-header">
+    <span class="label">AX CONSULTING FRAMEWORK</span>
+    <h1>AI Transformation 受注フレーム</h1>
+    <p class="subtitle">クイックウィンで渇望を生み、段階的に深化させるランド&エクスパンド戦略。<br>各フェーズの出口が次フェーズへの自然な導線になる設計。</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     PREMISE
+     ============================================================ -->
+<div class="container">
+  <div class="premise-section">
+    <div class="premise-card">
+      <div class="premise-label">PHASE 0 — PREMISE</div>
+      <p><strong>顧客の状態:</strong> 問題解決モードに入っている。AI readyになりたいが、何から始めるべきかわからない。AIがどれほどの変革をもたらすか実感がない。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PHASE FLOW — 6 Phases with vertical connector
+     ============================================================ -->
+<div class="container">
+  <div class="phase-flow">
+
+    <!-- ── SVG Flow: 再受注メカニズムの全体像 ── -->
+    <div class="flow-section">
+      <h2>再受注メカニズムの全体像</h2>
+      <svg viewBox="0 0 1056 420" width="100%" style="max-width: 1056px; display: block;">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+          </marker>
+          <marker id="arrow-blue" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+          </marker>
+          <marker id="arrow-amber" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#d97706"/>
+          </marker>
+        </defs>
+
+        <!-- Phase boxes -->
+        <rect x="0" y="30" width="156" height="64" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <text x="78" y="54" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#2563eb">P1</text>
+        <text x="78" y="72" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">期待/渇望</text>
+
+        <rect x="180" y="30" width="156" height="64" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <text x="258" y="54" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#2563eb">P2</text>
+        <text x="258" y="72" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">実感</text>
+
+        <rect x="360" y="30" width="156" height="64" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <text x="438" y="54" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#2563eb">P3</text>
+        <text x="438" y="72" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">診断</text>
+
+        <rect x="540" y="30" width="156" height="64" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <text x="618" y="54" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#2563eb">P4</text>
+        <text x="618" y="72" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">基盤</text>
+
+        <rect x="720" y="30" width="156" height="64" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <text x="798" y="54" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#2563eb">P5</text>
+        <text x="798" y="72" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">実装</text>
+
+        <rect x="900" y="30" width="156" height="64" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <text x="978" y="54" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#2563eb">P6</text>
+        <text x="978" y="72" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">自走</text>
+
+        <!-- Forward arrows (main flow) -->
+        <line x1="156" y1="62" x2="178" y2="62" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="336" y1="62" x2="358" y2="62" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="516" y1="62" x2="538" y2="62" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="696" y1="62" x2="718" y2="62" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="876" y1="62" x2="898" y2="62" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Re-order triggers (curved arrows below) -->
+        <!-- P1 → P2: "渇望" -->
+        <path d="M 78 94 L 78 140 L 258 140 L 258 94" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-amber)"/>
+        <rect x="112" y="128" width="112" height="22" rx="0" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+        <text x="168" y="143" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#b45309">渇望の生成</text>
+
+        <!-- P2 → P3: "使用データ" -->
+        <path d="M 258 94 L 258 180 L 438 180 L 438 94" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-amber)"/>
+        <rect x="287" y="168" width="122" height="22" rx="0" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+        <text x="348" y="183" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#b45309">使用データが診断材料に</text>
+
+        <!-- P3 → P4: "ロードマップ" -->
+        <path d="M 438 94 L 438 220 L 618 220 L 618 94" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-amber)"/>
+        <rect x="465" y="208" width="126" height="22" rx="0" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+        <text x="528" y="223" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#b45309">ロードマップ = 提案書</text>
+
+        <!-- P4 → P5: "基盤完成" -->
+        <path d="M 618 94 L 618 260 L 798 260 L 798 94" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-amber)"/>
+        <rect x="648" y="248" width="120" height="22" rx="0" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+        <text x="708" y="263" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#b45309">何を載せるかの議論</text>
+
+        <!-- P5 → P6: "定量成果" -->
+        <path d="M 798 94 L 798 300 L 978 300 L 978 94" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-amber)"/>
+        <rect x="828" y="288" width="120" height="22" rx="0" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+        <text x="888" y="303" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#b45309">定量成果 → 横展開</text>
+
+        <!-- Cross-cutting layer: 原理原則 -->
+        <rect x="0" y="350" width="1056" height="48" fill="#1a1a1a" stroke="none"/>
+        <text x="20" y="379" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#fdfdfc" text-transform="uppercase">CROSS-CUTTING</text>
+        <text x="140" y="379" font-family="'Instrument Sans', sans-serif" font-size="14" font-weight="600" fill="#fdfdfc">原理原則の教育 — 全フェーズで体験的に浸透させる</text>
+
+        <!-- Legend -->
+        <line x1="0" y1="415" x2="24" y2="415" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <text x="30" y="419" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b">デリバリーの流れ</text>
+
+        <line x1="160" y1="415" x2="184" y2="415" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-amber)"/>
+        <text x="190" y="419" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#b45309">再受注トリガー（前フェーズの成果が次の導線になる）</text>
+      </svg>
+    </div>
+
+    <!-- ── Phase 1 ── -->
+    <div class="phase-row">
+      <div class="phase-number-col">
+        <div class="phase-number">01</div>
+        <div class="phase-connector" style="top: 40px; height: calc(100% - 0px);"></div>
+      </div>
+      <div class="phase-content-col">
+        <div class="phase-card">
+          <div class="phase-title-row">
+            <span class="phase-title">期待/渇望</span>
+            <span class="phase-duration">1-2 weeks</span>
+          </div>
+          <p class="phase-desc">顧客の実業務でクイックウィンを見せる。AIの可能性を肌で理解させ、「もっとやりたい」を引き出す。</p>
+          <div class="phase-grid">
+            <div class="phase-detail-block">
+              <div class="detail-label">DELIVER</div>
+              <ul>
+                <li>実データ・実業務でのAIデモ</li>
+                <li>即日〜数日で動くプロトタイプ</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">EFFECT</div>
+              <ul>
+                <li>渇望の生成</li>
+                <li>現場チャンピオンの獲得</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">RE-ORDER TRIGGER</div>
+              <p>「全社展開するには何が足りないか」の問いが自然発生する</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Phase 2 ── -->
+    <div class="phase-row">
+      <div class="phase-number-col">
+        <div class="phase-number">02</div>
+        <div class="phase-connector" style="top: 40px; height: calc(100% - 0px);"></div>
+      </div>
+      <div class="phase-content-col">
+        <div class="phase-card">
+          <div class="phase-title-row">
+            <span class="phase-title">実感</span>
+            <span class="phase-duration">2-4 weeks</span>
+          </div>
+          <p class="phase-desc">Phase 1で見せた価値をミニマムの自動化ツールとして実装・納品。デモを実務ツールに昇格させる。</p>
+          <div class="phase-grid">
+            <div class="phase-detail-block">
+              <div class="detail-label">DELIVER</div>
+              <ul>
+                <li>ミニマムの自動化ツール開発</li>
+                <li>現場が日常的に使える状態</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">EFFECT</div>
+              <ul>
+                <li>「業務に組み込まれた実績」の創出</li>
+                <li>定量的な効果（時間削減等）</li>
+                <li>スイッチングコストの発生</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">RE-ORDER TRIGGER</div>
+              <ul>
+                <li>使用データから横展開候補が可視化</li>
+                <li>「もっとこうしたい」の自然発生</li>
+                <li>部門長への稟議材料が揃う</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Phase 3 ── -->
+    <div class="phase-row">
+      <div class="phase-number-col">
+        <div class="phase-number">03</div>
+        <div class="phase-connector" style="top: 40px; height: calc(100% - 0px);"></div>
+      </div>
+      <div class="phase-content-col">
+        <div class="phase-card">
+          <div class="phase-title-row">
+            <span class="phase-title">診断</span>
+            <span class="phase-duration">2-4 weeks</span>
+          </div>
+          <p class="phase-desc">業務・データ・組織の現状アセスメント。Phase 2の利用データを活用した実データ基盤の診断。</p>
+          <div class="phase-grid">
+            <div class="phase-detail-block">
+              <div class="detail-label">DELIVER</div>
+              <ul>
+                <li>組織AIレベル診断</li>
+                <li>ロードマップ策定</li>
+                <li>Phase 2利用データに基づく分析</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">EFFECT</div>
+              <ul>
+                <li>投資判断の材料</li>
+                <li>経営層スポンサーの獲得</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">RE-ORDER TRIGGER</div>
+              <p>ロードマップ自体が後続フェーズの提案書として機能する</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Phase 4 ── -->
+    <div class="phase-row">
+      <div class="phase-number-col">
+        <div class="phase-number">04</div>
+        <div class="phase-connector" style="top: 40px; height: calc(100% - 0px);"></div>
+      </div>
+      <div class="phase-content-col">
+        <div class="phase-card">
+          <div class="phase-title-row">
+            <span class="phase-title">基盤</span>
+            <span class="phase-duration">1-3 months</span>
+          </div>
+          <p class="phase-desc">データ基盤 + セキュリティ/ガバナンス設計。AIが機能する土壌を組織に実装する。</p>
+          <div class="phase-grid">
+            <div class="phase-detail-block">
+              <div class="detail-label">DELIVER</div>
+              <ul>
+                <li>データ基盤構築</li>
+                <li>セキュリティ/ガバナンス設計</li>
+                <li>原理原則の集中教育</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">EFFECT</div>
+              <ul>
+                <li>AIが機能する土壌の完成</li>
+                <li>組織のAIリテラシー底上げ</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">RE-ORDER TRIGGER</div>
+              <p>基盤完成の瞬間に「何を載せるか」の議論が始まる</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Phase 5 ── -->
+    <div class="phase-row">
+      <div class="phase-number-col">
+        <div class="phase-number">05</div>
+        <div class="phase-connector" style="top: 40px; height: calc(100% - 0px);"></div>
+      </div>
+      <div class="phase-content-col">
+        <div class="phase-card">
+          <div class="phase-title-row">
+            <span class="phase-title">実装</span>
+            <span class="phase-duration">3-6 months</span>
+          </div>
+          <p class="phase-desc">適切なタスク選定からワークフロー設計、品質管理までを一気通貫で実行する。</p>
+          <div class="phase-grid">
+            <div class="phase-detail-block">
+              <div class="detail-label">DELIVER</div>
+              <ul>
+                <li>タスク選定 + 優先順位付け</li>
+                <li>ワークフロー設計</li>
+                <li>品質管理体制の構築</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">EFFECT</div>
+              <ul>
+                <li>実業務での定量的成果</li>
+                <li>タスク単位での品質向上</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">RE-ORDER TRIGGER</div>
+              <p>成果の定量化が他部門への横展開の根拠になる</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Phase 6 ── -->
+    <div class="phase-row">
+      <div class="phase-number-col">
+        <div class="phase-number">06</div>
+      </div>
+      <div class="phase-content-col">
+        <div class="phase-card">
+          <div class="phase-title-row">
+            <span class="phase-title">自走</span>
+            <span class="phase-duration">Retainer</span>
+          </div>
+          <p class="phase-desc">改善サイクルが自律的に回る状態を構築。コンサル依存からの卒業と持続的な収益関係を両立。</p>
+          <div class="phase-grid">
+            <div class="phase-detail-block">
+              <div class="detail-label">DELIVER</div>
+              <ul>
+                <li>改善サイクルの仕組み化</li>
+                <li>内製チームの育成</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">EFFECT</div>
+              <ul>
+                <li>顧客の自律的改善能力</li>
+                <li>コンサル卒業（依存解消）</li>
+              </ul>
+            </div>
+            <div class="phase-detail-block">
+              <div class="detail-label">REVENUE MODEL</div>
+              <ul>
+                <li>月次アドバイザリー</li>
+                <li>プラットフォーム利用料</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /phase-flow -->
+</div>
+
+<!-- ============================================================
+     CROSS-CUTTING LAYER
+     ============================================================ -->
+<div class="container">
+  <div class="cross-layer">
+    <div class="cross-layer-inner">
+      <span class="cross-layer-badge">CROSS-CUTTING</span>
+      <div>
+        <div class="cross-layer-text">原理原則の教育</div>
+        <div class="cross-layer-desc">独立したステップではなく、全フェーズに通底するレイヤー。体験 → 判断材料 → 実践の中で段階的に浸透させる。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     STAKEHOLDER MAP
+     ============================================================ -->
+<div class="container">
+  <div class="stakeholder-section">
+    <h2>ステークホルダー別の接点設計</h2>
+    <div class="stakeholder-grid">
+      <div class="stakeholder-card">
+        <div class="role">現場担当者</div>
+        <div class="concern">自分の業務が楽になるか</div>
+        <div class="phase-tags">
+          <span class="phase-tag">P1</span>
+          <span class="phase-tag">P2</span>
+        </div>
+      </div>
+      <div class="stakeholder-card">
+        <div class="role">部門長</div>
+        <div class="concern">チーム全体の生産性向上</div>
+        <div class="phase-tags">
+          <span class="phase-tag">P2</span>
+          <span class="phase-tag">P3</span>
+          <span class="phase-tag">P5</span>
+        </div>
+      </div>
+      <div class="stakeholder-card">
+        <div class="role">CxO / 経営層</div>
+        <div class="concern">競争優位・コスト構造変革</div>
+        <div class="phase-tags">
+          <span class="phase-tag">P3</span>
+          <span class="phase-tag">P5</span>
+          <span class="phase-tag">P6</span>
+        </div>
+      </div>
+      <div class="stakeholder-card">
+        <div class="role">情報システム部門</div>
+        <div class="concern">セキュリティ・ガバナンス</div>
+        <div class="phase-tags">
+          <span class="phase-tag">P4</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     REVENUE / COMMITMENT CURVE (SVG)
+     ============================================================ -->
+<div class="container">
+  <div class="revenue-section">
+    <h2>投資規模と顧客コミットメントの推移</h2>
+    <svg viewBox="0 0 1056 320" width="100%" style="max-width: 1056px; display: block;">
+      <!-- Grid lines -->
+      <line x1="80" y1="40" x2="80" y2="260" stroke="#e2e8f0" stroke-width="1"/>
+      <line x1="80" y1="260" x2="1020" y2="260" stroke="#e2e8f0" stroke-width="1"/>
+      <!-- Horizontal gridlines -->
+      <line x1="80" y1="205" x2="1020" y2="205" stroke="#f1f5f9" stroke-width="1"/>
+      <line x1="80" y1="150" x2="1020" y2="150" stroke="#f1f5f9" stroke-width="1"/>
+      <line x1="80" y1="95" x2="1020" y2="95" stroke="#f1f5f9" stroke-width="1"/>
+
+      <!-- Y-axis labels -->
+      <text x="72" y="264" text-anchor="end" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#94a3b8">Low</text>
+      <text x="72" y="154" text-anchor="end" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#94a3b8">Mid</text>
+      <text x="72" y="48" text-anchor="end" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#94a3b8">High</text>
+
+      <!-- X-axis phase labels -->
+      <text x="140" y="285" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">P1</text>
+      <text x="270" y="285" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">P2</text>
+      <text x="420" y="285" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">P3</text>
+      <text x="580" y="285" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">P4</text>
+      <text x="760" y="285" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">P5</text>
+      <text x="950" y="285" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">P6</text>
+
+      <!-- Investment curve (ink-blue) -->
+      <polyline points="140,240 270,210 420,190 580,100 760,70 950,150"
+        fill="none" stroke="#2563eb" stroke-width="2"/>
+      <circle cx="140" cy="240" r="4" fill="#2563eb"/>
+      <circle cx="270" cy="210" r="4" fill="#2563eb"/>
+      <circle cx="420" cy="190" r="4" fill="#2563eb"/>
+      <circle cx="580" cy="100" r="4" fill="#2563eb"/>
+      <circle cx="760" cy="70" r="4" fill="#2563eb"/>
+      <circle cx="950" cy="150" r="4" fill="#2563eb"/>
+
+      <!-- Commitment curve (ink-green) -->
+      <polyline points="140,250 270,220 420,170 580,130 760,80 950,55"
+        fill="none" stroke="#16a34a" stroke-width="2"/>
+      <circle cx="140" cy="250" r="4" fill="#16a34a"/>
+      <circle cx="270" cy="220" r="4" fill="#16a34a"/>
+      <circle cx="420" cy="170" r="4" fill="#16a34a"/>
+      <circle cx="580" cy="130" r="4" fill="#16a34a"/>
+      <circle cx="760" cy="80" r="4" fill="#16a34a"/>
+      <circle cx="950" cy="55" r="4" fill="#16a34a"/>
+
+      <!-- Switching cost area (subtle fill) -->
+      <polygon points="270,260 270,220 420,170 580,130 760,80 950,55 950,260"
+        fill="#dcfce7" opacity="0.3"/>
+
+      <!-- Legend -->
+      <line x1="80" y1="308" x2="100" y2="308" stroke="#2563eb" stroke-width="2"/>
+      <circle cx="90" cy="308" r="3" fill="#2563eb"/>
+      <text x="108" y="312" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#1a1a1a">投資規模（案件単価）</text>
+
+      <line x1="300" y1="308" x2="320" y2="308" stroke="#16a34a" stroke-width="2"/>
+      <circle cx="310" cy="308" r="3" fill="#16a34a"/>
+      <text x="328" y="312" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#1a1a1a">顧客コミットメント（スイッチングコスト）</text>
+
+      <rect x="600" y="298" width="12" height="12" fill="#dcfce7" opacity="0.5"/>
+      <text x="618" y="310" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#1a1a1a">ロックイン領域</text>
+
+      <!-- Annotation: P6 investment dip -->
+      <text x="950" y="170" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#64748b">リテイナーへ移行</text>
+      <text x="950" y="182" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#64748b">（単価は下がるが安定収益）</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="container">
+    <span class="footer-text">AX Consulting Framework — Internal Use Only</span>
+  </div>
+</footer>
+
+</body>
+</html>

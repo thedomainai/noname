@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI市場の7層レイヤー構造 — 詳細分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   AI Market Layer Structure — Paper Design System (Web App)
+   Sans-serif only. No Crimson Pro.
+   ============================================================ */
+:root {
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040;  --ink-600: #525252;  --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a;  --ink-300: #a3a3a3;  --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0;  --ink-50:  #f0f0f0;
+
+  --slate-50:  #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155;
+
+  --paper-50:  #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600: #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+
+  --ink-blue:  #2563eb; --ink-green: #16a34a;
+  --ink-amber: #d97706; --ink-red:   #dc2626;
+
+  --wash-blue:  #dbeafe; --wash-green: #dcfce7;
+  --wash-amber: #fef3c7; --wash-red:   #fee2e2;
+
+  --bg-page: var(--paper-50);
+  --bg-surface: var(--paper-100);
+  --bg-surface-raised: var(--paper-50);
+  --bg-recessed: var(--paper-300);
+  --border-default: var(--slate-200);
+  --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000);
+  --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900);
+  --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500);
+  --text-muted: var(--slate-400);
+
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --separator: 1px solid var(--border-default);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Page Header ── */
+.page-header {
+  background: var(--bg-page);
+  border-bottom: 2px solid var(--border-heavy);
+  padding: 48px 0 32px;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.page-header .container {
+  position: relative;
+}
+.page-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.page-title {
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.page-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.page-meta {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+.page-date {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ── Language Switcher ── */
+.lang-switch {
+  display: flex;
+  border: 1px solid var(--border-strong);
+  border-radius: 0;
+  overflow: hidden;
+}
+.lang-switch button {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border: none;
+  background: var(--bg-surface-raised);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.lang-switch button:first-child {
+  border-right: 1px solid var(--border-strong);
+}
+.lang-switch button.active {
+  background: var(--ink-900);
+  color: #fff;
+}
+.lang-switch button:hover:not(.active) {
+  background: var(--paper-300);
+  color: var(--text-primary);
+}
+
+/* ── Sticky Nav ── */
+.section-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(253, 253, 252, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10;
+  border-bottom: 1px solid var(--border-default);
+}
+.section-nav .container {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.section-nav a {
+  display: block;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.section-nav a:hover,
+.section-nav a.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--ink-blue);
+}
+
+/* ── Layout ── */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.content-section {
+  padding: 64px 0;
+}
+.section-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border-heavy);
+  margin-bottom: 32px;
+}
+.section-lead {
+  font-size: 16px;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.section-separator {
+  height: 1px;
+  background: var(--border-default);
+}
+
+/* ── Stack Diagram ── */
+.stack-container {
+  display: flex;
+  gap: 32px;
+  align-items: stretch;
+}
+.stack-layers {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.stack-layer {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--border-default);
+  border-bottom: none;
+  background: var(--bg-surface-raised);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  position: relative;
+}
+.stack-layer:last-child {
+  border-bottom: 1px solid var(--border-default);
+}
+.stack-layer:hover {
+  background: var(--paper-200);
+}
+.stack-layer.selected {
+  border-color: var(--ink-900);
+  z-index: 1;
+  background: var(--bg-surface-raised);
+}
+.stack-layer.selected + .stack-layer {
+  border-top-color: var(--ink-900);
+}
+
+.layer-id {
+  width: 56px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-right: 1px solid var(--border-default);
+  flex-shrink: 0;
+}
+.layer-content {
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.layer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.layer-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.layer-durability {
+  flex-shrink: 0;
+  width: 80px;
+  text-align: center;
+}
+.durability-bar {
+  height: 6px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+.durability-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Durability colors */
+.durability-very-low .durability-bar { background: var(--ink-red); width: 16px; margin-left: auto; margin-right: auto; }
+.durability-very-low .durability-label { color: var(--ink-red); }
+.durability-low .durability-bar { background: var(--ink-amber); width: 32px; margin-left: auto; margin-right: auto; }
+.durability-low .durability-label { color: var(--ink-amber); }
+.durability-mid .durability-bar { background: var(--ink-blue); width: 48px; margin-left: auto; margin-right: auto; }
+.durability-mid .durability-label { color: var(--ink-blue); }
+.durability-high .durability-bar { background: var(--ink-green); width: 64px; margin-left: auto; margin-right: auto; }
+.durability-high .durability-label { color: var(--ink-green); }
+
+/* Zone brackets */
+.stack-side-annotations {
+  width: 160px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.zone-bracket {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+  position: relative;
+}
+.zone-bracket::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+}
+.zone-red::before { background: var(--ink-red); }
+.zone-green::before { background: var(--ink-green); }
+.zone-bracket-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+.zone-red .zone-bracket-label { color: var(--ink-red); }
+.zone-green .zone-bracket-label { color: var(--ink-green); }
+
+/* ── Layer Detail Panel ── */
+.detail-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+  margin-top: 24px;
+  display: none;
+}
+.detail-panel.visible {
+  display: block;
+}
+.detail-panel-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.detail-panel-id {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.detail-panel-definition {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: var(--separator);
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.detail-block-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.detail-block ul {
+  list-style: none;
+  padding: 0;
+}
+.detail-block li {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.detail-block li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-400);
+}
+.detail-implication {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--wash-amber);
+  border-left: 3px solid var(--ink-amber);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-900);
+}
+
+/* ── 3-Company Invasion SVG ── */
+.invasion-diagram {
+  margin: 32px 0;
+}
+
+/* ── Whitespace Timeline ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 120px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-default);
+}
+.timeline-phase {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  position: relative;
+  padding-bottom: 40px;
+}
+.timeline-phase:last-child {
+  padding-bottom: 0;
+}
+.timeline-period {
+  width: 100px;
+  flex-shrink: 0;
+  text-align: right;
+  padding-top: 4px;
+}
+.timeline-year {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-heading);
+}
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-blue);
+  background: var(--bg-page);
+  flex-shrink: 0;
+  margin-top: 6px;
+  position: relative;
+  z-index: 1;
+}
+.timeline-phase:first-child .timeline-dot {
+  background: var(--ink-blue);
+}
+.timeline-cards {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.timeline-card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 16px;
+}
+.timeline-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.timeline-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+.timeline-card-layer {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: var(--paper-300);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+.timeline-card-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── 2-Axis Frame ── */
+.axis-frame {
+  position: relative;
+  margin: 32px 0;
+}
+
+/* ── Company Cards ── */
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.company-card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 20px;
+}
+.company-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.company-thesis {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-blue);
+  letter-spacing: 0.3px;
+  margin-bottom: 12px;
+}
+.company-layers {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.company-layer-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 6px;
+  background: var(--wash-red);
+  color: var(--ink-red);
+  border: 1px solid var(--ink-red);
+  font-weight: 500;
+}
+.company-layer-chip.partial {
+  background: var(--wash-amber);
+  color: var(--ink-amber);
+  border-color: var(--ink-amber);
+}
+.company-detail {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Summary Table ── */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.summary-table thead th {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1.5px solid var(--ink-900);
+  background: var(--paper-300);
+}
+.summary-table tbody td {
+  font-size: 14px;
+  padding: 10px 12px;
+  border-bottom: 0.5px solid var(--ink-100);
+  vertical-align: top;
+}
+.summary-table tbody tr:hover {
+  background: var(--paper-300);
+}
+.table-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* ── Footer ── */
+.page-footer {
+  border-top: 1px solid var(--border-default);
+  padding: 32px 0;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .stack-container { flex-direction: column; }
+  .stack-side-annotations { display: none; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .company-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 28px; }
+}
+@media (max-width: 639px) {
+  .container { padding: 0 16px; }
+  .content-section { padding: 48px 0; }
+  .page-title { font-size: 22px; }
+  .layer-desc { display: none; }
+  .layer-durability { width: 60px; }
+  .page-meta { position: static; flex-direction: row; align-items: center; gap: 12px; margin-top: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PAGE HEADER
+     ============================================================ -->
+<div class="page-header">
+  <div class="container">
+    <div class="page-meta">
+      <div class="page-date">2026-03-09</div>
+      <div class="lang-switch">
+        <button id="langJa" class="active" onclick="setLang('ja')">JA</button>
+        <button id="langEn" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+    <div class="page-label">AI Market Analysis</div>
+    <h1 class="page-title" data-ja="AI市場の7層レイヤー構造" data-en="7-Layer Structure of the AI Market"></h1>
+    <p class="page-subtitle" data-ja="基盤モデル3社の戦略分析から導出した市場地図。独立プレーヤーの耐久性と余白領域の時間軸推移を構造化する。" data-en="A market map derived from strategic analysis of three foundation model companies. Structures the durability of independent players and the temporal evolution of white space."></p>
+  </div>
+</div>
+
+<!-- ============================================================
+     STICKY NAV
+     ============================================================ -->
+<nav class="section-nav">
+  <div class="container">
+    <a href="#stack" class="active" data-ja="レイヤー構造" data-en="Layer Stack"></a>
+    <a href="#invasion" data-ja="3社の侵攻" data-en="3-Company Invasion"></a>
+    <a href="#whitespace" data-ja="余白領域" data-en="White Space"></a>
+    <a href="#axis" data-ja="2軸フレーム" data-en="2-Axis Frame"></a>
+    <a href="#summary" data-ja="要約" data-en="Summary"></a>
+  </div>
+</nav>
+
+<!-- ============================================================
+     SECTION 1: LAYER STACK
+     ============================================================ -->
+<section id="stack" class="content-section">
+  <div class="container">
+    <h2 class="section-title" data-ja="レイヤー構造" data-en="Layer Stack"></h2>
+    <p class="section-lead" data-ja="AI市場を7層で定義する。下層がインフラ、上層がエンドユーザー接点。中間層（L3〜L5）に独立プレーヤーの持続的な戦場がある。レイヤーをクリックすると詳細を表示する。" data-en="The AI market is defined in 7 layers. Lower layers represent infrastructure, upper layers represent end-user touchpoints. The middle layers (L3–L5) form the sustainable battleground for independent players. Click a layer to see details."></p>
+
+    <div class="stack-container">
+      <div class="stack-layers" id="stackLayers">
+        <!-- L6 (top) -->
+        <div class="stack-layer" data-layer="6">
+          <div class="layer-id">L6</div>
+          <div class="layer-content">
+            <div>
+              <div class="layer-name">Default Distribution / Front Door</div>
+              <div class="layer-desc" data-ja="ChatGPT・Gemini in Workspace/Search/Chrome・Claude.ai" data-en="ChatGPT, Gemini in Workspace/Search/Chrome, Claude.ai"></div>
+            </div>
+          </div>
+          <div class="layer-durability durability-very-low">
+            <div class="durability-bar"></div>
+            <div class="durability-label" data-ja="極低" data-en="V.Low"></div>
+          </div>
+        </div>
+
+        <!-- L5 -->
+        <div class="stack-layer" data-layer="5">
+          <div class="layer-id">L5</div>
+          <div class="layer-content">
+            <div>
+              <div class="layer-name">Workflow / Vertical Execution</div>
+              <div class="layer-desc" data-ja="業界固有の承認責任・帳票・例外処理・KPI" data-en="Industry-specific approval authority, forms, exception handling, KPIs"></div>
+            </div>
+          </div>
+          <div class="layer-durability durability-high">
+            <div class="durability-bar"></div>
+            <div class="durability-label" data-ja="高" data-en="High"></div>
+          </div>
+        </div>
+
+        <!-- L4 -->
+        <div class="stack-layer" data-layer="4">
+          <div class="layer-id">L4</div>
+          <div class="layer-content">
+            <div>
+              <div class="layer-name">Control Plane</div>
+              <div class="layer-desc" data-ja="routing・policy・evals・trace・audit・cost・approval" data-en="Routing, policy, evals, trace, audit, cost, approval"></div>
+            </div>
+          </div>
+          <div class="layer-durability durability-high">
+            <div class="durability-bar"></div>
+            <div class="durability-label" data-ja="高" data-en="High"></div>
+          </div>
+        </div>
+
+        <!-- L3 -->
+        <div class="stack-layer" data-layer="3">
+          <div class="layer-id">L3</div>
+          <div class="layer-content">
+            <div>
+              <div class="layer-name">Context / Data / Identity / Tool Access</div>
+              <div class="layer-desc" data-ja="社内データ・権限・コネクタ・MCP・SoR接続" data-en="Internal data, permissions, connectors, MCP, SoR integration"></div>
+            </div>
+          </div>
+          <div class="layer-durability durability-mid">
+            <div class="durability-bar"></div>
+            <div class="durability-label" data-ja="中〜高" data-en="Mid-Hi"></div>
+          </div>
+        </div>
+
+        <!-- L2 -->
+        <div class="stack-layer" data-layer="2">
+          <div class="layer-id">L2</div>
+          <div class="layer-content">
+            <div>
+              <div class="layer-name">Agent Runtime</div>
+              <div class="layer-desc" data-ja="エージェント状態管理・実行・ツール呼び出し・メモリ・handoff" data-en="Agent state management, execution, tool calling, memory, handoff"></div>
+            </div>
+          </div>
+          <div class="layer-durability durability-low">
+            <div class="durability-bar"></div>
+            <div class="durability-label" data-ja="低" data-en="Low"></div>
+          </div>
+        </div>
+
+        <!-- L1 -->
+        <div class="stack-layer" data-layer="1">
+          <div class="layer-id">L1</div>
+          <div class="layer-content">
+            <div>
+              <div class="layer-name">Foundation Models</div>
+              <div class="layer-desc" data-ja="GPT・Claude・Gemini・Gemma — 性能差は縮小、コモディティ化圧力" data-en="GPT, Claude, Gemini, Gemma — narrowing performance gap, commoditization pressure"></div>
+            </div>
+          </div>
+          <div class="layer-durability durability-low">
+            <div class="durability-bar"></div>
+            <div class="durability-label" data-ja="低" data-en="Low"></div>
+          </div>
+        </div>
+
+        <!-- L0 (bottom) -->
+        <div class="stack-layer" data-layer="0">
+          <div class="layer-id">L0</div>
+          <div class="layer-content">
+            <div>
+              <div class="layer-name">Compute / Cloud / Energy</div>
+              <div class="layer-desc" data-ja="GPU・TPU・Trainium・DC・電力 — 資本集約層" data-en="GPU, TPU, Trainium, DC, power — capital-intensive layer"></div>
+            </div>
+          </div>
+          <div class="layer-durability durability-very-low">
+            <div class="durability-bar"></div>
+            <div class="durability-label" data-ja="極低" data-en="V.Low"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side annotations -->
+      <div class="stack-side-annotations">
+        <div style="height: 64px; display: flex; align-items: center;">
+          <div class="zone-bracket zone-red" style="height: 100%; align-items: center;">
+            <span class="zone-bracket-label" data-ja="3社の配布面" data-en="3-Co Distribution"></span>
+          </div>
+        </div>
+        <div style="flex: 1; display: flex; align-items: center; min-height: 192px;">
+          <div class="zone-bracket zone-green" style="height: 100%; align-items: center;">
+            <span class="zone-bracket-label" data-ja="独立プレーヤー<br>の余白領域" data-en="Independent<br>Player Zone"></span>
+          </div>
+        </div>
+        <div style="height: 192px; display: flex; align-items: center;">
+          <div class="zone-bracket zone-red" style="height: 100%; align-items: center;">
+            <span class="zone-bracket-label" data-ja="3社が制圧<br>（資本戦）" data-en="3-Co Dominance<br>(Capital War)"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-panel-id" id="detailId"></div>
+      <div class="detail-panel-title" id="detailTitle"></div>
+      <div class="detail-panel-definition" id="detailDef"></div>
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-block-title" data-ja="主要プレーヤーの動き" data-en="Key Player Moves"></div>
+          <ul id="detailPlayers"></ul>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title" data-ja="構造的特徴" data-en="Structural Features"></div>
+          <ul id="detailFeatures"></ul>
+        </div>
+      </div>
+      <div class="detail-implication" id="detailImplication"></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 2: 3社の侵攻パターン
+     ============================================================ -->
+<section id="invasion" class="content-section">
+  <div class="container">
+    <h2 class="section-title" data-ja="3社の侵攻パターン" data-en="3-Company Invasion Pattern"></h2>
+    <p class="section-lead" data-ja="OpenAI・Anthropic・Google は下（L0-L2）と上（L6）から挟み込む形で中間層に侵攻している。各社の制圧レイヤーと侵攻方向を示す。" data-en="OpenAI, Anthropic, and Google are invading the middle layers in a pincer movement from below (L0–L2) and above (L6). The diagram shows each company's dominated layers and invasion direction."></p>
+
+    <!-- SVG Invasion Diagram -->
+    <div class="invasion-diagram">
+      <svg viewBox="0 0 920 520" width="100%" style="max-width: 920px; display: block; margin: 0 auto;">
+        <!-- Defs -->
+        <defs>
+          <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#dc2626"/>
+          </marker>
+          <marker id="arrowAmber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#d97706"/>
+          </marker>
+        </defs>
+
+        <!-- Layer backgrounds -->
+        <rect x="40" y="10" width="560" height="56" rx="0" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <rect x="40" y="66" width="560" height="56" rx="0" fill="#dcfce7" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+        <rect x="40" y="122" width="560" height="56" rx="0" fill="#dcfce7" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+        <rect x="40" y="178" width="560" height="56" rx="0" fill="#dbeafe" stroke="#2563eb" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+        <rect x="40" y="234" width="560" height="56" rx="0" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <rect x="40" y="290" width="560" height="56" rx="0" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+        <rect x="40" y="346" width="560" height="56" rx="0" fill="#fdfdfc" stroke="#e2e8f0" stroke-width="1"/>
+
+        <!-- Layer labels -->
+        <text x="56" y="44" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b">L6</text>
+        <text x="96" y="44" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">Default Distribution</text>
+
+        <text x="56" y="100" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b">L5</text>
+        <text x="96" y="100" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">Workflow / Vertical</text>
+
+        <text x="56" y="156" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b">L4</text>
+        <text x="96" y="156" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">Control Plane</text>
+
+        <text x="56" y="212" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b">L3</text>
+        <text x="96" y="212" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">Context / Data / Identity</text>
+
+        <text x="56" y="268" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b">L2</text>
+        <text x="96" y="268" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">Agent Runtime</text>
+
+        <text x="56" y="324" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b">L1</text>
+        <text x="96" y="324" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">Foundation Models</text>
+
+        <text x="56" y="380" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b">L0</text>
+        <text x="96" y="380" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a">Compute / Cloud / Energy</text>
+
+        <!-- Company columns -->
+        <!-- OpenAI -->
+        <rect x="630" y="10" width="88" height="56" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+        <text x="674" y="42" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#dc2626" text-anchor="middle">ChatGPT</text>
+
+        <rect x="630" y="234" width="88" height="56" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+        <text x="674" y="258" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#dc2626" text-anchor="middle">Frontier</text>
+        <text x="674" y="272" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#dc2626" text-anchor="middle">Agents SDK</text>
+
+        <rect x="630" y="346" width="88" height="56" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+        <text x="674" y="374" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#d97706" text-anchor="middle">Stargate</text>
+        <text x="674" y="388" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#d97706" text-anchor="middle">10GW</text>
+
+        <!-- OpenAI侵攻矢印 (L6→L3: company knowledge) -->
+        <line x1="674" y1="66" x2="674" y2="230" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowRed)"/>
+        <text x="694" y="154" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#dc2626" transform="rotate(90, 694, 154)">company knowledge</text>
+
+        <!-- Anthropic -->
+        <rect x="730" y="178" width="88" height="56" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+        <text x="774" y="202" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#2563eb" text-anchor="middle">MCP</text>
+        <text x="774" y="216" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#2563eb" text-anchor="middle">Cross-cloud</text>
+
+        <rect x="730" y="290" width="88" height="56" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+        <text x="774" y="322" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#2563eb" text-anchor="middle">Claude</text>
+
+        <!-- Anthropic侵攻矢印 (L3→L4: trust/safety) -->
+        <line x1="774" y1="178" x2="774" y2="126" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowRed)"/>
+        <text x="786" y="156" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#2563eb">trust</text>
+
+        <!-- Google -->
+        <rect x="830" y="10" width="88" height="56" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+        <text x="874" y="34" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#dc2626" text-anchor="middle">Workspace</text>
+        <text x="874" y="48" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#dc2626" text-anchor="middle">Search Chrome</text>
+
+        <rect x="830" y="346" width="88" height="56" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+        <text x="874" y="374" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#d97706" text-anchor="middle">GCP</text>
+        <text x="874" y="388" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#d97706" text-anchor="middle">$175B CapEx</text>
+
+        <!-- Google侵攻矢印 (L6→L3: Workspace integration) -->
+        <line x1="874" y1="66" x2="874" y2="230" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowRed)"/>
+        <text x="886" y="154" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#dc2626" transform="rotate(90, 886, 154)">ADK / A2A</text>
+
+        <!-- Company labels at bottom -->
+        <text x="674" y="430" font-family="'Instrument Sans', sans-serif" font-size="14" font-weight="600" fill="#1a1a1a" text-anchor="middle">OpenAI</text>
+        <text x="674" y="446" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle">"Intelligence OS"</text>
+
+        <text x="774" y="430" font-family="'Instrument Sans', sans-serif" font-size="14" font-weight="600" fill="#1a1a1a" text-anchor="middle">Anthropic</text>
+        <text x="774" y="446" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle">"Trusted Intel Layer"</text>
+
+        <text x="874" y="430" font-family="'Instrument Sans', sans-serif" font-size="14" font-weight="600" fill="#1a1a1a" text-anchor="middle">Google</text>
+        <text x="874" y="446" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle">"Default AI Fabric"</text>
+
+        <!-- White space highlight -->
+        <rect x="40" y="66" width="560" height="168" rx="0" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="8,4"/>
+        <text x="410" y="86" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="700" fill="#16a34a" text-anchor="end" letter-spacing="1.5" data-svg-i18n="invasion-ws">WHITE SPACE</text>
+
+        <!-- Legend -->
+        <rect x="40" y="475" width="12" height="12" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+        <text x="58" y="486" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" data-svg-i18n="legend-dominated">3社の制圧レイヤー</text>
+
+        <rect x="180" y="475" width="12" height="12" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+        <text x="198" y="486" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" data-svg-i18n="legend-capital">資本投下レイヤー</text>
+
+        <rect x="340" y="475" width="12" height="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+        <text x="358" y="486" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" data-svg-i18n="legend-protocol">プロトコル / 中立戦略</text>
+
+        <line x1="500" y1="481" x2="530" y2="481" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowRed)"/>
+        <text x="538" y="486" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" data-svg-i18n="legend-direction">侵攻方向</text>
+      </svg>
+    </div>
+
+    <!-- Company detail cards -->
+    <div class="company-grid">
+      <div class="company-card">
+        <div class="company-name">OpenAI</div>
+        <div class="company-thesis">"Intelligence Operating System"</div>
+        <div class="company-layers">
+          <span class="company-layer-chip">L6</span>
+          <span class="company-layer-chip">L2</span>
+          <span class="company-layer-chip">L0</span>
+          <span class="company-layer-chip partial">L3</span>
+        </div>
+        <p class="company-detail" data-ja="ChatGPT を入口に、Frontier でエンタープライズ業務を実行し、Company Knowledge でコンテキストを吸収。AWS 提携で配布面とインフラを拡張。" data-en="Uses ChatGPT as the front door, runs enterprise processes via Frontier, and absorbs context through Company Knowledge. Expands distribution and infra via AWS partnership."></p>
+      </div>
+
+      <div class="company-card">
+        <div class="company-name">Anthropic</div>
+        <div class="company-thesis">"Trusted Enterprise Intelligence Layer"</div>
+        <div class="company-layers">
+          <span class="company-layer-chip">L1</span>
+          <span class="company-layer-chip">L3</span>
+          <span class="company-layer-chip partial">L4</span>
+        </div>
+        <p class="company-detail" data-ja="MCP をオープンスタンダードとして推進。信頼性・安全性・相互運用性を勝ち筋にクラウド横断で展開。日本では AISI と連携。" data-en="Promotes MCP as an open standard. Expands across clouds with trust, safety, and interoperability as winning strategy. Partners with AISI in Japan."></p>
+      </div>
+
+      <div class="company-card">
+        <div class="company-name">Google</div>
+        <div class="company-thesis">"Default AI Fabric Across Surfaces"</div>
+        <div class="company-layers">
+          <span class="company-layer-chip">L6</span>
+          <span class="company-layer-chip">L0</span>
+          <span class="company-layer-chip partial">L2</span>
+          <span class="company-layer-chip partial">L3</span>
+        </div>
+        <p class="company-detail" data-ja="Workspace・Search・Chrome・Cloud を束ねたバンドル戦略。Gemini Enterprise 同梱で採用障壁を下げ、ADK/A2A でエージェント層にも進出。" data-en="Bundle strategy combining Workspace, Search, Chrome, and Cloud. Lowers adoption barriers with Gemini Enterprise bundling, and enters the agent layer via ADK/A2A."></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 3: WHITE SPACE TIMELINE
+     ============================================================ -->
+<section id="whitespace" class="content-section">
+  <div class="container">
+    <h2 class="section-title" data-ja="余白領域 — 時間軸推移" data-en="White Space — Temporal Evolution"></h2>
+    <p class="section-lead" data-ja="独立プレーヤーが取るべき余白領域を時間軸で整理する。L3-L4の交点から始め、L5の業界特化を深掘りし、最終的に業界運用レイヤーを構築する。" data-en="Organizes white space that independent players should capture along a timeline. Starting from the L3–L4 intersection, deepening L5 vertical specialization, and ultimately building an Industry Operating Layer."></p>
+
+    <div class="timeline">
+      <!-- Phase 1 -->
+      <div class="timeline-phase">
+        <div class="timeline-period">
+          <div class="timeline-year">2026–27</div>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-cards">
+          <div class="timeline-card">
+            <div class="timeline-card-header">
+              <div class="timeline-card-title">Permissioned Context Plane</div>
+              <span class="timeline-card-layer">L3</span>
+            </div>
+            <p class="timeline-card-text" data-ja="日本企業の SoR をまたぎ、権限・監査・文書系統・業務オブジェクトを正しく束ねる。単なる RAG やコネクタ集合ではなく、業務の意味論を持つ層。" data-en="Correctly binds permissions, audit trails, document lineage, and business objects across Japanese enterprise SoRs. Not just a RAG or connector collection, but a layer with business semantics."></p>
+          </div>
+          <div class="timeline-card">
+            <div class="timeline-card-header">
+              <div class="timeline-card-title">Policy-based Router / Control Plane</div>
+              <span class="timeline-card-layer">L4</span>
+            </div>
+            <p class="timeline-card-text" data-ja="タスク・機密区分・承認要否・データ所在地・予算に基づく model/agent/tool/cloud の動的切り替え。マルチモデル時代の管理基盤。" data-en="Dynamic switching of model/agent/tool/cloud based on task, classification, approval requirements, data residency, and budget. The governance foundation for the multi-model era."></p>
+          </div>
+          <div class="timeline-card">
+            <div class="timeline-card-header">
+              <div class="timeline-card-title">Evals / Observability / Human Approval</div>
+              <span class="timeline-card-layer">L4</span>
+            </div>
+            <p class="timeline-card-text" data-ja="trace・再現性・承認フロー・監査ログ・コスト配賦・fallback を一体化した統治基盤。企業が買うのは「安全に動かせること」。" data-en="Unified governance foundation integrating trace, reproducibility, approval flows, audit logs, cost allocation, and fallback. What enterprises buy is the ability to operate safely."></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="timeline-phase">
+        <div class="timeline-period">
+          <div class="timeline-year">2027–28</div>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-cards">
+          <div class="timeline-card">
+            <div class="timeline-card-header">
+              <div class="timeline-card-title">MCP/A2A Bridge Managed Layer</div>
+              <span class="timeline-card-layer">L3–L4</span>
+            </div>
+            <p class="timeline-card-text" data-ja="MCP（tool/context）と A2A（agent-to-agent）をまたぎ、identity/policy/trace を一貫させるエンタープライズ相互運用基盤。" data-en="Enterprise interoperability fabric spanning MCP (tool/context) and A2A (agent-to-agent), maintaining consistent identity/policy/trace."></p>
+          </div>
+          <div class="timeline-card">
+            <div class="timeline-card-header">
+              <div class="timeline-card-title">Vertical Workflow Execution</div>
+              <span class="timeline-card-layer">L5</span>
+            </div>
+            <p class="timeline-card-text" data-ja="1〜2業界に絞り、調達/監査/法務/品質/保守/コンプライアンスの「行動を伴う業務」を深く実装。業界知識と販売チャネルが参入障壁。" data-en="Deep implementation of action-oriented operations (procurement, audit, legal, quality, maintenance, compliance) focused on 1–2 industries. Industry knowledge and sales channels become entry barriers."></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="timeline-phase">
+        <div class="timeline-period">
+          <div class="timeline-year">2028–29</div>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-cards">
+          <div class="timeline-card">
+            <div class="timeline-card-header">
+              <div class="timeline-card-title">Industry Operating Layer</div>
+              <span class="timeline-card-layer">L5+</span>
+            </div>
+            <p class="timeline-card-text" data-ja="業界ごとの業務オブジェクト・権限・承認・例外・SLA・KPI・履歴を持つ実行層。基盤モデルの入れ替わりや Front Door の変化に対して不変。プロトコルの半オープン化とマルチモデル化が進むほど強化される。" data-en="An execution layer holding industry-specific business objects, permissions, approvals, exceptions, SLAs, KPIs, and history. Invariant to foundation model turnover or front door changes. Strengthened as protocol semi-openness and multi-model adoption progress."></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 4: 2-AXIS FRAME
+     ============================================================ -->
+<section id="axis" class="content-section">
+  <div class="container">
+    <h2 class="section-title" data-ja="2軸フレーム — 交点が余白領域" data-en="2-Axis Frame — White Space at Intersections"></h2>
+    <p class="section-lead" data-ja="余白領域を正確に特定するために2軸で市場を見る。狙うべきは AI 供給スタックのど真ん中ではなく、2軸の交点である。" data-en="View the market through 2 axes to precisely identify white space. The target is not the center of the AI supply stack, but the intersections of both axes."></p>
+
+    <div class="axis-frame">
+      <svg viewBox="0 0 880 560" width="100%" style="max-width: 880px; display: block; margin: 0 auto;">
+        <defs>
+          <marker id="axisArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a1a"/>
+          </marker>
+        </defs>
+
+        <!-- Grid background -->
+        <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+          <line x1="40" y1="0" x2="40" y2="40" stroke="#f1f5f9" stroke-width="1"/>
+          <line x1="0" y1="40" x2="40" y2="40" stroke="#f1f5f9" stroke-width="1"/>
+        </pattern>
+        <rect x="120" y="40" width="720" height="420" fill="url(#gridPattern)"/>
+
+        <!-- Axes -->
+        <line x1="120" y1="460" x2="840" y2="460" stroke="#1a1a1a" stroke-width="2" marker-end="url(#axisArrow)"/>
+        <line x1="120" y1="460" x2="120" y2="40" stroke="#1a1a1a" stroke-width="2" marker-end="url(#axisArrow)"/>
+
+        <!-- Y-axis label -->
+        <text x="30" y="250" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a" text-anchor="middle" transform="rotate(-90, 30, 250)" data-svg-i18n="axis-y">AI Supply Stack</text>
+
+        <!-- X-axis label -->
+        <text x="480" y="510" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#1a1a1a" text-anchor="middle" data-svg-i18n="axis-x">Enterprise Design Stack</text>
+
+        <!-- Y-axis items -->
+        <text x="110" y="430" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="end">L0 Compute</text>
+        <text x="110" y="370" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="end">L1 Models</text>
+        <text x="110" y="310" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="end">L2 Runtime</text>
+        <text x="110" y="250" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="end">L3 Context</text>
+        <text x="110" y="190" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="end">L4 Control</text>
+        <text x="110" y="130" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="end">L5 Workflow</text>
+
+        <!-- X-axis items -->
+        <text x="210" y="485" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle" data-svg-i18n="axis-task">Task</text>
+        <text x="330" y="485" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle" data-svg-i18n="axis-role">Role</text>
+        <text x="450" y="485" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle" data-svg-i18n="axis-team">Team</text>
+        <text x="570" y="485" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle" data-svg-i18n="axis-function">Function</text>
+        <text x="700" y="485" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle" data-svg-i18n="axis-orgmodel">Operating Model</text>
+        <text x="810" y="485" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#64748b" text-anchor="middle" data-svg-i18n="axis-capital">Capital</text>
+
+        <!-- 3社の制圧ゾーン (gray) -->
+        <rect x="120" y="340" width="720" height="120" fill="#f0f0f0" opacity="0.5"/>
+        <text x="840" y="400" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#8a8a8a" text-anchor="end" data-svg-i18n="axis-dominated">3社制圧ゾーン</text>
+
+        <!-- White space zone (green overlay) -->
+        <rect x="270" y="100" width="500" height="200" rx="0" fill="#dcfce7" opacity="0.35" stroke="#16a34a" stroke-width="2" stroke-dasharray="8,4"/>
+
+        <!-- Intersection points -->
+        <circle cx="330" cy="190" r="8" fill="#16a34a" opacity="0.8"/>
+        <text x="342" y="186" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#16a34a">Role × Control</text>
+        <text x="342" y="200" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#64748b" data-svg-i18n="dot-role-ctrl">承認・権限再設計</text>
+
+        <circle cx="450" cy="130" r="8" fill="#16a34a" opacity="0.8"/>
+        <text x="462" y="126" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#16a34a">Team × Workflow</text>
+        <text x="462" y="140" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#64748b" data-svg-i18n="dot-team-wf">Human-Agent 混成運用</text>
+
+        <circle cx="570" cy="190" r="8" fill="#16a34a" opacity="0.8"/>
+        <text x="582" y="186" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#16a34a">Function × Control</text>
+        <text x="582" y="200" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#64748b" data-svg-i18n="dot-func-ctrl">KPI・管理会計変革</text>
+
+        <circle cx="700" cy="130" r="8" fill="#16a34a" opacity="0.8"/>
+        <text x="702" y="118" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" fill="#16a34a">Org Model × Workflow</text>
+        <text x="702" y="150" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#64748b">Industry Operating Layer</text>
+
+        <circle cx="330" cy="250" r="6" fill="#2563eb" opacity="0.7"/>
+        <text x="342" y="246" font-family="'Instrument Sans', sans-serif" font-size="10" font-weight="600" fill="#2563eb">Role × Context</text>
+        <text x="342" y="258" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#64748b">Permissioned Context</text>
+
+        <!-- White space label -->
+        <text x="520" y="86" font-family="'Instrument Sans', sans-serif" font-size="12" font-weight="700" fill="#16a34a" text-anchor="middle" letter-spacing="2" data-svg-i18n="axis-ws-label">WHITE SPACE: 2軸の交点</text>
+
+        <!-- 3社が取れない理由 -->
+        <text x="770" y="290" font-family="'Instrument Sans', sans-serif" font-size="10" fill="#94a3b8" text-anchor="end" data-svg-i18n="axis-reason">3社は組織設計責任を持てない</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 5: SUMMARY TABLE
+     ============================================================ -->
+<section id="summary" class="content-section">
+  <div class="container">
+    <h2 class="section-title" data-ja="要約 — レイヤー別 耐久性と戦略含意" data-en="Summary — Durability & Strategic Implications by Layer"></h2>
+
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th style="width: 60px;">Layer</th>
+          <th style="width: 200px;" data-ja="名称" data-en="Name"></th>
+          <th style="width: 100px;" data-ja="耐久性" data-en="Durability"></th>
+          <th style="width: 100px;" data-ja="3社侵食" data-en="3-Co Erosion"></th>
+          <th data-ja="戦略含意" data-en="Strategic Implication"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="table-mono">L6</td>
+          <td>Default Distribution</td>
+          <td><span style="color: var(--ink-red); font-weight: 600;" data-ja="極めて低い" data-en="Very Low"></span></td>
+          <td><span style="color: var(--ink-red); font-weight: 600;" data-ja="制圧済み" data-en="Dominated"></span></td>
+          <td style="color: var(--text-secondary);" data-ja="Front Door は3社に任せ、裏側の層に注力する" data-en="Leave the front door to the 3 companies; focus on the layers behind it"></td>
+        </tr>
+        <tr>
+          <td class="table-mono">L5</td>
+          <td>Workflow / Vertical</td>
+          <td><span style="color: var(--ink-green); font-weight: 600;" data-ja="高い" data-en="High"></span></td>
+          <td style="color: var(--text-secondary);" data-ja="低侵食" data-en="Low erosion"></td>
+          <td data-ja="1〜2業界に絞って深く実装。業界知識と販売チャネルが障壁" data-en="Deep implementation in 1–2 industries. Industry knowledge and sales channels form barriers"></td>
+        </tr>
+        <tr>
+          <td class="table-mono">L4</td>
+          <td>Control Plane</td>
+          <td><span style="color: var(--ink-green); font-weight: 600;" data-ja="高い" data-en="High"></span></td>
+          <td style="color: var(--text-secondary);" data-ja="低侵食" data-en="Low erosion"></td>
+          <td data-ja="マルチモデル統治基盤。identity/policy/trace/eval/audit を一体化" data-en="Multi-model governance foundation. Unifies identity/policy/trace/eval/audit"></td>
+        </tr>
+        <tr>
+          <td class="table-mono">L3</td>
+          <td>Context / Identity</td>
+          <td><span style="color: var(--ink-blue); font-weight: 600;" data-ja="中〜高" data-en="Mid-High"></span></td>
+          <td><span style="color: var(--ink-amber); font-weight: 600;" data-ja="侵攻中" data-en="Under invasion"></span></td>
+          <td data-ja="汎用コネクタは飲み込まれる。権限・監査・業務意味論を持てば残る" data-en="Generic connectors get absorbed. Survives if it holds permissions, audit, and business semantics"></td>
+        </tr>
+        <tr>
+          <td class="table-mono">L2</td>
+          <td>Agent Runtime</td>
+          <td><span style="color: var(--ink-amber); font-weight: 600;" data-ja="低い" data-en="Low"></span></td>
+          <td><span style="color: var(--ink-red); font-weight: 600;" data-ja="侵攻正面" data-en="Direct assault"></span></td>
+          <td data-ja="3社の主戦場。汎用 Runtime で独立するのは高リスク" data-en="The 3 companies' main battlefield. High risk to go independent with a generic runtime"></td>
+        </tr>
+        <tr>
+          <td class="table-mono">L1</td>
+          <td>Foundation Models</td>
+          <td><span style="color: var(--ink-amber); font-weight: 600;" data-ja="低い" data-en="Low"></span></td>
+          <td><span style="color: var(--ink-red); font-weight: 600;" data-ja="寡占化" data-en="Oligopolized"></span></td>
+          <td data-ja="モデルは「選ぶもの」。マルチモデル前提の設計が合理的" data-en="Models are &quot;something you choose.&quot; Multi-model architecture is rational"></td>
+        </tr>
+        <tr>
+          <td class="table-mono">L0</td>
+          <td>Compute / Cloud</td>
+          <td><span style="color: var(--ink-red); font-weight: 600;" data-ja="極めて低い" data-en="Very Low"></span></td>
+          <td><span style="color: var(--ink-red); font-weight: 600;" data-ja="資本戦" data-en="Capital war"></span></td>
+          <td data-ja="この層では戦わない。消費者として最適インフラを選択する" data-en="Don't compete here. Choose optimal infra as a consumer"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 32px; padding: 16px 20px; background: var(--wash-green); border-left: 3px solid var(--ink-green);">
+      <div style="font-size: 14px; font-weight: 600; color: var(--ink-green); margin-bottom: 4px;" data-ja="結論" data-en="Conclusion"></div>
+      <p style="font-size: 14px; line-height: 1.7; color: var(--ink-900);" data-ja="独立プレーヤーの耐久性が最も高いのは L4（Control Plane）と L5（Workflow / Vertical）、そして業務意味論に深く結びついた L3 である。狙うべきは AI 供給スタックのど真ん中ではなく、AI 供給スタック × 企業設計スタックの交点。3社は日本企業ごとの組織設計責任まで持てない — ここが構造的な余白領域である。" data-en="The highest durability for independent players lies in L4 (Control Plane), L5 (Workflow / Vertical), and L3 when deeply tied to business semantics. The target is not the center of the AI supply stack, but the intersection of the AI supply stack × enterprise design stack. The 3 companies cannot assume organizational design responsibility for each Japanese enterprise — this is the structural white space."></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="page-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span data-ja="出典: 基盤モデル3社戦略分析と AGIネイティブ変革会社への示唆 2026–2029" data-en="Source: Foundation Model 3-Company Strategy Analysis & Implications for AGI-Native Transformation 2026–2029"></span>
+      <span>Confidential</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JavaScript — Interaction & i18n
+     ============================================================ -->
+<script>
+// ── i18n ──
+let currentLang = 'ja';
+
+const svgI18n = {
+  ja: {
+    'invasion-ws': 'WHITE SPACE',
+    'legend-dominated': '3社の制圧レイヤー',
+    'legend-capital': '資本投下レイヤー',
+    'legend-protocol': 'プロトコル / 中立戦略',
+    'legend-direction': '侵攻方向',
+    'axis-y': 'AI 供給スタック',
+    'axis-x': '企業設計スタック',
+    'axis-task': 'タスク',
+    'axis-role': '役割',
+    'axis-team': 'チーム',
+    'axis-function': '機能',
+    'axis-orgmodel': '経営モデル',
+    'axis-capital': '資本',
+    'axis-dominated': '3社制圧ゾーン',
+    'dot-role-ctrl': '承認・権限再設計',
+    'dot-team-wf': 'Human-Agent 混成運用',
+    'dot-func-ctrl': 'KPI・管理会計変革',
+    'axis-ws-label': 'WHITE SPACE: 2軸の交点',
+    'axis-reason': '3社は組織設計責任を持てない',
+  },
+  en: {
+    'invasion-ws': 'WHITE SPACE',
+    'legend-dominated': 'Dominated Layers',
+    'legend-capital': 'Capital Investment Layer',
+    'legend-protocol': 'Protocol / Neutral Strategy',
+    'legend-direction': 'Invasion Direction',
+    'axis-y': 'AI Supply Stack',
+    'axis-x': 'Enterprise Design Stack',
+    'axis-task': 'Task',
+    'axis-role': 'Role',
+    'axis-team': 'Team',
+    'axis-function': 'Function',
+    'axis-orgmodel': 'Operating Model',
+    'axis-capital': 'Capital',
+    'axis-dominated': '3-Co Dominated Zone',
+    'dot-role-ctrl': 'Approval & Auth Redesign',
+    'dot-team-wf': 'Human-Agent Hybrid Ops',
+    'dot-func-ctrl': 'KPI & Mgmt Acctg Reform',
+    'axis-ws-label': 'WHITE SPACE: Axis Intersections',
+    'axis-reason': '3 companies cannot own org design',
+  },
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+
+  // Update buttons
+  document.getElementById('langJa').classList.toggle('active', lang === 'ja');
+  document.getElementById('langEn').classList.toggle('active', lang === 'en');
+
+  // Update all data-ja / data-en elements
+  document.querySelectorAll('[data-ja][data-en]').forEach(el => {
+    const text = el.getAttribute('data-' + lang);
+    if (text !== null) {
+      if (el.innerHTML.includes('<br>') || text.includes('<br>')) {
+        el.innerHTML = text;
+      } else {
+        el.textContent = text;
+      }
+    }
+  });
+
+  // Update SVG text elements
+  document.querySelectorAll('[data-svg-i18n]').forEach(el => {
+    const key = el.getAttribute('data-svg-i18n');
+    const dict = svgI18n[lang];
+    if (dict && dict[key]) {
+      el.textContent = dict[key];
+    }
+  });
+
+  // Update detail panel if visible
+  if (detailPanel.classList.contains('visible')) {
+    const selectedLayer = document.querySelector('.stack-layer.selected');
+    if (selectedLayer) {
+      const layerNum = parseInt(selectedLayer.dataset.layer);
+      showLayerDetail(layerNum);
+    }
+  }
+}
+
+// ── Layer detail data (bilingual) ──
+const layerData = {
+  6: {
+    id: 'L6',
+    title: 'Default Distribution / Front Door',
+    def: {
+      ja: 'エンドユーザーが AI に最初に触れる接点。ChatGPT・Gemini in Workspace/Search/Chrome・Claude.ai・クラウドコンソール・既存業務ソフト。',
+      en: 'The first touchpoint where end users encounter AI. ChatGPT, Gemini in Workspace/Search/Chrome, Claude.ai, cloud consoles, existing business software.',
+    },
+    players: {
+      ja: [
+        'OpenAI: ChatGPT（月間数億ユーザー）+ Frontier（企業向け）',
+        'Google: Gemini in Workspace 同梱 + Search AI Overviews + Chrome',
+        'Anthropic: Claude.ai + Bedrock/Vertex/Azure 上の API',
+      ],
+      en: [
+        'OpenAI: ChatGPT (hundreds of millions monthly users) + Frontier (enterprise)',
+        'Google: Gemini bundled in Workspace + Search AI Overviews + Chrome',
+        'Anthropic: Claude.ai + API on Bedrock/Vertex/Azure',
+      ],
+    },
+    features: {
+      ja: [
+        '3社の既存配布面が圧倒的に強い',
+        'ネットワーク効果とバンドル戦略で寡占',
+        '汎用社内チャット・Copilot で正面から入る意味はない',
+      ],
+      en: [
+        'The 3 companies\' existing distribution surfaces are overwhelmingly strong',
+        'Oligopoly through network effects and bundle strategy',
+        'No point entering head-on with generic enterprise chat or Copilot',
+      ],
+    },
+    implication: {
+      ja: 'Front Door は3社に任せ、その裏側で動く層（L3〜L5）に注力する。',
+      en: 'Leave the front door to the 3 companies and focus on the layers behind it (L3–L5).',
+    },
+  },
+  5: {
+    id: 'L5',
+    title: 'Workflow / Vertical Execution',
+    def: {
+      ja: '調達・監査・法務・営業・保守・品質・安全・医療などの業界固有の業務実行層。承認責任・帳票・例外処理・KPI・現場運用を含む。',
+      en: 'Industry-specific operational execution layer covering procurement, audit, legal, sales, maintenance, quality, safety, and healthcare. Includes approval authority, forms, exception handling, KPIs, and field operations.',
+    },
+    players: {
+      ja: [
+        'OpenAI: Frontier Alliance で BCG・McKinsey・Accenture を巻き込みパイロットから本番へ',
+        'Google: Gemini Enterprise の変革推進文脈',
+        'Anthropic: Claude for Life Sciences・Healthcare・Labs',
+      ],
+      en: [
+        'OpenAI: Frontier Alliance bringing BCG, McKinsey, Accenture from pilot to production',
+        'Google: Gemini Enterprise transformation context',
+        'Anthropic: Claude for Life Sciences, Healthcare, Labs',
+      ],
+    },
+    features: {
+      ja: [
+        '業界固有の承認責任は企業・業界ごとに異なる',
+        '規制・業界慣行に基づく固有の帳票・フォーマット体系',
+        '標準フローから外れた例外処理のエスカレーションパス',
+        '基盤モデルが変わってもこの層の価値は残る',
+      ],
+      en: [
+        'Industry-specific approval authority differs by company and industry',
+        'Unique document and format systems based on regulations and industry practices',
+        'Escalation paths for exception handling outside standard flows',
+        'This layer\'s value persists even when foundation models change',
+      ],
+    },
+    implication: {
+      ja: '1〜2業界に絞って深く実装するのが正解。薄く広く展開すると3社の汎用面と衝突する。',
+      en: 'The right approach is deep implementation in 1–2 industries. Thin, broad deployment collides with the 3 companies\' generic offerings.',
+    },
+  },
+  4: {
+    id: 'L4',
+    title: 'Control Plane',
+    def: {
+      ja: 'モデル/エージェント/ツールの routing・policy・evals・trace・audit・cost・approval を一体化した統治層。',
+      en: 'A governance layer that unifies routing, policy, evals, trace, audit, cost, and approval for models, agents, and tools.',
+    },
+    players: {
+      ja: [
+        'OpenAI: Frontier の permissions/boundaries を前提に設計',
+        'Google: Private Registry・ツールガバナンスを強化',
+        'Anthropic: Trust/Safeguards を前面に RSP 3.0 更新',
+      ],
+      en: [
+        'OpenAI: Designed around Frontier permissions/boundaries',
+        'Google: Strengthening Private Registry and tool governance',
+        'Anthropic: RSP 3.0 update with Trust/Safeguards at the forefront',
+      ],
+    },
+    features: {
+      ja: [
+        'マルチモデル・マルチクラウド化が進むほど価値が増す',
+        '3社は自社プラットフォーム内の制御のみ — クロスプラットフォーム統治は構造的に提供しにくい',
+        '企業が買うのは「賢い返答」より「安全に動かせること」',
+        'thin router（価格・レイテンシのみ）は圧縮される — identity/policy/trace を持つ必要',
+      ],
+      en: [
+        'Value increases as multi-model and multi-cloud adoption grows',
+        'The 3 companies only control within their own platforms — cross-platform governance is structurally difficult to provide',
+        'What enterprises buy is "the ability to operate safely" not "smart responses"',
+        'Thin routers (price/latency only) get compressed — must hold identity/policy/trace',
+      ],
+    },
+    implication: {
+      ja: 'Control Plane は独立プレーヤーの本丸候補。マルチモデル統治を一体化することで構造的な価値を創出する。',
+      en: 'Control Plane is a prime candidate for independent players\' core. Creates structural value by unifying multi-model governance.',
+    },
+  },
+  3: {
+    id: 'L3',
+    title: 'Context / Data / Identity / Tool Access',
+    def: {
+      ja: '社内データ、権限（Identity）、コネクタ、MCP 接続、System of Record 連携。エージェントが「何を知っているか」「何にアクセスできるか」を決定する層。',
+      en: 'Internal data, permissions (Identity), connectors, MCP connections, System of Record integration. The layer that determines what agents "know" and "can access."',
+    },
+    players: {
+      ja: [
+        'OpenAI: Company Knowledge + MCP コネクタを Business/Enterprise に拡大',
+        'Google: Workspace Content Integration + Search AI Overviews',
+        'Anthropic: MCP をオープンスタンダードとして推進、Remote MCP Servers',
+      ],
+      en: [
+        'OpenAI: Expanding Company Knowledge + MCP connectors to Business/Enterprise',
+        'Google: Workspace Content Integration + Search AI Overviews',
+        'Anthropic: Promoting MCP as open standard, Remote MCP Servers',
+      ],
+    },
+    features: {
+      ja: [
+        '汎用コネクタ/RAG は3社に飲み込まれつつある',
+        '業務意味論（権限・監査・文書系統・業務オブジェクト）に結びついた部分は残る',
+        '「何をつなぐか」ではなく「どう権限と意味を束ねるか」が価値の源泉',
+      ],
+      en: [
+        'Generic connectors/RAG are being absorbed by the 3 companies',
+        'Parts tied to business semantics (permissions, audit, document lineage, business objects) survive',
+        'Value comes not from "what to connect" but "how to bind permissions and meaning"',
+      ],
+    },
+    implication: {
+      ja: '単なる RAG やコネクタ集合では残らない。Permissioned Context Plane として権限・監査・業務意味論を持つ設計が必要。',
+      en: 'A mere RAG or connector collection won\'t survive. Must be designed as a Permissioned Context Plane holding permissions, audit, and business semantics.',
+    },
+  },
+  2: {
+    id: 'L2',
+    title: 'Agent Runtime',
+    def: {
+      ja: 'エージェントの状態管理・実行・ツール呼び出し・メモリ・handoff を担う実行基盤。3社の侵攻正面。',
+      en: 'The execution foundation handling agent state management, execution, tool calling, memory, and handoff. The 3 companies\' direct assault front.',
+    },
+    players: {
+      ja: [
+        'OpenAI: Frontier + Agents SDK + Responses API。AWS 上に Stateful Runtime Environment',
+        'Anthropic: Claude Enterprise + MCP ランタイム拡張。全 Major Cloud で展開',
+        'Google: Gemini Enterprise + ADK/A2A + Interactions API',
+      ],
+      en: [
+        'OpenAI: Frontier + Agents SDK + Responses API. Stateful Runtime Environment on AWS',
+        'Anthropic: Claude Enterprise + MCP runtime extension. Deployed on all major clouds',
+        'Google: Gemini Enterprise + ADK/A2A + Interactions API',
+      ],
+    },
+    features: {
+      ja: [
+        '3社が全力で取りに来ている層',
+        'プラットフォーム統合の優位に対抗しにくい',
+        '汎用 Agent Runtime を独立構築するリスクが高い',
+      ],
+      en: [
+        'The layer all 3 companies are going after full force',
+        'Hard to compete against platform integration advantages',
+        'High risk of building a generic Agent Runtime independently',
+      ],
+    },
+    implication: {
+      ja: '汎用エージェントプラットフォーム企業を目指すのは3社の延長線上に置かれるリスクが高い。',
+      en: 'Aiming to be a generic agent platform company carries high risk of being positioned on the 3 companies\' extension line.',
+    },
+  },
+  1: {
+    id: 'L1',
+    title: 'Foundation Models',
+    def: {
+      ja: 'GPT・Claude・Gemini・Gemma 等の基盤モデル群。推論能力・マルチモーダル・長コンテキストがコア機能。',
+      en: 'Foundation model family including GPT, Claude, Gemini, Gemma. Core capabilities: reasoning, multimodal, long context.',
+    },
+    players: {
+      ja: [
+        'OpenAI: GPT シリーズ — 最大のユーザーベースと API 利用',
+        'Anthropic: Claude シリーズ — 信頼性と安全性に強み',
+        'Google: Gemini シリーズ + Gemma（オープンモデル）',
+      ],
+      en: [
+        'OpenAI: GPT series — largest user base and API usage',
+        'Anthropic: Claude series — strengths in trust and safety',
+        'Google: Gemini series + Gemma (open model)',
+      ],
+    },
+    features: {
+      ja: [
+        'モデル性能差は数ヶ月で追いつかれる',
+        'オープンモデル（Llama, Gemma, Mistral）が品質面で追い上げ',
+        'コモディティ化圧力が強い',
+      ],
+      en: [
+        'Performance gaps are closed within months',
+        'Open models (Llama, Gemma, Mistral) catching up on quality',
+        'Strong commoditization pressure',
+      ],
+    },
+    implication: {
+      ja: 'モデルは「選ぶもの」であって「作るもの」ではない。マルチモデル前提の設計が合理的。',
+      en: 'Models are "something you choose" not "something you build." Multi-model architecture is rational.',
+    },
+  },
+  0: {
+    id: 'L0',
+    title: 'Compute / Cloud / Energy',
+    def: {
+      ja: 'GPU・TPU・Trainium・データセンター・電力。AIのすべてを支える物理インフラ層。数十〜数百億ドル規模の資本投下が必要。',
+      en: 'GPU, TPU, Trainium, data centers, power. The physical infrastructure layer underpinning all of AI. Requires tens to hundreds of billions of dollars in capital investment.',
+    },
+    players: {
+      ja: [
+        'OpenAI: Stargate 10GW 計画（SoftBank・Oracle 合弁）',
+        'Anthropic: Google Cloud 100万 TPU + AWS Trainium 2GW',
+        'Google/Alphabet: 2025年 CapEx 914億ドル、2026年 1,750〜1,850億ドル見込み',
+      ],
+      en: [
+        'OpenAI: Stargate 10GW plan (SoftBank/Oracle JV)',
+        'Anthropic: Google Cloud 1M TPU + AWS Trainium 2GW',
+        'Google/Alphabet: 2025 CapEx $91.4B, 2026 est. $175–185B',
+      ],
+    },
+    features: {
+      ja: [
+        '数十〜数百億ドル規模の資本戦',
+        'クラウドベンダーの寡占が続く',
+        'スタートアップが降りるのは非合理',
+      ],
+      en: [
+        'Capital war at tens to hundreds of billions of dollars',
+        'Cloud vendor oligopoly continues',
+        'Irrational for startups to enter this layer',
+      ],
+    },
+    implication: {
+      ja: 'この層では戦わない。消費者として最適なインフラを選択する立場を取る。',
+      en: 'Don\'t compete in this layer. Take the position of a consumer choosing optimal infrastructure.',
+    },
+  },
+};
+
+// ── Layer click interaction ──
+const stackLayers = document.getElementById('stackLayers');
+const detailPanel = document.getElementById('detailPanel');
+
+function showLayerDetail(layerNum) {
+  const data = layerData[layerNum];
+  if (!data) return;
+
+  const lang = currentLang;
+
+  document.getElementById('detailId').textContent = data.id;
+  document.getElementById('detailTitle').textContent = data.title;
+  document.getElementById('detailDef').textContent = data.def[lang];
+
+  const playersList = document.getElementById('detailPlayers');
+  playersList.innerHTML = data.players[lang].map(p => '<li>' + p + '</li>').join('');
+
+  const featuresList = document.getElementById('detailFeatures');
+  featuresList.innerHTML = data.features[lang].map(f => '<li>' + f + '</li>').join('');
+
+  document.getElementById('detailImplication').textContent = data.implication[lang];
+
+  detailPanel.classList.add('visible');
+}
+
+stackLayers.addEventListener('click', function(e) {
+  const layer = e.target.closest('.stack-layer');
+  if (!layer) return;
+
+  const layerNum = parseInt(layer.dataset.layer);
+
+  // Toggle selection
+  document.querySelectorAll('.stack-layer').forEach(l => l.classList.remove('selected'));
+  layer.classList.add('selected');
+
+  showLayerDetail(layerNum);
+});
+
+// ── Sticky nav active state with IntersectionObserver ──
+const sections = document.querySelectorAll('.content-section');
+const navLinks = document.querySelectorAll('.section-nav a');
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        navLinks.forEach((link) => link.classList.remove('active'));
+        const activeLink = document.querySelector('.section-nav a[href="#' + entry.target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  },
+  { rootMargin: '-20% 0px -80% 0px' }
+);
+
+sections.forEach((section) => observer.observe(section));
+
+// ── Initialize language ──
+setLang('ja');
+</script>
+
+</body>
+</html>

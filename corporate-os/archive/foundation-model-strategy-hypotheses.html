@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundation Model Strategy Hypotheses 2026–2029</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040; --ink-600: #525252; --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a; --ink-300: #a3a3a3; --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0; --ink-50: #f0f0f0;
+  --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --paper-50: #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600: #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+  --ink-blue: #2563eb; --ink-green: #16a34a;
+  --ink-amber: #d97706; --ink-red: #dc2626;
+  --wash-blue: #dbeafe; --wash-green: #dcfce7;
+  --wash-amber: #fef3c7; --wash-red: #fee2e2;
+  --bg-page: var(--paper-50); --bg-surface: var(--paper-100);
+  --border-default: var(--slate-200); --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000);
+  --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900); --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500); --text-muted: var(--slate-400);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 1120px; margin: 0 auto; padding: 0 48px; }
+.container-narrow { max-width: 840px; margin: 0 auto; }
+
+/* Sticky Nav */
+.section-nav {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(253, 253, 252, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default);
+  padding: 0 48px;
+}
+.section-nav-inner {
+  max-width: 1120px; margin: 0 auto;
+  display: flex; gap: 0; overflow-x: auto;
+}
+.section-nav a {
+  display: block; padding: 12px 16px;
+  font-size: 0.85rem; color: var(--text-muted);
+  text-decoration: none; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 150ms ease;
+}
+.section-nav a:hover, .section-nav a.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--ink-blue);
+}
+
+/* Hero */
+.hero {
+  padding: 96px 0 64px;
+  border-bottom: 2px solid var(--ink-1000);
+}
+.hero-label {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-secondary); margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: var(--font-serif); font-size: 56px; font-weight: 300;
+  line-height: 1.1; letter-spacing: -1.5px;
+  color: var(--text-heading); margin-bottom: 24px;
+  max-width: 900px;
+}
+.hero h1 em { font-style: italic; }
+.hero-sub {
+  font-size: 16px; line-height: 1.7; color: var(--text-secondary);
+  max-width: 720px; margin-bottom: 32px;
+}
+.hero-meta {
+  display: flex; gap: 32px; flex-wrap: wrap;
+}
+.hero-meta-item {
+  font-size: 12px; color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+.hero-meta-item strong {
+  display: block; font-size: 14px; font-weight: 600;
+  color: var(--text-primary); margin-top: 2px;
+}
+
+/* Sections */
+section { padding: 64px 0; }
+.section-label {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-secondary); margin-bottom: 8px;
+}
+.section-title {
+  font-family: var(--font-serif); font-size: 36px; font-weight: 400;
+  line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--text-heading); margin-bottom: 8px;
+}
+.section-desc {
+  font-size: 14px; line-height: 1.6; color: var(--text-secondary);
+  max-width: 720px; margin-bottom: 32px;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+}
+.card-title {
+  font-family: var(--font-serif); font-size: 22px; font-weight: 600;
+  line-height: 1.35; color: var(--text-heading); margin-bottom: 8px;
+}
+.card-subtitle {
+  font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+
+/* Conclusion box */
+.conclusion-box {
+  background: var(--paper-300);
+  border: 1px solid var(--border-default);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+.conclusion-box .quote {
+  font-family: var(--font-serif); font-size: 22px; font-weight: 400;
+  line-height: 1.4; color: var(--text-heading);
+  font-style: italic; margin-bottom: 12px;
+}
+.conclusion-box .attribution {
+  font-size: 12px; color: var(--text-secondary);
+}
+
+/* Three pillars */
+.pillar-openai .card-subtitle { color: var(--ink-blue); }
+.pillar-anthropic .card-subtitle { color: var(--ink-amber); }
+.pillar-google .card-subtitle { color: var(--ink-green); }
+.pillar-openai { border-top: 3px solid var(--ink-blue); }
+.pillar-anthropic { border-top: 3px solid var(--ink-amber); }
+.pillar-google { border-top: 3px solid var(--ink-green); }
+
+/* Tags */
+.tag {
+  display: inline-block; padding: 0 8px; height: 22px; line-height: 22px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tag-blue { background: var(--wash-blue); color: var(--ink-blue); border: 1px solid var(--ink-blue); }
+.tag-amber { background: var(--wash-amber); color: var(--ink-amber); border: 1px solid var(--ink-amber); }
+.tag-green { background: var(--wash-green); color: var(--ink-green); border: 1px solid var(--ink-green); }
+.tag-red { background: var(--wash-red); color: var(--ink-red); border: 1px solid var(--ink-red); }
+.tag-neutral { background: var(--paper-300); color: var(--ink-600); border: 1px solid var(--border-strong); }
+
+/* Bullet */
+ul.clean { list-style: none; padding: 0; }
+ul.clean li {
+  position: relative; padding-left: 16px;
+  font-size: 14px; line-height: 1.6; margin-bottom: 6px;
+}
+ul.clean li::before {
+  content: ""; position: absolute; left: 0; top: 9px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--ink-400);
+}
+
+/* Timeline */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: ""; position: absolute; left: 11px; top: 0; bottom: 0;
+  width: 2px; background: var(--border-default);
+}
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before {
+  content: ""; position: absolute; left: -32px; top: 4px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--paper-50); border: 2px solid var(--ink-900);
+}
+.timeline-label {
+  font-family: var(--font-serif); font-size: 18px; font-weight: 600;
+  color: var(--text-heading); margin-bottom: 4px;
+}
+.timeline-desc {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;
+}
+
+/* Scenario matrix */
+.scenario-matrix {
+  display: grid; grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  gap: 0;
+}
+.scenario-axis-label {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px;
+}
+.scenario-axis-label.vertical {
+  writing-mode: vertical-rl; text-orientation: mixed;
+  transform: rotate(180deg);
+}
+.scenario-cell {
+  border: 1px solid var(--border-default);
+  padding: 20px;
+  background: var(--bg-surface);
+}
+.scenario-cell-title {
+  font-family: var(--font-serif); font-size: 18px; font-weight: 600;
+  color: var(--text-heading); margin-bottom: 4px;
+}
+.scenario-cell-sub {
+  font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;
+}
+.scenario-cell.highlight {
+  background: var(--wash-amber);
+  border-color: var(--ink-amber);
+}
+
+/* Layer stack */
+.layer-stack { display: flex; flex-direction: column; gap: 0; }
+.layer-row {
+  display: flex; align-items: stretch;
+  border: 1px solid var(--border-default);
+  border-bottom: none;
+  min-height: 48px;
+}
+.layer-row:last-child { border-bottom: 1px solid var(--border-default); }
+.layer-id {
+  width: 48px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 400;
+  color: var(--text-secondary);
+  background: var(--paper-300);
+  border-right: 1px solid var(--border-default);
+  flex-shrink: 0;
+}
+.layer-content {
+  flex: 1; padding: 10px 16px;
+  display: flex; align-items: center;
+}
+.layer-name {
+  font-size: 14px; font-weight: 600; color: var(--text-heading);
+  margin-right: 12px; white-space: nowrap;
+}
+.layer-desc { font-size: 13px; color: var(--text-secondary); }
+.layer-pills {
+  display: flex; gap: 6px; margin-left: auto; flex-shrink: 0;
+  align-items: center;
+}
+.pill {
+  display: inline-block; padding: 2px 8px;
+  font-size: 11px; font-weight: 600;
+  white-space: nowrap;
+}
+.pill-openai { background: var(--wash-blue); color: var(--ink-blue); }
+.pill-anthropic { background: var(--wash-amber); color: var(--ink-amber); }
+.pill-google { background: var(--wash-green); color: var(--ink-green); }
+.layer-row.layer-highlight {
+  background: var(--wash-amber);
+}
+
+/* Battleground grid */
+.battle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.battle-card {
+  background: var(--bg-surface); border: 1px solid var(--border-default);
+  padding: 16px;
+}
+.battle-num {
+  font-family: var(--font-serif); font-size: 28px; font-weight: 300;
+  color: var(--ink-300); margin-bottom: 4px;
+}
+.battle-name {
+  font-size: 14px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.battle-insight { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+/* Do / Don't */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.do-box, .dont-box {
+  padding: 24px;
+  border: 1px solid var(--border-default);
+}
+.do-box { background: var(--wash-green); border-color: var(--ink-green); }
+.dont-box { background: var(--wash-red); border-color: var(--ink-red); }
+.do-box .card-subtitle { color: var(--ink-green); }
+.dont-box .card-subtitle { color: var(--ink-red); }
+
+/* Watchlist */
+.watch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.watch-card {
+  background: var(--bg-surface); border: 1px solid var(--border-default);
+  padding: 16px;
+}
+.watch-card-title {
+  font-size: 14px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 8px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-default);
+}
+
+/* Footer */
+.page-footer {
+  padding: 32px 0;
+  border-top: 1px solid var(--border-default);
+  margin-top: 64px;
+}
+.footer-inner {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-left { font-size: 12px; color: var(--text-muted); }
+.footer-right { font-size: 12px; color: var(--text-muted); }
+
+/* Separator */
+.sep { border-top: 2px solid var(--ink-1000); margin: 0; }
+
+/* Hypothesis card inner */
+.hypo-section { margin-bottom: 16px; }
+.hypo-section-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* Evidence flow */
+.evidence-flow {
+  display: flex; align-items: center; gap: 0;
+  margin: 24px 0;
+}
+.evidence-step {
+  flex: 1; padding: 12px 16px;
+  background: var(--bg-surface); border: 1px solid var(--border-default);
+  text-align: center;
+}
+.evidence-step-num {
+  font-family: var(--font-serif); font-size: 22px; font-weight: 300;
+  color: var(--ink-300);
+}
+.evidence-step-label {
+  font-size: 12px; font-weight: 600; color: var(--text-heading);
+  margin-top: 2px;
+}
+.evidence-arrow {
+  width: 24px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-300); font-size: 16px;
+}
+
+/* Tripolar diagram */
+.tripolar-summary {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+  margin-bottom: 16px;
+}
+.tripolar-card {
+  background: var(--bg-surface); padding: 24px; text-align: center;
+}
+.tripolar-card .company-name {
+  font-family: var(--font-serif); font-size: 22px; font-weight: 600;
+  color: var(--text-heading); margin-bottom: 4px;
+}
+.tripolar-card .strategy-line {
+  font-size: 14px; font-weight: 600; margin-bottom: 8px;
+}
+.tripolar-card .strategy-desc {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+}
+
+/* Key insight box */
+.insight-box {
+  background: var(--paper-300);
+  border-left: 3px solid var(--ink-1000);
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.insight-box p {
+  font-family: var(--font-serif); font-size: 18px; font-weight: 400;
+  line-height: 1.5; color: var(--text-heading);
+}
+
+/* Strength/Weakness inline */
+.sw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.sw-col-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* Hypothesis timeline */
+.hypo-timeline {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+  margin-top: 12px;
+}
+.hypo-phase {
+  background: var(--paper-300); padding: 12px 16px;
+  border: 1px solid var(--border-default);
+}
+.hypo-phase-label {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.hypo-phase-conf {
+  font-size: 11px; font-weight: 600; margin-bottom: 6px;
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+  .container { padding: 0 32px; }
+  .hero h1 { font-size: 36px; }
+  .grid-3, .tripolar-summary, .hypo-timeline { grid-template-columns: 1fr; }
+  .grid-4, .watch-grid { grid-template-columns: 1fr 1fr; }
+  .battle-grid { grid-template-columns: 1fr 1fr; }
+  .do-dont { grid-template-columns: 1fr; }
+  .scenario-matrix { grid-template-columns: auto 1fr; }
+}
+@media (max-width: 639px) {
+  .container { padding: 0 16px; }
+  .section-nav { padding: 0 16px; }
+  .hero h1 { font-size: 28px; }
+  .grid-2, .grid-4, .watch-grid { grid-template-columns: 1fr; }
+  .battle-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sticky Navigation -->
+<nav class="section-nav" id="topnav">
+  <div class="section-nav-inner">
+    <a href="#conclusion">Conclusion</a>
+    <a href="#update">Update</a>
+    <a href="#framework">Framework</a>
+    <a href="#signals">Signals</a>
+    <a href="#battlegrounds">9 Battlegrounds</a>
+    <a href="#hypotheses">Hypotheses</a>
+    <a href="#tripolar">Tripolar</a>
+    <a href="#scenarios">Scenarios</a>
+    <a href="#whitespace">White Space</a>
+    <a href="#dodont">Do / Don't</a>
+    <a href="#watchlist">Watchlist</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- Hero -->
+<header class="hero" id="conclusion">
+  <div class="hero-label">Foundation Model Layer &mdash; Strategic Hypotheses</div>
+  <h1>2029年の基盤モデル戦争は<br>「誰が知能を<em>default infrastructure</em>に<br>できるか」の戦いである</h1>
+  <p class="hero-sub">
+    OpenAI / Anthropic / Google の3社は、モデル性能ではなく compute + distribution + runtime + context + protocol + control + monetization の複合戦で覇権を争う。その上に残る最も強い白地は、企業そのものを AGI-native に作り変える責任である。
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      対象期間
+      <strong>2026 &ndash; 2029</strong>
+    </div>
+    <div class="hero-meta-item">
+      分析対象
+      <strong>OpenAI / Anthropic / Google</strong>
+    </div>
+    <div class="hero-meta-item">
+      エビデンス
+      <strong>39 Hard Signals</strong>
+    </div>
+    <div class="hero-meta-item">
+      作成日
+      <strong>2026-03-08</strong>
+    </div>
+  </div>
+</header>
+
+<!-- Section 1: Cognitive Update -->
+<section id="update">
+  <div class="section-label">Section 1</div>
+  <h2 class="section-title">認識更新 &mdash; 何が変わったか</h2>
+  <p class="section-desc">
+    分析の出発点は技術スタック上の自社位置だった。セッションを通じて、問いそのものが変わった。
+  </p>
+
+  <div class="grid-2" style="margin-bottom: 24px;">
+    <div class="card">
+      <div class="card-subtitle" style="color: var(--ink-red);">BEFORE &mdash; 初期仮説</div>
+      <div class="card-title">技術レイヤーの会社</div>
+      <ul class="clean" style="margin-top: 12px;">
+        <li>Agent 基盤</li>
+        <li>Data / Context 基盤</li>
+        <li>Model Router / Orchestrator</li>
+      </ul>
+      <p style="margin-top: 12px; font-size: 13px; color: var(--text-secondary);">
+        「どのレイヤーの何を売る会社か」が技術寄りに寄りすぎる
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-subtitle" style="color: var(--ink-green);">AFTER &mdash; 補正後</div>
+      <div class="card-title">企業変革の会社</div>
+      <ul class="clean" style="margin-top: 12px;">
+        <li>AGI/ASI 前提で組織・業務・役割を再設計する</li>
+        <li>コンサルティングが本体</li>
+        <li>プロダクトは楔（wedge）であり実装手段</li>
+      </ul>
+      <p style="margin-top: 12px; font-size: 13px; color: var(--text-secondary);">
+        <strong>AGI-native transformation firm</strong> として再定義
+      </p>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <p>見るべきものは「AI供給スタック」だけではない。<strong>AI供給スタック &times; 企業設計スタック</strong>の交点で、どこに durable な価値が残るかを見なければならない。</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 2: Analysis Framework -->
+<section id="framework">
+  <div class="section-label">Section 2</div>
+  <h2 class="section-title">分析フレーム</h2>
+  <p class="section-desc">
+    予測を感覚論にしないために、エビデンスの優先順位を定め、2軸の地図で市場を見る。
+  </p>
+
+  <!-- Evidence hierarchy -->
+  <div style="margin-bottom: 32px;">
+    <div class="card-subtitle" style="color: var(--text-secondary); margin-bottom: 12px;">EVIDENCE PRIORITY</div>
+    <div class="evidence-flow">
+      <div class="evidence-step"><div class="evidence-step-num">1</div><div class="evidence-step-label">公式発表<br>公式ドキュメント</div></div>
+      <div class="evidence-arrow">&rarr;</div>
+      <div class="evidence-step"><div class="evidence-step-num">2</div><div class="evidence-step-label">決算 / 10-K<br>料金 / Release Notes</div></div>
+      <div class="evidence-arrow">&rarr;</div>
+      <div class="evidence-step"><div class="evidence-step-num">3</div><div class="evidence-step-label">安全性・規制<br>政策文書</div></div>
+      <div class="evidence-arrow">&rarr;</div>
+      <div class="evidence-step"><div class="evidence-step-num">4</div><div class="evidence-step-label">主要パートナー<br>発表</div></div>
+      <div class="evidence-arrow">&rarr;</div>
+      <div class="evidence-step"><div class="evidence-step-num">5</div><div class="evidence-step-label">推論</div></div>
+    </div>
+  </div>
+
+  <!-- Two-axis framework -->
+  <div class="grid-2" style="gap: 32px;">
+    <!-- Vertical: AI Supply Stack -->
+    <div>
+      <div class="card-subtitle" style="color: var(--text-secondary); margin-bottom: 12px;">VERTICAL AXIS &mdash; AI SUPPLY STACK</div>
+      <div class="layer-stack">
+        <div class="layer-row">
+          <div class="layer-id">L6</div>
+          <div class="layer-content">
+            <span class="layer-name">Default Distribution</span>
+            <span class="layer-desc">Front Door</span>
+          </div>
+        </div>
+        <div class="layer-row layer-highlight">
+          <div class="layer-id">L5</div>
+          <div class="layer-content">
+            <span class="layer-name">Workflow / Vertical</span>
+            <span class="layer-desc">業務実行</span>
+            <div class="layer-pills"><span class="tag tag-amber" style="font-size: 10px;">WHITE SPACE</span></div>
+          </div>
+        </div>
+        <div class="layer-row layer-highlight">
+          <div class="layer-id">L4</div>
+          <div class="layer-content">
+            <span class="layer-name">Control Plane</span>
+            <span class="layer-desc">Routing, Policy, Evals, Audit</span>
+            <div class="layer-pills"><span class="tag tag-amber" style="font-size: 10px;">WHITE SPACE</span></div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L3</div>
+          <div class="layer-content">
+            <span class="layer-name">Context / Identity</span>
+            <span class="layer-desc">Data, Tool Access</span>
+            <div class="layer-pills">
+              <span class="pill pill-openai">O</span>
+              <span class="pill pill-anthropic">A</span>
+              <span class="pill pill-google">G</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L2</div>
+          <div class="layer-content">
+            <span class="layer-name">Agent Runtime</span>
+            <span class="layer-desc">状態管理, ツール実行</span>
+            <div class="layer-pills">
+              <span class="pill pill-openai">O</span>
+              <span class="pill pill-anthropic">A</span>
+              <span class="pill pill-google">G</span>
+            </div>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L1</div>
+          <div class="layer-content">
+            <span class="layer-name">Foundation Models</span>
+            <span class="layer-desc">GPT / Claude / Gemini</span>
+          </div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-id">L0</div>
+          <div class="layer-content">
+            <span class="layer-name">Compute / Cloud</span>
+            <span class="layer-desc">GPU, TPU, Energy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horizontal: Enterprise Design Stack -->
+    <div>
+      <div class="card-subtitle" style="color: var(--text-secondary); margin-bottom: 12px;">HORIZONTAL AXIS &mdash; ENTERPRISE DESIGN STACK</div>
+      <div style="display: flex; flex-direction: column; gap: 0;">
+        <div style="display: flex; align-items: stretch; border: 1px solid var(--border-default); border-bottom: none;">
+          <div style="width: 48px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); background: var(--paper-300); border-right: 1px solid var(--border-default); flex-shrink: 0;">6</div>
+          <div style="flex: 1; padding: 10px 16px; display: flex; align-items: center; background: var(--wash-amber);">
+            <span class="layer-name">Capital Allocation / Management</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; border: 1px solid var(--border-default); border-bottom: none;">
+          <div style="width: 48px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); background: var(--paper-300); border-right: 1px solid var(--border-default); flex-shrink: 0;">5</div>
+          <div style="flex: 1; padding: 10px 16px; display: flex; align-items: center; background: var(--wash-amber);">
+            <span class="layer-name">Company Operating Model</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; border: 1px solid var(--border-default); border-bottom: none;">
+          <div style="width: 48px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); background: var(--paper-300); border-right: 1px solid var(--border-default); flex-shrink: 0;">4</div>
+          <div style="flex: 1; padding: 10px 16px; display: flex; align-items: center;">
+            <span class="layer-name">Function</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; border: 1px solid var(--border-default); border-bottom: none;">
+          <div style="width: 48px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); background: var(--paper-300); border-right: 1px solid var(--border-default); flex-shrink: 0;">3</div>
+          <div style="flex: 1; padding: 10px 16px; display: flex; align-items: center;">
+            <span class="layer-name">Team</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; border: 1px solid var(--border-default); border-bottom: none;">
+          <div style="width: 48px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); background: var(--paper-300); border-right: 1px solid var(--border-default); flex-shrink: 0;">2</div>
+          <div style="flex: 1; padding: 10px 16px; display: flex; align-items: center;">
+            <span class="layer-name">Role</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: stretch; border: 1px solid var(--border-default);">
+          <div style="width: 48px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); background: var(--paper-300); border-right: 1px solid var(--border-default); flex-shrink: 0;">1</div>
+          <div style="flex: 1; padding: 10px 16px; display: flex; align-items: center;">
+            <span class="layer-name">Task</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-box" style="margin-top: 24px;">
+        <p style="font-size: 16px;">白地は「技術の間」ではなく「<strong>技術と企業設計の間</strong>」にある</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 3: Hard Signals -->
+<section id="signals">
+  <div class="section-label">Section 3</div>
+  <h2 class="section-title">2026年3月時点の Hard Signals</h2>
+  <p class="section-desc">
+    公式一次情報から確認された39件のハードシグナルを3社ごとに整理し、そこから読める戦略仮説を導出する。
+  </p>
+
+  <div class="grid-3">
+    <!-- OpenAI -->
+    <div class="card pillar-openai">
+      <div class="card-subtitle">OPENAI &mdash; 13 SIGNALS</div>
+      <div class="card-title">Intelligence Operating System</div>
+      <ul class="clean" style="margin-top: 12px; margin-bottom: 16px;">
+        <li><strong>Frontier</strong> &mdash; Enterprise agent platform</li>
+        <li><strong>Frontier Alliances</strong> &mdash; BCG, McKinsey, Accenture</li>
+        <li><strong>Company Knowledge</strong> &mdash; 社内文脈の集約</li>
+        <li><strong>MCP Connectors</strong> &mdash; Enterprise/Edu向け</li>
+        <li><strong>Amazon提携</strong> &mdash; AWS展開 + 2GW Trainium</li>
+        <li><strong>Responses API</strong> &mdash; Agentic primitives統合</li>
+        <li><strong>Stargate</strong> &mdash; 2029年10GW目標</li>
+        <li><strong>OpenAI for Government</strong></li>
+        <li><strong>Japan Economic Blueprint</strong></li>
+        <li><strong>Multi-layer monetization</strong> &mdash; Subs/API/Ads/Licensing</li>
+      </ul>
+      <div style="background: var(--wash-blue); padding: 12px; margin-top: auto;">
+        <p style="font-size: 13px; color: var(--ink-blue); font-weight: 600;">読み</p>
+        <p style="font-size: 13px; color: var(--text-primary); margin-top: 4px;">
+          「モデル会社」ではなく「知能の経済を制御する」方向。Consumer + Enterprise + Developer + Government + Compute + Monetization を一体で押さえにいく。
+        </p>
+      </div>
+    </div>
+
+    <!-- Anthropic -->
+    <div class="card pillar-anthropic">
+      <div class="card-subtitle">ANTHROPIC &mdash; 10 SIGNALS</div>
+      <div class="card-title">Trusted Enterprise Cognition</div>
+      <ul class="clean" style="margin-top: 12px; margin-bottom: 16px;">
+        <li><strong>MCP &rarr; AAIF</strong> &mdash; Linux Foundation に寄贈</li>
+        <li><strong>RSP v3.0</strong> &mdash; Safety Roadmaps + Risk Reports</li>
+        <li><strong>100万TPU</strong> &mdash; Google Cloud拡張</li>
+        <li><strong>3大クラウド全対応</strong> &mdash; Bedrock/Vertex/Azure</li>
+        <li><strong>Claude for Healthcare</strong> &mdash; 規制領域垂直化</li>
+        <li><strong>Claude for Life Sciences</strong></li>
+        <li><strong>東京オフィス</strong> &mdash; JAISI協力覚書</li>
+        <li><strong>Anthropic Labs</strong> &mdash; 製品化加速</li>
+        <li><strong>Multi-chip戦略</strong> &mdash; Trainium/TPU/GPU</li>
+      </ul>
+      <div style="background: var(--wash-amber); padding: 12px; margin-top: auto;">
+        <p style="font-size: 13px; color: var(--ink-amber); font-weight: 600;">読み</p>
+        <p style="font-size: 13px; color: var(--text-primary); margin-top: 4px;">
+          Trust / Safety / Standards / Cloud Neutrality の4語で一貫。自前distributionの弱さを、信頼性とどこにでも入れるneutralityで補う。
+        </p>
+      </div>
+    </div>
+
+    <!-- Google -->
+    <div class="card pillar-google">
+      <div class="card-subtitle">GOOGLE &mdash; 16 SIGNALS</div>
+      <div class="card-title">Default AI Fabric</div>
+      <ul class="clean" style="margin-top: 12px; margin-bottom: 16px;">
+        <li><strong>Gemini Enterprise</strong> &mdash; Workplace front door</li>
+        <li><strong>Workspace同梱</strong> &mdash; Add-on &rarr; Default</li>
+        <li><strong>Gemini in Chrome</strong> &mdash; Enterprise policy対応</li>
+        <li><strong>AI Overviews</strong> &mdash; Gemini 3搭載</li>
+        <li><strong>Vertex AI</strong> &mdash; 200超モデルのOpen platform</li>
+        <li><strong>ADK</strong> &mdash; Model-agnostic agent framework</li>
+        <li><strong>A2A Protocol</strong> &mdash; MCP補完</li>
+        <li><strong>Interactions API</strong> &mdash; Background execution</li>
+        <li><strong>UCP</strong> &mdash; AI &times; Commerce標準化</li>
+        <li><strong>CapEx $175-185B</strong> &mdash; 2026年見通し</li>
+        <li><strong>700社 / 200万 Subscribers</strong></li>
+      </ul>
+      <div style="background: var(--wash-green); padding: 12px; margin-top: auto;">
+        <p style="font-size: 13px; color: var(--ink-green); font-weight: 600;">読み</p>
+        <p style="font-size: 13px; color: var(--text-primary); margin-top: 4px;">
+          Search / Workspace / Chrome / Cloud を束ねて、Geminiを「選ぶAI」ではなく「既にそこにあるAI」にする。Bundle戦略。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 4: 9 Battlegrounds -->
+<section id="battlegrounds">
+  <div class="section-label">Section 4</div>
+  <h2 class="section-title">9つの戦場</h2>
+  <p class="section-desc">
+    3社の戦いは「どのモデルが賢いか」ではなく、9つの戦場の複合戦である。各戦場で3社の優位性は異なる。
+  </p>
+
+  <div class="battle-grid">
+    <div class="battle-card">
+      <div class="battle-num">1</div>
+      <div class="battle-name">Compute / Energy</div>
+      <div class="battle-insight">
+        <span class="pill pill-google" style="margin-bottom: 4px;">Google: 統合Infra</span><br>
+        <span class="pill pill-openai" style="margin-bottom: 4px;">OpenAI: 外部動員</span><br>
+        <span class="pill pill-anthropic">Anthropic: Multi-chip最適化</span>
+      </div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">2</div>
+      <div class="battle-name">Frontier Capability</div>
+      <div class="battle-insight">3社とも投資するが、能力差がそのまま利益差にならない</div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">3</div>
+      <div class="battle-name">Default Distribution</div>
+      <div class="battle-insight">
+        <span class="pill pill-google" style="margin-bottom: 4px;">Google: 面の広さ</span><br>
+        <span class="pill pill-openai" style="margin-bottom: 4px;">OpenAI: AIブランド</span><br>
+        <span class="pill pill-anthropic">Anthropic: 最も弱い</span>
+      </div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">4</div>
+      <div class="battle-name">Enterprise Runtime</div>
+      <div class="battle-insight">
+        <span class="pill pill-openai" style="margin-bottom: 4px;">OpenAI: Frontier + Responses</span><br>
+        <span class="pill pill-google" style="margin-bottom: 4px;">Google: Gemini Ent + Vertex</span><br>
+        <span class="pill pill-anthropic">Anthropic: Neutral embed</span>
+      </div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">5</div>
+      <div class="battle-name">Context / Identity</div>
+      <div class="battle-insight">3社とも猛烈に上がっている。<strong>Thin RAG / Thin Connector は圧縮されやすい</strong></div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">6</div>
+      <div class="battle-name">Protocol / SDK</div>
+      <div class="battle-insight">MCP + A2A + Runtime-specific の多層構造へ。<strong>Identity / Policy / Audit を握る層</strong>の価値が増す</div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">7</div>
+      <div class="battle-name">Safety / Compliance</div>
+      <div class="battle-insight">
+        <span class="pill pill-anthropic" style="margin-bottom: 4px;">Anthropic: Trust最強</span><br>
+        <span class="pill pill-openai" style="margin-bottom: 4px;">OpenAI: 政府で攻勢</span><br>
+        <span class="pill pill-google">Google: 既存Compliance基盤</span>
+      </div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">8</div>
+      <div class="battle-name">Pricing / Monetization</div>
+      <div class="battle-insight">
+        <span class="pill pill-google" style="margin-bottom: 4px;">Google: バンドル</span><br>
+        <span class="pill pill-openai" style="margin-bottom: 4px;">OpenAI: 最も多様</span><br>
+        <span class="pill pill-anthropic">Anthropic: Premium/Cloud</span>
+      </div>
+    </div>
+    <div class="battle-card">
+      <div class="battle-num">9</div>
+      <div class="battle-name">Vertical Solutions</div>
+      <div class="battle-insight">2029年に利益が残るのは <strong>verticalized intelligence</strong>。汎用基盤だけでは不十分</div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 5: Strategy Hypothesis Cards -->
+<section id="hypotheses">
+  <div class="section-label">Section 5</div>
+  <h2 class="section-title">3社の戦略仮説カード</h2>
+  <p class="section-desc">
+    各社のハードシグナルから導かれる2029年仮説と、時間軸別の行動予測、強み/弱み、反証条件。
+  </p>
+
+  <!-- OpenAI Hypothesis -->
+  <div class="card pillar-openai" style="margin-bottom: 16px;">
+    <div class="card-subtitle">OPENAI HYPOTHESIS</div>
+    <div class="card-title" style="font-size: 28px;">「最も広い意味での Intelligence Company」</div>
+    <p style="margin-top: 8px; font-size: 14px; color: var(--text-secondary);">
+      モデルを売るだけでなく、Consumer Surface + Enterprise Runtime + Developer Primitives + Government Channel + Compute Portfolio + Multi-layer Monetization を一体で押さえる「知能のフルスタック企業」を志向。
+    </p>
+
+    <div class="hypo-timeline">
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2026&ndash;2027</div>
+        <div class="hypo-phase-conf"><span class="tag tag-green" style="font-size: 10px;">HIGH CONFIDENCE</span></div>
+        <ul class="clean">
+          <li>Frontier を Enterprise 本番基盤へ</li>
+          <li>ChatGPT を社内文脈 Front Door へ</li>
+          <li>API を Agentic Primitive に統合</li>
+          <li>Cloud 依存を分散（AWS + Stargate）</li>
+          <li>Government Channel 拡大</li>
+        </ul>
+      </div>
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2027&ndash;2028</div>
+        <div class="hypo-phase-conf"><span class="tag tag-amber" style="font-size: 10px;">MED-HIGH</span></div>
+        <ul class="clean">
+          <li>Persistent agents / Long-running workflows</li>
+          <li>Workflow completion に近づく</li>
+          <li>SI/コンサルで Enterprise 導入を工業化</li>
+          <li>UI と Runtime の統合を深化</li>
+          <li>高価値 Vertical に深く入る</li>
+        </ul>
+      </div>
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2028&ndash;2029</div>
+        <div class="hypo-phase-conf"><span class="tag tag-neutral" style="font-size: 10px;">MEDIUM</span></div>
+        <ul class="clean">
+          <li>Consumer &harr; Enterprise の境界を薄くする</li>
+          <li>Commerce / Ads を収益柱に育てる</li>
+          <li>Outcome-based pricing</li>
+          <li>Sovereign deployments の型</li>
+          <li>知能の Default Interaction Layer へ</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sw-grid">
+      <div>
+        <div class="sw-col-title" style="color: var(--ink-green);">STRENGTHS</div>
+        <ul class="clean">
+          <li>Standalone AI Brand の強さ</li>
+          <li>Consumer + Developer の両面</li>
+          <li>Enterprise Runtime への上昇速度</li>
+          <li>Monetization の幅</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sw-col-title" style="color: var(--ink-red);">WEAKNESSES</div>
+        <ul class="clean">
+          <li>Vendor lock-in 懸念</li>
+          <li>Cloud / Partner と競合しやすい</li>
+          <li>Safety では Anthropic に劣後</li>
+          <li>Distribution は Google に劣後</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hypo-section" style="margin-top: 16px;">
+      <div class="hypo-section-title">FALSIFICATION</div>
+      <p style="font-size: 13px; color: var(--text-secondary);">Frontier が enterprise standard にならない / Runtime ownership をやめる / Company Knowledge が shallow に留まる / Ad/Commerce が立ち上がらない</p>
+    </div>
+  </div>
+
+  <!-- Anthropic Hypothesis -->
+  <div class="card pillar-anthropic" style="margin-bottom: 16px;">
+    <div class="card-subtitle">ANTHROPIC HYPOTHESIS</div>
+    <div class="card-title" style="font-size: 28px;">「最も信頼される Serious-Work Cognition Layer」</div>
+    <p style="margin-top: 8px; font-size: 14px; color: var(--text-secondary);">
+      Distribution の弱さを Trust / Standards / Cross-cloud Availability / High-stakes Verticals で補う。「どこにでも入れるが、特に重要業務で選ばれる」ポジション。
+    </p>
+
+    <div class="hypo-timeline">
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2026&ndash;2027</div>
+        <div class="hypo-phase-conf"><span class="tag tag-green" style="font-size: 10px;">HIGH CONFIDENCE</span></div>
+        <ul class="clean">
+          <li>MCP 標準化の中心に立ち続ける</li>
+          <li>安全性を Commercial Feature に変換</li>
+          <li>Cloud-neutral procurement を強化</li>
+          <li>Regulated verticals を開拓</li>
+          <li>日本・アジアで Trust channel</li>
+        </ul>
+      </div>
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2027&ndash;2028</div>
+        <div class="hypo-phase-conf"><span class="tag tag-amber" style="font-size: 10px;">MED-HIGH</span></div>
+        <ul class="clean">
+          <li>Industry-specific evals / governance</li>
+          <li>Labs を通じた Productization 加速</li>
+          <li>Regulated enterprise の "Safe Default"</li>
+          <li>Claude を Neutral Stack の中核に</li>
+          <li>MCP上で最も信頼できるモデル</li>
+        </ul>
+      </div>
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2028&ndash;2029</div>
+        <div class="hypo-phase-conf"><span class="tag tag-neutral" style="font-size: 10px;">MEDIUM</span></div>
+        <ul class="clean">
+          <li>Enterprise Control Plane の Preferred Model</li>
+          <li>High-value embed rate を追求</li>
+          <li>公共・医療・研究・金融に深く入る</li>
+          <li>Mission-critical knowledge work で定着</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sw-grid">
+      <div>
+        <div class="sw-col-title" style="color: var(--ink-green);">STRENGTHS</div>
+        <ul class="clean">
+          <li>Trust / Safety / Governance の明快さ</li>
+          <li>MCP 標準化の主導権</li>
+          <li>3大クラウド横断 Neutrality</li>
+          <li>Serious Work での強い評判</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sw-col-title" style="color: var(--ink-red);">WEAKNESSES</div>
+        <ul class="clean">
+          <li>Direct Distribution が弱い</li>
+          <li>Massive Bundle Power がない</li>
+          <li>Consumer breadth で scale しにくい</li>
+          <li>資本戦の自由度が低い</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hypo-section" style="margin-top: 16px;">
+      <div class="hypo-section-title">FALSIFICATION</div>
+      <p style="font-size: 13px; color: var(--text-secondary);">Open standard より closed stack を優先 / Cloud-neutrality を崩す / Consumer distribution に大きく舵を切る / Safety が商業的差別化にならない</p>
+    </div>
+  </div>
+
+  <!-- Google Hypothesis -->
+  <div class="card pillar-google" style="margin-bottom: 16px;">
+    <div class="card-subtitle">GOOGLE HYPOTHESIS</div>
+    <div class="card-title" style="font-size: 28px;">「既存 Surfaces の Default AI Fabric」</div>
+    <p style="margin-top: 8px; font-size: 14px; color: var(--text-secondary);">
+      Search / Workspace / Chrome / Android / Cloud / TPU を束ねて、Gemini を「見えない既定値」にする。単体勝負ではなく、既存 Distribution を AI で再統合する Bundle 戦略。
+    </p>
+
+    <div class="hypo-timeline">
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2026&ndash;2027</div>
+        <div class="hypo-phase-conf"><span class="tag tag-green" style="font-size: 10px;">HIGH CONFIDENCE</span></div>
+        <ul class="clean">
+          <li>Gemini を Workspace 既定機能に</li>
+          <li>Gemini Enterprise を Front Door に</li>
+          <li>Search の AI Transformation</li>
+          <li>Chrome を AI-native Browser に</li>
+          <li>Cloud で Open Platform 維持</li>
+        </ul>
+      </div>
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2027&ndash;2028</div>
+        <div class="hypo-phase-conf"><span class="tag tag-amber" style="font-size: 10px;">MED-HIGH</span></div>
+        <ul class="clean">
+          <li>Multi-agent Workflow を Surfaces 間で結合</li>
+          <li>Packaged Enterprise Agents 拡充</li>
+          <li>A2A + MCP の Ecosystem 整備</li>
+          <li>AI Overviews の収益化</li>
+          <li>Security / Admin で管理部門を押さえる</li>
+        </ul>
+      </div>
+      <div class="hypo-phase">
+        <div class="hypo-phase-label">2028&ndash;2029</div>
+        <div class="hypo-phase-conf"><span class="tag tag-neutral" style="font-size: 10px;">MEDIUM</span></div>
+        <ul class="clean">
+          <li>Gemini を Invisible Default に</li>
+          <li>Vertex AI = 最も現実的な Multi-model Cloud</li>
+          <li>AI &times; Commerce の収益導線</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sw-grid">
+      <div>
+        <div class="sw-col-title" style="color: var(--ink-green);">STRENGTHS</div>
+        <ul class="clean">
+          <li>圧倒的 Distribution</li>
+          <li>Surface の面の広さ</li>
+          <li>Cloud / Admin / Compliance 基盤</li>
+          <li>TPU / Infra / CapEx の規模</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sw-col-title" style="color: var(--ink-red);">WEAKNESSES</div>
+        <ul class="clean">
+          <li>Antitrust / Regulation の制約</li>
+          <li>Search / Ads を自ら壊す難しさ</li>
+          <li>Developer Love で OpenAI に劣後</li>
+          <li>"Default だが Best ではない" 評価</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hypo-section" style="margin-top: 16px;">
+      <div class="hypo-section-title">FALSIFICATION</div>
+      <p style="font-size: 13px; color: var(--text-secondary);">Gemini inclusion が縮小 / Vertex AI が closed に寄る / Search の AI 統合が難航 / Antitrust で bundle の自由度が削られる</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 6: Tripolar Structure -->
+<section id="tripolar">
+  <div class="section-label">Section 6</div>
+  <h2 class="section-title">三極構造の仮説</h2>
+  <p class="section-desc">
+    2029年の市場は Single Winner ではなく、三極分化する。利益プール・配布面・調達要件・プロトコルの違いが Winner-take-all を阻む。
+  </p>
+
+  <div class="tripolar-summary">
+    <div class="tripolar-card pillar-openai">
+      <div class="company-name">OpenAI</div>
+      <div class="strategy-line" style="color: var(--ink-blue);">Premium Intelligence Platform</div>
+      <div class="strategy-desc">
+        Standalone AI experience / Frontier developer mindshare / Consumer &times; Enterprise 統合 / Government channel / Outcome-based monetization
+      </div>
+    </div>
+    <div class="tripolar-card pillar-anthropic">
+      <div class="company-name">Anthropic</div>
+      <div class="strategy-line" style="color: var(--ink-amber);">Trusted Serious-Work Layer</div>
+      <div class="strategy-desc">
+        High-stakes enterprise / Regulated industries / Cloud-neutral / Standards-first / "Safest serious choice"
+      </div>
+    </div>
+    <div class="tripolar-card pillar-google">
+      <div class="company-name">Google</div>
+      <div class="strategy-line" style="color: var(--ink-green);">Bundled Default Fabric</div>
+      <div class="strategy-desc">
+        Seat expansion / Frictionless adoption / Daily use 埋め込み / Cloud-native orchestration / Multi-model on Google infra
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <div class="card-subtitle" style="color: var(--text-secondary);">WHY NOT WINNER-TAKE-ALL</div>
+    <div class="grid-3" style="margin-top: 12px; gap: 24px;">
+      <div>
+        <p style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">1. 利益プールが違う</p>
+        <p style="font-size: 13px; color: var(--text-secondary);">Consumer, Enterprise, Public Sector, Developer, Commerce で勝ち方が異なる</p>
+      </div>
+      <div>
+        <p style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">2. 配布面が違う</p>
+        <p style="font-size: 13px; color: var(--text-secondary);">Standalone AI App vs Existing Surface vs Embed/Partner</p>
+      </div>
+      <div>
+        <p style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">3. 調達要件が違う</p>
+        <p style="font-size: 13px; color: var(--text-secondary);">Best Model vs Trusted Model vs Bundled Default</p>
+      </div>
+      <div>
+        <p style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">4. Semi-open プロトコル</p>
+        <p style="font-size: 13px; color: var(--text-secondary);">MCP / A2A / ADK の世界では完全封鎖型 lock-in で勝ち切れない</p>
+      </div>
+      <div>
+        <p style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">5. 能力の Commoditize</p>
+        <p style="font-size: 13px; color: var(--text-secondary);">差は Distribution, Context, Control, Workflow に移る</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 7: Scenarios -->
+<section id="scenarios">
+  <div class="section-label">Section 7</div>
+  <h2 class="section-title">2029年シナリオ &mdash; 2&times;2 マトリクス</h2>
+  <p class="section-desc">
+    市場構造（単一集中 vs マルチモデル）と供給環境（Compute制約 vs 豊富）の2軸で4つの世界を描く。
+  </p>
+
+  <div class="scenario-matrix">
+    <!-- Top-left: empty corner -->
+    <div></div>
+    <!-- Top axis labels -->
+    <div class="scenario-axis-label">Single Default<br>集中</div>
+    <div class="scenario-axis-label">Multi-model<br>常態化</div>
+
+    <!-- Left axis: Compute constrained -->
+    <div class="scenario-axis-label vertical">Compute 制約<br>規制強い</div>
+    <div class="scenario-cell">
+      <div class="scenario-cell-title">A: Default Empire</div>
+      <div class="scenario-cell-sub">単一デフォルト集中 &times; Compute制約</div>
+      <ul class="clean">
+        <li>Google は Bundle + Distribution で強い</li>
+        <li>OpenAI は Premium intelligence</li>
+        <li>Anthropic は高信頼 niche</li>
+        <li>周辺の白地は狭い</li>
+      </ul>
+    </div>
+    <div class="scenario-cell highlight">
+      <div class="scenario-cell-title">C: Governed Mesh</div>
+      <div class="scenario-cell-sub">マルチモデル &times; Compute制約</div>
+      <ul class="clean">
+        <li>企業はリスクと能力でモデルを使い分け</li>
+        <li>Anthropic の Neutral position 強化</li>
+        <li><strong>Control Plane / Policy の価値大</strong></li>
+      </ul>
+      <div style="margin-top: 8px;"><span class="tag tag-amber">SHORT-MID TERM</span></div>
+    </div>
+
+    <!-- Left axis: Compute abundant -->
+    <div class="scenario-axis-label vertical">Compute 豊富<br>Intelligence 安価</div>
+    <div class="scenario-cell">
+      <div class="scenario-cell-title">B: Bundled Abundance</div>
+      <div class="scenario-cell-sub">単一デフォルト集中 &times; Compute豊富</div>
+      <ul class="clean">
+        <li>モデル能力差縮小 &rarr; Bundle が勝つ</li>
+        <li>Google 優位拡大</li>
+        <li>Thin Router / Thin RAG は死にやすい</li>
+      </ul>
+    </div>
+    <div class="scenario-cell highlight">
+      <div class="scenario-cell-title">D: Cheap Intelligence</div>
+      <div class="scenario-cell-sub">マルチモデル &times; Compute豊富</div>
+      <ul class="clean">
+        <li>Intelligence 自体は安くなる</li>
+        <li><strong>価値は Context / Workflow / Trust に移動</strong></li>
+        <li><strong>Adjacent player に最大の白地</strong></li>
+      </ul>
+      <div style="margin-top: 8px;"><span class="tag tag-amber">LONG TERM</span></div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <p>現時点の見立て: <strong>短中期は A と C の混合、長期は D 寄り</strong>。本命は「完全単一覇権」ではなく「上は複数、下は統合、真ん中は制御と文脈が勝つ」世界。</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 8: White Space -->
+<section id="whitespace">
+  <div class="section-label">Section 8</div>
+  <h2 class="section-title">White Space &mdash; 時間軸別の白地</h2>
+  <p class="section-desc">
+    AGI-native transformation firm として再定義された立ち位置から見ると、白地は3つの時間層で順に現れる。
+  </p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">2026&ndash;2027: 移行設計</div>
+      <div class="timeline-desc">売るべきものは「AI戦略」ではなく「AI-native company への移行責任」</div>
+      <div class="grid-3" style="gap: 8px;">
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Permissioned Context Plane</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Policy-based Routing</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Evals / Observability / Audit</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Human Approval / Exception</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Industry Workflow Wedge</span></div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-label">2027&ndash;2028: Transition OS</div>
+      <div class="timeline-desc">上流コンサルだけでは repeatability が弱い。プロダクトだけでは本丸を取れない。「未来像」ではなく「そこへ移る OS」が白地になる。</div>
+      <div class="grid-3" style="gap: 8px;">
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Role Decomposition</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Human-Agent Handoff</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Approval Redesign</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Enterprise Policy Layer</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">MCP / A2A Bridge</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Industry Template Library</span></div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-label">2028&ndash;2029: AI-native Management System</div>
+      <div class="timeline-desc">最終的に残るのは「人と Agent が混成で働く会社をどう管理するか」という層。これはモデル技術ではなく、企業の設計責任そのもの。</div>
+      <div class="grid-3" style="gap: 8px;">
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">AI Workforce Portfolio</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Role / Budget 再配分</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">人 / Agent / 外部委託の境界設計</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Management-level Governance</span></div>
+        <div class="card" style="padding: 12px;"><span style="font-size: 13px; font-weight: 600;">Industry Operating Layer</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 9: Do / Don't -->
+<section id="dodont">
+  <div class="section-label">Section 9</div>
+  <h2 class="section-title">Do / Don't</h2>
+  <p class="section-desc">
+    どのシナリオでも有効な Robust Bets と、どのシナリオでも危険な No-Go を整理する。
+  </p>
+
+  <div class="do-dont">
+    <div class="do-box">
+      <div class="card-subtitle">ROBUST BETS &mdash; DO</div>
+      <ul class="clean" style="margin-top: 12px;">
+        <li><strong>AGI-native Operating Model Design</strong> を上流商品に持つ</li>
+        <li>提案だけで終わらず <strong>1つの実装楔</strong> を必ず持つ</li>
+        <li>楔は Permissioned Context / Policy Routing / Evals / Industry Workflow のいずれかに寄せる</li>
+        <li>MCP / A2A 時代を前提に <strong>Managed Interoperability Layer</strong> を作る</li>
+        <li>業界ごとに Task &rarr; Role &rarr; Team &rarr; Function の再設計テンプレートを蓄積</li>
+        <li>最終的に <strong>Transition OS</strong> と <strong>Industry Operating Layer</strong> に上がる</li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <div class="card-subtitle">NO-GO &mdash; DON'T</div>
+      <ul class="clean" style="margin-top: 12px;">
+        <li><strong>汎用 AI 戦略コンサル</strong> &mdash; OpenAI/Google/大手コンサルが混む</li>
+        <li><strong>汎用社内チャット / Copilot</strong> &mdash; ChatGPT/Gemini/Claude に飲まれる</li>
+        <li><strong>Thin Router</strong> &mdash; クラウド同梱・内製で圧縮</li>
+        <li><strong>Thin RAG / Connector</strong> &mdash; Company Knowledge/MCP で吸収</li>
+        <li><strong>汎用 No-code Agent Builder</strong> &mdash; Frontier/Gemini Enterprise と正面衝突</li>
+        <li><strong>楔が本丸に資産化しない受託</strong> &mdash; Future OS の知見が蓄積しない</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 10: Watchlist -->
+<section id="watchlist">
+  <div class="section-label">Section 10</div>
+  <h2 class="section-title">四半期ごとの観測指標</h2>
+  <p class="section-desc">
+    以下のシグナルが変化した場合は戦略の再評価が必要。
+  </p>
+
+  <div class="watch-grid">
+    <div class="watch-card">
+      <div class="watch-card-title" style="color: var(--ink-blue);">OpenAI</div>
+      <ul class="clean">
+        <li>Frontier 導入社数 / 事例</li>
+        <li>Company Knowledge 拡張速度</li>
+        <li>Responses API への収束度</li>
+        <li>Compute diversification</li>
+        <li>Government programs</li>
+        <li>Commerce / Ads / Licensing</li>
+      </ul>
+    </div>
+    <div class="watch-card">
+      <div class="watch-card-title" style="color: var(--ink-amber);">Anthropic</div>
+      <ul class="clean">
+        <li>MCP / AAIF 採用進展</li>
+        <li>RSP / Audit frameworks</li>
+        <li>Regulated vertical 大型案件</li>
+        <li>3大クラウドでの強化</li>
+        <li>Labs の productization 速度</li>
+        <li>Consumer distribution へ進むか</li>
+      </ul>
+    </div>
+    <div class="watch-card">
+      <div class="watch-card-title" style="color: var(--ink-green);">Google</div>
+      <ul class="clean">
+        <li>Gemini Ent の seat adoption</li>
+        <li>Surfaces への AI inclusion 深化</li>
+        <li>AI Overviews monetization</li>
+        <li>Vertex AI の openness 維持</li>
+        <li>A2A / MCP ecosystem 浸透</li>
+        <li>UCP / Commerce 事業化</li>
+      </ul>
+    </div>
+    <div class="watch-card">
+      <div class="watch-card-title">External</div>
+      <ul class="clean">
+        <li>Compute cost curve</li>
+        <li>電力制約 / DC 規制</li>
+        <li>AI safety / liability 制度変化</li>
+        <li>Open models の能力向上</li>
+        <li>MSFT / AWS / Meta / Apple</li>
+        <li>大規模安全性事故</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Section 11: Critical Thinking -->
+<section>
+  <div class="section-label">Section 11</div>
+  <h2 class="section-title">この仮説が外れうる5つの理由</h2>
+  <p class="section-desc">
+    仮説は仮説である。以下の変数が動けば、フレーム全体の再構築が必要になる。
+  </p>
+
+  <div class="grid-3" style="gap: 12px;">
+    <div class="card" style="padding: 16px;">
+      <div style="font-family: var(--font-serif); font-size: 28px; font-weight: 300; color: var(--ink-300); margin-bottom: 4px;">1</div>
+      <p style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">モデル能力差が想定以上に縮小</p>
+      <p style="font-size: 13px; color: var(--text-secondary);">利益が上位レイヤーにもっと早く移る</p>
+    </div>
+    <div class="card" style="padding: 16px;">
+      <div style="font-family: var(--font-serif); font-size: 28px; font-weight: 300; color: var(--ink-300); margin-bottom: 4px;">2</div>
+      <p style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">逆に能力差が拡大し続ける</p>
+      <p style="font-size: 13px; color: var(--text-secondary);">Premium frontier provider がより強くなる</p>
+    </div>
+    <div class="card" style="padding: 16px;">
+      <div style="font-family: var(--font-serif); font-size: 28px; font-weight: 300; color: var(--ink-300); margin-bottom: 4px;">3</div>
+      <p style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">規制が急に厳しくなる / 緩い</p>
+      <p style="font-size: 13px; color: var(--text-secondary);">3社すべての優位構造が変わりうる</p>
+    </div>
+    <div class="card" style="padding: 16px;">
+      <div style="font-family: var(--font-serif); font-size: 28px; font-weight: 300; color: var(--ink-300); margin-bottom: 4px;">4</div>
+      <p style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Distribution owner が別に現れる</p>
+      <p style="font-size: 13px; color: var(--text-secondary);">OS / Browser / Enterprise suite 側がさらに強化</p>
+    </div>
+    <div class="card" style="padding: 16px;">
+      <div style="font-family: var(--font-serif); font-size: 28px; font-weight: 300; color: var(--ink-300); margin-bottom: 4px;">5</div>
+      <p style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">大企業の導入速度が想定より遅い</p>
+      <p style="font-size: 13px; color: var(--text-secondary);">Enterprise runtime より co-pilot 的用途が長引く</p>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <p>この枠組みが有用なのは、「どの会社が勝つか」だけでなく「<strong>どのレイヤーがどの会社に取られやすいか</strong>」を整理できるから。そして重要なのは、<strong>勝者予想よりも、勝者が誰でも残る white space を見つけること</strong>。</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- Final Conclusion -->
+<section>
+  <div class="section-label">Section 12</div>
+  <h2 class="section-title">最終結論</h2>
+
+  <div class="conclusion-box" style="margin-bottom: 24px;">
+    <div class="quote">
+      2029年までの基盤モデル戦争は、「誰のモデルが一番賢いか」ではなく、「誰が知能を default infrastructure にできるか」の戦いである。そして、その上に残る最も強い白地は、企業そのものを AGI-native に作り変える責任である。
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom: 24px;">
+    <div class="card pillar-openai" style="text-align: center; padding: 32px 24px;">
+      <div style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px;">OpenAI</div>
+      <div style="font-size: 14px; color: var(--ink-blue); font-weight: 600; margin-bottom: 8px;">Model &rarr; Intelligence Platform</div>
+      <p style="font-size: 13px; color: var(--text-secondary);">知能の供給そのものを制御する</p>
+    </div>
+    <div class="card pillar-anthropic" style="text-align: center; padding: 32px 24px;">
+      <div style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px;">Anthropic</div>
+      <div style="font-size: 14px; color: var(--ink-amber); font-weight: 600; margin-bottom: 8px;">Trusted Cognition Layer</div>
+      <p style="font-size: 13px; color: var(--text-secondary);">最も信頼される埋め込み先になる</p>
+    </div>
+    <div class="card pillar-google" style="text-align: center; padding: 32px 24px;">
+      <div style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px;">Google</div>
+      <div style="font-size: 14px; color: var(--ink-green); font-weight: 600; margin-bottom: 8px;">Default AI Fabric</div>
+      <p style="font-size: 13px; color: var(--text-secondary);">既にそこにあるAIにする</p>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 32px;">
+    <div class="card-subtitle" style="color: var(--text-secondary);">OUR POSITION</div>
+    <div class="card-title" style="font-size: 28px; margin-bottom: 12px;">AGI-native Transformation Firm</div>
+    <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+      もう1つの汎用 Agent 基盤ではなく、OpenAI / Anthropic / Google の誰が伸びても、その上で必要になる企業設計・移行設計・実装設計の責任を持つ。
+    </p>
+    <div class="grid-3" style="gap: 8px;">
+      <div style="background: var(--paper-300); padding: 12px; text-align: center;">
+        <span style="font-size: 13px; font-weight: 600;">AI-native Enterprise Design</span>
+      </div>
+      <div style="background: var(--paper-300); padding: 12px; text-align: center;">
+        <span style="font-size: 13px; font-weight: 600;">Transition OS</span>
+      </div>
+      <div style="background: var(--paper-300); padding: 12px; text-align: center;">
+        <span style="font-size: 13px; font-weight: 600;">Permissioned Context</span>
+      </div>
+      <div style="background: var(--paper-300); padding: 12px; text-align: center;">
+        <span style="font-size: 13px; font-weight: 600;">Policy Routing</span>
+      </div>
+      <div style="background: var(--paper-300); padding: 12px; text-align: center;">
+        <span style="font-size: 13px; font-weight: 600;">Evals / Audit / Approval</span>
+      </div>
+      <div style="background: var(--paper-300); padding: 12px; text-align: center;">
+        <span style="font-size: 13px; font-weight: 600;">Industry Operating Layer</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="page-footer">
+  <div class="footer-inner">
+    <div class="footer-left">Foundation Model Strategy Hypotheses 2026&ndash;2029 &mdash; 39 Hard Signals / 14 Chapters / 1,029 Lines</div>
+    <div class="footer-right">Confidential &mdash; 2026-03-08</div>
+  </div>
+</footer>
+
+</div><!-- .container -->
+
+<script>
+// IntersectionObserver for sticky nav
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navLinks = document.querySelectorAll('.section-nav a');
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(function(link) { link.classList.remove('active'); });
+        const activeLink = document.querySelector('.section-nav a[href="#' + entry.target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(function(section) { observer.observe(section); });
+
+  // Smooth scroll
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>
