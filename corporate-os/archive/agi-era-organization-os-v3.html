@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGI/ASI時代の組織OS設計 v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Ink Scale */
+  --ink-1000: #000000;
+  --ink-900: #1a1a1a;
+  --ink-800: #2d2d2d;
+  --ink-700: #404040;
+  --ink-600: #525252;
+  --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a;
+  --ink-300: #a3a3a3;
+  --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0;
+  --ink-50: #f0f0f0;
+
+  /* Slate Scale */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  /* Paper Scale */
+  --paper-50: #fdfdfc;
+  --paper-100: #faf9f7;
+  --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0;
+  --paper-400: #f1f0ec;
+  --paper-500: #eeedea;
+  --paper-600: #e8e7e3;
+  --paper-700: #e3e2de;
+  --paper-800: #dddcd8;
+
+  /* Accent Ink */
+  --ink-blue: #2563eb;
+  --ink-green: #16a34a;
+  --ink-amber: #d97706;
+  --ink-red: #dc2626;
+
+  /* Wash */
+  --wash-blue: #dbeafe;
+  --wash-green: #dcfce7;
+  --wash-amber: #fef3c7;
+  --wash-red: #fee2e2;
+
+  /* Semantic */
+  --bg-page: var(--paper-50);
+  --bg-surface: var(--paper-100);
+  --bg-recessed: var(--paper-300);
+  --border-default: var(--slate-200);
+  --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000);
+  --text-primary: var(--ink-900);
+  --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500);
+  --text-muted: var(--slate-400);
+  --grid-line: var(--slate-100);
+
+  /* Fonts */
+  --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Instrument Sans', -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ── */
+.page-header {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 96px 48px 48px;
+}
+.page-header .label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.page-header .title {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: var(--text-heading);
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--border-heavy);
+  padding-bottom: 16px;
+}
+.page-header .title em {
+  font-style: italic;
+  font-weight: 300;
+}
+.page-header .subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 720px;
+}
+.page-header .meta {
+  margin-top: 24px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.page-header .meta-item {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.page-header .meta-item strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* ── Sticky Navigation ── */
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(253,253,252,0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default);
+}
+.sticky-nav-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sticky-nav-inner::-webkit-scrollbar { display: none; }
+.sticky-nav a {
+  display: block;
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 80ms ease, border-color 80ms ease;
+}
+.sticky-nav a:hover { color: var(--text-heading); }
+.sticky-nav a.active {
+  color: var(--text-heading);
+  border-bottom-color: var(--border-heavy);
+}
+
+/* ── Main Content ── */
+.main-content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 48px 96px;
+}
+
+/* ── Section ── */
+.section {
+  padding-top: 64px;
+  scroll-margin-top: 52px;
+}
+.section-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 720px;
+  margin-bottom: 32px;
+}
+
+/* ── Subsection ── */
+.subsection {
+  margin-top: 48px;
+}
+.subsection-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.subsection-ref {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* ── Subsubsection ── */
+.h4 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+.h5 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-heading);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+/* ── Typography ── */
+p { margin-bottom: 12px; line-height: 1.7; }
+strong { font-weight: 600; }
+
+/* ── Blockquote ── */
+blockquote {
+  border-left: 3px solid var(--border-heavy);
+  padding: 16px 24px;
+  margin: 16px 0;
+  background: var(--bg-surface);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--ink-800);
+}
+blockquote p { margin-bottom: 0; }
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.card-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.card-body {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+/* ── Grid layouts ── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 16px 0;
+}
+
+/* ── Table ── */
+.table-wrap {
+  margin: 16px 0;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.5;
+}
+thead th {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--border-heavy);
+}
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-default);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+
+/* ── Code block ── */
+.code-block {
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-default);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre;
+  overflow-x: auto;
+  color: var(--ink-800);
+}
+
+/* ── Callout ── */
+.callout {
+  padding: 20px 24px;
+  margin: 16px 0;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+}
+.callout.callout-blue {
+  border-left: 3px solid var(--ink-blue);
+  background: var(--wash-blue);
+}
+.callout.callout-amber {
+  border-left: 3px solid var(--ink-amber);
+  background: var(--wash-amber);
+}
+.callout.callout-red {
+  border-left: 3px solid var(--ink-red);
+  background: var(--wash-red);
+}
+.callout-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+/* ── List ── */
+ul, ol { padding-left: 20px; margin: 8px 0 12px; }
+li { margin-bottom: 4px; line-height: 1.6; }
+li strong { color: var(--ink-800); }
+
+/* ── Phase badge ── */
+.phase-badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border: 1px solid;
+  margin-right: 8px;
+}
+.phase-h { color: var(--ink-blue); border-color: var(--ink-blue); background: var(--wash-blue); }
+.phase-c { color: var(--ink-amber); border-color: var(--ink-amber); background: var(--wash-amber); }
+.phase-a { color: var(--ink-red); border-color: var(--ink-red); background: var(--wash-red); }
+
+/* ── Principle card ── */
+.principle-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+}
+.principle-num {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text-muted);
+  float: left;
+  margin-right: 16px;
+  line-height: 1;
+}
+.principle-title {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.principle-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* ── Right card ── */
+.right-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+  text-align: center;
+}
+.right-num {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 300;
+  color: var(--text-heading);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.right-name {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.right-name-en {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.right-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+/* ── Step card ── */
+.step-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 16px 20px;
+}
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.step-name {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.step-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+/* ── Layer flow SVG ── */
+.layer-flow {
+  margin: 24px 0;
+  text-align: center;
+}
+.layer-flow svg { max-width: 100%; height: auto; }
+
+/* ── Metric ── */
+.metric-val {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--text-heading);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.metric-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ── Footer ── */
+.page-footer {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 48px;
+  border-top: 1px solid var(--border-default);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-header { padding: 64px 24px 32px; }
+  .page-header .title { font-size: 32px; }
+  .sticky-nav-inner { padding: 0 16px; }
+  .main-content { padding: 0 24px 64px; }
+  .section-title { font-size: 28px; }
+  .subsection-title { font-size: 22px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .page-footer { padding: 24px; flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="page-header">
+  <div class="label">Corporate OS &mdash; Rationale Document</div>
+  <h1 class="title">AGI/ASI時代の<em>組織OS設計</em> v3</h1>
+  <p class="subtitle">AIが主要な知的主体として組織を運営し、人間がその参加者として安全・持続可能・正当に共存できる状態を設計・実現する。</p>
+  <div class="meta">
+    <span class="meta-item"><strong>構成</strong> 4部 + 付録</span>
+    <span class="meta-item"><strong>射程</strong> Phase H → C → A</span>
+    <span class="meta-item"><strong>設計空間</strong> 10レイヤー (L1–L10)</span>
+    <span class="meta-item"><strong>正本</strong> 00-core-ai-native-institution-os-complete-spec.md</span>
+  </div>
+</header>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="sticky-nav" id="nav">
+  <div class="sticky-nav-inner">
+    <a href="#prologue" class="active">序章</a>
+    <a href="#part1">第1部: 原理</a>
+    <a href="#part2">第2部: 統治</a>
+    <a href="#part3">第3部: 運用</a>
+    <a href="#part4">第4部: 移行</a>
+    <a href="#appendix">付録</a>
+  </div>
+</nav>
+
+<main class="main-content">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PROLOGUE                                           -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="prologue">
+  <div class="section-label">序章</div>
+  <div class="section-title">ゴールとこのドキュメントの読み方</div>
+
+  <blockquote>
+    <p>AGI/ASI時代において、AIが主要な知的主体として組織を運営し、人間がその参加者として安全・持続可能・正当に共存できる状態を設計・実現する。</p>
+  </blockquote>
+
+  <p>このゴールは5つの要素から成る。「AGI/ASI時代において」は設計の時間的射程を、「AIが主要な知的主体として組織を運営し」はAIと人間の関係を、「安全に」は技術・制度的な安全設計を、「持続可能に」は人間と組織の長期的存続を、「正当に」は内外の正統性を規定する。</p>
+
+  <div class="h4">8つの問い</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>問い</th><th>ゴールとの対応</th></tr></thead>
+      <tbody>
+        <tr><td>Q1</td><td>この設計は何を扱い、何を扱わないのか</td><td>設計空間の定義</td></tr>
+        <tr><td>Q2</td><td>AIは何のために組織を運営するのか</td><td>「正当に」の基盤</td></tr>
+        <tr><td>Q3</td><td>AI運営の組織で人間はどう参加し、どの権利を行使するか</td><td>「安全・正当に」の参加設計</td></tr>
+        <tr><td>Q4</td><td>AI能力の変化にどう適応するか</td><td>「AGI/ASI時代において」の通時性</td></tr>
+        <tr><td>Q5</td><td>AIが運営する日常に人間はどう参加するか</td><td>「共存できる状態」の具体設計</td></tr>
+        <tr><td>Q6</td><td>安全性と信頼をどう確保するか</td><td>「安全に」の技術・制度設計</td></tr>
+        <tr><td>Q7</td><td>人間はどう存在し、意味を持つか</td><td>「持続可能に」の人間側設計</td></tr>
+        <tr><td>Q8</td><td>複数の組織OSが共存する世界をどう設計するか</td><td>社会レベルの「正当に」</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="h4">4部構成の論理</div>
+
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-label">第1部</div>
+      <div class="card-title">原理と設計空間</div>
+      <div class="card-body">「何を設計するのか」「何を原則とするのか」を定義する。Q1・Q2・Q4の前提に答える。</div>
+    </div>
+    <div class="card">
+      <div class="card-label">第2部</div>
+      <div class="card-title">統治設計</div>
+      <div class="card-body">AIが運営する組織で人間はどう参加するかを設計する。Q2・Q3・Q7の権利部分に答える。</div>
+    </div>
+    <div class="card">
+      <div class="card-label">第3部</div>
+      <div class="card-title">運用設計</div>
+      <div class="card-body">統治の原則をAI運営の日常に翻訳する。Q5・Q6・Q7の主体性部分に答える。</div>
+    </div>
+    <div class="card">
+      <div class="card-label">第4部</div>
+      <div class="card-title">移行と適応</div>
+      <div class="card-body">AI能力の変化と外部環境への対応を設計する。Q4・Q6・Q8に答える。</div>
+    </div>
+  </div>
+
+  <div class="h4">v1/v2からの主要な転換</div>
+  <ul>
+    <li><strong>人間の権威の根拠を再定義</strong>: 能力ベースの正当化を棄却し、受益者性・手続的正統性・能力の3原理の複合へ</li>
+    <li><strong>通時性の構造的組み込み</strong>: Phase H / C / Aの全てに設計を配置</li>
+    <li><strong>人間の6職能から4権利+3カテゴリ職能へ</strong>: 能力ベースの「不可譲渡な職能」を構造ベースの「不可譲渡な権利」に</li>
+    <li><strong>メタガバナンスの中核化</strong>: ハードコア/ソフトシェルの2層構造として明示</li>
+    <li><strong>権限配分の動的化</strong>: AI能力レベルの関数としての動的設計へ</li>
+    <li><strong>主体の反転</strong>: 「組織がAIを運用する」から「AIが組織を運営し、人間が参加する」へ</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PART 1: PRINCIPLES                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="part1">
+  <div class="section-label">第1部</div>
+  <div class="section-title">原理と設計空間</div>
+  <div class="section-desc">まず「何を設計するのか」「何を原則とするのか」を定義する。設計対象の定義なしに設計はできない。</div>
+
+  <!-- §1.1 -->
+  <div class="subsection" id="s1-1">
+    <div class="subsection-title">§1.1 組織OSの定義と射程</div>
+
+    <blockquote>
+      <p>AIが組織を運営する主体であり、人間はその参加者である。</p>
+    </blockquote>
+
+    <p>これは予測ではなく、設計の出発点として採用する前提である。「人間がAIにどこまで任せるか」と問う設計は暗黙に人間を主体に置く。本ドキュメントは逆に、「AIが運営する組織に人間がどう参加するか」と問う。</p>
+
+    <div class="h5">OSの定義</div>
+
+    <blockquote>
+      <p>AGI/ASI時代のOSとは、AIが組織を運営する全体アーキテクチャであり、人間の参加・権利・意味を構造的に保証する多層的秩序である。</p>
+    </blockquote>
+
+    <div class="h5">既存議論が陥りやすい4つの誤り</div>
+
+    <div class="grid-2">
+      <div class="callout callout-red">
+        <div class="callout-title">誤り1: 認知アーキテクチャへの縮約</div>
+        <p>「どう知るか」だけを定義し、「何者として存在するのか」「力と価値をどう配るのか」を欠落させる。</p>
+      </div>
+      <div class="callout callout-red">
+        <div class="callout-title">誤り2: ガバナンスの矮小化</div>
+        <p>ガバナンスを「承認フロー」程度に捉え、権限配分・拒否権・監査独立性・責任追跡を欠く。</p>
+      </div>
+      <div class="callout callout-red">
+        <div class="callout-title">誤り3: 生産性の単一評価</div>
+        <p>生産性以外の評価軸（主体性、社会的信頼、分配の公正、文化の維持）を欠く。</p>
+      </div>
+      <div class="callout callout-red">
+        <div class="callout-title">誤り4: 静的な役割分担</div>
+        <p>重要なのは静的な役割分担ではなく、可変的な境界設計である。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1.2 -->
+  <div class="subsection" id="s1-2">
+    <div class="subsection-title">§1.2 設計空間 — 10の設計次元</div>
+    <div class="subsection-ref">組織OSが扱う設計空間は10の次元（レイヤー）から成る。</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>名称</th><th>中心問い</th><th>欠落時の典型的失敗</th></tr></thead>
+        <tbody>
+          <tr><td>L1</td><td>存在目的・外部正当性</td><td>何のために存在するのか</td><td>強いが正当性のないシステム</td></tr>
+          <tr><td>L2</td><td>憲法・権力・責任</td><td>誰が何を決め、誰が責任を負うのか</td><td>ガバナンス演出、責任の空洞化</td></tr>
+          <tr><td>L3</td><td>経済・分配・資源配分</td><td>何を最適化し、価値をどう配るのか</td><td>最適化はするが不公平になる</td></tr>
+          <tr><td>L4</td><td>社会・文化・信頼</td><td>共同体としてどう成立するのか</td><td>協働は動くが社会が壊れる</td></tr>
+          <tr><td>L5</td><td>人間の主体性・成長・意味</td><td>人間はどう強くなるか</td><td>deskilling、疎外、依存</td></tr>
+          <tr><td>L6</td><td>仕事・役割・運用モデル</td><td>日々どう働き、どう協働するのか</td><td>通知地獄、責任不明、疲弊</td></tr>
+          <tr><td>L7</td><td>認知・知識・意思決定</td><td>どう知覚し、理解し、判断するのか</td><td>賢く見える誤作動</td></tr>
+          <tr><td>L8</td><td>エージェント実行・IF</td><td>どう行動し、人間と接続するのか</td><td>危険な自動化、実務不整合</td></tr>
+          <tr><td>L9</td><td>技術基盤・安全・可観測性</td><td>どう安全に、安定して動かすのか</td><td>見えない故障、重大事故</td></tr>
+          <tr><td>L10</td><td>学習・適応・メタガバナンス</td><td>OS自体をどう改定するのか</td><td>強いが硬直化、または暴走</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="h5">3つの大領域</div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">領域 A: 組織は何者か</div>
+        <div class="card-body"><strong>L1–L3</strong><br>存在理由と統治原理。AGI/ASI時代に本当に決定的になる領域。</div>
+      </div>
+      <div class="card">
+        <div class="card-label">領域 B: 組織はどう生きるか</div>
+        <div class="card-body"><strong>L4–L6</strong><br>lived reality（人間の日常）。上位理念を日常に翻訳する。</div>
+      </div>
+      <div class="card">
+        <div class="card-label">領域 C: 知り、行動し、進化する</div>
+        <div class="card-body"><strong>L7–L10</strong><br>知能的実装と変化能力。既存のAI組織論の多くはここだけを扱う。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1.3 -->
+  <div class="subsection" id="s1-3">
+    <div class="subsection-title">§1.3 設計原則</div>
+    <div class="subsection-ref">Phase H / C / Aに依存しない、全フェーズ共通の8原則。</div>
+
+    <div class="principle-card">
+      <div class="principle-num">1</div>
+      <div class="principle-title">AI運営を設計の出発点とする</div>
+      <div class="principle-body">デフォルトはAI運営であり、人間の参加は権利・機会として設計する。</div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">2</div>
+      <div class="principle-title">上位レイヤーなき下位最適化を禁止する</div>
+      <div class="principle-body">目的（L1）、参加と権利（L2）、分配（L3）が定義されていない状態で下位レイヤーを最適化しない。</div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">3</div>
+      <div class="principle-title">人間の参加は設計対象そのものである</div>
+      <div class="principle-body">人間は「残余タスク処理者」でも「最終承認者」でもない。主体性、意味、成長、関係性の設計が必要。</div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">4</div>
+      <div class="principle-title">能力ベースの正当化を設計原理にしない</div>
+      <div class="principle-body">「人間にしかできないから人間がやる」は一時的な事実であり、設計原理にはならない。</div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">5</div>
+      <div class="principle-title">権利と職能を区別する</div>
+      <div class="principle-body">不可譲渡なのは「権利」であり「職能」ではない。権利はAI能力とは無関係に維持される。</div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">6</div>
+      <div class="principle-title">反省は出力改善だけでなく制度改善へ拡張する</div>
+      <div class="principle-body">ポリシー、権限配分、文化設計の修正まで含む。前提の妥当性、価値整合、主体性保全を評価対象にする。</div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">7</div>
+      <div class="principle-title">分配の設計を後回しにしない</div>
+      <div class="principle-body">AGI/ASI時代には、知能そのものの限界より分配のルールがボトルネックになる。</div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">8</div>
+      <div class="principle-title">速度より正当性、正当性より更新可能性</div>
+      <div class="principle-body">更新可能性を担保するメタガバナンス（L10）は、OSの中で最も本質的な設計対象の一つ。</div>
+      <div style="clear:both"></div>
+    </div>
+  </div>
+
+  <!-- §1.4 -->
+  <div class="subsection" id="s1-4">
+    <div class="subsection-title">§1.4 能力の時代変化と設計への含意</div>
+
+    <blockquote>
+      <p>能力が低い時代には下位レイヤーがボトルネックになる。能力が高い時代には上位レイヤーがボトルネックになる。</p>
+    </blockquote>
+
+    <div class="h5">3フェーズの概要</div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label"><span class="phase-badge phase-h">Phase H</span></div>
+        <div class="card-title">Human Sovereignty</div>
+        <div class="card-body">
+          <strong>移行の出発点。</strong>人間が最終権限を保持しつつAI運営の基盤を構築する。<br>
+          <span style="font-size:12px;color:var(--text-muted)">想定: 現在〜AGI初期</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label"><span class="phase-badge phase-c">Phase C</span></div>
+        <div class="card-title">Co-Sovereignty</div>
+        <div class="card-body">
+          <strong>移行の中間段階。</strong>領域別にAI運営を拡大し、人間の参加モデルを検証する。<br>
+          <span style="font-size:12px;color:var(--text-muted)">想定: AGI成熟期</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label"><span class="phase-badge phase-a">Phase A</span></div>
+        <div class="card-title">Algorithmic Sovereignty</div>
+        <div class="card-body">
+          <strong>設計の目標状態。</strong>AIが組織を運営し、人間が参加者として権利を行使する。<br>
+          <span style="font-size:12px;color:var(--text-muted)">想定: ASI段階</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PART 2: GOVERNANCE                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="part2">
+  <div class="section-label">第2部</div>
+  <div class="section-title">統治設計</div>
+  <div class="section-desc">AIが運営する組織で人間はどう参加するかを設計する。参加の構造がなければ、人間は形式的な存在に転落する。</div>
+
+  <!-- §2.1 -->
+  <div class="subsection" id="s2-1">
+    <div class="subsection-title">§2.1 権威の原理 — 誰が・なぜ決定権を持つか</div>
+    <div class="subsection-ref">対応レイヤー: L1, L2</div>
+
+    <div class="h5">能力ベースの権威を棄却する</div>
+    <p>能力的優位性に基づく権威は、AIの能力がその領域で人間を超えた時点で正当性を失う。AGI段階で既に多くの認知タスクでAIが人間を超え、ASI段階では全認知タスクで超える可能性がある。</p>
+
+    <div class="h5">受益者性を権威の主要根拠に据える</div>
+    <p>組織の意思決定の帰結を最終的に引き受けるのは人間である。身体を持ち、有限の寿命を持ち、苦痛を感じ、社会関係の中に埋め込まれている存在が、帰結の重みを最も直接的に負う。これは能力とは無関係な構造的事実である。</p>
+
+    <div class="h5">3原理の複合としての権威</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>原理</th><th>内容</th><th>Phase H</th><th>Phase C</th><th>Phase A</th></tr></thead>
+        <tbody>
+          <tr><td><strong>受益者原理</strong></td><td>帰結を引き受ける存在が決定権を持つ</td><td>高</td><td>高</td><td>中（維持）</td></tr>
+          <tr><td><strong>能力原理</strong></td><td>より優れた判断ができる存在が判断する</td><td>低〜中</td><td>中〜高</td><td>高</td></tr>
+          <tr><td><strong>手続原理</strong></td><td>定められた手続きに従って決定が行われた</td><td>高</td><td>高</td><td>高（形骸化リスクあり）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- §2.2 -->
+  <div class="subsection" id="s2-2">
+    <div class="subsection-title">§2.2 人間の不可譲渡な権利</div>
+    <div class="subsection-ref">対応レイヤー: L2, L5</div>
+
+    <p>人権の歴史は「能力に基づかない権利」の拡大の歴史である。参政権が識字能力や財産から切り離されたように、組織OSにおける人間の権利も能力から切り離す。</p>
+
+    <div class="grid-4">
+      <div class="right-card">
+        <div class="right-num">1</div>
+        <div class="right-name">離脱権</div>
+        <div class="right-name-en">Exit Right</div>
+        <div class="right-desc">組織・システムからいつでも離脱できる。OSの全ての設計に対する最終的なチェック機能。</div>
+      </div>
+      <div class="right-card">
+        <div class="right-num">2</div>
+        <div class="right-name">停止権</div>
+        <div class="right-name-en">Kill Switch Right</div>
+        <div class="right-desc">OSの任意の部分の動作を停止できる。事前承認は不要、事後検証は必要。</div>
+      </div>
+      <div class="right-card">
+        <div class="right-num">3</div>
+        <div class="right-name">受益権</div>
+        <div class="right-name-en">Benefit Right</div>
+        <div class="right-desc">組織が生む価値の一定割合を受け取る。AIの貢献度が100%でも維持される最低保証。</div>
+      </div>
+      <div class="right-card">
+        <div class="right-num">4</div>
+        <div class="right-name">知る権利</div>
+        <div class="right-name-en">Transparency Right</div>
+        <div class="right-desc">OSの動作状態、意思決定の根拠を「理解可能な形式で」知ることができる。</div>
+      </div>
+    </div>
+
+    <div class="h5">3カテゴリの職能体系</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>カテゴリ</th><th>内容</th><th>ASI耐性</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1: 不可譲渡な権利</strong></td><td>離脱権、停止権、受益権、知る権利</td><td>全フェーズで維持</td></tr>
+          <tr><td><strong>2: 条件付き職能</strong></td><td>目的設定、境界定義、関係管理</td><td>Phase Aで再検討必要</td></tr>
+          <tr><td><strong>3: 委譲可能な職能</strong></td><td>Domain governance、Exception handling、Red teaming</td><td>Phase C以降で完全移行可能</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- §2.3 -->
+  <div class="subsection" id="s2-3">
+    <div class="subsection-title">§2.3 統治構造 — 権限配分のアーキテクチャ</div>
+    <div class="subsection-ref">対応レイヤー: L1, L2, L3</div>
+
+    <div class="h5">5層の統治構造（Phase A 目標状態）</div>
+
+    <div class="card" style="margin-bottom:8px">
+      <div class="card-label">Layer A</div>
+      <div class="card-title">Purpose Layer</div>
+      <div class="card-body">組織の存在理由、価値、禁則、ステークホルダー順位。AIが目的案を生成し、人間は受益者として最終選択権を行使。</div>
+    </div>
+    <div class="card" style="margin-bottom:8px">
+      <div class="card-label">Layer B</div>
+      <div class="card-title">Governance Kernel</div>
+      <div class="card-body">リスク分類、Trust Score、Composite Risk、承認ポリシー、権限、監査基準。組織の「憲法」と「判例」。人間の4権利の実効性を保証する機構。</div>
+    </div>
+    <div class="card" style="margin-bottom:8px">
+      <div class="card-label">Layer C</div>
+      <div class="card-title">Domain Cells</div>
+      <div class="card-body">事業や業務領域ごとのセル。Phase AではAIエージェント群が自律運営。人間は参加権に基づき関与。</div>
+    </div>
+    <div class="card" style="margin-bottom:8px">
+      <div class="card-label">Layer D</div>
+      <div class="card-title">Execution Fabric</div>
+      <div class="card-body">Symphony型・Data Agent型・業務自動化エージェントが動く実作業の主戦場。全フェーズを通じてAI中心。</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Layer E</div>
+      <div class="card-title">Reflection & Evolution Engine</div>
+      <div class="card-body">評価、インシデント分析、メモリ更新、Trust Score更新、ポリシー改訂提案。ハードコアの改定は不可能。</div>
+    </div>
+
+    <div class="h5">Composite Risk — 8つのリスク次元</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>リスク次元</th><th>評価内容</th></tr></thead>
+        <tbody>
+          <tr><td>不可逆性</td><td>判断の結果を元に戻せるか</td></tr>
+          <tr><td>法務・規制</td><td>法的リスクがあるか</td></tr>
+          <tr><td>金銭影響</td><td>財務的影響の大きさ</td></tr>
+          <tr><td>ブランド影響</td><td>評判・信頼への影響</td></tr>
+          <tr><td>人権・公平性・倫理</td><td>倫理的問題があるか</td></tr>
+          <tr><td>外部露出</td><td>外部ステークホルダーへの影響</td></tr>
+          <tr><td>新規性・未知性</td><td>前例のない判断か</td></tr>
+          <tr><td>人間の主体性への影響</td><td>人間のAgencyを損なうか</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- §2.4 -->
+  <div class="subsection" id="s2-4">
+    <div class="subsection-title">§2.4 メタガバナンス — OS自体の改定権の設計</div>
+    <div class="subsection-ref">対応レイヤー: L10</div>
+
+    <p>OSが自己改定できなければ硬直化し、無制限に改定可能であれば暴走する。この両極の均衡点を設計する。</p>
+
+    <div class="grid-2">
+      <div class="callout callout-blue">
+        <div class="callout-title">ハードコア（改定不可能）</div>
+        <ul>
+          <li>人間の離脱権</li>
+          <li>人間の停止権</li>
+          <li>人間の受益権</li>
+          <li>人間の知る権利</li>
+          <li>ハードコア自体の改定禁止</li>
+        </ul>
+      </div>
+      <div class="callout">
+        <div class="callout-title">ソフトシェル（改定可能）</div>
+        <ul>
+          <li>権限配分の比率</li>
+          <li>具体的な手続き・プロセス</li>
+          <li>評価基準・KPI</li>
+          <li>レイヤー間の優先順位</li>
+          <li>受益者の範囲（追加は可能）</li>
+          <li>3原理の重み付け</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="h5">改定権の分権設計</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>権限</th><th>保持者</th><th>役割</th></tr></thead>
+        <tbody>
+          <tr><td>改定提案権</td><td>AIまたは人間</td><td>改定案を作成する</td></tr>
+          <tr><td>改定審査権</td><td>独立した監査機関</td><td>改定案を評価する</td></tr>
+          <tr><td>改定承認権</td><td>ステークホルダー代表</td><td>最終承認する</td></tr>
+          <tr><td>改定拒否権</td><td>任意のステークホルダー</td><td>一定期間内に異議を申し立てる</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="h5">ラバースタンプ問題への対策</div>
+    <ol>
+      <li><strong>理解可能な説明の義務化</strong>: 説明なしの改定案は審査対象にならない</li>
+      <li><strong>AI間チェック</strong>: 複数の独立したAIに改定案を評価させる</li>
+      <li><strong>帰結翻訳</strong>: 人間の生活・権利・利益への影響を明示する</li>
+      <li><strong>Canary rollout</strong>: 小規模な試験導入を義務づける</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PART 3: OPERATIONS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="part3">
+  <div class="section-label">第3部</div>
+  <div class="section-title">運用設計</div>
+  <div class="section-desc">統治の原則をAI運営の日常に翻訳する。統治がどれほど優れていても、運用プロセスがなければ動かない。</div>
+
+  <!-- §3.1 -->
+  <div class="subsection" id="s3-1">
+    <div class="subsection-title">§3.1 業務ループ — Sense → Evolve の8ステップ</div>
+    <div class="subsection-ref">対応レイヤー: L6, L7</div>
+
+    <p>業務は部署起点ではなく<strong>ループ起点</strong>で設計する。人間の参加は、権利の行使と参加機会として特定のポイントに配置される。</p>
+
+    <div class="code-block">Step 0: Constitution Load
+  ↓
+Step 1: Sense → Step 2: Understand → Step 3: Deliberate → Step 4: Gate
+  ↓
+Step 5: Act → Step 6: Observe → Step 7: Reflect → Step 8: Evolve</div>
+
+    <div class="grid-3" style="margin-top:16px">
+      <div class="step-card">
+        <div class="step-num">STEP 0</div>
+        <div class="step-name">Constitution Load</div>
+        <div class="step-desc">Purpose / Values / Non-negotiables / Risk policy を読み込む。HUTLの本体。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 1</div>
+        <div class="step-name">Sense</div>
+        <div class="step-desc">新しいsignalを受け取り、eventとして正規化する。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 2</div>
+        <div class="step-name">Understand</div>
+        <div class="step-desc">domain graphとmemoryを引き、世界状態を再構成。Active Extractionで盲点を補完。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 3</div>
+        <div class="step-name">Deliberate</div>
+        <div class="step-desc">複数案を生成。前提・期待便益・副作用・失敗条件・ロールバック案を付与。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 4</div>
+        <div class="step-name">Gate</div>
+        <div class="step-desc">Autonomy Modeを算出。f(Trust Score, Composite Risk, Novelty, Uncertainty, Agency Impact)。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 5</div>
+        <div class="step-name">Act</div>
+        <div class="step-desc">Canary rollout、Rate limit、Kill switch、Rollback planを必須として実行。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 6</div>
+        <div class="step-name">Observe</div>
+        <div class="step-desc">結果、副作用、二次影響を観測。説明不能率の推移も追跡。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 7</div>
+        <div class="step-name">Reflect</div>
+        <div class="step-desc">Output accuracy / Assumption validity / Value alignment / Agency preservation の4軸で評価。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">STEP 8</div>
+        <div class="step-name">Evolve</div>
+        <div class="step-desc">Memory更新、Trust Score更新、Policy改訂案を生成。「学習してよいこと」は人間が決める。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §3.2 -->
+  <div class="subsection" id="s3-2">
+    <div class="subsection-title">§3.2 自律度制御 — Autonomy Mode</div>
+    <div class="subsection-ref">対応レイヤー: L2, L6, L8</div>
+
+    <p>デフォルトはAI運営（A1）であり、リスクと権利に基づいて人間の参加点を設計する。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mode</th><th>名称</th><th>説明</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A1</strong></td><td>Full auto</td><td>AI自律運営、事後レビュー不要。<strong>デフォルト</strong>。大半の業務がここに属する。</td></tr>
+          <tr><td><strong>A2</strong></td><td>Auto + post-audit</td><td>AI自律運営、事後監査必須。人間は知る権利に基づき結果を監査。</td></tr>
+          <tr><td><strong>A3</strong></td><td>HOTL</td><td>人間にveto windowを与える。停止権に基づき介入可能。</td></tr>
+          <tr><td><strong>A4</strong></td><td>HITL</td><td>人間の事前承認が必要。受益者として判断に参加。</td></tr>
+          <tr><td><strong>A5</strong></td><td>Human-only</td><td>AIは提案のみ、実行は人間。権利行使・危機対応・制度改定。</td></tr>
+          <tr><td><strong>A0</strong></td><td>Sandbox only</td><td>本番環境での実行禁止。未検証エージェントの隔離。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- §3.3 -->
+  <div class="subsection" id="s3-3">
+    <div class="subsection-title">§3.3 データ・知識アーキテクチャ</div>
+    <div class="subsection-ref">対応レイヤー: L7, L9</div>
+
+    <p>業務ループが機能するためのデータ基盤。単なるRAG付きチャットでは動かない。<strong>組織世界モデル</strong>が必要である。</p>
+
+    <div class="grid-3">
+      <div class="card"><div class="card-label">1</div><div class="card-title">Reality Plane</div><div class="card-body">現実データ。immutable event log。追記のみで履歴を保全。</div></div>
+      <div class="card"><div class="card-label">2</div><div class="card-title">Semantic Plane</div><div class="card-body">エンティティと関係。Knowledge Graphが基盤。</div></div>
+      <div class="card"><div class="card-label">3</div><div class="card-title">Memory Plane</div><div class="card-body">5種の組織記憶: Semantic / Episodic / Procedural / Evaluative / Normative。</div></div>
+      <div class="card"><div class="card-label">4</div><div class="card-title">Decision Plane</div><div class="card-body">Goal、仮説、候補案、選択理由。「思考の可観測化」。</div></div>
+      <div class="card"><div class="card-label">5</div><div class="card-title">Action Plane</div><div class="card-body">ツール実行、APIコール、通知。Workflow stateとrollback plan。</div></div>
+      <div class="card"><div class="card-label">6</div><div class="card-title">Governance Plane</div><div class="card-body">権限、ポリシー、Trust Score、Composite Risk、監査証跡。</div></div>
+    </div>
+  </div>
+
+  <!-- §3.4 -->
+  <div class="subsection" id="s3-4">
+    <div class="subsection-title">§3.4 安全・可観測性・評価</div>
+    <div class="subsection-ref">対応レイヤー: L9</div>
+
+    <div class="h5">評価の4軸</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>評価軸</th><th>問い</th><th>失敗パターン</th></tr></thead>
+        <tbody>
+          <tr><td>Output accuracy</td><td>出力は正確だったか</td><td>事実誤認、計算ミス</td></tr>
+          <tr><td>Assumption validity</td><td>前提は妥当だったか</td><td>間違った前提で正しい結論</td></tr>
+          <tr><td>Value alignment</td><td>組織の価値と整合していたか</td><td>効率は最大だが倫理に反する</td></tr>
+          <tr><td>Agency preservation</td><td>人間の主体性は保全されたか</td><td>人間が意味ある判断をする余地がない</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- §3.5 -->
+  <div class="subsection" id="s3-5">
+    <div class="subsection-title">§3.5 人間の主体性・意味・文化の設計</div>
+    <div class="subsection-ref">対応レイヤー: L3, L4, L5</div>
+
+    <div class="h5">意味の構造的保証 — 4つの機会</div>
+
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">選択の機会</div>
+        <div class="card-body">AIが最適解を提示しても、人間が別の選択をできる余地。Override権の保障。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">創造の機会</div>
+        <div class="card-body">AIが生成したものに人間が手を加え、自分のものにできるプロセス。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">学習の機会</div>
+        <div class="card-body">AIの判断根拠の可視化、メンタリングモードを通じた理解の深化。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">関係の機会</div>
+        <div class="card-body">Exception Council、Purpose Councilでの対面協議。人間同士の信頼構築。</div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-title">トレードオフの明示</div>
+      <p>これは効率最大化とトレードオフになる。AIに全て任せた方が効率は高いが、人間の意味と主体性を考慮すると意図的に人間の関与を残す必要がある。このトレードオフは設計上の選択であり、効率を犠牲にする正当な理由として明示する。</p>
+    </div>
+  </div>
+
+  <!-- §3.6 -->
+  <div class="subsection" id="s3-6">
+    <div class="subsection-title">§3.6 最小構成と運用リズム</div>
+    <div class="subsection-ref">対応レイヤー: 全レイヤーの最小実装</div>
+
+    <div class="h5">運用リズム</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>頻度</th><th>内容</th><th>担当</th></tr></thead>
+        <tbody>
+          <tr><td>常時</td><td>AIがSense / Understand / Act / Observeを回す</td><td>Execution Fabric</td></tr>
+          <tr><td>毎日</td><td>Exception Councilが高リスク案件だけ裁く</td><td>Domain Governor + AI</td></tr>
+          <tr><td>毎週</td><td>Domain GovernorがPolicyとEvalをUpdateする</td><td>Domain Cells</td></tr>
+          <tr><td>毎月</td><td>Purpose Councilが資源配分と大方針を見直す</td><td>Purpose Council</td></tr>
+          <tr><td>四半期</td><td>Purpose / Values / Non-goalsを再定義する</td><td>全ステークホルダー</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>定例会議の中心を「状況共有」から「例外裁定と制度更新」へ移す。状況共有はAIが常時出せるので、会議でやる必要はない。</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PART 4: TRANSITION                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="part4">
+  <div class="section-label">第4部</div>
+  <div class="section-title">移行と適応の設計</div>
+  <div class="section-desc">AI能力の変化と外部環境への対応を設計する。単一フェーズの設計ではAGI/ASI時代を射程に含められない。</div>
+
+  <!-- §4.1 -->
+  <div class="subsection" id="s4-1">
+    <div class="subsection-title">§4.1 3フェーズの移行モデル</div>
+    <div class="subsection-ref">対応レイヤー: 全レイヤーの通時的設計</div>
+
+    <div class="h5">レイヤー別の権限配分（フェーズ依存）</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>レイヤー</th><th><span class="phase-badge phase-h">H</span></th><th><span class="phase-badge phase-c">C</span></th><th><span class="phase-badge phase-a">A</span></th></tr></thead>
+        <tbody>
+          <tr><td>L1–L3 (組織は何者か)</td><td>人間が全面主導</td><td>AI提案、人間が原則設定</td><td>AI運営、人間は受益者として参加</td></tr>
+          <tr><td>L4–L6 (組織はどう生きるか)</td><td>人間主導、AI支援</td><td>領域別にAI主導が出現</td><td>AI運営、参加機会を構造化</td></tr>
+          <tr><td>L7–L9 (知り、行動し、進化する)</td><td>AI主導、人間がHOTL/HITL</td><td>AIが最終権限を保持</td><td>AI運営</td></tr>
+          <tr><td>L10 (メタガバナンス)</td><td>人間が全権保持</td><td>ソフトシェルのAI自律改定拡大</td><td>ハードコアは不変</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- §4.2 -->
+  <div class="subsection" id="s4-2">
+    <div class="subsection-title">§4.2 権限移行の設計</div>
+    <div class="subsection-ref">対応レイヤー: L2</div>
+
+    <div class="h5">権限移行のトリガー条件（3条件全て必要）</div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">能力条件</div>
+        <div class="card-body">当該領域でAIが人間と同等以上の判断品質を、統計的に有意な期間（最低6ヶ月）にわたり示している。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">安全条件</div>
+        <div class="card-body">権限移行後の最悪ケースシナリオが、人間が保持する停止権・ロールバック権で対処可能。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">正統性条件</div>
+        <div class="card-body">権限移行がステークホルダーの過半数から事前同意を得ている。</div>
+      </div>
+    </div>
+
+    <div class="h5">権限の非対称的回収メカニズム</div>
+    <ul>
+      <li><strong>Sunset clause</strong>: 委譲された権限は定期的に再承認が必要（例: 12ヶ月ごと）</li>
+      <li><strong>Emergency recall</strong>: 重大インシデント時に即時回収</li>
+      <li><strong>Graduated rollback</strong>: A1→A2→A3→A4と自律度を段階的に下げる</li>
+    </ul>
+  </div>
+
+  <!-- §4.3 -->
+  <div class="subsection" id="s4-3">
+    <div class="subsection-title">§4.3 不連続な変化への対応</div>
+    <div class="subsection-ref">対応レイヤー: L10 の非常時設計</div>
+
+    <div class="grid-3">
+      <div class="callout callout-red">
+        <div class="callout-title">サーキットブレーカー</div>
+        <p>AI能力が急激に向上した場合、全権限移行を一時凍結する。最新の権限移行を一段階巻き戻し、Constitutional Conventionを招集。</p>
+      </div>
+      <div class="callout callout-amber">
+        <div class="callout-title">Constitutional Convention</div>
+        <p>ステークホルダーが集まってOSの根本的再設計を行う非常時プロセス。最大3ヶ月、凍結中の運用を継続。</p>
+      </div>
+      <div class="callout callout-blue">
+        <div class="callout-title">Safe Harbor</div>
+        <p>移行期間中に人間が安全に退避できる構造。離脱権の即時行使を保証し、受益権を最低保証する。</p>
+      </div>
+    </div>
+
+    <div class="h5">不確実性への3原則</div>
+    <ol>
+      <li><strong>可逆性の最大化</strong>: 不可逆な決定を可能な限り遅延させる</li>
+      <li><strong>情報の保全</strong>: 「なぜその決定をしたか」の根拠を記録する</li>
+      <li><strong>多様性の維持</strong>: 単一のOS設計に収斂しない</li>
+    </ol>
+  </div>
+
+  <!-- §4.4 -->
+  <div class="subsection" id="s4-4">
+    <div class="subsection-title">§4.4 外部正当性</div>
+    <div class="subsection-ref">対応レイヤー: L1</div>
+
+    <div class="h5">外部正当性の3本柱</div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">透明性</div>
+        <div class="card-body">3層の開示レベル — Public（社会全体）/ Stakeholder（利害関係者）/ Audit（監査機関）。段階的開示が現実的。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">外部監査</div>
+        <div class="card-body">OSの動作が内部で定めた原則に従っているかを外部の独立機関が検証。ハードコアの実効性確認を含む。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">ステークホルダー参加</div>
+        <div class="card-body">3段階の参加権 — 情報アクセス権 / 異議申立権 / 改定参加権。参加権なき透明性は「見せるだけ」。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §4.5 -->
+  <div class="subsection" id="s4-5">
+    <div class="subsection-title">§4.5 組織間接続 — 複数OSが並存する世界</div>
+    <div class="subsection-ref">対応レイヤー: L1 の組織間拡張</div>
+
+    <div class="grid-2">
+      <div class="callout">
+        <div class="callout-title">標準化すべきもの</div>
+        <ul>
+          <li>人間の4権利の最低保証</li>
+          <li>外部監査のプロトコル</li>
+          <li>インシデント報告の形式</li>
+          <li>法規制インターフェース</li>
+        </ul>
+      </div>
+      <div class="callout">
+        <div class="callout-title">多様であるべきもの</div>
+        <ul>
+          <li>内部の権限配分</li>
+          <li>Phase移行の速度</li>
+          <li>業務プロセスの設計</li>
+          <li>AI技術の選択</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>組織を超えた調整は、インターネットプロトコル（TCP/IP）のように、誰も所有しないプロトコルとして設計する。効率のみで競争すると底辺への競争（race to the bottom）になるため、正当性を差別化要因とし、持続可能性を長期生存条件とする。</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- APPENDIX                                           -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="appendix">
+  <div class="section-label">付録</div>
+  <div class="section-title">カバレッジ検証・用語・差分</div>
+
+  <div class="subsection">
+    <div class="subsection-title">付録A: カバレッジ検証マトリクス</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>問い</th><th>主要セクション</th><th>補助セクション</th></tr></thead>
+        <tbody>
+          <tr><td>Q1: 設計空間</td><td>§1.1, §1.2</td><td></td></tr>
+          <tr><td>Q2: 目的と正当性</td><td>§1.3, §2.1, §2.2</td><td></td></tr>
+          <tr><td>Q3: 権力と統治</td><td>§2.1, §2.3, §2.4</td><td>§3.2</td></tr>
+          <tr><td>Q4: 通時的移行</td><td>§1.4, §4.1, §4.2, §4.3</td><td>§2.3</td></tr>
+          <tr><td>Q5: 運用モデル</td><td>§3.1, §3.2, §3.3, §3.6</td><td></td></tr>
+          <tr><td>Q6: 安全・信頼</td><td>§3.4, §4.4</td><td>§3.2, §2.4</td></tr>
+          <tr><td>Q7: 人間の主体性</td><td>§2.2, §3.5</td><td>§1.3</td></tr>
+          <tr><td>Q8: 組織間・社会</td><td>§4.4, §4.5</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">付録B: 用語定義（抜粋）</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>用語</th><th>定義</th></tr></thead>
+        <tbody>
+          <tr><td>OS（組織OS）</td><td>AIが組織を運営し、人間の参加・権利・意味を構造的に保証する多層的秩序</td></tr>
+          <tr><td>Phase H</td><td>Human Sovereignty。人間が最終権限を保持しAI運営基盤を構築する移行出発点</td></tr>
+          <tr><td>Phase C</td><td>Co-Sovereignty。領域別にAI運営を拡大し参加モデルを検証する移行中間段階</td></tr>
+          <tr><td>Phase A</td><td>Algorithmic Sovereignty with Human Participation。設計の目標状態</td></tr>
+          <tr><td>ハードコア</td><td>OSの改定不可能な層。4つの不可譲渡な権利 + 自己言及的保護</td></tr>
+          <tr><td>ソフトシェル</td><td>OSの改定可能な層。定められた手続きに従って変更可能</td></tr>
+          <tr><td>Trust Score</td><td>AIエージェント・業務領域に対する信頼度の定量スコア</td></tr>
+          <tr><td>Composite Risk</td><td>判断・行動に対するリスクの8次元総合評価</td></tr>
+          <tr><td>Autonomy Mode</td><td>A0〜A5の6段階の自律度</td></tr>
+          <tr><td>受益者性</td><td>組織の帰結を最終的に引き受ける存在であること。人間の権威の主要根拠</td></tr>
+          <tr><td>ラバースタンプ問題</td><td>人間が理解できない選択肢を形式的に承認するだけになる問題</td></tr>
+          <tr><td>サーキットブレーカー</td><td>AI能力の急激な向上時に全権限移行を凍結するメカニズム</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">付録C: v1/v2との差分サマリ</div>
+
+    <div class="h5">変更したもの</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>項目</th><th>v1/v2</th><th>v3</th></tr></thead>
+        <tbody>
+          <tr><td>人間の権威の根拠</td><td>能力ベースの暗黙前提</td><td>受益者性・手続的正統性・能力の3原理の複合</td></tr>
+          <tr><td>人間の職能</td><td>6職能（Purpose Owner等）</td><td>4権利 + 3カテゴリ職能</td></tr>
+          <tr><td>権限配分</td><td>レイヤー別に静的に固定</td><td>AI能力レベルの関数として動的に変化</td></tr>
+          <tr><td>設計の時間射程</td><td>Level 4（Phase H相当）のみ</td><td>Phase H / C / Aの全フェーズ</td></tr>
+          <tr><td>主体の前提</td><td>組織がAIを運用する</td><td>AIが組織を運営し人間が参加する</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="h5">追加したもの</div>
+    <ul>
+      <li>メタガバナンスの2層構造（ハードコア/ソフトシェル）</li>
+      <li>改定権の分権設計（提案権・審査権・承認権・拒否権）</li>
+      <li>3フェーズ移行モデル（Phase H / C / A）</li>
+      <li>権限移行のトリガー条件（能力・安全・正統性の3条件）</li>
+      <li>非対称的回収メカニズム（Sunset clause / Emergency recall / Graduated rollback）</li>
+      <li>サーキットブレーカー / Constitutional Convention / Safe Harbor</li>
+      <li>不確実性への3原則（可逆性の最大化・情報の保全・多様性の維持）</li>
+      <li>外部正当性の3本柱（透明性・外部監査・ステークホルダー参加）</li>
+      <li>組織間接続設計（標準化インターフェースとプロトコル層）</li>
+      <li>ラバースタンプ対策 / Deskilling防止設計 / 意味の構造的保証</li>
+    </ul>
+
+    <div class="h5">棄却したもの</div>
+    <ul>
+      <li>「人間にしかできないから人間がやる」という能力ベースの正当化</li>
+      <li>「組織がAIを運用する」という人間主体の前提</li>
+      <li>Level 4を最終設計目標とする暗黙の前提</li>
+      <li>「AIにどこまで任せるか」という自律度の方向</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <span>AGI/ASI時代の組織OS設計 v3 — Rationale Document</span>
+  <span>Canonical core spec: 00-core-ai-native-institution-os-complete-spec.md</span>
+</footer>
+
+<script>
+// Sticky navigation active state
+(function() {
+  const nav = document.getElementById('nav');
+  const links = nav.querySelectorAll('a');
+  const sections = [];
+
+  links.forEach(function(link) {
+    const id = link.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateActive() {
+    let current = sections[0];
+    for (let i = sections.length - 1; i >= 0; i--) {
+      if (sections[i].el.getBoundingClientRect().top <= 80) {
+        current = sections[i];
+        break;
+      }
+    }
+    links.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+})();
+</script>
+</body>
+</html>
