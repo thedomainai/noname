@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>経営管理 × AI — 売上30億・3事業部体制でのケーススタディ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink-1000:#000;--ink-900:#1a1a1a;--ink-800:#2d2d2d;--ink-700:#404040;--ink-600:#525252;
+  --ink-500:#6b6b6b;--ink-400:#8a8a8a;--ink-300:#a3a3a3;--ink-200:#c4c4c4;--ink-100:#e0e0e0;--ink-50:#f0f0f0;
+  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;--slate-400:#94a3b8;
+  --slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;--slate-900:#0f172a;
+  --paper-50:#fdfdfc;--paper-100:#faf9f7;--paper-200:#f8f7f4;--paper-300:#f5f4f0;
+  --ink-blue:#2563eb;--ink-green:#16a34a;--ink-amber:#d97706;--ink-red:#dc2626;
+  --wash-blue:#dbeafe;--wash-green:#dcfce7;--wash-amber:#fef3c7;--wash-red:#fee2e2;
+  --bg-page:var(--paper-50);--bg-surface:var(--paper-100);
+  --text-primary:var(--ink-900);--text-heading:var(--ink-1000);--text-secondary:var(--slate-500);--text-muted:var(--slate-400);
+  --border-default:var(--slate-200);--border-strong:var(--slate-300);
+  --font-serif:'Crimson Pro',Georgia,serif;
+  --font-sans:'Instrument Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-page);line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--slate-200) 1px,transparent 1px),linear-gradient(90deg,var(--slate-200) 1px,transparent 1px);background-size:40px 40px;opacity:.25}
+.slide{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:80px 40px}
+.slide+.slide{border-top:1px solid var(--border-default)}
+.sn{font-family:var(--font-mono);font-size:13px;color:var(--text-muted);letter-spacing:.05em;margin-bottom:8px}
+.d-lg{font-family:var(--font-serif);font-size:60px;font-weight:300;line-height:1.1;letter-spacing:-.02em;color:var(--text-heading)}
+.d-md{font-family:var(--font-serif);font-size:36px;font-weight:400;line-height:1.2;color:var(--text-heading)}
+.h-lg{font-family:var(--font-serif);font-size:28px;font-weight:600;line-height:1.3;color:var(--text-heading)}
+.h-sm{font-family:var(--font-sans);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary)}
+.b-sm{font-size:14px;line-height:1.5;color:var(--text-secondary)}
+.b-md{font-size:15px;line-height:1.7;color:var(--text-secondary)}
+
+/* S1 Hero */
+.hero{text-align:center;padding:120px 40px 100px}
+.hero .d-lg{margin-bottom:16px}
+.hero-sub{font-family:var(--font-serif);font-size:22px;font-weight:300;color:var(--text-secondary);margin-bottom:52px;font-style:italic}
+.badges{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.bg{display:flex;flex-direction:column;align-items:center;padding:16px 28px;border:1px solid var(--border-default);border-radius:8px;background:var(--bg-surface);min-width:140px}
+.bg-v{font-family:var(--font-serif);font-size:22px;font-weight:600;color:var(--text-heading)}
+.bg-l{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-top:4px}
+.hero-ctx{max-width:720px;margin:48px auto 0;text-align:left}
+.hero-ctx ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;margin-bottom:16px}
+.hero-ctx li{font-size:14px;color:var(--text-secondary);padding-left:18px;position:relative}
+.hero-ctx li::before{content:'—';position:absolute;left:0;color:var(--slate-300)}
+
+/* S2 Challenges */
+.ch-hd{text-align:center;margin-bottom:48px}
+.cg-group{margin-bottom:28px}
+.cg-group:last-child{margin-bottom:40px}
+.cg-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:10px;padding-left:4px}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cc{background:var(--slate-50);border:1px solid var(--border-default);border-radius:8px;padding:18px;display:flex;gap:12px;align-items:flex-start;transition:transform .15s,box-shadow .15s}
+.cc:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.cn{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--slate-200);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;color:var(--slate-600);margin-top:2px}
+.ct{font-size:14px;line-height:1.5;color:var(--slate-700);font-weight:600}
+.cd2{font-size:12px;line-height:1.5;color:var(--slate-500);margin-top:6px}
+.rb{background:var(--slate-800);color:#fff;padding:20px 28px;border-radius:8px;text-align:center;font-size:15px;line-height:1.6}
+.rb strong{color:#fbbf24}
+
+/* S3 Logic Map */
+.lw{position:relative}
+.lh{text-align:center;margin-bottom:48px}
+.lg{display:grid;grid-template-columns:1fr 1fr;gap:48px;position:relative}
+.lcl{font-family:var(--font-sans);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:16px}
+.ic{border-radius:10px;padding:22px;margin-bottom:14px;border-left:4px solid;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:box-shadow .2s,transform .15s}
+.ic:hover{box-shadow:0 6px 20px rgba(0,0,0,.08);transform:translateY(-1px)}
+.ic.cb{border-color:var(--ink-blue)}.ic.cg2{border-color:var(--ink-green)}.ic.ca{border-color:var(--ink-amber)}.ic.cr{border-color:var(--ink-red)}
+.il{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.it{font-family:var(--font-serif);font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:6px}
+.id{font-size:13px;color:var(--text-secondary);margin-bottom:10px}
+.ip{display:flex;flex-wrap:wrap;gap:6px}
+.ipl{font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:10px;background:var(--slate-100);color:var(--slate-500)}
+.oc{border-radius:10px;padding:22px;margin-bottom:14px;background:#fff;border:1px solid var(--border-default);box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:box-shadow .2s,transform .15s}
+.oc:hover{box-shadow:0 6px 20px rgba(0,0,0,.08);transform:translateY(-1px)}
+.on{font-family:var(--font-serif);font-size:32px;font-weight:300;color:var(--ink-blue);margin-bottom:4px}
+.ot{font-family:var(--font-serif);font-size:17px;font-weight:600;color:var(--text-heading);margin-bottom:6px}
+.om{font-family:var(--font-mono);font-size:13px;color:var(--ink-blue)}
+.oc-cap{background:var(--slate-900);border:none}
+.oc-cap .on{color:#fbbf24}.oc-cap .ot{color:#fff}.oc-cap .om{color:var(--slate-300)}
+#lmsvg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2}
+#lmsvg path{fill:none;stroke-width:2;opacity:.22;transition:opacity .25s,stroke-width .25s}
+.lw.ha #lmsvg path{opacity:.07}
+.lw.ha #lmsvg path.hl{opacity:.75;stroke-width:3}
+
+/* S4-7 Before/After */
+.bar{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:36px}
+.bp{padding:36px;border-radius:12px;display:flex;flex-direction:column;justify-content:center}
+.bb{background:var(--slate-100)}.ba{background:#fff;border:1px solid var(--border-default)}
+.baw{display:flex;align-items:center;justify-content:center;width:56px;font-size:32px;color:var(--slate-300)}
+.bt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.bb .bt{color:var(--slate-400)}.ba .bt{color:var(--ink-green)}
+.bn{font-family:var(--font-serif);font-weight:300;letter-spacing:-.03em;line-height:1;margin-bottom:8px}
+.bb .bn{font-size:56px;color:var(--slate-600)}
+.ba .bn{font-size:56px}
+.ba.ab .bn{color:var(--ink-blue)}.ba.ag .bn{color:var(--ink-green)}.ba.aa .bn{color:var(--ink-amber)}.ba.ar .bn{color:var(--ink-red)}
+.bd{font-size:15px;color:var(--text-secondary);line-height:1.6}
+.bb .bd{color:var(--slate-500)}
+.ac{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:28px}
+.acd{padding:18px;border-radius:8px;background:#fff;border:1px solid var(--border-default)}
+.aci{width:24px;height:24px;border-radius:50%;background:var(--slate-200);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--slate-600);margin-bottom:6px;flex-shrink:0}
+.act{font-weight:700;font-size:14px;color:var(--text-heading);margin-bottom:4px}
+.acp{font-size:13px;color:var(--text-secondary);line-height:1.4}
+
+/* 変わったこと callout */
+.chg{margin-top:28px;padding:20px 28px;border-radius:8px;border-left:3px solid var(--ink-blue);background:var(--slate-50)}
+.chg-l{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-blue);margin-bottom:8px}
+.chg-t{font-size:14px;color:var(--text-primary);line-height:1.7}
+
+/* Ratio bar */
+.rw{margin:24px 0}
+.rl{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px}
+.rb2{height:32px;border-radius:6px;overflow:hidden;display:flex;background:var(--slate-100)}
+.rai{background:linear-gradient(135deg,var(--ink-blue),#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+.rhu{background:var(--slate-200);display:flex;align-items:center;justify-content:center;color:var(--slate-600);font-size:13px;font-weight:700}
+
+/* Meeting bars */
+.mb{margin:28px 0}
+.mr{display:flex;align-items:center;margin-bottom:14px}
+.ml2{width:80px;flex-shrink:0;font-size:14px;font-weight:600;color:var(--text-secondary)}
+.mt{flex:1;height:52px;display:flex;border-radius:6px;overflow:hidden}
+.ms{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;white-space:nowrap}
+.msr{background:var(--wash-red);color:var(--ink-red)}.msd{background:var(--wash-blue);color:var(--ink-blue)}
+.mm{width:56px;flex-shrink:0;text-align:right;font-family:var(--font-mono);font-size:13px;color:var(--text-muted)}
+
+/* Prep compare */
+.pr{display:flex;align-items:center;justify-content:center;gap:32px;margin:24px 0;padding:24px;background:var(--slate-50);border-radius:10px}
+.pb{text-align:center}
+.pv{font-family:var(--font-serif);font-size:40px;font-weight:300;display:block}
+.pa{font-size:28px;color:var(--slate-300)}
+
+/* Prep table */
+.prep-tbl{margin:24px 0}
+.prep-tbl table{width:100%;border-collapse:collapse}
+.prep-tbl th,.prep-tbl td{padding:10px 14px;text-align:left;font-size:14px;border-bottom:1px solid var(--border-default)}
+.prep-tbl th{font-weight:600;color:var(--text-heading);background:var(--slate-50)}
+.prep-tbl td:last-child{text-align:right;font-family:var(--font-mono);color:var(--text-secondary);white-space:nowrap}
+
+/* Timeline compare (ES) */
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:32px 0}
+.tb{padding:24px;border-radius:10px;text-align:center}
+.tbf{background:var(--slate-100);border:1px solid var(--slate-200)}
+.taf{background:#fff;border:1px solid var(--ink-amber)}
+.tlb{height:8px;border-radius:4px;margin:16px 0}
+.tbf .tlb{background:linear-gradient(90deg,var(--slate-300) 0%,var(--slate-300) 85%,var(--ink-red) 85%,var(--ink-red) 100%)}
+.taf .tlb{background:repeating-linear-gradient(90deg,var(--ink-amber) 0%,var(--ink-amber) 6%,transparent 6%,transparent 10%)}
+
+/* S8 Resource */
+.rt{display:flex;gap:0;margin-bottom:28px}
+.rp{padding:24px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.rp:first-child{border-radius:10px 0 0 10px}.rp:last-child{border-radius:0 10px 10px 0}
+.rn{font-weight:700;font-size:15px;margin-bottom:4px}
+.rd{font-family:var(--font-mono);font-size:13px;margin-bottom:6px}
+.re{font-size:12px;opacity:.8}
+.r1{background:var(--wash-blue);color:var(--ink-blue);flex:2}
+.r2{background:var(--wash-green);color:var(--ink-green);flex:3.5}
+.r3{background:var(--wash-amber);color:var(--ink-amber);flex:8}
+.r4{background:var(--slate-900);color:#fff;flex:6}.r4 .re{color:var(--slate-300)}
+.rc{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:8px;border:2px solid var(--ink-green);background:var(--wash-green);font-weight:700;font-size:15px;color:var(--ink-green)}
+
+/* S9 Changes */
+.c5g{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:24px}
+.c5{padding:28px;border-radius:10px;background:#fff;border:1px solid var(--border-default);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.c5n{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.c5m{font-family:var(--font-serif);font-size:32px;font-weight:300;color:var(--ink-blue);margin-bottom:6px}
+.c5t{font-family:var(--font-serif);font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:8px}
+.c5d{font-size:14px;color:var(--text-secondary);line-height:1.6}
+.c5d p{margin-bottom:10px}.c5d p:last-child{margin-bottom:0}
+.c5-ex{font-size:13px;color:var(--slate-600);background:var(--slate-50);padding:12px 16px;border-radius:6px;margin-top:12px;line-height:1.5}
+.c5-ex strong{color:var(--text-heading);font-weight:600}
+.c5cap{background:var(--slate-900);border:none;padding:36px;text-align:center}
+.c5cap .c5n{color:var(--slate-400)}.c5cap .c5m{color:#fbbf24;font-size:36px}.c5cap .c5t{color:#fff;font-size:20px}.c5cap .c5d{color:var(--slate-300);font-size:15px}
+.c5cap .c5d p{margin-bottom:10px}.c5cap .c5d p:last-child{margin-bottom:0}
+
+/* S10 Closing */
+.clb{background:var(--slate-900);border-radius:16px;padding:80px 60px;text-align:center;max-width:900px;margin:0 auto}
+.cll{font-family:var(--font-serif);font-size:24px;font-weight:300;color:var(--slate-300);line-height:1.8;margin-bottom:24px}
+.cll:last-child{margin-bottom:0}
+.cll em{font-style:normal;color:#fff;font-weight:400}
+.cll strong{color:#fbbf24;font-weight:400}
+
+/* Responsive */
+@media(max-width:768px){
+  .slide{padding:48px 20px}.hero{padding:80px 20px 60px}
+  .d-lg{font-size:38px}.d-md{font-size:28px}
+  .badges{gap:10px}.bg{min-width:100px;padding:12px 16px}.bg-v{font-size:18px}
+  .hero-ctx ul{grid-template-columns:1fr}
+  .cg{grid-template-columns:1fr}
+  .lg{grid-template-columns:1fr;gap:24px}#lmsvg{display:none}
+  .bar{grid-template-columns:1fr}.baw{width:auto;height:40px;transform:rotate(90deg)}
+  .bp{padding:28px 24px}.bb .bn,.ba .bn{font-size:40px}
+  .tc{grid-template-columns:1fr}
+  .rt{flex-direction:column}.rp{border-radius:0!important}.rp:first-child{border-radius:10px 10px 0 0!important}.rp:last-child{border-radius:0 0 10px 10px!important}
+  .c5g{gap:14px}
+  .clb{padding:48px 24px}.cll{font-size:18px}
+  .pr{flex-direction:column;gap:16px}.pa{transform:rotate(90deg)}
+  .prep-tbl td,.prep-tbl th{padding:8px 10px;font-size:13px}
+}
+@media print{
+  body::before{display:none}.slide{page-break-inside:avoid;padding:40px 20px}
+  .clb,.rb,.r4,.oc-cap,.c5cap{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- S1: Hero -->
+<section class="slide hero" id="s1">
+  <div class="d-lg">経営管理 &times; AI</div>
+  <div class="hero-sub">売上30億・3事業部体制でのケーススタディ</div>
+  <div class="badges">
+    <div class="bg"><div class="bg-v">30億</div><div class="bg-l">売上規模</div></div>
+    <div class="bg"><div class="bg-v">3</div><div class="bg-l">事業部数</div></div>
+    <div class="bg"><div class="bg-v">経営企画</div><div class="bg-l">対象機能</div></div>
+    <div class="bg"><div class="bg-v">少人数</div><div class="bg-l">チーム規模</div></div>
+    <div class="bg"><div class="bg-v">~6ヶ月</div><div class="bg-l">導入期間</div></div>
+  </div>
+  <div class="hero-ctx">
+    <div class="h-sm" style="margin-bottom:10px;text-align:center">経営管理機能（経営企画寄り）の担当業務</div>
+    <ul>
+      <li>全社・事業部別のKPI策定と運用</li>
+      <li>年次予算策定と期中見直し</li>
+      <li>エクイティストーリーの構築・更新</li>
+      <li>各事業部との月次定例の設計・運営</li>
+    </ul>
+    <div class="b-sm" style="text-align:center">経営管理の実働は少人数。やるべきことは明確だが、手が回らないものが常に積み残されていた。</div>
+  </div>
+</section>
+
+<!-- S2: 9 Challenges -->
+<section class="slide" id="s2">
+  <div class="sn">02</div>
+  <div class="ch-hd">
+    <div class="d-md" style="margin-bottom:12px">やるべきだとわかっていた。手が回らなかった。</div>
+    <div class="b-sm">経営管理として当然やるべきだとわかっていながら、手が回らずに放置されていた業務の一覧。<br>高度な分析の話ではない。<strong style="color:var(--text-heading)">どれも経営管理の基本動作</strong>であり、できていないこと自体が問題だった。</div>
+  </div>
+  <div class="cg-group">
+    <div class="cg-label">月次決算・予算管理</div>
+    <div class="cg">
+      <div class="cc"><div class="cn">1</div><div><div class="ct">月次の数字を月初5営業日以内に揃える</div><div class="cd2">各事業部がバラバラのExcelで報告。統合・突合に時間がかかり、経営会議に間に合わない月がある</div></div></div>
+      <div class="cc"><div class="cn">2</div><div><div class="ct">予実差異に「なぜ」をつける</div><div class="cd2">「売上未達 △800万」は出せるが、その原因（案件ズレ？単価下落？件数減？）まで毎月掘る余力がない</div></div></div>
+      <div class="cc"><div class="cn">3</div><div><div class="ct">予算の前提条件を文書で残す</div><div class="cd2">作った本人の頭の中にしかない。半年後に「この数字の根拠は？」と聞かれて誰も答えられない</div></div></div>
+      <div class="cc"><div class="cn">6</div><div><div class="ct">月次着地見通しを出す</div><div class="cd2">年初予算は作るが、期中に「今期どこに着地しそうか」を月次で更新する運用がない。聞かれてから慌てて計算する</div></div></div>
+    </div>
+  </div>
+  <div class="cg-group">
+    <div class="cg-label">会議体・レポーティング</div>
+    <div class="cg">
+      <div class="cc"><div class="cn">4</div><div><div class="ct">会議の決定事項を翌月に追跡する</div><div class="cd2">議事録は書く。が、前回のアクションアイテムを次回冒頭で確認する習慣がなく、決めっぱなし</div></div></div>
+      <div class="cc"><div class="cn">5</div><div><div class="ct">3事業部の報告フォーマットを統一する</div><div class="cd2">各部が独自フォーマットで出してくる。毎月手作業で統一形式に転記している</div></div></div>
+      <div class="cc"><div class="cn">7</div><div><div class="ct">取締役会資料を効率的に作る</div><div class="cd2">毎回、前回資料をコピーして数字を差し替え、体裁を直す作業。構造は同じなのに毎回2日かかる</div></div></div>
+      <div class="cc"><div class="cn">8</div><div><div class="ct">事業部長に会議前に論点を共有する</div><div class="cd2">会議の場で初めて数字を見せる。事業部長も準備なしで臨むため、その場で答えられない質問が飛ぶ</div></div></div>
+    </div>
+  </div>
+  <div class="cg-group">
+    <div class="cg-label">外部環境</div>
+    <div class="cg">
+      <div class="cc"><div class="cn">9</div><div><div class="ct">競合の動きを定期的に整理する</div><div class="cd2">IR直前に慌てて調べる。普段は誰も追っていない</div></div></div>
+    </div>
+  </div>
+  <div class="rb">これらは「怠慢」ではない。<strong>少人数の経営管理チームが、目の前の締め切りを優先した結果、構造的に後回しになっていた</strong>ものである。どの会社でも起きている。</div>
+</section>
+
+<!-- S3: Logic Map -->
+<section class="slide" id="s3">
+  <div class="sn">03</div>
+  <div class="lh">
+    <div class="d-md" style="margin-bottom:8px">全体ロジックマップ</div>
+    <div class="b-sm">4つの施策が9つの課題を解決し、5つの本質的変化を生んだ</div>
+  </div>
+  <div class="lw" id="lw">
+    <svg id="lmsvg"></svg>
+    <div class="lg">
+      <div id="li">
+        <div class="lcl">4 Initiatives</div>
+        <div class="ic cb" data-i="1" data-o="2">
+          <div class="il">施策 01</div><div class="it">KPI策定</div>
+          <div class="id">財務KPIだけ → 先行指標を含む多層KPI</div>
+          <div class="ip"><span class="ipl">#2</span></div>
+        </div>
+        <div class="ic cg2" data-i="2" data-o="2,4">
+          <div class="il">施策 02</div><div class="it">予算策定</div>
+          <div class="id">年1回の大作業 → 月次ローリングフォーキャスト</div>
+          <div class="ip"><span class="ipl">#3</span><span class="ipl">#6</span></div>
+        </div>
+        <div class="ic ca" data-i="3" data-o="4">
+          <div class="il">施策 03</div><div class="it">エクイティストーリー</div>
+          <div class="id">資金調達時に急いで作る → 常時アップデート</div>
+          <div class="ip"><span class="ipl">#9</span></div>
+        </div>
+        <div class="ic cr" data-i="4" data-o="1,3">
+          <div class="il">施策 04</div><div class="it">月次定例</div>
+          <div class="id">報告会 → 意思決定会議</div>
+          <div class="ip"><span class="ipl">#1</span><span class="ipl">#2</span><span class="ipl">#4</span><span class="ipl">#5</span><span class="ipl">#7</span><span class="ipl">#8</span></div>
+        </div>
+        <div style="text-align:center;margin-top:8px"><span class="b-sm" style="font-style:italic">全4施策 → 変化5: 凡事徹底</span></div>
+      </div>
+      <div id="lo">
+        <div class="lcl">5 Outcomes</div>
+        <div class="oc" data-oc="1"><div class="on">1</div><div class="ot">会議の時間配分が変わった</div><div class="om">報告75% → 12.5% / 判断数2〜3倍</div></div>
+        <div class="oc" data-oc="2"><div class="on">2</div><div class="ot">検知が「事後」→「兆候」に</div><div class="om">月次→週次粒度 / リードタイム12ヶ月分</div></div>
+        <div class="oc" data-oc="3"><div class="on">3</div><div class="ot">仕事が「集計」→「解釈」に</div><div class="om">集計7:解釈3 → 集計3:解釈7</div></div>
+        <div class="oc" data-oc="4"><div class="on">4</div><div class="ot">記憶が「個人の頭」→「文書」に</div><div class="om">追加コストゼロの記録習慣</div></div>
+        <div class="oc oc-cap" data-oc="5"><div class="on">5</div><div class="ot">当たり前のことが当たり前にできる</div><div class="om">凡事徹底 = 競争力</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S4: KPI -->
+<section class="slide" id="s4">
+  <div class="sn">04 — 施策 1</div>
+  <div class="h-lg" style="margin-bottom:4px">KPI策定</div>
+  <div class="b-sm" style="margin-bottom:32px">「財務KPIだけ」→「先行指標を含む多層KPI」</div>
+  <div class="bar">
+    <div class="bp bb">
+      <div class="bt">Before</div>
+      <div class="bn">3指標</div>
+      <div class="bd">各事業部の売上・粗利・営業利益の3指標が中心。月次で実績を集計し、予算比・前年比を出す。それ以上の分析は、問題が顕在化してから個別にExcelで掘る作業だった。<br><br>先行指標（パイプライン件数、商談進捗率、顧客継続率等）は「追いたいが、データ収集コストが高すぎる」として後回しにされていた。</div>
+    </div>
+    <div class="baw">&#x2192;</div>
+    <div class="bp ba ab">
+      <div class="bt" style="color:var(--ink-blue)">After</div>
+      <div class="bn">8-10指標</div>
+      <div class="bd">追跡KPIが事業部あたり3指標→8〜10指標に拡張。増えたのは主に先行指標で、「問題が顕在化する前に兆候を検知する」体制に移行。<br><br>データ収集の統合設計に約2週間、相関分析のプロンプト設計に1週間。月次運用はAIが下書きしたレポートを人間がレビュー・修正する形で、月次2〜3時間で回っている。</div>
+    </div>
+  </div>
+  <div class="h-sm" style="margin-bottom:12px">AIが担うこと</div>
+  <div class="ac">
+    <div class="acd"><div class="aci">1</div><div class="act">データソース統合</div><div class="acp">各事業部のデータソース（SFA、会計ソフト、スプレッドシート）から月次データを収集・統合する定型プロセスの設計</div></div>
+    <div class="acd"><div class="aci">2</div><div class="act">相関分析</div><div class="acp">財務KPIと先行指標の相関分析（どの先行指標が3ヶ月後の売上と相関するか）</div></div>
+    <div class="acd"><div class="aci">3</div><div class="act">異常値検知</div><div class="acp">前月比で有意に変動した指標のフラグ立て</div></div>
+  </div>
+  <div class="chg">
+    <div class="chg-l">変わったこと</div>
+    <div class="chg-t">経営会議で「なぜ？」の議論が始まる前に、先行指標の変動として兆候が見えるようになった。事後対処から事前検知への転換。</div>
+  </div>
+</section>
+
+<!-- S5: Budget -->
+<section class="slide" id="s5">
+  <div class="sn">05 — 施策 2</div>
+  <div class="h-lg" style="margin-bottom:4px">予算策定</div>
+  <div class="b-sm" style="margin-bottom:32px">「年1回の大作業」→「月次ローリングフォーキャスト」</div>
+  <div class="bar">
+    <div class="bp bb">
+      <div class="bt">Before</div>
+      <div class="bn">3ヶ月</div>
+      <div class="bd">年次予算は10月から12月にかけて約3ヶ月かけて策定。各事業部からボトムアップで数字を集め、全社で調整し、取締役会で承認。期中の見直しは半期に1回が限界。<br><br>予算が3ヶ月で陳腐化する。市場環境が変わっても予算の前提は固定されたまま。「予算比」の数字が経営判断の参考にならない状態が常態化。ローリングフォーキャストの導入は何度も検討されたが、月次で3事業部のフォーキャストを更新する工数を考えると現実的でなかった。</div>
+    </div>
+    <div class="baw">&#x2192;</div>
+    <div class="bp ba ag">
+      <div class="bt" style="color:var(--ink-green)">After</div>
+      <div class="bn">半日</div>
+      <div class="bd">月次フォーキャスト更新にかかる時間が、ゼロベースで作る場合の推定3日→半日に短縮。AIが80%の下書きを作り、人間が20%の判断を入れる構造。人間は「これは違う」という部分だけ修正する（例: 大型案件のクロージング時期のズレ、価格改定の影響等）。</div>
+    </div>
+  </div>
+  <div class="rw">
+    <div class="rl"><span style="color:var(--ink-blue)">AI &mdash; 80%</span><span style="color:var(--slate-600)">人間 &mdash; 20%</span></div>
+    <div class="rb2"><div class="rai" style="width:80%">トレンド + 季節性 + 既知イベント</div><div class="rhu" style="width:20%">判断・修正</div></div>
+  </div>
+  <div class="ac" style="margin-top:28px">
+    <div class="acd"><div class="aci">1</div><div class="act">残月フォーキャスト自動更新</div><div class="acp">月次実績が確定した時点で、直近トレンド＋季節性＋既知のイベントを考慮してAIが残月のフォーキャストを自動更新</div></div>
+    <div class="acd"><div class="aci">2</div><div class="act">乖離フラグ</div><div class="acp">予算との乖離が一定幅を超えた項目は自動でフラグが立ち、コメント入力を求める</div></div>
+    <div class="acd"><div class="aci">3</div><div class="act">前提条件の文書化</div><div class="acp">「作った人の頭の中」にしかなかった予算の前提条件を構造化して記録</div></div>
+  </div>
+  <div class="chg">
+    <div class="chg-l">変わったこと</div>
+    <div class="chg-t">「年次予算 vs 実績」ではなく「最新フォーキャスト vs 実績」で議論できるようになった。年度末に「予算未達だが年初の前提が間違っていた」という不毛な議論がなくなる。</div>
+  </div>
+</section>
+
+<!-- S6: Equity Story -->
+<section class="slide" id="s6">
+  <div class="sn">06 — 施策 3</div>
+  <div class="h-lg" style="margin-bottom:4px">エクイティストーリー</div>
+  <div class="b-sm" style="margin-bottom:32px">「資金調達時に急いで作る」→「常時アップデート」</div>
+  <div class="bar">
+    <div class="bp bb">
+      <div class="bt">Before</div>
+      <div class="bn">2-3週間</div>
+      <div class="bd">資金調達ラウンドの直前に集中的に作成。市場データの収集、競合分析、自社の成長ストーリーの整合性チェック、財務モデルの更新を2〜3週間で一気にやる。<br><br>問題は2つ。調達が終わると更新が止まり、半年後には現実と乖離する。急いで作るため、市場データが浅い（1〜2日で集められる範囲に限定される）。</div>
+    </div>
+    <div class="baw">&#x2192;</div>
+    <div class="bp ba aa">
+      <div class="bt" style="color:var(--ink-amber)">After</div>
+      <div class="bn">1-2日</div>
+      <div class="bd">エクイティストーリー本体の書き換えは人間が行うが、「書き換えるべき箇所」の特定と、書き換えに必要な材料の収集がAIで自動化された。常に「半完成品」が手元にある状態。<br><br>投資家や取締役から突然「最新の市場環境を踏まえた事業計画の見通しは？」と聞かれても、1〜2日で更新版を出せる。</div>
+    </div>
+  </div>
+  <div class="tc">
+    <div class="tb tbf"><div class="h-sm" style="margin-bottom:8px">Before: 調達直前に集中</div><div class="tlb"></div><div class="b-sm">普段は放置 → 調達前に2〜3週間の突貫</div></div>
+    <div class="tb taf"><div class="h-sm" style="margin-bottom:8px;color:var(--ink-amber)">After: 常時アップデート</div><div class="tlb"></div><div class="b-sm">月次で競合・市場を自動収集 → 常に鮮度維持</div></div>
+  </div>
+  <div class="h-sm" style="margin-bottom:12px">AIが担うこと</div>
+  <div class="ac">
+    <div class="acd"><div class="aci">1</div><div class="act">競合情報の月次収集・要約</div><div class="acp">競合の公開情報（プレスリリース、決算情報、採用動向）を月次で収集・要約</div></div>
+    <div class="acd"><div class="aci">2</div><div class="act">市場データ定点観測</div><div class="acp">市場規模・成長率の推計に使う公開データの定点観測。TAM/SAMの推移を自動追跡</div></div>
+    <div class="acd"><div class="aci">3</div><div class="act">自社KPIとの突合</div><div class="acp">自社KPI実績をエクイティストーリーの前提と突合し、乖離が出た箇所をフラグ</div></div>
+  </div>
+  <div class="chg">
+    <div class="chg-l">変わったこと</div>
+    <div class="chg-t">投資家や取締役から突然「最新の市場環境を踏まえた事業計画の見通しは？」と聞かれても、1〜2日で更新版を出せる状態になった。以前は2〜3週間かかっていた。常に「半完成品」が手元にある状態。</div>
+  </div>
+</section>
+
+<!-- S7: Monthly Meeting -->
+<section class="slide" id="s7">
+  <div class="sn">07 — 施策 4</div>
+  <div class="h-lg" style="margin-bottom:4px">月次定例</div>
+  <div class="b-sm" style="margin-bottom:32px">「報告会」→「意思決定会議」</div>
+
+  <div class="h-sm" style="margin-bottom:12px">準備の内訳（Before）</div>
+  <div class="prep-tbl">
+    <table>
+      <thead><tr><th>作業</th><th>所要時間</th></tr></thead>
+      <tbody>
+        <tr><td>各事業部からの数字収集・突合</td><td>1日</td></tr>
+        <tr><td>全社サマリ資料の作成</td><td>1日</td></tr>
+        <tr><td>前月比・予算比の差異分析コメント作成</td><td>0.5〜1日</td></tr>
+        <tr><td>資料のフォーマット調整・体裁整え</td><td>0.5日</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="b-md" style="margin-bottom:32px">会議自体は2時間。そのうち<strong style="color:var(--text-heading)">1時間30分が「何が起きたか」の報告</strong>、残り30分が「どうするか」の議論。報告に時間を使いすぎて、意思決定の時間が常に不足していた。さらに、前回会議で決まったアクションアイテムが追跡されないまま次の会議を迎えることが常態化。事業部長には会議の場で初めて数字を見せるため、その場で答えられない質問が飛び、「持ち帰り」が増える悪循環だった。</div>
+
+  <div class="h-sm" style="margin-bottom:16px">会議2時間の使い方</div>
+  <div class="mb">
+    <div class="mr"><div class="ml2">Before</div><div class="mt"><div class="ms msr" style="flex:90">報告 90分</div><div class="ms msd" style="flex:30">議論 30分</div></div><div class="mm">2h</div></div>
+    <div class="mr"><div class="ml2">After</div><div class="mt"><div class="ms msr" style="flex:15">15分</div><div class="ms msd" style="flex:105">議論・意思決定 105分</div></div><div class="mm">2h</div></div>
+  </div>
+  <div class="pr">
+    <div class="pb"><div class="h-sm">準備時間</div><span class="pv" style="color:var(--slate-500)">3-4日</span></div>
+    <div class="pa">&#x2192;</div>
+    <div class="pb"><div class="h-sm" style="color:var(--ink-red)">準備時間</div><span class="pv" style="color:var(--ink-red)">1-1.5日</span><div class="b-sm">AIが集計・下書き → 人間はレビューのみ</div></div>
+  </div>
+  <div class="h-sm" style="margin-bottom:12px;margin-top:32px">AIが担うこと</div>
+  <div class="ac">
+    <div class="acd"><div class="aci">1</div><div class="act">集計・統一フォーマット</div><div class="acp">数字の集計・突合・前月比/予算比の算出を自動化し、3事業部の報告を統一フォーマットで出力</div></div>
+    <div class="acd"><div class="aci">2</div><div class="act">差異コメント下書き</div><div class="acp">差異の大きい項目に対するコメント下書き（「売上が前月比-8%。主因はBU-2のX案件の失注（△2,000万円）と推定」）</div></div>
+    <div class="acd"><div class="aci">3</div><div class="act">アクション追跡</div><div class="acp">前回定例のアクションアイテム一覧と進捗状況を自動整理し、未完了項目をフラグ</div></div>
+    <div class="acd"><div class="aci">4</div><div class="act">論点サマリ事前配布</div><div class="acp">事業部別の論点サマリを生成し、会議2日前に事業部長へ事前配布（「今月の主要論点: BU-1は粗利率改善の施策効果検証、BU-3は新規案件パイプラインの質」）</div></div>
+  </div>
+  <div class="b-md" style="margin-top:24px">人間が担うのは、AIの分析の妥当性チェック（数字の裏にある文脈はAIにはわからない）、論点の優先順位づけ（「今月はBU-2の失注分析を重点的に議論する」）、会議のファシリテーションである。</div>
+  <div class="b-sm" style="margin-top:16px;text-align:center">レポートテンプレートの設計に約1週間、最初の2ヶ月はAI出力を全項目チェックして精度を上げた。現在はレビュー中心で回っている。</div>
+  <div class="chg">
+    <div class="chg-l">変わったこと</div>
+    <div class="chg-t">会議の構造が根本から変わった。事前に論点付きレポートが配布されるため、会議冒頭の報告が15分で済み、残り1時間45分が意思決定と議論に充てられる。同じ2時間でも、中身が報告から意思決定に変わった。</div>
+  </div>
+</section>
+
+<!-- S8: Resource Timeline -->
+<section class="slide" id="s8">
+  <div class="sn">08</div>
+  <div class="h-lg" style="margin-bottom:4px">投入リソース</div>
+  <div class="b-sm" style="margin-bottom:36px">4フェーズで段階的に構築。初期の設計〜構築フェーズで集中的に時間を使うが、外部ツールの大規模導入やシステム開発は不要</div>
+  <div class="rt">
+    <div class="rp r1"><div class="rn">設計</div><div class="rd">2週間</div><div class="re">フルタイム1名<br>業務棚卸し・AIで代替可能な範囲の特定・データフロー設計</div></div>
+    <div class="rp r2"><div class="rn">構築</div><div class="rd">3〜4週間</div><div class="re">フルタイム1名<br>プロンプト設計・データ連携・テンプレート作成</div></div>
+    <div class="rp r3"><div class="rn">並走</div><div class="rd">2ヶ月</div><div class="re">月20h（通常業務と並行）<br>AIの出力を人間がチェックしながら精度を上げる</div></div>
+    <div class="rp r4"><div class="rn">定常運用</div><div class="rd">継続中</div><div class="re">月15〜20h（従来比40%減）<br>AIが下書き → 人間がレビュー・修正</div></div>
+  </div>
+  <div style="text-align:center">
+    <div class="rc">システム開発不要。既存ツール + AI。</div>
+    <div class="b-sm" style="margin-top:12px">既存のデータソース（会計ソフト、SFA、スプレッドシート）とAIの組み合わせで成立する</div>
+  </div>
+</section>
+
+<!-- S9: 5 Changes -->
+<section class="slide" id="s9">
+  <div class="sn">09</div>
+  <div class="d-md" style="margin-bottom:8px">5つの変化</div>
+  <div class="b-sm" style="margin-bottom:40px">工数が減ったこと自体は副次的な成果。ツール導入の先にある、仕事の構造そのものの変化</div>
+  <div class="c5g">
+    <div class="c5">
+      <div class="c5n">変化 01</div>
+      <div class="c5m">2〜3倍</div>
+      <div class="c5t">経営者の会議での時間の使い方が変わった</div>
+      <div class="c5d">
+        <p>以前の月次定例は、最初の1時間半が「何が起きたか」の報告だった。事業部長が数字を説明し、経営者が質問し、その場で原因を推測する。議論が白熱するのは大抵「なぜこの数字なのか」という事実確認であって、「だからどうするか」という意思決定ではなかった。</p>
+        <p>今は事前に論点付きレポートが配布されるため、会議が始まる時点で全員が数字と主要な差異の原因を把握している。会議冒頭の報告は15分で済み、残りの時間が意思決定に使われるようになった。</p>
+        <div class="c5-ex"><strong>経営者にとって一番貴重なのは時間</strong>。同じ2時間の会議でも、中身が報告から意思決定に変わることで、会議1回あたりに下せる判断の数が体感で2〜3倍になった。</div>
+      </div>
+    </div>
+    <div class="c5">
+      <div class="c5n">変化 02</div>
+      <div class="c5m">12ヶ月分</div>
+      <div class="c5t">問題の検知が「事後」から「兆候」に変わった</div>
+      <div class="c5d">
+        <p>以前は、売上が落ちたことを月次の数字で知る。知った時点で、その月はもう終わっている。問題の発生から対処開始まで最短でも1ヶ月のタイムラグがあった。</p>
+        <p>今は月次の着地見通しが常に更新されているため、月の半ばで「今月の着地が予算を下回りそうだ」という兆候が見える。これは「速くなった」のではない。以前は構造的に不可能だったことが可能になった。</p>
+        <div class="c5-ex">問題を1ヶ月早く検知して対処を始められるなら、年間12回の月次サイクルで<strong>12ヶ月分の対処リードタイム</strong>が生まれる。</div>
+      </div>
+    </div>
+    <div class="c5">
+      <div class="c5n">変化 03</div>
+      <div class="c5m">7:3 → 3:7</div>
+      <div class="c5t">経営管理の仕事が「集計」→「解釈」に変わった</div>
+      <div class="c5d">
+        <p>以前の経営管理担当の1週間を振り返ると、工数の7割はデータを集める・揃える・転記する・フォーマットを整える作業だった。残りの3割で分析や資料の中身を考える。しかし3割では深い分析はできず、「数字を並べて簡単なコメントを付ける」レベルで精一杯だった。</p>
+        <p>今はデータ収集・集計・フォーマット整備をAIが担うことで、人間の時間の7割が「この数字をどう解釈するか」「経営者に何を提言するか」に使えるようになった。</p>
+        <div class="c5-ex"><strong>以前:</strong> 3事業部のExcelを1つのフォーマットに転記する作業に半日<br><strong>今:</strong> 転記はAIが済ませた状態で、「BU-1の粗利率が3ヶ月連続で下がっている。原因は原価上昇か、値引きの増加か、ミックスの変化か」を考える時間に半日を使う</div>
+      </div>
+    </div>
+    <div class="c5">
+      <div class="c5n">変化 04</div>
+      <div class="c5m">コスト0</div>
+      <div class="c5t">組織の記憶が「個人の頭」→「文書」に移った</div>
+      <div class="c5d">
+        <p>以前は、多くの重要情報が特定の人の記憶に依存していた。予算の前提条件は作った人しか知らない。先月の会議で何が決まったかは議事録にあるが探すのに時間がかかる。人が異動したり退職したりすると、この記憶は失われる。</p>
+        <p>AIを使ったプロセスでは、予算の前提条件、差異分析の理由、会議のアクションアイテムと進捗がすべて構造的に記録される。AIがレポートを生成する過程で、記録すること自体が業務フローに組み込まれたため、「記録する手間」が追加コストとして発生しない。</p>
+        <div class="c5-ex">半年前の取締役会で「来期は新規事業に投資する方針」と決まっていたのに、予算にそれが反映されていない——こうした<strong>「決めたのに忘れた」問題が構造的に起きにくくなった</strong>。</div>
+      </div>
+    </div>
+  </div>
+  <div class="c5cap c5">
+    <div class="c5n">変化 05 — 全施策の帰結</div>
+    <div class="c5m">凡事徹底</div>
+    <div class="c5t">当たり前のことが当たり前にできるようになった</div>
+    <div class="c5d">
+      <p>冒頭の「やれていなかったこと」の一覧を見返してほしい。どれも経営管理の基本動作である。やっていなかったのは、知らなかったからではなく、やるコストが人手に見合わなかったからだ。少人数のチームで月次の締めを回すだけで手一杯で、基本動作に充てる余力が残らなかった。</p>
+      <p>AIがこの状況を変えた。単純作業のコストが下がったことで、基本動作に手が回るようになった。</p>
+      <p>当たり前のことを当たり前にやっている会社は驚くほど少ない。月次の数字が月初5営業日以内に揃い、予実差異に毎月理由がつき、会議の決定事項が翌月に追跡され、予算の前提が文書として残っている会社——これだけのことがすべてできている30億円規模の会社は、体感では2割もない。</p>
+      <p><strong style="color:#fbbf24">だからこそ、基本動作の徹底はそれ自体が競争力になる。</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- S10: Closing -->
+<section class="slide" id="s10">
+  <div class="clb">
+    <div class="cll">当たり前のことを当たり前にやっている会社は<br><em>驚くほど少ない。</em></div>
+    <div class="cll">30億円規模でこれが全てできている会社は<br><em>体感で2割もない。</em></div>
+    <div class="cll" style="margin-top:40px"><strong>凡事徹底を可能にした</strong>、というのが<br>AI導入の最も本質的な成果である。</div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var C=[
+    {i:'1',o:'2',c:'#2563eb'},{i:'2',o:'2',c:'#16a34a'},{i:'2',o:'4',c:'#16a34a'},
+    {i:'3',o:'4',c:'#d97706'},{i:'4',o:'1',c:'#dc2626'},{i:'4',o:'3',c:'#dc2626'}
+  ];
+  function draw(){
+    var w=document.getElementById('lw'),s=document.getElementById('lmsvg');
+    if(!w||!s||getComputedStyle(s).display==='none')return;
+    var r=w.getBoundingClientRect();
+    s.setAttribute('width',r.width);s.setAttribute('height',r.height);
+    s.setAttribute('viewBox','0 0 '+r.width+' '+r.height);s.innerHTML='';
+    C.forEach(function(cn){
+      var a=w.querySelector('.ic[data-i="'+cn.i+'"]'),b=w.querySelector('.oc[data-oc="'+cn.o+'"]');
+      if(!a||!b)return;
+      var ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();
+      var x1=ar.right-r.left,y1=ar.top+ar.height/2-r.top,x2=br.left-r.left,y2=br.top+br.height/2-r.top;
+      var cp=(x1+x2)/2;
+      var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d','M '+x1+' '+y1+' C '+cp+' '+y1+', '+cp+' '+y2+', '+x2+' '+y2);
+      p.setAttribute('stroke',cn.c);p.dataset.i=cn.i;p.dataset.o=cn.o;s.appendChild(p);
+    });
+  }
+  var W=document.getElementById('lw');
+  if(W){
+    W.addEventListener('mouseover',function(e){
+      var cd=e.target.closest('.ic,.oc');if(!cd)return;
+      W.classList.add('ha');var svg=document.getElementById('lmsvg');
+      if(cd.classList.contains('ic')){
+        var ii=cd.dataset.i;
+        svg.querySelectorAll('path').forEach(function(p){if(p.dataset.i===ii)p.classList.add('hl')});
+        (cd.dataset.o||'').split(',').forEach(function(o){
+          var oc=W.querySelector('.oc[data-oc="'+o+'"]');
+          if(oc)oc.style.boxShadow='0 0 0 2px '+getComputedStyle(cd).borderLeftColor;
+        });
+      }else{
+        var oi=cd.dataset.oc;
+        svg.querySelectorAll('path').forEach(function(p){if(p.dataset.o===oi)p.classList.add('hl')});
+      }
+    });
+    W.addEventListener('mouseout',function(e){
+      var cd=e.target.closest('.ic,.oc');if(!cd)return;
+      W.classList.remove('ha');var svg=document.getElementById('lmsvg');
+      svg.querySelectorAll('path.hl').forEach(function(p){p.classList.remove('hl')});
+      W.querySelectorAll('.oc').forEach(function(c){c.style.boxShadow=''});
+    });
+  }
+  window.addEventListener('load',draw);
+  var t;window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(draw,80)});
+  if(document.fonts)document.fonts.ready.then(draw);
+})();
+</script>
+</body>
+</html>

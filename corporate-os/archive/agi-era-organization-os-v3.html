@@ -93,7 +93,7 @@ body {
 
 /* ── Header ── */
 .page-header {
-  max-width: 1120px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 96px 48px 48px;
 }
@@ -155,7 +155,7 @@ body {
   border-bottom: 1px solid var(--border-default);
 }
 .sticky-nav-inner {
-  max-width: 1120px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 48px;
   display: flex;
@@ -185,7 +185,7 @@ body {
 
 /* ── Main Content ── */
 .main-content {
-  max-width: 1120px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 48px 96px;
 }
@@ -527,9 +527,190 @@ li strong { color: var(--ink-800); }
   color: var(--text-secondary);
 }
 
+/* ── Goal Structure Diagram ── */
+.goal-structure {
+  margin: 24px 0;
+}
+.goal-layer {
+  position: relative;
+  padding: 16px 20px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  margin-bottom: 0;
+}
+.goal-layer + .goal-connector {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+.goal-connector .arrow-down {
+  width: 1.5px;
+  height: 20px;
+  background: var(--ink-300);
+  position: relative;
+}
+.goal-connector .arrow-down::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: -4px;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-top: 6px solid var(--ink-300);
+}
+.goal-layer-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.goal-layer-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.goal-layer-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.goal-conditions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+.goal-condition-item {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-recessed);
+  text-align: center;
+}
+.goal-condition-item .cond-keyword {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+.goal-condition-item .cond-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ── 4-Part Logic Diagram ── */
+.four-part-rationale {
+  margin: 24px 0;
+  padding: 24px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+}
+.four-part-rationale .rationale-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.four-part-rationale .rationale-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+.four-part-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.four-part-cell {
+  padding: 16px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-recessed);
+  position: relative;
+}
+.four-part-cell .cell-num {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--ink-200);
+  position: absolute;
+  top: 8px;
+  right: 12px;
+}
+.four-part-cell .cell-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.four-part-cell .cell-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+}
+.four-part-cell .cell-q {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.four-part-dep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  padding: 4px 0;
+}
+.four-part-dep .dep-arrow {
+  color: var(--ink-300);
+  flex-shrink: 0;
+}
+.goal-mapping {
+  margin-top: 20px;
+}
+.goal-mapping-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--border-default);
+}
+.goal-mapping-row:last-child { border-bottom: none; }
+.goal-mapping-key {
+  font-weight: 600;
+  color: var(--text-heading);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+.goal-mapping-val {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .goal-conditions { flex-direction: column; }
+  .four-part-grid { grid-template-columns: 1fr; }
+  .goal-mapping-row { flex-direction: column; gap: 2px; }
+  .goal-mapping-key { min-width: unset; }
+}
+
 /* ── Footer ── */
 .page-footer {
-  max-width: 1120px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 24px 48px;
   border-top: 1px solid var(--border-default);
@@ -592,48 +773,115 @@ li strong { color: var(--ink-800); }
     <p>AGI/ASI時代において、AIが主要な知的主体として組織を運営し、人間がその参加者として安全・持続可能・正当に共存できる状態を設計・実現する。</p>
   </blockquote>
 
-  <p>このゴールは5つの要素から成る。「AGI/ASI時代において」は設計の時間的射程を、「AIが主要な知的主体として組織を運営し」はAIと人間の関係を、「安全に」は技術・制度的な安全設計を、「持続可能に」は人間と組織の長期的存続を、「正当に」は内外の正統性を規定する。</p>
+  <p>このゴールは5つの要素から成る。これら全てに対して構造的な解を提供するのが本ドキュメントの目的である。</p>
+
+  <div class="goal-structure">
+    <div class="goal-layer">
+      <div class="goal-layer-label">時間的射程 — いつ</div>
+      <div class="goal-layer-title">AGI/ASI時代において</div>
+    </div>
+    <div class="goal-connector"><div class="arrow-down"></div></div>
+    <div class="goal-layer">
+      <div class="goal-layer-label">主体と関係 — だれが・どう</div>
+      <div class="goal-layer-title">AIが主要な知的主体として組織を運営し</div>
+      <div class="goal-layer-desc">AIが運営主体、人間が参加者</div>
+    </div>
+    <div class="goal-connector"><div class="arrow-down"></div></div>
+    <div class="goal-layer">
+      <div class="goal-layer-label">共存の3条件 — どのように</div>
+      <div class="goal-layer-title">人間がその参加者として共存できる状態を設計・実現する</div>
+      <div class="goal-conditions">
+        <div class="goal-condition-item">
+          <div class="cond-keyword">安全に</div>
+          <div class="cond-desc">技術・制度的な安全設計</div>
+        </div>
+        <div class="goal-condition-item">
+          <div class="cond-keyword">持続可能に</div>
+          <div class="cond-desc">人間と組織の長期的存続</div>
+        </div>
+        <div class="goal-condition-item">
+          <div class="cond-keyword">正当に</div>
+          <div class="cond-desc">内外の正統性</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="h4">8つの問い</div>
 
   <div class="table-wrap">
     <table>
-      <thead><tr><th>#</th><th>問い</th><th>ゴールとの対応</th></tr></thead>
+      <thead><tr><th>#</th><th>問い</th><th>扱うゴール要素</th></tr></thead>
       <tbody>
-        <tr><td>Q1</td><td>この設計は何を扱い、何を扱わないのか</td><td>設計空間の定義</td></tr>
-        <tr><td>Q2</td><td>AIは何のために組織を運営するのか</td><td>「正当に」の基盤</td></tr>
-        <tr><td>Q3</td><td>AI運営の組織で人間はどう参加し、どの権利を行使するか</td><td>「安全・正当に」の参加設計</td></tr>
-        <tr><td>Q4</td><td>AI能力の変化にどう適応するか</td><td>「AGI/ASI時代において」の通時性</td></tr>
-        <tr><td>Q5</td><td>AIが運営する日常に人間はどう参加するか</td><td>「共存できる状態」の具体設計</td></tr>
-        <tr><td>Q6</td><td>安全性と信頼をどう確保するか</td><td>「安全に」の技術・制度設計</td></tr>
-        <tr><td>Q7</td><td>人間はどう存在し、意味を持つか</td><td>「持続可能に」の人間側設計</td></tr>
-        <tr><td>Q8</td><td>複数の組織OSが共存する世界をどう設計するか</td><td>社会レベルの「正当に」</td></tr>
+        <tr><td>Q1</td><td>この設計は何を扱い、何を扱わないのか</td><td>（前提）設計空間の定義</td></tr>
+        <tr><td>Q2</td><td>AIは何のために組織を運営するのか</td><td>正当に — 正統性の基盤</td></tr>
+        <tr><td>Q3</td><td>AI運営の組織で人間はどう参加し、どの権利を行使するか</td><td>安全に・正当に — 参加設計</td></tr>
+        <tr><td>Q4</td><td>AI能力の変化にどう適応するか</td><td>AGI/ASI時代において — 通時性</td></tr>
+        <tr><td>Q5</td><td>AIが運営する日常に人間はどう参加するか</td><td>共存できる状態 — 具体設計</td></tr>
+        <tr><td>Q6</td><td>安全性と信頼をどう確保するか</td><td>安全に — 技術・制度設計</td></tr>
+        <tr><td>Q7</td><td>人間はどう存在し、意味を持つか</td><td>持続可能に — 人間側設計</td></tr>
+        <tr><td>Q8</td><td>複数の組織OSが共存する世界をどう設計するか</td><td>正当に — 社会レベル</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="h4">4部構成の論理</div>
 
-  <div class="grid-4">
-    <div class="card">
-      <div class="card-label">第1部</div>
-      <div class="card-title">原理と設計空間</div>
-      <div class="card-body">「何を設計するのか」「何を原則とするのか」を定義する。Q1・Q2・Q4の前提に答える。</div>
+  <div class="four-part-rationale">
+    <div class="rationale-title">なぜこの4部で完結するか</div>
+    <div class="rationale-body">
+      あらゆる制度設計は4つの問いに答える必要がある。<br>
+      ①何を設計するのか（対象と原則）　②誰が何を決めるのか（権限配分）　③日常をどう回すのか（運用プロセス）　④変化にどう耐えるのか（適応メカニズム）<br><br>
+      ①がなければ②③④の設計対象が不明。②がなければ③④の正当性がない。③がなければ②は絵に描いた餅。④がなければ①②③は時間の経過で陳腐化する。<strong>4部は必要十分であり、各部は相互に不可欠。</strong>
     </div>
-    <div class="card">
-      <div class="card-label">第2部</div>
-      <div class="card-title">統治設計</div>
-      <div class="card-body">AIが運営する組織で人間はどう参加するかを設計する。Q2・Q3・Q7の権利部分に答える。</div>
+
+    <div class="four-part-grid">
+      <div class="four-part-cell">
+        <div class="cell-num">①</div>
+        <div class="cell-label">第1部</div>
+        <div class="cell-title">原理と設計空間</div>
+        <div class="cell-q">何を設計するか / 何を原則とするか</div>
+      </div>
+      <div class="four-part-cell">
+        <div class="cell-num">②</div>
+        <div class="cell-label">第2部</div>
+        <div class="cell-title">統治設計</div>
+        <div class="cell-q">誰が何を決めるか / 人間の権利は何か</div>
+      </div>
+      <div class="four-part-cell">
+        <div class="cell-num">④</div>
+        <div class="cell-label">第4部</div>
+        <div class="cell-title">移行と適応</div>
+        <div class="cell-q">変化にどう耐えるか / どう移行するか</div>
+      </div>
+      <div class="four-part-cell">
+        <div class="cell-num">③</div>
+        <div class="cell-label">第3部</div>
+        <div class="cell-title">運用設計</div>
+        <div class="cell-q">日常をどう回すか / 安全をどう担保するか</div>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-label">第3部</div>
-      <div class="card-title">運用設計</div>
-      <div class="card-body">統治の原則をAI運営の日常に翻訳する。Q5・Q6・Q7の主体性部分に答える。</div>
+
+    <div style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+      <div class="four-part-dep"><span class="dep-arrow">①→②</span> 第1部が第2部の前提（設計対象の定義なしに権限配分はできない）</div>
+      <div class="four-part-dep"><span class="dep-arrow">②→③</span> 第2部が第3部の正当性（統治原則なしに運用プロセスは正当化できない）</div>
+      <div class="four-part-dep"><span class="dep-arrow">③→④</span> 第3部の経験が第4部にフィードバック（運用実績なしに移行判断はできない）</div>
     </div>
-    <div class="card">
-      <div class="card-label">第4部</div>
-      <div class="card-title">移行と適応</div>
-      <div class="card-body">AI能力の変化と外部環境への対応を設計する。Q4・Q6・Q8に答える。</div>
+
+    <div class="goal-mapping">
+      <div style="font-family:var(--font-sans); font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">ゴール要素と各部の対応</div>
+      <div class="goal-mapping-row">
+        <div class="goal-mapping-key">「安全に」</div>
+        <div class="goal-mapping-val">第2部（権利）+ 第3部（安全設計）+ 第4部（緊急停止）</div>
+      </div>
+      <div class="goal-mapping-row">
+        <div class="goal-mapping-key">「持続可能に」</div>
+        <div class="goal-mapping-val">第3部（人間の主体性）+ 第4部（移行・適応）</div>
+      </div>
+      <div class="goal-mapping-row">
+        <div class="goal-mapping-key">「正当に」</div>
+        <div class="goal-mapping-val">第2部（正統性の基盤）+ 第4部（外部正当性）</div>
+      </div>
     </div>
   </div>
 
