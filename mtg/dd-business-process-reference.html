@@ -469,6 +469,55 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
         <div style="font-size: 13px; font-weight: 600; color: var(--ink-blue); margin-bottom: 4px;">ソーシングの実態</div>
         <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">IMの段階でも「箸にも棒にもかからない」案件が相当数ある。<strong>仲介経由のIM件数は圧倒的に多いが、クロージング実績でみるとロングリスト・直接アプローチと大差ない</strong>（昨年のクロージング予定含む5件中、仲介経由は1件のみ）。ロングリストは労働集約的かつ鮮度が落ちるが、ピンポイントで良い会社を狙えるため投資対効果は高い。<strong>3つのワークストリーム（本DD・Pre-DD検討・ロングリスト更新）が常時並走しており、ディールパイプラインが埋まるとロングリスト更新は後回しになる</strong>のが実態。</div>
       </div>
+
+      <!-- Comparison Table -->
+      <div style="margin-top: 32px;">
+        <h4 style="font-size: 15px; font-weight: 600; color: var(--text-heading); margin-bottom: 16px;">チャネル比較</h4>
+        <div style="overflow-x: auto;">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>項目</th>
+                <th>仲介型</th>
+                <th>FA型</th>
+                <th>直接アプローチ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label">起点</td>
+                <td>仲介会社がセルサイドとの関係を起点にバイサイドに案件を紹介</td>
+                <td>自社がFAを雇い、ターゲットリストを作成してアプローチ</td>
+                <td>自社が直接ターゲット企業にコンタクト</td>
+              </tr>
+              <tr>
+                <td class="row-label">情報の流れ</td>
+                <td>ノンネーム→NDA→IM の定型フロー</td>
+                <td>FAがターゲットの情報を収集・整理して提供</td>
+                <td>自社で公開情報を収集。先方の開示意向に依存</td>
+              </tr>
+              <tr>
+                <td class="row-label">コスト</td>
+                <td>成功報酬（レーマン方式: 譲渡価額の1〜5%）。双方から徴収</td>
+                <td>リテイナー＋成功報酬。バイサイドのみ負担</td>
+                <td>アドバイザー費用なし。ただし社内工数大</td>
+              </tr>
+              <tr>
+                <td class="row-label">案件の質</td>
+                <td>売り手が売却意思決定済み。成約確度が高い</td>
+                <td>売却意思を持っていない場合もある</td>
+                <td>同左</td>
+              </tr>
+              <tr>
+                <td class="row-label">日本市場</td>
+                <td><strong>最も一般的</strong>。中堅・中小企業のM&Aは仲介型が大半</td>
+                <td>大型案件（数百億円〜）や上場企業同士</td>
+                <td>スタートアップ間、業界内ネットワーク</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- Process Flow with Channel Branching -->
@@ -477,129 +526,131 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
     <div class="pf-wrap">
       <div style="min-width: 1060px;">
 
-        <!-- ===== Sourcing: 3-lane branching ===== -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-bottom: 2px solid var(--border-heavy); padding-bottom: 24px;">
-
-          <!-- Lane: 仲介会社様経由 -->
-          <div style="padding: 0 12px; border-right: 1px solid var(--border-default);">
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); margin-bottom: 16px;">仲介会社様経由</div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">1</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">ノンネーム受領</div>
-              </div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">2</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">初期スクリーニング</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">IMの半数以上が不適合で弾かれる</div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">3</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">NDA → IM受領</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">年間200件紹介 → IM 40〜45件</div>
-            </div>
-          </div>
-
-          <!-- Lane: 自社ロングリスト -->
-          <div style="padding: 0 12px; border-right: 1px solid var(--border-default);">
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); margin-bottom: 16px;">自社ロングリスト</div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">1</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">ターゲット要件定義</div>
-              </div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">2</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">リスト作成・色付け</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">数十〜100社 → 上位10社を深掘り</div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">3</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">直接コンタクト・対話</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">売却意思の確認から。複数回の対話が必要</div>
-            </div>
-          </div>
-
-          <!-- Lane: 対象会社様お持ち込み -->
-          <div style="padding: 0 12px;">
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); margin-bottom: 16px;">対象会社様お持ち込み</div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">1</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">先方からの打診</div>
-              </div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">2</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">初期面談</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">経営者の人柄・事業実態を直接確認</div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">3</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">NDA締結</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">件数は少ないが成約率は高い</div>
-            </div>
-          </div>
+        <!-- ===== Swimlane header (time axis → right) ===== -->
+        <div style="display: grid; grid-template-columns: 120px repeat(3, 1fr) 40px repeat(6, 1fr); gap: 0; align-items: end; padding-bottom: 8px; border-bottom: 2px solid var(--border-heavy);">
+          <div></div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; grid-column: span 3;">ソーシング</div>
+          <div></div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; grid-column: span 3;">Pre-DD → 基本合意</div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; grid-column: span 3;">DD実行 → クロージング</div>
         </div>
 
-        <!-- ===== Merge indicator ===== -->
-        <div style="display: flex; flex-direction: column; align-items: center; padding: 12px 0;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 200px; height: 2px; background: var(--border-default);"></div>
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--ink-blue); background: var(--wash-blue); padding: 4px 12px; white-space: nowrap;">合流 → 共通フロー</div>
-            <div style="width: 200px; height: 2px; background: var(--border-default);"></div>
-          </div>
-        </div>
-
-        <!-- ===== Common track: Pre-DD → Closing ===== -->
-        <div class="pf-lanes" style="min-width: 960px;">
-          <div class="pf-lane-label" style="flex: 3;">Pre-DD → 基本合意</div>
-          <div class="pf-lane-label" style="flex: 4; border-left: 2px solid var(--border-heavy);">DD実行 → クロージング</div>
-        </div>
-
-        <div class="pf-track" style="min-width: 960px; grid-template-columns: repeat(6, 1fr);">
+        <!-- ===== Lane 1: Brokerage ===== -->
+        <div style="display: grid; grid-template-columns: 120px repeat(3, 1fr) 40px repeat(6, 1fr); gap: 0; align-items: start; padding: 20px 0; border-bottom: 1px solid var(--border-default); position: relative;">
+          <!-- Lane label -->
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-heading); line-height: 1.35; padding-right: 12px; align-self: center;">Brokerage<br><span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">仲介会社様経由</span></div>
+          <!-- Steps 1-3 -->
           <div class="pf-item">
-            <div class="pf-dot">4</div>
-            <div class="pf-title">簡易分析<br>（3〜4週間）</div>
-            <div class="pf-desc">ストレスシナリオ作成<br>簡易DCFで価格レンジ</div>
-            <div class="pf-gate-tag">意向表明を出すか</div>
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">1</div>
+            <div class="pf-title">ノンネーム受領</div>
+            <div class="pf-desc">年間200件紹介</div>
           </div>
           <div class="pf-item">
-            <div class="pf-dot gate">5</div>
-            <div class="pf-title">意向表明書<br>（LOI）提出</div>
-            <div class="pf-desc">価格帯・シナジー・<br>独占交渉権の要請</div>
-            <div class="pf-gate-tag">LOI通過でDD開始</div>
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">2</div>
+            <div class="pf-title">初期スクリーニング</div>
+            <div class="pf-desc">半数以上が不適合</div>
           </div>
           <div class="pf-item">
-            <div class="pf-dot gate">6</div>
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">3</div>
+            <div class="pf-title">NDA → IM受領</div>
+            <div class="pf-desc">→ IM 40〜45件/年</div>
+          </div>
+          <!-- Merge column -->
+          <div style="display: flex; align-items: center; justify-content: center; align-self: stretch; position: relative;">
+            <div style="width: 2px; height: 100%; background: var(--border-default); position: absolute;"></div>
+          </div>
+          <!-- Common steps 4-9 (row 1 only, spans all 3 lanes) -->
+          <div class="pf-item" style="grid-row: 1;">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">4</div>
+            <div class="pf-title">簡易分析</div>
+            <div class="pf-desc">3〜4週間<br>簡易DCF</div>
+            <div class="pf-gate-tag">LOI出すか</div>
+          </div>
+          <div class="pf-item" style="grid-row: 1;">
+            <div class="pf-dot gate" style="width: 28px; height: 28px; font-size: 11px;">5</div>
+            <div class="pf-title">LOI提出</div>
+            <div class="pf-desc">価格帯・シナジー<br>独占交渉権</div>
+            <div class="pf-gate-tag">LOI通過</div>
+          </div>
+          <div class="pf-item" style="grid-row: 1;">
+            <div class="pf-dot gate" style="width: 28px; height: 28px; font-size: 11px;">6</div>
             <div class="pf-title">DD実行</div>
-            <div class="pf-desc">5〜6モジュール並走<br>4〜8週間</div>
-            <div class="pf-gate-tag">買うか・いくらで</div>
+            <div class="pf-desc">5〜6モジュール<br>4〜8週間</div>
+            <div class="pf-gate-tag">買うか/いくら</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot gate">7</div>
-            <div class="pf-title">DD結果統合<br>取締役会決議A</div>
-            <div class="pf-desc">リスクマトリクス<br>デック数十枚で付議</div>
-            <div class="pf-gate-tag">バインディングLOI</div>
+          <div class="pf-item" style="grid-row: 1;">
+            <div class="pf-dot gate" style="width: 28px; height: 28px; font-size: 11px;">7</div>
+            <div class="pf-title">DD統合<br>取締役会A</div>
+            <div class="pf-desc">リスクマトリクス<br>デック数十枚</div>
+            <div class="pf-gate-tag">Binding LOI</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot">8</div>
-            <div class="pf-title">SPA交渉<br>取締役会決議B</div>
-            <div class="pf-desc">表明保証・補償条項<br>PMI100日プラン具体化</div>
-            <div class="pf-gate-tag">契約締結の最終決議</div>
+          <div class="pf-item" style="grid-row: 1;">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">8</div>
+            <div class="pf-title">SPA交渉<br>取締役会B</div>
+            <div class="pf-desc">表明保証<br>PMI計画</div>
+            <div class="pf-gate-tag">最終決議</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot">9</div>
+          <div class="pf-item" style="grid-row: 1;">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">9</div>
             <div class="pf-title">クロージング</div>
-            <div class="pf-desc">決議B後1〜1.5ヶ月<br>PMI準備前倒し実行</div>
+            <div class="pf-desc">決議B後<br>1〜1.5ヶ月</div>
+          </div>
+        </div>
+
+        <!-- ===== Lane 2: Long List ===== -->
+        <div style="display: grid; grid-template-columns: 120px repeat(3, 1fr) 40px repeat(6, 1fr); gap: 0; align-items: start; padding: 20px 0; border-bottom: 1px solid var(--border-default); position: relative;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-heading); line-height: 1.35; padding-right: 12px; align-self: center;">Long List<br><span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">自社ロングリスト</span></div>
+          <div class="pf-item">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">1</div>
+            <div class="pf-title">ターゲット要件定義</div>
+            <div class="pf-desc">事業部と要件出し</div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">2</div>
+            <div class="pf-title">リスト作成・色付け</div>
+            <div class="pf-desc">数十〜100社<br>→ 上位10社深掘り</div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">3</div>
+            <div class="pf-title">直接コンタクト</div>
+            <div class="pf-desc">売却意思の確認<br>複数回の対話</div>
+          </div>
+          <!-- Merge column -->
+          <div style="display: flex; align-items: center; justify-content: center; align-self: stretch; position: relative;">
+            <div style="width: 2px; height: 100%; background: var(--border-default); position: absolute;"></div>
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--ink-blue); background: var(--wash-blue); padding: 2px 4px; white-space: nowrap; position: relative; z-index: 1;">合流</div>
+          </div>
+          <!-- Steps 4-9: visually empty (shared with lane 1) -->
+          <div style="grid-column: span 6; display: flex; align-items: center; justify-content: center;">
+            <div style="font-size: 11px; color: var(--text-muted); font-style: italic;">← 共通フロー（上記 Step 4〜9）</div>
+          </div>
+        </div>
+
+        <!-- ===== Lane 3: Direct ===== -->
+        <div style="display: grid; grid-template-columns: 120px repeat(3, 1fr) 40px repeat(6, 1fr); gap: 0; align-items: start; padding: 20px 0; position: relative;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-heading); line-height: 1.35; padding-right: 12px; align-self: center;">Direct<br><span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">対象会社お持ち込み</span></div>
+          <div class="pf-item">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">1</div>
+            <div class="pf-title">先方からの打診</div>
+            <div class="pf-desc">業界NW経由</div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">2</div>
+            <div class="pf-title">初期面談</div>
+            <div class="pf-desc">経営者の人柄<br>事業実態を確認</div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px;">3</div>
+            <div class="pf-title">NDA締結</div>
+            <div class="pf-desc">件数少ないが<br>成約率は高い</div>
+          </div>
+          <!-- Merge column -->
+          <div style="display: flex; align-items: center; justify-content: center; align-self: stretch; position: relative;">
+            <div style="width: 2px; height: 100%; background: var(--border-default); position: absolute;"></div>
+          </div>
+          <!-- Steps 4-9: visually empty (shared with lane 1) -->
+          <div style="grid-column: span 6; display: flex; align-items: center; justify-content: center;">
+            <div style="font-size: 11px; color: var(--text-muted); font-style: italic;">← 共通フロー（上記 Step 4〜9）</div>
           </div>
         </div>
 
@@ -671,7 +722,7 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
 
     <!-- DD Setup: Team Structure -->
     <div style="margin-top: 64px; margin-bottom: 64px;">
-      <h3 class="heading-md" style="margin-bottom: 8px;">DD実行体制（フルスタックの場合）</h3>
+      <h3 class="heading-md" style="margin-bottom: 8px;">DDプロセス</h3>
       <p class="body-md text-secondary" style="margin-bottom: 24px;">フルスタックDDでは5〜6本のモジュールが並走する。関係者が多数に及ぶため、<strong>PMチームの初動＝プロジェクト運営ルールの定義</strong>が最も重要。</p>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
@@ -747,54 +798,6 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
       </div>
     </div>
 
-    <!-- Comparison Table -->
-    <div style="margin-top: 64px;">
-      <h3 class="heading-md" style="margin-bottom: 24px;">仲介型 vs FA型 vs 直接アプローチ</h3>
-      <div style="overflow-x: auto;">
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th>項目</th>
-              <th>仲介型</th>
-              <th>FA型</th>
-              <th>直接アプローチ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="row-label">起点</td>
-              <td>仲介会社がセルサイドとの関係を起点にバイサイドに案件を紹介</td>
-              <td>自社がFAを雇い、ターゲットリストを作成してアプローチ</td>
-              <td>自社が直接ターゲット企業にコンタクト</td>
-            </tr>
-            <tr>
-              <td class="row-label">情報の流れ</td>
-              <td>ノンネーム→NDA→IM の定型フロー</td>
-              <td>FAがターゲットの情報を収集・整理して提供</td>
-              <td>自社で公開情報を収集。先方の開示意向に依存</td>
-            </tr>
-            <tr>
-              <td class="row-label">コスト</td>
-              <td>成功報酬（レーマン方式: 譲渡価額の1〜5%）。双方から徴収</td>
-              <td>リテイナー＋成功報酬。バイサイドのみ負担</td>
-              <td>アドバイザー費用なし。ただし社内工数大</td>
-            </tr>
-            <tr>
-              <td class="row-label">案件の質</td>
-              <td>売り手が売却意思決定済み。成約確度が高い</td>
-              <td>売却意思を持っていない場合もある</td>
-              <td>同左</td>
-            </tr>
-            <tr>
-              <td class="row-label">日本市場</td>
-              <td><strong>最も一般的</strong>。中堅・中小企業のM&Aは仲介型が大半</td>
-              <td>大型案件（数百億円〜）や上場企業同士</td>
-              <td>スタートアップ間、業界内ネットワーク</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
   </div>
 </section>
 
