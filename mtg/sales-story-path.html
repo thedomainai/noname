@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Story Path — SmartHR 商談設計</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Sales Story Path — Paper Design System (Web App context)
+   Instrument Sans only. No Crimson Pro.
+   ============================================================ */
+:root {
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040;  --ink-600: #525252;  --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a;  --ink-300: #a3a3a3;  --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0;  --ink-50:  #f0f0f0;
+
+  --slate-50:  #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
+
+  --paper-50:  #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600: #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+
+  --ink-blue:  #2563eb; --ink-green: #16a34a;
+  --ink-amber: #d97706; --ink-red:   #dc2626;
+
+  --wash-blue:  #dbeafe; --wash-green: #dcfce7;
+  --wash-amber: #fef3c7; --wash-red:   #fee2e2;
+
+  --bg-page: var(--paper-50);
+  --bg-surface: var(--paper-100);
+  --bg-surface-raised: var(--paper-50);
+  --bg-recessed: var(--paper-300);
+  --border-default: var(--slate-200);
+  --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000);
+  --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900);
+  --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500);
+  --text-muted: var(--slate-400);
+
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --separator: 1px solid var(--border-default);
+  --shadow-flat: 2px 2px 0 var(--ink-50);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Header ── */
+.page-header {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  background: rgba(253,253,252,0.92);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--border-heavy);
+}
+.page-header-inner {
+  max-width: 1120px; margin: 0 auto; padding: 12px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.page-header .label-tag {
+  font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-secondary);
+}
+.page-header .date-tag {
+  font-size: 13px; color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ── Sticky Nav ── */
+.section-nav {
+  position: fixed; top: 50px; width: 100%; z-index: 99;
+  background: rgba(253,253,252,0.95);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default);
+}
+.section-nav-inner {
+  max-width: 1120px; margin: 0 auto; padding: 0 32px;
+  display: flex; gap: 0; overflow-x: auto;
+}
+.section-nav a {
+  font-size: 13px; font-weight: 400; color: var(--text-muted);
+  text-decoration: none; padding: 12px 16px; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.section-nav a:hover { color: var(--text-primary); }
+.section-nav a.active {
+  color: var(--text-primary); font-weight: 600;
+  border-bottom-color: var(--ink-blue);
+}
+
+/* ── Main ── */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+main { padding-top: 100px; }
+section { padding: 64px 0; scroll-margin-top: 100px; }
+
+/* ── Section Header (left-aligned, Web App) ── */
+.sec-header { margin-bottom: 48px; }
+.sec-header .label-sm {
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--ink-blue);
+  margin-bottom: 8px; display: block;
+}
+.sec-header h2 {
+  font-size: 28px; font-weight: 600; line-height: 1.3;
+  letter-spacing: -0.3px; color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.sec-header p {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+}
+
+/* ── Hero ── */
+.hero-section {
+  padding: 96px 0 64px;
+  border-bottom: 1px solid var(--border-default);
+}
+.hero-title {
+  font-size: 36px; font-weight: 400; line-height: 1.2;
+  letter-spacing: -0.5px; color: var(--text-heading);
+  margin-bottom: 16px;
+}
+.hero-subtitle {
+  font-size: 16px; color: var(--text-secondary); line-height: 1.7;
+  max-width: 640px;
+}
+.hero-meta {
+  display: flex; gap: 24px; margin-top: 24px;
+}
+.hero-meta-item {
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-meta-item .meta-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.hero-meta-item .meta-value {
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+}
+
+/* ── Timeline ── */
+.timeline {
+  position: relative;
+  padding-left: 48px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 19px; top: 0; bottom: 0;
+  width: 2px; background: var(--border-default);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 48px;
+  cursor: pointer;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-dot {
+  position: absolute; left: -48px; top: 4px;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600;
+  background: var(--bg-page);
+  border: 2px solid var(--border-default);
+  color: var(--text-secondary);
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+.timeline-item.active .timeline-dot,
+.timeline-item:hover .timeline-dot {
+  border-color: var(--ink-blue);
+  color: var(--ink-blue);
+  background: var(--wash-blue);
+}
+
+.timeline-head {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 8px;
+}
+.timeline-head h3 {
+  font-size: 18px; font-weight: 600; line-height: 1.4;
+  color: var(--text-heading);
+}
+.timeline-head .badge {
+  display: inline-block; height: 22px; padding: 0 8px;
+  font-size: 11px; font-weight: 600; line-height: 22px;
+  letter-spacing: 0.3px; border-radius: 2px;
+}
+.badge-psychology {
+  background: var(--wash-amber); color: #b45309; border: 1px solid #fde68a;
+}
+.badge-layer {
+  background: var(--wash-blue); color: #1d4ed8; border: 1px solid #bfdbfe;
+}
+
+.timeline-desc {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* ── Expandable Detail ── */
+.timeline-detail {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+.timeline-item.open .timeline-detail { max-height: 1200px; }
+
+.detail-inner {
+  padding-top: 16px; border-top: 1px solid var(--border-default);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.detail-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  padding: 20px;
+}
+.detail-card h4 {
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.detail-card p, .detail-card li {
+  font-size: 14px; color: var(--text-primary); line-height: 1.6;
+}
+.detail-card ul {
+  list-style: none; padding: 0;
+}
+.detail-card li {
+  padding: 4px 0 4px 16px; position: relative;
+}
+.detail-card li::before {
+  content: ''; position: absolute; left: 0; top: 12px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--ink-400);
+}
+
+/* ── Expand Hint ── */
+.expand-hint {
+  font-size: 12px; color: var(--text-muted);
+  display: flex; align-items: center; gap: 4px;
+  transition: color 0.15s ease;
+}
+.timeline-item:hover .expand-hint { color: var(--ink-blue); }
+.expand-hint .arrow {
+  display: inline-block; transition: transform 0.2s ease;
+  font-size: 10px;
+}
+.timeline-item.open .expand-hint .arrow { transform: rotate(90deg); }
+
+/* ── 3 Types Grid ── */
+.types-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.type-card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+  transition: border-color 0.15s ease;
+}
+.type-card:hover { border-color: var(--ink-blue); }
+.type-card .type-icon {
+  width: 40px; height: 40px; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 16px;
+  border: 1px solid var(--border-default);
+}
+.type-card .type-icon.tool { background: var(--wash-blue); color: var(--ink-blue); }
+.type-card .type-icon.output { background: var(--wash-green); color: var(--ink-green); }
+.type-card .type-icon.coach { background: var(--wash-amber); color: var(--ink-amber); }
+.type-card h3 {
+  font-size: 18px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.type-card p {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+}
+.type-card .type-status {
+  margin-top: 16px; padding-top: 12px;
+  border-top: 1px solid var(--border-default);
+  font-size: 12px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.status-active { color: var(--ink-blue); }
+.status-future { color: var(--text-muted); }
+.type-card .type-fit {
+  margin-top: 12px; font-size: 13px; color: var(--text-secondary);
+}
+.type-card .type-fit strong { color: var(--text-primary); font-weight: 600; }
+
+/* ── Stakeholder Grid ── */
+.stakeholder-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.stake-card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+}
+.stake-card h3 {
+  font-size: 14px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.stake-card .stake-sub {
+  font-size: 12px; color: var(--text-muted); margin-bottom: 16px;
+}
+.stake-card .flow-steps {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+.flow-step {
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-default);
+  padding: 6px 12px;
+  font-size: 13px; font-weight: 400; color: var(--text-primary);
+}
+.flow-arrow { color: var(--text-muted); font-size: 12px; }
+
+/* ── Principles Section ── */
+.principle-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.principle-card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+}
+.principle-card h3 {
+  font-size: 16px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.principle-card h3 .p-icon {
+  width: 28px; height: 28px; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  background: var(--ink-900); color: var(--paper-50);
+}
+.principle-card p {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+}
+.principle-card .callout {
+  margin-top: 12px; padding: 12px 16px;
+  border-left: 3px solid var(--ink-blue);
+  background: var(--wash-blue);
+  font-size: 13px; color: var(--text-primary); line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── Impact Diagram (SVG) ── */
+.impact-diagram { margin-top: 32px; }
+
+/* ── Footer ── */
+.page-footer {
+  border-top: 1px solid var(--border-default);
+  padding: 32px 0;
+}
+.page-footer-inner {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.page-footer .footer-left { font-size: 12px; color: var(--text-muted); }
+.page-footer .footer-right { font-size: 12px; color: var(--text-muted); }
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .types-grid { grid-template-columns: 1fr; }
+  .detail-inner { grid-template-columns: 1fr; }
+  .stakeholder-grid { grid-template-columns: 1fr; }
+  .principle-grid { grid-template-columns: 1fr; }
+  .hero-meta { flex-wrap: wrap; }
+}
+@media (max-width: 639px) {
+  .container { padding: 0 16px; }
+  .hero-title { font-size: 26px; }
+  section { padding: 48px 0; }
+  .section-nav-inner { padding: 0 16px; }
+  .page-header-inner { padding: 12px 16px; }
+  .flow-steps { flex-direction: column; align-items: flex-start; }
+  .flow-arrow { transform: rotate(90deg); }
+  .page-footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="label-tag">Sales Story Path</span>
+    <span class="date-tag">2026-03-23</span>
+  </div>
+</div>
+
+<!-- ── Sticky Nav ── -->
+<div class="section-nav">
+  <div class="section-nav-inner">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#types">3 Types</a>
+    <a href="#stakeholders">Stakeholders</a>
+    <a href="#principles">Principles</a>
+    <a href="#impact">Impact Model</a>
+  </div>
+</div>
+
+<main>
+<div class="container">
+
+  <!-- ============================================================
+       SECTION 01 — Hero / Overview
+       ============================================================ -->
+  <section id="overview" class="hero-section">
+    <h1 class="hero-title">中林の営業ストーリーパス</h1>
+    <p class="hero-subtitle">
+      SmartHR コーポレート戦略本部への商談設計。クイックウィンから信頼を積み上げ、段階的に提案領域を拡張するランド&エクスパンド戦略。
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="meta-label">Client</span>
+        <span class="meta-value">SmartHR</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="meta-label">Target</span>
+        <span class="meta-value">M&A DD / Corp. Strategy</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="meta-label">Approach</span>
+        <span class="meta-value">Land & Expand</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="meta-label">Phase</span>
+        <span class="meta-value">Hearing Done</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 02 — Timeline (6 Steps)
+       ============================================================ -->
+  <section id="timeline">
+    <div class="sec-header">
+      <span class="label-sm">Story Path</span>
+      <h2>受注までの 6 ステップ</h2>
+      <p>各ステップをクリックすると、設計意図と背景思考を展開します。</p>
+    </div>
+
+    <div class="timeline">
+
+      <!-- Step 1 -->
+      <div class="timeline-item" data-step="1">
+        <div class="timeline-dot">01</div>
+        <div class="timeline-head">
+          <h3>ケーススタディで興味を喚起</h3>
+          <span class="badge badge-psychology">興味</span>
+        </div>
+        <p class="timeline-desc">具体的な事例を見せて「これなら話を聞いてみたい」を引き出す。売り込みではなく、好奇心の点火。</p>
+        <div class="expand-hint"><span class="arrow">&#9654;</span> 設計意図を見る</div>
+        <div class="timeline-detail">
+          <div class="detail-inner">
+            <div class="detail-card">
+              <h4>Client Psychology</h4>
+              <p>「何ができるか分からない」状態から「具体的な可能性が見えた」状態への遷移。AI活用の解像度が上がることで、自社の課題と接続できるようになる。</p>
+            </div>
+            <div class="detail-card">
+              <h4>Design Intent</h4>
+              <ul>
+                <li>抽象論ではなく実例で語る — クライアントは「自分ごと」にできない限り動かない</li>
+                <li>事例の選定が重要: 先方の業務に近いケースを選ぶことで「うちでもできそう」を引き出す</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="timeline-item" data-step="2">
+        <div class="timeline-dot">02</div>
+        <div class="timeline-head">
+          <h3>ヒアリングの時間を獲得</h3>
+          <span class="badge badge-psychology">時間投資</span>
+          <span class="badge badge-layer">Hearing</span>
+        </div>
+        <p class="timeline-desc">先方の時間投資を引き出す。時間を使った相手は心理的に撤退しにくくなる。</p>
+        <div class="expand-hint"><span class="arrow">&#9654;</span> 設計意図を見る</div>
+        <div class="timeline-detail">
+          <div class="detail-inner">
+            <div class="detail-card">
+              <h4>Client Psychology</h4>
+              <p>「聞くだけなら」という軽いコミットメント。しかし時間を投下した事実が次のステップへの心理的ハードルを下げる。一貫性の原理が働き始める。</p>
+            </div>
+            <div class="detail-card">
+              <h4>Design Intent</h4>
+              <ul>
+                <li>ヒアリング自体が価値提供 — 業務の棚卸しを通じて先方も自社の課題を再認識する</li>
+                <li>提案ではなくヒアリングという位置づけが、クライアントの警戒心を下げる</li>
+                <li>「一緒に大変だと思うんですよね」という姿勢が信頼の起点になる</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="timeline-item" data-step="3">
+        <div class="timeline-dot">03</div>
+        <div class="timeline-head">
+          <h3>業務棚卸し & クイックウィン選定</h3>
+          <span class="badge badge-psychology">期待感</span>
+          <span class="badge badge-layer">Consulting</span>
+        </div>
+        <p class="timeline-desc">最大の差別化ポイント。プロダクトは誰でも作れるが、「どこから着手するか」の目利きが本質的な価値。</p>
+        <div class="expand-hint"><span class="arrow">&#9654;</span> 設計意図を見る</div>
+        <div class="timeline-detail">
+          <div class="detail-inner">
+            <div class="detail-card">
+              <h4>Client Psychology</h4>
+              <p>「この人たちはうちの業務を理解している」という実感。棚卸しの過程でクライアント自身も見えていなかった非効率に気づき、「ここが変わったら嬉しい」という期待が具体化する。</p>
+            </div>
+            <div class="detail-card">
+              <h4>Design Intent</h4>
+              <ul>
+                <li><strong>コンサルとしての最大の差別化</strong>: 「どこから着手するか」の選定力</li>
+                <li>「マイナスの解消」（大変なことをゼロにする）を優先して選定する</li>
+                <li>AIへの信頼がない段階で「プラスの創出」は任せてもらえない</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="timeline-item" data-step="4">
+        <div class="timeline-dot">04</div>
+        <div class="timeline-head">
+          <h3>小さなモジュールで価値を体感</h3>
+          <span class="badge badge-psychology">実感</span>
+          <span class="badge badge-layer">Tool</span>
+        </div>
+        <p class="timeline-desc">動くモノを見せて「これならお金を払いたい」を引き出す。言葉ではなく体験で価値を証明する。</p>
+        <div class="expand-hint"><span class="arrow">&#9654;</span> 設計意図を見る</div>
+        <div class="timeline-detail">
+          <div class="detail-inner">
+            <div class="detail-card">
+              <h4>Client Psychology</h4>
+              <p>「本当に動くんだ」という驚きと安心。プレゼン資料や構想図ではなく、実際に自分の業務データで動くものを見ることで、抽象的な可能性が具体的な価値に変わる。</p>
+            </div>
+            <div class="detail-card">
+              <h4>Design Intent</h4>
+              <ul>
+                <li>小さく作ることで失敗リスクを最小化</li>
+                <li>体感させることで「もっとできるのでは」という欲求を自然に生む</li>
+                <li>この段階で信頼の閾値を越える — 次の拡張提案が通るための基盤</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="timeline-item" data-step="5">
+        <div class="timeline-dot">05</div>
+        <div class="timeline-head">
+          <h3>プルの発生を待つ</h3>
+          <span class="badge badge-psychology">渇望</span>
+        </div>
+        <p class="timeline-desc"><strong>ツールは売らない。</strong>価値を体感させた上で「もっといいものありませんか」をクライアント側から引き出す。</p>
+        <div class="expand-hint"><span class="arrow">&#9654;</span> 設計意図を見る</div>
+        <div class="timeline-detail">
+          <div class="detail-inner">
+            <div class="detail-card">
+              <h4>Client Psychology</h4>
+              <p>「これが1つの業務でできるなら、他にもあるはず」という拡張欲求。クライアント自身が次の対象を探し始める。売り込まれている感覚がなく、自発的な意思決定として進む。</p>
+            </div>
+            <div class="detail-card">
+              <h4>Design Intent</h4>
+              <ul>
+                <li>押し売りではなくプル型 — クライアントの自発的意思を引き出す</li>
+                <li>「ツール屋」にならないための重要な転換点</li>
+                <li>ここで初めて本格提案（データ整備・家庭教師・アウトプット委任）の布石を打つ</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="timeline-item" data-step="6">
+        <div class="timeline-dot">06</div>
+        <div class="timeline-head">
+          <h3>本格提案への展開</h3>
+          <span class="badge badge-psychology">信頼</span>
+          <span class="badge badge-layer">Full Suite</span>
+        </div>
+        <p class="timeline-desc">3類型（ツール / 家庭教師 / アウトプット委任）の全体像を展開。データ整備を共通基盤として、最適な組み合わせを提案する。</p>
+        <div class="expand-hint"><span class="arrow">&#9654;</span> 設計意図を見る</div>
+        <div class="timeline-detail">
+          <div class="detail-inner">
+            <div class="detail-card">
+              <h4>Client Psychology</h4>
+              <p>「この人たちに任せたい」という信頼が確立された状態。Step 1-5 の体験を通じて、コンサルの目利き力と実行力が証明されている。大型提案を受け入れる心理的基盤が整っている。</p>
+            </div>
+            <div class="detail-card">
+              <h4>Design Intent</h4>
+              <ul>
+                <li>信頼の上に乗せることで、大型提案の受容率を最大化する</li>
+                <li>データ整備（共通基盤）の提案が自然に受け入れられるタイミング</li>
+                <li>家庭教師型（AIコーチング）は最もインパクトが大きいが、信頼が前提</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 03 — 3 Types of Proposal
+       ============================================================ -->
+  <section id="types" style="border-top: 1px solid var(--border-default);">
+    <div class="sec-header">
+      <span class="label-sm">Proposal Framework</span>
+      <h2>提案の 3 類型</h2>
+      <p>業務の性質に応じて使い分け、組み合わせて最適な提案を設計する。</p>
+    </div>
+
+    <div class="types-grid">
+      <div class="type-card">
+        <div class="type-icon tool">&#9881;</div>
+        <h3>Tool</h3>
+        <p>定型業務の自動化ツールを構築・提供。ロングリスト作成、てにをは修正、資料集約など。</p>
+        <div class="type-fit"><strong>適合:</strong> 定型業務（手順が決まっている作業）</div>
+        <div class="type-status status-active">&#9679; Now Active</div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon output">&#9998;</div>
+        <h3>Output Delegation</h3>
+        <p>業務の成果物自体を請け負う（BPO的）。実績・信頼の蓄積後に展開。</p>
+        <div class="type-fit"><strong>適合:</strong> 成果物が明確な業務（レポート、分析資料）</div>
+        <div class="type-status status-future">&#9675; Phase 2+</div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon coach">&#9733;</div>
+        <h3>Coach</h3>
+        <p>本人たちへのAI活用コーチング。高付加価値人材に最もインパクト大。</p>
+        <div class="type-fit"><strong>適合:</strong> 抽象的業務（裁量が大きい仕事）</div>
+        <div class="type-status status-future">&#9675; Phase 2+</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px; padding: 20px; border-left: 3px solid var(--ink-blue); background: var(--wash-blue);">
+      <p style="font-size: 14px; color: var(--text-primary); line-height: 1.6;">
+        <strong>共通基盤: データダンプの整備。</strong>AI処理系の発達により、従来コスパが悪かったデータ整備の ROI が劇的に向上している。どの類型でもデータ整備が前提になる。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 04 — Stakeholder Communication
+       ============================================================ -->
+  <section id="stakeholders" style="border-top: 1px solid var(--border-default);">
+    <div class="sec-header">
+      <span class="label-sm">Communication Design</span>
+      <h2>ステークホルダー別コミュニケーション</h2>
+      <p>相手の立場によって、全体像の見せ方とステップの踏み方を使い分ける。</p>
+    </div>
+
+    <div class="stakeholder-grid">
+      <div class="stake-card">
+        <h3>Staff Level</h3>
+        <div class="stake-sub">DD チームメンバー・実務担当者</div>
+        <div class="flow-steps">
+          <div class="flow-step">Hearing</div>
+          <span class="flow-arrow">&#8594;</span>
+          <div class="flow-step">Quick Win</div>
+          <span class="flow-arrow">&#8594;</span>
+          <div class="flow-step">Expand</div>
+        </div>
+        <p style="margin-top: 16px; font-size: 13px; color: var(--text-secondary);">
+          段階的に信頼を積み上げる。まずヒアリングで業務理解を示し、小さな成功体験を作ってから拡張する。
+        </p>
+      </div>
+      <div class="stake-card">
+        <h3>Senior / C-Level</h3>
+        <div class="stake-sub">長谷山さん、新家さん、ファンド部門</div>
+        <div class="flow-steps">
+          <div class="flow-step" style="background: var(--wash-blue); border-color: #bfdbfe;">Full Picture</div>
+          <span class="flow-arrow">&#8594;</span>
+          <div class="flow-step">Trust Step</div>
+          <span class="flow-arrow">&#8594;</span>
+          <div class="flow-step">Quick Win</div>
+        </div>
+        <p style="margin-top: 16px; font-size: 13px; color: var(--text-secondary);">
+          全体像（3類型の組み合わせ）を最初に提示。「本当にやりたいことはこれではない」を先に伝え、信頼構築のステップとしてクイックウィンから入る旨を明示する。
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px; padding: 20px; border-left: 3px solid var(--ink-amber); background: var(--wash-amber);">
+      <p style="font-size: 14px; color: var(--text-primary); line-height: 1.6;">
+        <strong>核心原則: 謙虚さが最優先。</strong>「お前らに何がわかるんだ」という感情を 1 ミリでも抱かせたら、ピュアに話してくれなくなる。情報優位を持っていても、押しつけない。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 05 — Underlying Principles
+       ============================================================ -->
+  <section id="principles" style="border-top: 1px solid var(--border-default);">
+    <div class="sec-header">
+      <span class="label-sm">Background Thinking</span>
+      <h2>設計原則</h2>
+      <p>営業パスの背景にある思考と判断基準。</p>
+    </div>
+
+    <div class="principle-grid">
+      <div class="principle-card">
+        <h3><span class="p-icon">1</span>目利き力が差別化</h3>
+        <p>プロダクト（ツール）自体は誰が作っても同等。「どこから着手するか」を選ぶ力がコンサルの本質的価値。</p>
+      </div>
+      <div class="principle-card">
+        <h3><span class="p-icon">2</span>マイナス解消が先</h3>
+        <p>AI への信頼がない段階では、プラス面（付加価値向上）を任せるのはハードルが高い。「大変なところをゼロにする」から入る。</p>
+        <div class="callout">
+          信頼ができてからプラスの領域（上流工程の質向上）に展開する。逆順は機能しない。
+        </div>
+      </div>
+      <div class="principle-card">
+        <h3><span class="p-icon">3</span>情報非対称性の活用</h3>
+        <p>AI活用の可能性について、コンサル側の方が情報を持っている。しかし情報優位を直接ぶつけず、クライアントの課題認識に寄り添う。</p>
+      </div>
+      <div class="principle-card">
+        <h3><span class="p-icon">4</span>売らずに引き出す</h3>
+        <p>ツールは売らない。体感させた上で「もっといいものありませんか」をクライアント側から引き出す。押し売りではなくプル型。</p>
+        <div class="callout">
+          全体像の先出し + 「まずクイックウィンから」の明示 = ツール屋にならないためのコミュニケーション設計。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 06 — Impact Model (SVG)
+       ============================================================ -->
+  <section id="impact" style="border-top: 1px solid var(--border-default);">
+    <div class="sec-header">
+      <span class="label-sm">Impact Model</span>
+      <h2>リボン型インパクト構造</h2>
+      <p>LLM 介入の経営インパクトは上流（ソーシング）と下流（最終決定）の両端で最大化する。</p>
+    </div>
+
+    <div class="impact-diagram">
+      <svg viewBox="0 0 900 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 900px;">
+        <!-- Ribbon shape -->
+        <path d="M 50 60 C 200 60, 250 180, 450 180 C 650 180, 700 60, 850 60" stroke="#e2e8f0" stroke-width="60" stroke-linecap="round" fill="none"/>
+        <path d="M 50 60 C 200 60, 250 180, 450 180 C 650 180, 700 60, 850 60" stroke="#dbeafe" stroke-width="56" stroke-linecap="round" fill="none"/>
+
+        <!-- Impact indicators — left peak -->
+        <circle cx="80" cy="60" r="24" fill="#2563eb" opacity="0.15"/>
+        <circle cx="80" cy="60" r="16" fill="#2563eb" opacity="0.25"/>
+        <circle cx="80" cy="60" r="8" fill="#2563eb"/>
+
+        <!-- Impact indicators — right peak -->
+        <circle cx="820" cy="60" r="24" fill="#2563eb" opacity="0.15"/>
+        <circle cx="820" cy="60" r="16" fill="#2563eb" opacity="0.25"/>
+        <circle cx="820" cy="60" r="8" fill="#2563eb"/>
+
+        <!-- Valley center -->
+        <circle cx="450" cy="180" r="6" fill="#94a3b8"/>
+
+        <!-- Labels -->
+        <text x="80" y="110" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Sourcing</text>
+        <text x="80" y="128" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="12" fill="#64748b">年間 200 件のスクリーニング</text>
+        <text x="80" y="146" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="12" fill="#64748b">ロングリスト自動化</text>
+
+        <text x="450" y="218" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="14" font-weight="600" fill="#94a3b8">DD Execution</text>
+        <text x="450" y="236" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="12" fill="#94a3b8">定型作業の効率化</text>
+
+        <text x="820" y="110" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="14" font-weight="600" fill="#1a1a1a">Final Decision</text>
+        <text x="820" y="128" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="12" fill="#64748b">事業計画整合性チェック</text>
+        <text x="820" y="146" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="12" fill="#64748b">マルチプル算出の品質向上</text>
+
+        <!-- Axis labels -->
+        <text x="50" y="28" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" letter-spacing="1.5" fill="#94a3b8" text-transform="uppercase">HIGH IMPACT</text>
+        <text x="410" y="270" font-family="'Instrument Sans', sans-serif" font-size="11" font-weight="600" letter-spacing="1.5" fill="#94a3b8" text-transform="uppercase">LOW IMPACT</text>
+
+        <!-- Arrow: upstream -->
+        <line x1="140" y1="20" x2="50" y2="20" stroke="#e2e8f0" stroke-width="1"/>
+        <polygon points="50,16 50,24 42,20" fill="#e2e8f0"/>
+        <text x="160" y="24" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#94a3b8">upstream</text>
+
+        <!-- Arrow: downstream -->
+        <line x1="760" y1="20" x2="850" y2="20" stroke="#e2e8f0" stroke-width="1"/>
+        <polygon points="850,16 850,24 858,20" fill="#e2e8f0"/>
+        <text x="710" y="24" font-family="'Instrument Sans', sans-serif" font-size="11" fill="#94a3b8">downstream</text>
+
+        <!-- Entry strategy annotation -->
+        <rect x="300" y="278" width="300" height="36" rx="0" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+        <text x="450" y="300" text-anchor="middle" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#b45309">Entry: DD 定型作業（マイナス解消）</text>
+      </svg>
+    </div>
+
+    <div style="margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
+      <div style="padding: 16px; background: var(--wash-blue); border-left: 3px solid var(--ink-blue);">
+        <p style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #1d4ed8; margin-bottom: 4px;">High Impact</p>
+        <p style="font-size: 13px; color: var(--text-primary);">上流の効率化 — 「釣り堀にいい魚がいっぱいいる」状態を作る</p>
+      </div>
+      <div style="padding: 16px; background: var(--paper-300); border-left: 3px solid var(--ink-300);">
+        <p style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Entry Point</p>
+        <p style="font-size: 13px; color: var(--text-primary);">DD 定型作業 — 「大変なところをゼロにする」信頼構築の入口</p>
+      </div>
+      <div style="padding: 16px; background: var(--wash-blue); border-left: 3px solid var(--ink-blue);">
+        <p style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #1d4ed8; margin-bottom: 4px;">High Impact</p>
+        <p style="font-size: 13px; color: var(--text-primary);">最終判断の品質向上 — 意思決定フェーズでのAI補助</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ── Footer ── -->
+<div class="page-footer">
+  <div class="container">
+    <div class="page-footer-inner">
+      <span class="footer-left">Source: SmartHR 商談後デブリーフ 2026-03-23</span>
+      <span class="footer-right">Confidential</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Accordion toggle for timeline items ── */
+document.querySelectorAll('.timeline-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.timeline-item').forEach(i => i.classList.remove('open'));
+    // Toggle clicked
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+/* ── IntersectionObserver for sticky nav ── */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.section-nav a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const activeLink = document.querySelector(`.section-nav a[href="#${entry.target.id}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+}, { rootMargin: '-120px 0px -60% 0px', threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
