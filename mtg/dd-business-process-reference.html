@@ -93,7 +93,7 @@ body {
 .text-muted { color: var(--text-muted); }
 
 /* ── Layout ── */
-.container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 0 32px; }
 section { padding: 96px 0; position: relative; }
 .section-separator { height: 1px; background: var(--border-default); }
 
@@ -104,7 +104,7 @@ header {
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-bottom: 2px solid var(--border-heavy);
 }
-nav { max-width: 1120px; margin: 0 auto; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+nav { max-width: 1400px; margin: 0 auto; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
 .logo { font-size: 18px; font-weight: 700; color: var(--text-heading); text-decoration: none; letter-spacing: -0.3px; }
 .nav-links { display: flex; gap: 24px; align-items: center; }
 .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 400; transition: color 0.15s ease; }
@@ -475,134 +475,125 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
     <h3 class="heading-md" style="margin-bottom: 24px;">プロセスフロー（チャネル別分岐）</h3>
 
     <div class="pf-wrap">
-      <div style="min-width: 1060px;">
+      <div style="min-width: 1200px;">
 
-        <!-- ===== Sourcing: 3-lane branching ===== -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-bottom: 2px solid var(--border-heavy); padding-bottom: 24px;">
-
-          <!-- Lane: 仲介会社様経由 -->
-          <div style="padding: 0 12px; border-right: 1px solid var(--border-default);">
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); margin-bottom: 16px;">仲介会社様経由</div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">1</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">ノンネーム受領</div>
-              </div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">2</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">初期スクリーニング</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">IMの半数以上が不適合で弾かれる</div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">3</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">NDA → IM受領</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">年間200件紹介 → IM 40〜45件</div>
-            </div>
-          </div>
-
-          <!-- Lane: 自社ロングリスト -->
-          <div style="padding: 0 12px; border-right: 1px solid var(--border-default);">
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); margin-bottom: 16px;">自社ロングリスト</div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">1</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">ターゲット要件定義</div>
-              </div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">2</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">リスト作成・色付け</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">数十〜100社 → 上位10社を深掘り</div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">3</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">直接コンタクト・対話</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">売却意思の確認から。複数回の対話が必要</div>
-            </div>
-          </div>
-
-          <!-- Lane: 対象会社様お持ち込み -->
-          <div style="padding: 0 12px;">
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); margin-bottom: 16px;">対象会社様お持ち込み</div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">1</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">先方からの打診</div>
-              </div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">2</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">初期面談</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">経営者の人柄・事業実態を直接確認</div>
-              <div style="width: 2px; height: 8px; background: var(--border-default);"></div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="pf-dot" style="width: 28px; height: 28px; font-size: 11px; flex-shrink: 0;">3</div>
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-heading); line-height: 1.35;">NDA締結</div>
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.4;">件数は少ないが成約率は高い</div>
-            </div>
-          </div>
+        <!-- ===== Phase lane labels (same grid as body) ===== -->
+        <div style="display: grid; grid-template-columns: 80px repeat(9, 1fr); min-width: 1200px;">
+          <div></div>
+          <div style="grid-column: 2/5; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy);">ソーシング（チャネル別）</div>
+          <div style="grid-column: 5/7; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); border-left: 2px solid var(--border-heavy);">Pre-DD → 基本合意</div>
+          <div style="grid-column: 7/11; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); text-align: center; padding: 8px 0; border-bottom: 2px solid var(--border-heavy); border-left: 2px solid var(--border-heavy);">DD実行 → クロージング</div>
         </div>
 
-        <!-- ===== Merge indicator ===== -->
-        <div style="display: flex; flex-direction: column; align-items: center; padding: 12px 0;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 200px; height: 2px; background: var(--border-default);"></div>
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--ink-blue); background: var(--wash-blue); padding: 4px 12px; white-space: nowrap;">合流 → 共通フロー</div>
-            <div style="width: 200px; height: 2px; background: var(--border-default);"></div>
+        <!-- ===== Unified grid: label(80px) + 9 steps, header + 3 channel rows ===== -->
+        <div style="display: grid; grid-template-columns: 80px repeat(9, 1fr); position: relative; min-width: 1200px;">
+
+          <!-- Connector line through header dots -->
+          <div style="position: absolute; top: 38px; left: 80px; right: 0; height: 2px; background: var(--border-default); z-index: 0;"></div>
+
+          <!-- Row 0: Header — step number dots -->
+          <div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot">1</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot">2</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot">3</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot">4</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot gate">5</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot gate">6</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot gate">7</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot">8</div></div>
+          <div style="display: flex; justify-content: center; padding: 20px 0 12px; position: relative; z-index: 1;"><div class="pf-dot">9</div></div>
+
+          <!-- Row 1: 仲介 -->
+          <div style="display: flex; align-items: center; padding: 0 4px 0 0; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-secondary); border-top: 1px solid var(--border-default);">仲介</div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">ノンネーム受領</div>
+            </div>
           </div>
-        </div>
-
-        <!-- ===== Common track: Pre-DD → Closing ===== -->
-        <div class="pf-lanes" style="min-width: 960px;">
-          <div class="pf-lane-label" style="flex: 3;">Pre-DD → 基本合意</div>
-          <div class="pf-lane-label" style="flex: 4; border-left: 2px solid var(--border-heavy);">DD実行 → クロージング</div>
-        </div>
-
-        <div class="pf-track" style="min-width: 960px; grid-template-columns: repeat(6, 1fr);">
-          <div class="pf-item">
-            <div class="pf-dot">4</div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">初期スクリーニング</div>
+              <div style="font-size: 9px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">IM半数以上が不適合</div>
+            </div>
+          </div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">NDA → IM受領</div>
+              <div style="font-size: 9px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">200件→IM 40〜45件</div>
+            </div>
+          </div>
+          <!-- Steps 4–9: span all 3 channel rows -->
+          <div style="grid-row: 2/5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; border-top: 1px solid var(--border-default); border-left: 2px solid var(--border-heavy);">
             <div class="pf-title">簡易分析<br>（3〜4週間）</div>
             <div class="pf-desc">ストレスシナリオ作成<br>簡易DCFで価格レンジ</div>
             <div class="pf-gate-tag">意向表明を出すか</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot gate">5</div>
+          <div style="grid-row: 2/5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; border-top: 1px solid var(--border-default);">
             <div class="pf-title">意向表明書<br>（LOI）提出</div>
             <div class="pf-desc">価格帯・シナジー・<br>独占交渉権の要請</div>
             <div class="pf-gate-tag">LOI通過でDD開始</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot gate">6</div>
+          <div style="grid-row: 2/5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; border-top: 1px solid var(--border-default); border-left: 2px solid var(--border-heavy);">
             <div class="pf-title">DD実行</div>
             <div class="pf-desc">5〜6モジュール並走<br>4〜8週間</div>
             <div class="pf-gate-tag">買うか・いくらで</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot gate">7</div>
+          <div style="grid-row: 2/5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; border-top: 1px solid var(--border-default);">
             <div class="pf-title">DD結果統合<br>取締役会決議A</div>
             <div class="pf-desc">リスクマトリクス<br>デック数十枚で付議</div>
             <div class="pf-gate-tag">バインディングLOI</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot">8</div>
+          <div style="grid-row: 2/5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; border-top: 1px solid var(--border-default);">
             <div class="pf-title">SPA交渉<br>取締役会決議B</div>
             <div class="pf-desc">表明保証・補償条項<br>PMI100日プラン具体化</div>
             <div class="pf-gate-tag">契約締結の最終決議</div>
           </div>
-          <div class="pf-item">
-            <div class="pf-dot">9</div>
+          <div style="grid-row: 2/5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; border-top: 1px solid var(--border-default);">
             <div class="pf-title">クロージング</div>
             <div class="pf-desc">決議B後1〜1.5ヶ月<br>PMI準備前倒し実行</div>
           </div>
-        </div>
 
+          <!-- Row 2: ロングリスト -->
+          <div style="display: flex; align-items: center; padding: 0 4px 0 0; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-secondary); border-top: 1px solid var(--border-default);">ロング<br>リスト</div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">ターゲット要件定義</div>
+            </div>
+          </div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">リスト作成・色付け</div>
+              <div style="font-size: 9px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">数十〜100社→上位10社</div>
+            </div>
+          </div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">直接コンタクト・対話</div>
+              <div style="font-size: 9px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">売却意思の確認から</div>
+            </div>
+          </div>
+
+          <!-- Row 3: インバウンド -->
+          <div style="display: flex; align-items: center; padding: 0 4px 0 0; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-secondary); border-top: 1px solid var(--border-default);">インバ<br>ウンド</div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">先方からの打診</div>
+            </div>
+          </div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">初期面談</div>
+              <div style="font-size: 9px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">経営者の人柄・事業実態</div>
+            </div>
+          </div>
+          <div style="padding: 8px 4px; border-top: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 8px; text-align: center;">
+              <div style="font-size: 11px; font-weight: 600; color: var(--text-heading); line-height: 1.3;">NDA締結</div>
+              <div style="font-size: 9px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">成約率は高い</div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
