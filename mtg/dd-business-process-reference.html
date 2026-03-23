@@ -1115,38 +1115,71 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
       <p>領域を問わず発生するプロジェクトマネジメント業務。</p>
     </div>
 
-    <div class="cross-grid">
-      <div class="cross-card">
-        <div class="cross-card-title"><span class="icon">◈</span> VDR管理</div>
-        <ul class="task-list">
-          <li><span class="task-name">VDR構築</span><span class="task-desc">フォルダ構成設計（領域別×資料カテゴリ別）、アクセス権設定</span></li>
-          <li><span class="task-name">資料依頼リスト</span><span class="task-desc">DD領域ごとの必要資料をリスト化（通常200〜500項目）。優先度付け</span></li>
-          <li><span class="task-name">資料の受領・管理</span><span class="task-desc">インデックス管理、不備・不足のフォローアップ</span></li>
-          <li><span class="task-name">Q&Aプロセス</span><span class="task-desc">各DDチームからの質問（Excelシート）を集約。<strong>モジュール間の重複質問の消し込みが必須</strong>（財務・税務とビジネスで重複多発）。週2〜3回セルサイドに送付、回答の各アドバイザーへの即時配布。セルサイドからの情報開示も都度対応</span></li>
-        </ul>
-      </div>
+    <!-- Gantt-style: phases × cross-cutting functions -->
+    <div class="pf-wrap">
+      <div style="min-width: 900px;">
 
-      <div class="cross-card">
-        <div class="cross-card-title"><span class="icon">◈</span> プロジェクトマネジメント</div>
-        <ul class="task-list">
-          <li><span class="task-name" style="color: var(--ink-blue);">運営ルール定義</span><span class="task-desc"><strong>最重要の初動</strong>。報告フォーマット・Q&Aプロセス・エスカレーション基準を全関係者（外部4〜5社 + 社内3〜4チーム）と合意</span></li>
-          <li><span class="task-name">DD体制設計</span><span class="task-desc">社内チーム編成、外部アドバイザー4社（BDD/FDD/TDD/LDD）+ バリュエーションベンダーの選定・契約</span></li>
-          <li><span class="task-name">スケジュール管理</span><span class="task-desc">全体スケジュール（4〜8週間）、5〜6モジュールの並走管理、マイルストーン・進捗トラッキング</span></li>
-          <li><span class="task-name">予算管理</span><span class="task-desc">外部アドバイザーフィー、出張費、VDR利用料等のコスト管理</span></li>
-          <li><span class="task-name">ステアリングコミッティ</span><span class="task-desc">週次/隔週の経営陣への進捗報告、Go/No-Go判断のための論点整理</span></li>
-          <li><span class="task-name">コンフリクト管理</span><span class="task-desc">売り手とのコミュニケーション管理、情報開示の交渉</span></li>
-        </ul>
-      </div>
+        <!-- Phase header row -->
+        <div style="display: grid; grid-template-columns: 160px repeat(5, 1fr); border-bottom: 2px solid var(--border-heavy);">
+          <div style="padding: 8px 0;"></div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-left: 1px solid var(--border-default);">DD準備</div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-left: 1px solid var(--border-default);">DD実行<span style="font-weight: 400; letter-spacing: 0;">（4〜8w）</span></div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-left: 1px solid var(--border-default);">DD統合</div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-left: 1px solid var(--border-default);">取締役会A</div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-align: center; padding: 8px 0; border-left: 1px solid var(--border-default);">SPA交渉</div>
+        </div>
 
-      <div class="cross-card">
-        <div class="cross-card-title"><span class="icon">◈</span> DD統合レポーティング</div>
-        <ul class="task-list">
-          <li><span class="task-name">エグゼクティブサマリー</span><span class="task-desc">全領域のDD結果を1枚サマリーに集約。Go/No-Go推奨、主要リスク</span></li>
-          <li><span class="task-name">リスクマトリクス</span><span class="task-desc">発見事項を「影響度×発生確率」で分類。Red/Amber/Green のトリアージ</span></li>
-          <li><span class="task-name">バリュエーション反映</span><span class="task-desc">EBITDA調整、ネットデット調整、特別補償請求</span></li>
-          <li><span class="task-name">SPA論点リスト</span><span class="task-desc">表明保証・補償条項・前提条件への反映論点</span></li>
-          <li><span class="task-name">取締役会付議資料</span><span class="task-desc">DDサマリー、バリュエーション、ストラクチャー、推奨事項を意思決定フォーマットに整形</span></li>
-        </ul>
+        <!-- Row 1: 情報統制 — spans DD準備〜DD統合 -->
+        <div style="display: grid; grid-template-columns: 160px repeat(5, 1fr); border-bottom: 1px solid var(--border-default); min-height: 80px;">
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-heading); padding: 16px 12px 16px 0; line-height: 1.35;">情報統制<br><span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">資料授受・Q&A</span></div>
+          <!-- Bar spanning 3 columns (DD準備〜DD統合) -->
+          <div style="grid-column: 2 / 5; padding: 12px 8px; border-left: 1px solid var(--border-default);">
+            <div style="background: var(--wash-blue); border-left: 3px solid var(--ink-blue); padding: 8px 12px; height: 100%; display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: start; align-content: start;">
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-blue);">VDR構築</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-blue);">資料依頼リスト</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-blue);">資料受領・管理</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-blue);">Q&A消込・配布</span>
+              <div style="font-size: 10px; color: var(--text-secondary); width: 100%; margin-top: 2px;">200〜500項目の資料依頼 / モジュール間の重複Q&A消込が必須 / 週2〜3回セルサイドへ送付</div>
+            </div>
+          </div>
+          <div style="grid-column: 5 / 7; border-left: 1px solid var(--border-default);"></div>
+        </div>
+
+        <!-- Row 2: プロジェクトマネジメント — spans DD準備〜SPA交渉（全期間） -->
+        <div style="display: grid; grid-template-columns: 160px repeat(5, 1fr); border-bottom: 1px solid var(--border-default); min-height: 80px;">
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-heading); padding: 16px 12px 16px 0; line-height: 1.35;">プロジェクト<br>マネジメント</div>
+          <!-- Bar spanning all 5 columns -->
+          <div style="grid-column: 2 / 7; padding: 12px 8px; border-left: 1px solid var(--border-default);">
+            <div style="background: var(--bg-surface-raised); border-left: 3px solid var(--ink-1000); padding: 8px 12px; height: 100%; display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: start; align-content: start;">
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-heading);">運営ルール定義</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-heading);">DD体制設計</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-heading);">スケジュール管理</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-heading);">予算管理</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-heading);">ステアリングコミッティ</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-heading);">コンフリクト管理</span>
+              <div style="font-size: 10px; color: var(--text-secondary); width: 100%; margin-top: 2px;">初動の運営ルール定義が最重要 / 外部4〜5社＋社内3〜4チームの合意形成 / 週次SC運営</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: DD統合レポーティング — spans DD実行後半〜SPA交渉 -->
+        <div style="display: grid; grid-template-columns: 160px repeat(5, 1fr); min-height: 80px;">
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-heading); padding: 16px 12px 16px 0; line-height: 1.35;">DD統合<br>レポーティング</div>
+          <!-- Empty: DD準備 -->
+          <div style="border-left: 1px solid var(--border-default);"></div>
+          <!-- Bar spanning DD実行〜SPA交渉 (4 columns) -->
+          <div style="grid-column: 3 / 7; padding: 12px 8px; border-left: 1px solid var(--border-default);">
+            <div style="background: var(--wash-amber); border-left: 3px solid var(--ink-amber); padding: 8px 12px; height: 100%; display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: start; align-content: start;">
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-amber);">リスクマトリクス</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-amber);">エグゼクティブサマリー</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-amber);">バリュエーション反映</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-amber);">SPA論点リスト</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--ink-amber);">取締役会付議資料</span>
+              <div style="font-size: 10px; color: var(--text-secondary); width: 100%; margin-top: 2px;">DD実行中から並行で統合開始 / リスクRAG分類 / デック数十枚で決議A付議</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
