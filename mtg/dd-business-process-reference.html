@@ -93,7 +93,7 @@ body {
 .text-muted { color: var(--text-muted); }
 
 /* ── Layout ── */
-.container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
 section { padding: 96px 0; position: relative; }
 .section-separator { height: 1px; background: var(--border-default); }
 
@@ -237,10 +237,6 @@ nav { max-width: 1120px; margin: 0 auto; padding: 16px 32px; display: flex; just
 .task-list .task-desc { color: var(--text-secondary); }
 
 /* ── Issue Cards ── */
-.issue-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-.issue-card { background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px; }
-.issue-card-title { font-size: 15px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px; }
-.issue-card-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
 
 /* ── Timeline / Gantt ── */
 .gantt-container { overflow-x: auto; }
@@ -333,6 +329,7 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
 
 /* ── Responsive ── */
 @media (max-width: 1023px) {
+  .container { padding: 0 24px; }
   .dd-grid { grid-template-columns: repeat(2, 1fr); }
   .cross-grid { grid-template-columns: repeat(2, 1fr); }
   .hero { min-height: auto; padding: 120px 0 80px; }
@@ -343,7 +340,7 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
 }
 @media (max-width: 639px) {
   .container { padding: 0 16px; }
-  .dd-grid, .cross-grid, .issue-grid, .sourcing-grid { grid-template-columns: 1fr; }
+  .dd-grid, .cross-grid, .sourcing-grid { grid-template-columns: 1fr; }
   .display-xl { font-size: 32px; letter-spacing: -0.5px; }
   .display-md { font-size: 22px; }
   .nav-links { display: none; }
@@ -364,7 +361,6 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
       <a href="#phases">フェーズ構成</a>
       <a href="#dd-areas">DD領域</a>
       <a href="#cross">横断業務</a>
-      <a href="#issues">特有の論点</a>
       <a href="#ai-opportunity">AI活用</a>
       <a href="#llm-map">LLM Map</a>
       <a href="#timeline">タイムライン</a>
@@ -1188,66 +1184,12 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
 <div class="section-separator"></div>
 
 <!-- ============================================================
-     SECTION 4 — 事業会社DD特有の論点
+     SECTION 4 — AI活用の可能性
      ============================================================ -->
-<section id="issues" style="background: var(--bg-surface);">
+<section id="ai-opportunity" style="background: var(--bg-surface);">
   <div class="container">
     <div class="section-header">
       <span class="label">SECTION 04</span>
-      <h2 class="display-md">事業会社DD特有の論点</h2>
-      <p>FA・コンサルではなく事業会社が自社でDDを実行する際の特有の考慮事項。</p>
-    </div>
-
-    <div class="issue-grid">
-      <div class="issue-card">
-        <div class="issue-card-title">内製 vs 外注の線引き</div>
-        <div class="issue-card-text">BDDの戦略フィット評価・シナジー分析は<strong>内製</strong>（自社の戦略を最も理解している）。FDD・LDD・TDDは専門性が必要なため<strong>外注</strong>が一般的。HRDDは半内製（自社HR部門＋外部アドバイザー）</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">情報の非対称性</div>
-        <div class="issue-card-text">事業会社はFA・コンサルと比べて対象業界の知見が深い場合がある一方、DD実行の経験値が少ない。<strong>「何を聞くべきか知らない」リスク</strong>を認識する</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">バイアスの管理</div>
-        <div class="issue-card-text">事業部門が「買いたい」というバイアスを持ちやすい。DDはバイアスを排除して客観的にリスクを洗い出す機能。<strong>社内の推進者とDD担当を分離する設計</strong>が重要</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">秘密保持の範囲</div>
-        <div class="issue-card-text">社内でDD情報にアクセスできる人数を限定する（<strong>Need to Know原則</strong>）。上場企業の場合はインサイダー取引規制への配慮</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">PMIとの接続</div>
-        <div class="issue-card-text">事業会社のDDはPMI計画と連続的。DDで発見した課題がそのまま<strong>PMIの100日プランに引き継がれる</strong>。DD段階からPMI担当を巻き込む設計が理想</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">取締役会への付議</div>
-        <div class="issue-card-text">DD結果→バリュエーション→SPA条件の全てを取締役会が承認する。<strong>付議資料の品質（起案書フォーマット）</strong>がDD成果の実効性を左右する。DD前の社外取ブリーフィングで懸念を先に回収しておくことが決議の円滑化に直結する</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">キャパシティ制約</div>
-        <div class="issue-card-text">年間5件程度のディールが常に複数並走し、本DD・Pre-DD評価・ロングリスト更新の<strong>3ワークストリームが同時に走る</strong>。DDが重なると極めて高負荷であり、現在のチーム規模ではキャパシティが制約になっている</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">ジュニアスタッフの論点抽出力</div>
-        <div class="issue-card-text">シニアメンバーは経験的にDD資料の「臭いところ」にヒントを見つけられるが、DD経験の少ないメンバーは<strong>大量の資料を見ても何を見ればよいかわからない</strong>。業種×DDファンクション別のチェックポイント整備がジュニアの生産性向上に直結する</div>
-      </div>
-      <div class="issue-card">
-        <div class="issue-card-title">Q&A上限とディールの文脈依存性</div>
-        <div class="issue-card-text">DD期間はタイトで、セルサイドから<strong>Q&A数を制限される場合がある（例: 300問まで）</strong>。網羅的な論点リストを持つだけでは不十分で、ディールの成否に直結する論点を優先的に選別する判断力が必要。ここが優秀なアドバイザーの付加価値の源泉</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-separator"></div>
-
-<!-- ============================================================
-     SECTION 5 — AI活用の可能性
-     ============================================================ -->
-<section id="ai-opportunity">
-  <div class="container">
-    <div class="section-header">
-      <span class="label">SECTION 05</span>
       <h2 class="display-md">AI/LLM活用の可能性</h2>
       <p>ヒアリングで特定されたペインポイントとAI活用が有望な領域。</p>
     </div>
@@ -1255,7 +1197,7 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
       <!-- High value targets -->
       <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;">
-        <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-green); margin-bottom: 16px;">高付加価値（推論力の外注）</div>
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-green); margin-bottom: 16px;">現在行っていて効率化したい業務</div>
         <ul class="task-list">
           <li><span class="task-name">DD論点の網羅性担保</span><span class="task-desc">DD実務書20冊+を構造化し、ファンクション別×業種別の論点チェックリストを構築。<strong>1,000項目程度の網羅的チェックが可能になり、人間の経験則の「テーパーする90点→100点」を補完</strong></span></li>
           <li><span class="task-name">資料到着時の即時論点抽出</span><span class="task-desc">VDRに届く大量資料をタイムリーに読解し、DDモジュール別の論点候補・リスクシグナルを自動抽出。<strong>ジュニアスタッフのガイドとして機能</strong></span></li>
@@ -1266,7 +1208,7 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
 
       <!-- Low-hanging fruit -->
       <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;">
-        <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-blue); margin-bottom: 16px;">即効性（安価な労働力として）</div>
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-blue); margin-bottom: 16px;">現在行えておらず実施したい業務</div>
         <ul class="task-list">
           <li><span class="task-name">ロングリストの更新・調査</span><span class="task-desc">鮮度が落ちたロングリストをWeb情報で補完・更新。新規ターゲット候補の初期スクリーニング</span></li>
           <li><span class="task-name">IM初期分析</span><span class="task-desc">届いたIMの定型的な初期分析（KPI抽出、業界比較、戦略フィットの初期判定）を自動化</span></li>
@@ -1292,7 +1234,7 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
 <section id="llm-map">
   <div class="container">
     <div class="section-header">
-      <span class="label">SECTION 06</span>
+      <span class="label">SECTION 05</span>
       <h2 class="display-md">LLM介入マップ</h2>
       <p>DD業務をLLM介入の深さ × インパクトで俯瞰する。バブルの大きさは現在の工数、色は既存業務（青）vs 新規ケイパビリティ（琥珀）。実線は付加価値業務、破線は雑務・消込系。</p>
     </div>
@@ -1475,7 +1417,7 @@ footer { border-top: 1px solid var(--border-default); padding: 48px 0; backgroun
 <section id="timeline">
   <div class="container">
     <div class="section-header">
-      <span class="label">SECTION 07</span>
+      <span class="label">SECTION 06</span>
       <h2 class="display-md">DDタイムライン（典型的な4〜8週間）</h2>
       <p>DD開始からSPA交渉開始までの標準的なスケジュール。</p>
     </div>
