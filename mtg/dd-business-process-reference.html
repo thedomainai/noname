@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M&A Due Diligence Business Process Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   M&A DD Business Process Reference — Paper Design System
+   Web App context: --font-sans (Instrument Sans) only.
+   ============================================================ */
+:root {
+  --ink-1000: #000000;
+  --ink-900:  #1a1a1a;
+  --ink-800:  #2d2d2d;
+  --ink-700:  #404040;
+  --ink-600:  #525252;
+  --ink-500:  #6b6b6b;
+  --ink-400:  #8a8a8a;
+  --ink-300:  #a3a3a3;
+  --ink-200:  #c4c4c4;
+  --ink-100:  #e0e0e0;
+  --ink-50:   #f0f0f0;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50:  #f8fafc;
+  --paper-white:  #fdfdfc;
+  --paper-cream:  #faf9f7;
+  --paper-warm:   #f5f4f0;
+  --paper-kraft:  #eeedea;
+  --paper-aged:   #e8e7e3;
+  --paper-shadow: #dddcd8;
+  --ink-blue:  #2563eb;
+  --ink-green: #16a34a;
+  --ink-amber: #d97706;
+  --ink-red:   #dc2626;
+  --wash-blue:  #dbeafe;
+  --wash-green: #dcfce7;
+  --wash-amber: #fef3c7;
+  --wash-red:   #fee2e2;
+  --bg-page:           var(--paper-white);
+  --bg-surface:        var(--paper-cream);
+  --bg-surface-raised: var(--paper-white);
+  --border-default:    var(--slate-200);
+  --border-strong:     var(--slate-300);
+  --border-heavy:      var(--ink-1000);
+  --grid-line:         var(--slate-100);
+  --text-primary:      var(--ink-900);
+  --text-heading:      var(--ink-1000);
+  --text-secondary:    var(--slate-500);
+  --text-muted:        var(--slate-400);
+  --text-caption:      var(--slate-500);
+  --interactive:       var(--ink-blue);
+  --separator:         1px solid var(--border-default);
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography ── */
+.display-xl { font-size: 56px; font-weight: 300; line-height: 1.1; letter-spacing: -1.5px; color: var(--text-heading); }
+.display-lg { font-size: 44px; font-weight: 300; line-height: 1.15; letter-spacing: -1px; color: var(--text-heading); }
+.display-md { font-size: 36px; font-weight: 400; line-height: 1.2; letter-spacing: -0.5px; color: var(--text-heading); }
+.heading-lg { font-size: 28px; font-weight: 600; line-height: 1.3; letter-spacing: -0.3px; color: var(--text-heading); }
+.heading-md { font-size: 22px; font-weight: 600; line-height: 1.35; letter-spacing: -0.2px; color: var(--text-heading); }
+.heading-sm { font-size: 18px; font-weight: 600; line-height: 1.4; color: var(--text-primary); }
+.body-lg { font-size: 16px; font-weight: 400; line-height: 1.7; color: var(--text-primary); }
+.body-md { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--text-primary); }
+.body-sm { font-size: 12px; font-weight: 400; line-height: 1.5; letter-spacing: 0.1px; color: var(--text-caption); }
+.label { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-blue); display: inline-block; margin-bottom: 16px; }
+.mono { font-family: var(--font-mono); font-size: 13px; }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+
+/* ── Layout ── */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+section { padding: 96px 0; position: relative; }
+.section-separator { height: 1px; background: var(--border-default); }
+
+/* ── Header ── */
+header {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  background: rgba(253, 253, 252, 0.92);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--border-heavy);
+}
+nav { max-width: 1120px; margin: 0 auto; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 18px; font-weight: 700; color: var(--text-heading); text-decoration: none; letter-spacing: -0.3px; }
+.nav-links { display: flex; gap: 24px; align-items: center; }
+.nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 400; transition: color 0.15s ease; }
+.nav-links a:hover { color: var(--text-primary); }
+
+/* ── Hero ── */
+.hero {
+  min-height: 70vh; display: flex; align-items: center; position: relative; overflow: hidden;
+  padding-top: 68px;
+  background-color: var(--paper-white);
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.hero-content { position: relative; z-index: 1; text-align: center; }
+.hero-subtitle { font-size: 18px; font-weight: 400; color: var(--text-secondary); line-height: 1.6; margin-top: 20px; max-width: 720px; margin-left: auto; margin-right: auto; }
+.hero-stats { display: flex; gap: 48px; justify-content: center; margin-top: 40px; }
+.hero-stat-value { font-size: 36px; font-weight: 300; color: var(--text-heading); letter-spacing: -0.5px; }
+.hero-stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; letter-spacing: 0.1px; }
+
+/* ── Section Header ── */
+.section-header { text-align: left; margin: 0 0 48px; }
+.section-header .label { margin-bottom: 12px; }
+.section-header .display-md { margin-bottom: 12px; }
+.section-header p { font-size: 16px; color: var(--text-secondary); line-height: 1.6; max-width: 720px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 24px;
+  transition: border-color 0.15s ease;
+}
+.card:hover { border-color: var(--border-strong); }
+
+/* ── Flow Diagram ── */
+.flow-svg { width: 100%; overflow-x: auto; }
+
+/* ── Phase Flow Steps ── */
+.phase-steps { display: flex; flex-direction: column; gap: 0; }
+.phase-step {
+  display: grid; grid-template-columns: 56px 1fr; gap: 0; position: relative;
+}
+.phase-step-number {
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: white; background: var(--ink-1000);
+  position: relative; z-index: 2;
+}
+.phase-step-number.gate { background: var(--ink-blue); }
+.phase-step-connector {
+  position: absolute; left: 19px; top: 40px; bottom: 0; width: 2px; background: var(--border-default); z-index: 1;
+}
+.phase-step:last-child .phase-step-connector { display: none; }
+.phase-step-content { padding: 8px 0 32px 0; }
+.phase-step-title { font-size: 16px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px; }
+.phase-step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.phase-step-gate { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--ink-blue); background: var(--wash-blue); padding: 2px 10px; letter-spacing: 0.3px; }
+
+/* ── DD Area Cards ── */
+.dd-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.dd-card {
+  background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 0;
+  transition: border-color 0.15s ease; overflow: hidden;
+}
+.dd-card:hover { border-color: var(--border-strong); }
+.dd-card-header { padding: 20px 24px; border-bottom: 1px solid var(--border-default); display: flex; align-items: center; gap: 12px; }
+.dd-card-icon {
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; letter-spacing: -0.5px;
+}
+.dd-card-icon.bdd { background: var(--wash-blue); color: #1d4ed8; }
+.dd-card-icon.fdd { background: var(--wash-green); color: #15803d; }
+.dd-card-icon.ldd { background: var(--wash-amber); color: #b45309; }
+.dd-card-icon.tdd { background: var(--wash-red); color: #b91c1c; }
+.dd-card-icon.hrdd { background: #f3e8ff; color: #7e22ce; }
+.dd-card-icon.itdd { background: #e0f2fe; color: #0369a1; }
+.dd-card-icon.env { background: var(--wash-green); color: #15803d; }
+.dd-card-title { font-size: 16px; font-weight: 600; color: var(--text-heading); }
+.dd-card-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+.dd-card-body { padding: 0; }
+
+/* ── Accordion ── */
+.accordion-item { border-bottom: 1px solid var(--border-default); }
+.accordion-item:last-child { border-bottom: none; }
+.accordion-trigger {
+  width: 100%; background: none; border: none; cursor: pointer;
+  padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--text-primary);
+  transition: background 0.1s ease; text-align: left;
+}
+.accordion-trigger:hover { background: var(--slate-50); }
+.accordion-trigger .arrow { font-size: 10px; color: var(--text-muted); transition: transform 0.2s ease; }
+.accordion-item.open .accordion-trigger .arrow { transform: rotate(90deg); }
+.accordion-content {
+  max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+}
+.accordion-item.open .accordion-content { max-height: 2000px; }
+.accordion-inner { padding: 0 24px 16px; }
+
+/* ── Mini Table ── */
+.mini-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.mini-table th {
+  text-align: left; padding: 6px 8px; font-weight: 600; color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-default); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.mini-table td { padding: 8px 8px; border-bottom: 1px solid var(--slate-100); color: var(--text-primary); vertical-align: top; line-height: 1.5; }
+.mini-table tr:last-child td { border-bottom: none; }
+.mini-table .col-task { width: 22%; font-weight: 600; color: var(--text-heading); }
+.mini-table .col-detail { width: 42%; }
+.mini-table .col-io { width: 18%; color: var(--text-secondary); }
+
+/* ── Comparison Table ── */
+.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.compare-table th {
+  text-align: left; padding: 12px 16px; font-weight: 600; color: var(--text-heading);
+  border-bottom: 2px solid var(--border-heavy); font-size: 13px; background: var(--bg-surface);
+}
+.compare-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-default); vertical-align: top; line-height: 1.5; }
+.compare-table .row-label { font-weight: 600; color: var(--text-heading); background: var(--slate-50); width: 14%; }
+.compare-table td:not(.row-label) { width: 28.66%; }
+
+/* ── Cross-functional ── */
+.cross-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.cross-card { background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px; }
+.cross-card-title { font-size: 16px; font-weight: 600; color: var(--text-heading); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.cross-card-title .icon { font-size: 14px; }
+.task-list { list-style: none; }
+.task-list li { padding: 8px 0; border-bottom: 1px solid var(--slate-100); font-size: 13px; line-height: 1.5; display: flex; gap: 8px; }
+.task-list li:last-child { border-bottom: none; }
+.task-list .task-name { font-weight: 600; color: var(--text-heading); min-width: 120px; flex-shrink: 0; }
+.task-list .task-desc { color: var(--text-secondary); }
+
+/* ── Issue Cards ── */
+.issue-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.issue-card { background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px; }
+.issue-card-title { font-size: 15px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px; }
+.issue-card-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── Timeline / Gantt ── */
+.gantt-container { overflow-x: auto; }
+.gantt { width: 100%; min-width: 800px; border-collapse: collapse; }
+.gantt th { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-align: center; padding: 8px 4px; border-bottom: 2px solid var(--border-heavy); letter-spacing: 0.5px; text-transform: uppercase; }
+.gantt th:first-child { text-align: left; width: 180px; }
+.gantt td { padding: 6px 4px; border-bottom: 1px solid var(--slate-100); vertical-align: middle; height: 36px; }
+.gantt td:first-child { font-size: 13px; font-weight: 600; color: var(--text-heading); padding-left: 0; }
+.gantt-bar {
+  height: 24px; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2px; color: white;
+}
+.gantt-bar.setup { background: var(--ink-blue); }
+.gantt-bar.analysis { background: var(--ink-green); }
+.gantt-bar.deep { background: var(--ink-amber); }
+.gantt-bar.interview { background: #7e22ce; }
+.gantt-bar.integration { background: var(--ink-red); }
+.gantt-bar.decision { background: var(--ink-1000); }
+.gantt-bar.negotiation { background: var(--slate-600); }
+.gantt-bar.sc { background: var(--slate-300); color: var(--text-heading); }
+
+/* ── Sourcing Section ── */
+.sourcing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
+.sourcing-card { background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px; text-align: center; }
+.sourcing-value { font-size: 32px; font-weight: 300; color: var(--text-heading); letter-spacing: -0.5px; }
+.sourcing-label { font-size: 14px; font-weight: 600; color: var(--text-heading); margin-top: 4px; }
+.sourcing-desc { font-size: 12px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5; }
+
+/* ── Horizontal Process Flow ── */
+.pf-wrap { overflow-x: auto; padding-bottom: 8px; }
+.pf-lanes { display: flex; }
+.pf-lane-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-secondary); text-align: center; padding: 8px 0;
+  border-bottom: 2px solid var(--border-heavy);
+}
+.pf-track {
+  display: grid; grid-template-columns: repeat(9, 1fr);
+  position: relative; padding-top: 24px;
+}
+.pf-track::before {
+  content: ''; position: absolute;
+  top: 42px; left: 5%; right: 5%;
+  height: 2px; background: var(--border-default); z-index: 0;
+}
+.pf-item {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; z-index: 1; padding: 0 4px;
+}
+.pf-dot {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  background: var(--ink-1000); border-radius: 50%;
+  border: 3px solid var(--bg-page);
+}
+.pf-dot.gate { background: var(--ink-blue); }
+.pf-title {
+  font-size: 12px; font-weight: 600; color: var(--text-heading);
+  text-align: center; margin-top: 12px; line-height: 1.35;
+}
+.pf-desc {
+  font-size: 11px; color: var(--text-secondary);
+  text-align: center; margin-top: 4px; line-height: 1.4;
+}
+.pf-gate-tag {
+  margin-top: 6px; font-size: 10px; font-weight: 600;
+  color: var(--ink-blue); background: var(--wash-blue);
+  padding: 2px 6px; line-height: 1.3; text-align: center;
+}
+
+/* ── Footer ── */
+footer { border-top: 1px solid var(--border-default); padding: 48px 0; background: var(--bg-surface); }
+.footer-content { display: flex; justify-content: space-between; align-items: center; }
+.footer-text { font-size: 13px; color: var(--text-muted); }
+
+/* ── Bubble Chart (LLM Map) ── */
+.bub-wrap { overflow-x: auto; padding-bottom: 8px; }
+.bub { cursor: pointer; transition: opacity 0.15s ease; }
+.bub:hover { opacity: 0.85; }
+.bub-label { pointer-events: none; }
+.bub-tooltip {
+  position: fixed; z-index: 9999; pointer-events: none;
+  background: var(--ink-900); color: #fff; font-size: 12px; line-height: 1.5;
+  padding: 8px 12px; max-width: 260px; opacity: 0; transition: opacity 0.15s ease;
+}
+.bub-tooltip.visible { opacity: 1; }
+.bub-legend { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; font-size: 12px; color: var(--text-secondary); }
+.bub-legend-item { display: flex; align-items: center; gap: 6px; }
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .dd-grid { grid-template-columns: repeat(2, 1fr); }
+  .cross-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero { min-height: auto; padding: 120px 0 80px; }
+  .display-xl { font-size: 40px; letter-spacing: -1px; }
+  .display-md { font-size: 28px; }
+  section { padding: 64px 0; }
+  .hero-stats { gap: 32px; }
+}
+@media (max-width: 639px) {
+  .container { padding: 0 16px; }
+  .dd-grid, .cross-grid, .issue-grid, .sourcing-grid { grid-template-columns: 1fr; }
+  .display-xl { font-size: 32px; letter-spacing: -0.5px; }
+  .display-md { font-size: 22px; }
+  .nav-links { display: none; }
+  section { padding: 48px 0; }
+  .hero-stats { flex-direction: column; gap: 16px; }
+  .footer-content { flex-direction: column; gap: 16px; text-align: center; }
+  .phase-step { grid-template-columns: 48px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <nav>
+    <a href="#" class="logo">M&A DD Reference</a>
+    <div class="nav-links">
+      <a href="#phases">フェーズ構成</a>
+      <a href="#dd-areas">DD領域</a>
+      <a href="#cross">横断業務</a>
+      <a href="#issues">特有の論点</a>
+      <a href="#ai-opportunity">AI活用</a>
+      <a href="#llm-map">LLM Map</a>
+      <a href="#timeline">タイムライン</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <span class="label">M&A DUE DILIGENCE</span>
+      <h1 class="display-xl">Business Process Reference</h1>
+      <p class="hero-subtitle">
+        事業会社のコーポレート部門（M&A担当）がバイサイドとして実行するDD業務の網羅的リファレンス
+      </p>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">9</div>
+          <div class="hero-stat-label">M&Aフェーズ</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">7</div>
+          <div class="hero-stat-label">DD領域</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">5~10</div>
+          <div class="hero-stat-label">年間ディール数</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 1 — M&Aフェーズ構成
+     ============================================================ -->
+<section id="phases">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">SECTION 01</span>
+      <h2 class="display-md">M&Aのフェーズ構成</h2>
+      <p>ソーシングからクロージングまでの9フェーズ。各フェーズに社内の意思決定ゲートが設定されている。</p>
+    </div>
+
+    <!-- Sourcing -->
+    <div style="margin-bottom: 48px;">
+      <h3 class="heading-md" style="margin-bottom: 8px;">ソーシング（案件発掘）</h3>
+      <p class="body-md text-secondary" style="margin-bottom: 24px;">案件の入口は主に3つ。年間紹介200件に対してIMまで進むのは約40〜45件。多くは初期スクリーニングで見送りとなる。クロージング実績は年5件程度（常時複数案件が並走）。</p>
+
+      <!-- Funnel metrics -->
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding: 20px 24px; border: 1px solid var(--border-default); background: var(--bg-surface);">
+        <div style="text-align: center; flex: 1;">
+          <div style="font-size: 32px; font-weight: 300; color: var(--text-heading);">200<span style="font-size: 14px; font-weight: 400; color: var(--text-secondary);">件/年</span></div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">紹介・持ち込み</div>
+        </div>
+        <div style="font-size: 20px; color: var(--text-muted);">→</div>
+        <div style="text-align: center; flex: 1;">
+          <div style="font-size: 32px; font-weight: 300; color: var(--text-heading);">60<span style="font-size: 14px; font-weight: 400; color: var(--text-secondary);">社/年</span></div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">仲介会社からの案件</div>
+        </div>
+        <div style="font-size: 20px; color: var(--text-muted);">→</div>
+        <div style="text-align: center; flex: 1;">
+          <div style="font-size: 32px; font-weight: 300; color: var(--ink-blue);">40<span style="font-size: 14px; font-weight: 400; color: var(--text-secondary);">件/年</span></div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">IM受領</div>
+        </div>
+        <div style="font-size: 20px; color: var(--text-muted);">→</div>
+        <div style="text-align: center; flex: 1;">
+          <div style="font-size: 14px; font-weight: 600; color: var(--text-heading);">LOI → DD</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">意向表明以降</div>
+        </div>
+      </div>
+
+      <div class="sourcing-grid">
+        <div class="sourcing-card" style="text-align: left;">
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
+            <span style="font-size: 28px; font-weight: 300; color: var(--text-heading);">60<span style="font-size: 14px; font-weight: 400;">社/年</span></span>
+          </div>
+          <div class="sourcing-label" style="text-align: left;">仲介会社様経由</div>
+          <div class="sourcing-desc" style="text-align: left; margin-top: 8px;">日本M&Aセンター、ストライク、M&Aキャピタルパートナーズ等。<strong>昨年60社を開拓し関係を構築済み</strong>。セルサイドとの関係を起点にノンネームシートを提示。四半期に1回程度、投資戦略やホットな領域をメルマガで配信。<strong>ティアの高い（筋の良い）仲介には個別にターゲットリスト作成を依頼</strong>することも検討中</div>
+        </div>
+        <div class="sourcing-card" style="text-align: left;">
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
+            <span style="font-size: 24px; font-weight: 300; color: var(--text-heading);">Long List</span>
+          </div>
+          <div class="sourcing-label" style="text-align: left;">自社ロングリスト</div>
+          <div class="sourcing-desc" style="text-align: left; margin-top: 8px;">事業部とターゲットの要件出し → Web検索で数十社〜100社をリストアップ → 色付け・スクリーニング → <strong>上位10社程度は取引銀行調査・経営者のSNS経由コンタクト等で泥臭く深掘り</strong>。打率は高くないがピンポイントで良い会社を狙える。<strong>鮮度が落ちるため定期更新が必要だが、ディールパイプラインが埋まると後回しになりがち</strong></div>
+        </div>
+        <div class="sourcing-card" style="text-align: left;">
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
+            <span style="font-size: 24px; font-weight: 300; color: var(--text-heading);">Direct</span>
+          </div>
+          <div class="sourcing-label" style="text-align: left;">対象会社様お持ち込み</div>
+          <div class="sourcing-desc" style="text-align: left; margin-top: 8px;">対象会社自身が身売りを希望して声をかけてくるパターン、業界ネットワーク経由のコンタクト。デスクトップでは見えない<strong>経営者の人柄や事業実態</strong>が重要。仲介経由より件数は少ないが、<strong>クロージング実績では仲介と同等以上の成果</strong>。足の長い活動を地道に継続することが鍵</div>
+        </div>
+      </div>
+
+      <!-- Insight callout -->
+      <div style="margin-top: 24px; padding: 16px 20px; border-left: 3px solid var(--ink-blue); background: var(--wash-blue);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--ink-blue); margin-bottom: 4px;">ソーシングの実態</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">IMの段階でも「箸にも棒にもかからない」案件が相当数ある。<strong>仲介経由のIM件数は圧倒的に多いが、クロージング実績でみるとロングリスト・直接アプローチと大差ない</strong>（昨年のクロージング予定含む5件中、仲介経由は1件のみ）。ロングリストは労働集約的かつ鮮度が落ちるが、ピンポイントで良い会社を狙えるため投資対効果は高い。<strong>3つのワークストリーム（本DD・Pre-DD検討・ロングリスト更新）が常時並走しており、ディールパイプラインが埋まるとロングリスト更新は後回しになる</strong>のが実態。</div>
+      </div>
+    </div>
+
+    <!-- 9 Phase Flow (Horizontal) -->
+    <h3 class="heading-md" style="margin-bottom: 24px;">9フェーズのプロセスフロー</h3>
+    <div class="pf-wrap">
+      <!-- Lane labels -->
+      <div class="pf-lanes" style="min-width: 960px;">
+        <div class="pf-lane-label" style="flex: 5;">ソーシング → 基本合意</div>
+        <div class="pf-lane-label" style="flex: 4; border-left: 2px solid var(--border-heavy);">DD実行 → クロージング</div>
+      </div>
+
+      <!-- Horizontal process track -->
+      <div class="pf-track" style="min-width: 960px;">
+        <div class="pf-item">
+          <div class="pf-dot">1</div>
+          <div class="pf-title">ノンネーム受領<br>初期スクリーニング</div>
+          <div class="pf-desc">戦略との適合を判断</div>
+          <div class="pf-gate-tag">NDAを締結するか</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot">2</div>
+          <div class="pf-title">NDA締結</div>
+          <div class="pf-desc">秘密保持契約<br>Need to Know設定</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot">3</div>
+          <div class="pf-title">IM分析<br>戦略フィット評価</div>
+          <div class="pf-desc">バリュエーション概算</div>
+          <div class="pf-gate-tag">意向表明を出すか</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot gate">4</div>
+          <div class="pf-title">意向表明書<br>（LOI）提出</div>
+          <div class="pf-desc">価格帯・シナジー・<br>独占交渉権の要請</div>
+          <div class="pf-gate-tag">この条件で挙げるか</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot gate">5</div>
+          <div class="pf-title">基本合意書<br>（MOU）締結</div>
+          <div class="pf-desc">独占交渉権付与<br>DD範囲・費用合意</div>
+          <div class="pf-gate-tag">DDに投資するか</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot gate">6</div>
+          <div class="pf-title">DD実行</div>
+          <div class="pf-desc">5〜6モジュール並走<br>4〜8週間</div>
+          <div class="pf-gate-tag">買うか・いくらで</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot gate">7</div>
+          <div class="pf-title">DD結果統合<br>取締役会決議A</div>
+          <div class="pf-desc">リスクマトリクス<br>デック数十枚で付議</div>
+          <div class="pf-gate-tag">バインディングLOI</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot">8</div>
+          <div class="pf-title">SPA交渉<br>取締役会決議B</div>
+          <div class="pf-desc">表明保証・補償条項<br>PMI100日プラン具体化</div>
+          <div class="pf-gate-tag">契約締結の最終決議</div>
+        </div>
+        <div class="pf-item">
+          <div class="pf-dot">9</div>
+          <div class="pf-title">クロージング</div>
+          <div class="pf-desc">決議B後1〜1.5ヶ月<br>PMI準備前倒し実行</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pre-DD: 意向表明前の検討プロセス -->
+    <div style="margin-top: 64px; margin-bottom: 64px;">
+      <h3 class="heading-md" style="margin-bottom: 8px;">Pre-DD（意向表明前の検討プロセス）</h3>
+      <p class="body-md text-secondary" style="margin-bottom: 24px;">IM受領から意向表明（LOI）提出までの3〜4週間。フルDDほどの深さはないが、価格レンジと投資仮説を形成する重要な期間。</p>
+
+      <div class="phase-steps">
+        <div class="phase-step">
+          <div class="phase-step-number">1</div>
+          <div class="phase-step-connector"></div>
+          <div class="phase-step-content">
+            <div class="phase-step-title">初期スクリーニング</div>
+            <div class="phase-step-desc">IM到着後、PMチームが戦略フィットを即時判定。明らかに合わないものはこの段階で弾く（IMの半分以上は「箸にも棒にもかからない」）。判断に迷うものは事業部に展開して意見を求める</div>
+          </div>
+        </div>
+        <div class="phase-step">
+          <div class="phase-step-number">2</div>
+          <div class="phase-step-connector"></div>
+          <div class="phase-step-content">
+            <div class="phase-step-title">初回面談（〜1時間）</div>
+            <div class="phase-step-desc">対象会社とディール概要・事業内容を確認。ここでさらに半分強が見送りに。ピンとくるものがあればNDA締結に進む。ロングリスト経由の場合は「売ってくれるとも限らない」ため、複数回の対話が必要になることも</div>
+          </div>
+        </div>
+        <div class="phase-step">
+          <div class="phase-step-number">3</div>
+          <div class="phase-step-connector"></div>
+          <div class="phase-step-content">
+            <div class="phase-step-title">NDA締結 → 資料受領</div>
+            <div class="phase-step-desc">基本的なKPI・戦略・財務諸表等を開示範囲で受領（ファイル10点程度）。この段階ではVDRではなく直接のファイル共有が一般的</div>
+          </div>
+        </div>
+        <div class="phase-step">
+          <div class="phase-step-number">4</div>
+          <div class="phase-step-connector"></div>
+          <div class="phase-step-content">
+            <div class="phase-step-title">簡易分析（3〜4週間）</div>
+            <div class="phase-step-desc">受領資料を元に社内でディスカッション＋先方と追加の対話を1〜2回実施。<strong>先方の事業計画にストレスシナリオを複数作成し、簡易DCFでバリュエーションレンジを算出</strong>。精緻なフェアバリューではなく、先方の言い値（売却希望額）がはまる事業計画のレンジをバックキャストで見に行く</div>
+          </div>
+        </div>
+        <div class="phase-step">
+          <div class="phase-step-number gate">5</div>
+          <div class="phase-step-connector"></div>
+          <div class="phase-step-content">
+            <div class="phase-step-title">ノンバインディング意向表明（LOI）提出</div>
+            <div class="phase-step-desc">法的拘束力なし。価格レンジ・シナジー仮説・独占交渉権の要請を記載。社内的にはCFOチーム+事業部との合意で提出可能（この段階では取締役会決議は不要）</div>
+            <div class="phase-step-gate">LOIが通過すればDD開始</div>
+          </div>
+        </div>
+        <div class="phase-step">
+          <div class="phase-step-number">6</div>
+          <div class="phase-step-content">
+            <div class="phase-step-title">社外取締役への事前ブリーフィング</div>
+            <div class="phase-step-desc">DD開始前後に社外取締役へディールの投資仮説・KPI分析・DD論点を共有。<strong>形式はGoogle Docsの箇条書き＋数枚のスライド</strong>（仮説ベース。社外取のリテラシーが高いため正式デックは不要）。投資意義（「なぜやるのか」）を深く問われるため、表面的なカテゴライズではなくディール固有の深い論拠が求められる。宿題や懸念を先に回収しておくことで、最終決議を円滑にする</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deal size callout -->
+      <div style="margin-top: 24px; padding: 16px 20px; border-left: 3px solid var(--ink-amber); background: var(--wash-amber);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--ink-amber); margin-bottom: 4px;">案件規模によるDD体制の分岐</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">数十億円規模のディール → 外部アドバイザーを入れたフルスタックDD。<strong>数億〜10億円程度 → インハウスDDの選択肢</strong>もある。オークションプロセスか相対かによっても体制は変わる。</div>
+      </div>
+    </div>
+
+    <!-- DD Setup: Team Structure -->
+    <div style="margin-top: 64px; margin-bottom: 64px;">
+      <h3 class="heading-md" style="margin-bottom: 8px;">DD実行体制（フルスタックの場合）</h3>
+      <p class="body-md text-secondary" style="margin-bottom: 24px;">フルスタックDDでは5〜6本のモジュールが並走する。関係者が多数に及ぶため、<strong>PMチームの初動＝プロジェクト運営ルールの定義</strong>が最も重要。</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <!-- External Advisors -->
+        <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">外部アドバイザー（基本4社 + Val）</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--wash-blue); color: #1d4ed8;">BDD</div>
+              <div><div style="font-size: 13px; font-weight: 600;">コンサルティングファーム</div><div style="font-size: 11px; color: var(--text-secondary);">市場・競合・シナジー分析</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--wash-green); color: #15803d;">FDD</div>
+              <div><div style="font-size: 13px; font-weight: 600;">監査法人 / 会計士</div><div style="font-size: 11px; color: var(--text-secondary);">財務実態・正常収益力</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--wash-red); color: #b91c1c;">TDD</div>
+              <div><div style="font-size: 13px; font-weight: 600;">税理士法人</div><div style="font-size: 11px; color: var(--text-secondary);">税務リスク・ストラクチャー</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--wash-amber); color: #b45309;">LDD</div>
+              <div><div style="font-size: 13px; font-weight: 600;">法律事務所</div><div style="font-size: 11px; color: var(--text-secondary);">法的リスク・SPA条項</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid var(--border-default);">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--paper-kraft); color: var(--ink-700);">Val</div>
+              <div><div style="font-size: 13px; font-weight: 600;">バリュエーションベンダー</div><div style="font-size: 11px; color: var(--text-secondary);">公正価値算定レポート</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Internal Teams -->
+        <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">社内チーム</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--ink-1000); color: #fff;">PM</div>
+              <div><div style="font-size: 13px; font-weight: 600;">PMチーム（M&A担当）</div><div style="font-size: 11px; color: var(--text-secondary);">運営ルール定義・進捗管理・SC運営</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1;">Sec</div>
+              <div><div style="font-size: 13px; font-weight: 600;">セキュリティチーム</div><div style="font-size: 11px; color: var(--text-secondary);">DB DD・インフラセキュリティ評価</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: #f3e8ff; color: #7e22ce;">Dev</div>
+              <div><div style="font-size: 13px; font-weight: 600;">開発チーム</div><div style="font-size: 11px; color: var(--text-secondary);">プロダクトDD（SaaS企業の場合）</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--wash-green); color: #15803d;">HR</div>
+              <div><div style="font-size: 13px; font-weight: 600;">人事チーム</div><div style="font-size: 11px; color: var(--text-secondary);">HRDD・文化適合性評価</div></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--wash-blue); color: #1d4ed8;">Biz</div>
+              <div><div style="font-size: 13px; font-weight: 600;">事業部門</div><div style="font-size: 11px; color: var(--text-secondary);">戦略フィット評価・シナジー検証</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PM初動 callout -->
+      <div style="margin-top: 24px; padding: 16px 20px; border-left: 3px solid var(--ink-1000); background: var(--paper-cream);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px;">PMチームの初動が成否を分ける</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">関係者（外部4〜5社 + 社内3〜4チーム）が一斉に動くため、DD開始前に<strong>プロジェクト運営ルール</strong>（報告フォーマット・Q&Aプロセス・VDRアクセス権・SC頻度・論点エスカレーション基準）を定義・合意することが最重要。ルールなしに走り始めると、情報が散在し論点が埋もれる。</div>
+      </div>
+
+      <div style="margin-top: 16px; padding: 16px 20px; border-left: 3px solid var(--ink-blue); background: var(--wash-blue);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--ink-blue); margin-bottom: 4px;">DD中のQ&Aと情報フロー</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">各アドバイザーからの質問がExcelシートで上がってくるが、<strong>財務・税務とビジネスで重複する質問が頻出</strong>するため、PMOが重複の消し込みを行う。Q&Aは週2〜3回セルサイドに送付。セルサイドからの情報開示も都度発生し、各アドバイザーへのタイムリーな通知と「速攻で見てね」のコミュニケーションが日々大量に走る。<strong>各DDモジュールのアウトカムは相互に連関している</strong>ため、横断的にリスクを俯瞰しながらどこを掘るかのアライメントを取り続ける必要がある。</div>
+      </div>
+
+      <div style="margin-top: 16px; padding: 16px 20px; border-left: 3px solid var(--ink-red); background: var(--wash-red);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--ink-red); margin-bottom: 4px;">DD後の2段階の取締役会決議</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;"><strong>決議A（バインディングLOI前）:</strong> 全DDの結果・価格・PMI体制を一式揃えたデック数十枚で役会決議。法的拘束力ありの意向表明の可否と条件を決定。<strong>決議B（SPA締結前）:</strong> 契約書ベースでの最終リスクヘッジ＋PMI計画の具体化（100日プラン）を付議。決議B後1〜1.5ヶ月でクロージング、その間にPMI準備を前倒しで開始。</div>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div style="margin-top: 64px;">
+      <h3 class="heading-md" style="margin-bottom: 24px;">仲介型 vs FA型 vs 直接アプローチ</h3>
+      <div style="overflow-x: auto;">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>仲介型</th>
+              <th>FA型</th>
+              <th>直接アプローチ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">起点</td>
+              <td>仲介会社がセルサイドとの関係を起点にバイサイドに案件を紹介</td>
+              <td>自社がFAを雇い、ターゲットリストを作成してアプローチ</td>
+              <td>自社が直接ターゲット企業にコンタクト</td>
+            </tr>
+            <tr>
+              <td class="row-label">情報の流れ</td>
+              <td>ノンネーム→NDA→IM の定型フロー</td>
+              <td>FAがターゲットの情報を収集・整理して提供</td>
+              <td>自社で公開情報を収集。先方の開示意向に依存</td>
+            </tr>
+            <tr>
+              <td class="row-label">コスト</td>
+              <td>成功報酬（レーマン方式: 譲渡価額の1〜5%）。双方から徴収</td>
+              <td>リテイナー＋成功報酬。バイサイドのみ負担</td>
+              <td>アドバイザー費用なし。ただし社内工数大</td>
+            </tr>
+            <tr>
+              <td class="row-label">案件の質</td>
+              <td>売り手が売却意思決定済み。成約確度が高い</td>
+              <td>売却意思を持っていない場合もある</td>
+              <td>同左</td>
+            </tr>
+            <tr>
+              <td class="row-label">日本市場</td>
+              <td><strong>最も一般的</strong>。中堅・中小企業のM&Aは仲介型が大半</td>
+              <td>大型案件（数百億円〜）や上場企業同士</td>
+              <td>スタートアップ間、業界内ネットワーク</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 2 — DD領域別の業務詳細
+     ============================================================ -->
+<section id="dd-areas" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">SECTION 02</span>
+      <h2 class="display-md">DD領域別の業務詳細</h2>
+      <p>7つのDD領域ごとの調査項目・入出力を網羅。各カードを展開して詳細を確認。</p>
+    </div>
+
+    <div class="dd-grid">
+
+      <!-- BDD -->
+      <div class="dd-card">
+        <div class="dd-card-header">
+          <div class="dd-card-icon bdd">B</div>
+          <div>
+            <div class="dd-card-title">ビジネスDD</div>
+            <div class="dd-card-subtitle">事業の持続性・成長性・シナジー検証</div>
+          </div>
+        </div>
+        <div class="dd-card-body">
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">市場・競合分析 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">入力</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">市場規模推定</td><td>TAM/SAM/SOM算出</td><td>業界レポート</td><td>市場規模推定シート</td></tr>
+                <tr><td class="col-task">成長率予測</td><td>CAGR算出、成長ドライバー特定</td><td>マクロ経済データ</td><td>成長予測モデル</td></tr>
+                <tr><td class="col-task">競合マッピング</td><td>シェア推定、ポジショニング</td><td>公開情報</td><td>競合マトリクス</td></tr>
+                <tr><td class="col-task">参入障壁評価</td><td>規制・技術・NW効果</td><td>業界構造分析</td><td>評価レポート</td></tr>
+                <tr><td class="col-task">顧客集中度</td><td>上位10顧客の売上構成比</td><td>売上明細</td><td>顧客集中度表</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">事業モデル分析 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">入力</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">収益構造分解</td><td>プロダクト別・セグメント別・地域別</td><td>PL明細</td><td>収益ブレイクダウン</td></tr>
+                <tr><td class="col-task">ユニットエコノミクス</td><td>LTV/CAC、Churn Rate</td><td>顧客データ</td><td>UE シート</td></tr>
+                <tr><td class="col-task">価格戦略</td><td>値上げ余地、競合比較</td><td>料金表</td><td>価格分析レポート</td></tr>
+                <tr><td class="col-task">サプライチェーン</td><td>仕入先依存度、切替リスク</td><td>契約書</td><td>リスク評価</td></tr>
+                <tr><td class="col-task">技術評価</td><td>アーキテクチャ、技術的負債</td><td>技術資料</td><td>技術DD報告書</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">シナジー分析 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">入力</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">売上シナジー</td><td>クロスセル、顧客基盤の補完</td><td>両社顧客データ</td><td>シナジー試算</td></tr>
+                <tr><td class="col-task">コストシナジー</td><td>重複機能統合、仕入れスケール</td><td>両社コスト構造</td><td>コスト削減シート</td></tr>
+                <tr><td class="col-task">ディスシナジー</td><td>顧客流出、キーマン離脱リスク</td><td>インタビュー</td><td>リスクリスト</td></tr>
+                <tr><td class="col-task">実現タイムライン</td><td>100日/1年/3年のフェーズ設計</td><td>シナジー項目</td><td>PMIロードマップ</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">Mgmtインタビュー <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">質問設計</td><td>戦略・オペ・組織・文化の各軸</td><td>インタビューガイド</td></tr>
+                <tr><td class="col-task">インタビュー実施</td><td>CEO/CFO/CTO/事業部長への個別面談</td><td>議事録</td></tr>
+                <tr><td class="col-task">ファインディング統合</td><td>定量×定性の突合、矛盾の洗出し</td><td>BDD統合レポート</td></tr>
+              </table>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FDD -->
+      <div class="dd-card">
+        <div class="dd-card-header">
+          <div class="dd-card-icon fdd">F</div>
+          <div>
+            <div class="dd-card-title">ファイナンシャルDD</div>
+            <div class="dd-card-subtitle">財務実態の把握・バリュエーション基礎</div>
+          </div>
+        </div>
+        <div class="dd-card-body">
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">PL分析 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">正常収益力算定</td><td>非経常項目を除外しNormalized EBITDA算出</td><td>正常EBITDA算定表</td></tr>
+                <tr><td class="col-task">売上品質分析</td><td>契約vs認識ベース差異、前受金分析</td><td>売上品質レポート</td></tr>
+                <tr><td class="col-task">コスト構造分析</td><td>固定費/変動費分解、人件費率</td><td>コスト分析シート</td></tr>
+                <tr><td class="col-task">EBITDA調整</td><td>オーナー報酬調整、関連当事者取引排除</td><td>EBITDA Bridge</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">BS分析 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">運転資本分析</td><td>回転日数、正常運転資本の算定</td><td>運転資本シート</td></tr>
+                <tr><td class="col-task">ネットデット</td><td>デットライクアイテムの特定</td><td>ネットデット算定表</td></tr>
+                <tr><td class="col-task">資産実在性</td><td>棚卸資産評価減、減損リスク</td><td>資産評価レポート</td></tr>
+                <tr><td class="col-task">簿外債務</td><td>偶発債務、コミットメント</td><td>簿外債務リスト</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">CF分析 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">FCF算定</td><td>維持Capex vs 成長Capexの区分</td><td>FCF分析シート</td></tr>
+                <tr><td class="col-task">設備投資評価</td><td>延期可能/不可能の区分</td><td>Capex評価レポート</td></tr>
+                <tr><td class="col-task">資金繰り</td><td>月次キャッシュ推移、借入枠</td><td>資金繰り分析</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">事業計画検証 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">売上計画検証</td><td>前提条件の妥当性（ARPU、解約率）</td><td>計画vs実績比較表</td></tr>
+                <tr><td class="col-task">コスト計画検証</td><td>人員増加計画との整合性</td><td>コスト前提検証</td></tr>
+                <tr><td class="col-task">感応度分析</td><td>主要変数のバリュエーション影響</td><td>感応度テーブル</td></tr>
+              </table>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LDD -->
+      <div class="dd-card">
+        <div class="dd-card-header">
+          <div class="dd-card-icon ldd">L</div>
+          <div>
+            <div class="dd-card-title">リーガルDD</div>
+            <div class="dd-card-subtitle">法的リスクの特定・SPA条項への反映</div>
+          </div>
+        </div>
+        <div class="dd-card-body">
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">会社法・コーポレート <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">株主構成確認</td><td>新株予約権、種類株式、希薄化計算</td><td>資本政策表</td></tr>
+                <tr><td class="col-task">機関設計</td><td>取締役会・監査役会の構成</td><td>ガバナンス構成図</td></tr>
+                <tr><td class="col-task">決議の瑕疵</td><td>定足数、利益相反の確認</td><td>瑕疵リスクリスト</td></tr>
+                <tr><td class="col-task">CoC条項</td><td>既存契約の支配権変更条項</td><td>CoC条項一覧</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">契約関連 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">重要契約レビュー</td><td>顧客・仕入先・ライセンス契約</td><td>契約リスクサマリー</td></tr>
+                <tr><td class="col-task">契約条件分析</td><td>解約・競業避止・損害賠償上限</td><td>契約条件比較表</td></tr>
+                <tr><td class="col-task">知的財産権</td><td>権利帰属、侵害リスク</td><td>IP権利関係図</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">訴訟・紛争 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">係属中訴訟</td><td>請求額、進行状況、想定損失額</td><td>訴訟リスク評価表</td></tr>
+                <tr><td class="col-task">潜在的リスク</td><td>規制違反、未解決クレーム</td><td>潜在リスクリスト</td></tr>
+              </table>
+            </div></div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">規制・コンプライアンス <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">許認可</td><td>取得状況、M&Aによる影響</td><td>許認可一覧表</td></tr>
+                <tr><td class="col-task">データプライバシー</td><td>個人情報保護法、GDPR準拠</td><td>プライバシー評価</td></tr>
+                <tr><td class="col-task">業界規制</td><td>業法、監督官庁の指導</td><td>規制リスク評価</td></tr>
+              </table>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TDD -->
+      <div class="dd-card">
+        <div class="dd-card-header">
+          <div class="dd-card-icon tdd">T</div>
+          <div>
+            <div class="dd-card-title">タックスDD</div>
+            <div class="dd-card-subtitle">税務リスク定量化・ストラクチャー最適化</div>
+          </div>
+        </div>
+        <div class="dd-card-body">
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">税務調査項目 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">申告レビュー</td><td>過去3〜5期の法人税・消費税の正確性</td><td>税務リスク評価表</td></tr>
+                <tr><td class="col-task">繰越欠損金</td><td>残高、利用期限、M&A後の制限</td><td>利用可否分析</td></tr>
+                <tr><td class="col-task">移転価格</td><td>グループ間取引の妥当性</td><td>移転価格リスク評価</td></tr>
+                <tr><td class="col-task">ストラクチャー</td><td>株式譲渡vs事業譲渡の税務比較</td><td>税務分析</td></tr>
+                <tr><td class="col-task">間接税</td><td>印紙税・登録免許税のコスト算定</td><td>間接税コスト見積</td></tr>
+              </table>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HRDD -->
+      <div class="dd-card">
+        <div class="dd-card-header">
+          <div class="dd-card-icon hrdd">HR</div>
+          <div>
+            <div class="dd-card-title">人事DD</div>
+            <div class="dd-card-subtitle">人的資本のリスク・価値評価</div>
+          </div>
+        </div>
+        <div class="dd-card-body">
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">人事調査項目 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">組織構成</td><td>組織図、部門別人員数</td><td>組織サマリー</td></tr>
+                <tr><td class="col-task">報酬分析</td><td>給与テーブル、SO、市場比較</td><td>報酬ベンチマーク</td></tr>
+                <tr><td class="col-task">キーマンリスク</td><td>主要人材特定、リテンション策</td><td>キーマンリスク評価</td></tr>
+                <tr><td class="col-task">労務リスク</td><td>未払残業代、36協定遵守</td><td>労務リスクリスト</td></tr>
+                <tr><td class="col-task">退職給付債務</td><td>積立不足、制度変更リスク</td><td>退職給付評価</td></tr>
+                <tr><td class="col-task">文化・エンゲージメント</td><td>満足度調査、離職率推移</td><td>文化適合性評価</td></tr>
+              </table>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITDD -->
+      <div class="dd-card">
+        <div class="dd-card-header">
+          <div class="dd-card-icon itdd">IT</div>
+          <div>
+            <div class="dd-card-title">ITDD</div>
+            <div class="dd-card-subtitle">情報システムの健全性・統合コスト</div>
+          </div>
+        </div>
+        <div class="dd-card-body">
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">IT調査項目 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th><th class="col-io">出力</th></tr>
+                <tr><td class="col-task">システム構成</td><td>基幹システム、SaaS利用、クラウド比率</td><td>IT資産マップ</td></tr>
+                <tr><td class="col-task">セキュリティ</td><td>ポリシー、インシデント履歴</td><td>セキュリティ評価</td></tr>
+                <tr><td class="col-task">ライセンス</td><td>適正利用、M&A時の移転可否</td><td>ライセンスリスク一覧</td></tr>
+                <tr><td class="col-task">統合コスト</td><td>統合/並行運用/移行シナリオ別</td><td>IT統合コスト見積</td></tr>
+                <tr><td class="col-task">データ移行</td><td>品質、互換性、移行工数</td><td>データ移行リスク評価</td></tr>
+              </table>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Environmental DD -->
+      <div class="dd-card" style="opacity: 0.7;">
+        <div class="dd-card-header">
+          <div class="dd-card-icon env">E</div>
+          <div>
+            <div class="dd-card-title">環境DD</div>
+            <div class="dd-card-subtitle">製造業・不動産が絡む場合に実施</div>
+          </div>
+        </div>
+        <div class="dd-card-body">
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">環境調査項目 <span class="arrow">▶</span></button>
+            <div class="accordion-content"><div class="accordion-inner">
+              <table class="mini-table">
+                <tr><th class="col-task">業務</th><th class="col-detail">作業内容</th></tr>
+                <tr><td class="col-task">土壌・地下水</td><td>過去の用途調査、土壌調査報告書レビュー</td></tr>
+                <tr><td class="col-task">アスベスト・PCB</td><td>建物調査報告書、除去計画</td></tr>
+                <tr><td class="col-task">環境法令遵守</td><td>排出規制、廃棄物処理法、環境アセスメント</td></tr>
+              </table>
+              <p class="body-sm" style="margin-top: 12px;">SaaS企業では通常省略</p>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 3 — DD共通の横断業務
+     ============================================================ -->
+<section id="cross">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">SECTION 03</span>
+      <h2 class="display-md">DD共通の横断業務</h2>
+      <p>領域を問わず発生するプロジェクトマネジメント業務。</p>
+    </div>
+
+    <div class="cross-grid">
+      <div class="cross-card">
+        <div class="cross-card-title"><span class="icon">◈</span> VDR管理</div>
+        <ul class="task-list">
+          <li><span class="task-name">VDR構築</span><span class="task-desc">フォルダ構成設計（領域別×資料カテゴリ別）、アクセス権設定</span></li>
+          <li><span class="task-name">資料依頼リスト</span><span class="task-desc">DD領域ごとの必要資料をリスト化（通常200〜500項目）。優先度付け</span></li>
+          <li><span class="task-name">資料の受領・管理</span><span class="task-desc">インデックス管理、不備・不足のフォローアップ</span></li>
+          <li><span class="task-name">Q&Aプロセス</span><span class="task-desc">各DDチームからの質問（Excelシート）を集約。<strong>モジュール間の重複質問の消し込みが必須</strong>（財務・税務とビジネスで重複多発）。週2〜3回セルサイドに送付、回答の各アドバイザーへの即時配布。セルサイドからの情報開示も都度対応</span></li>
+        </ul>
+      </div>
+
+      <div class="cross-card">
+        <div class="cross-card-title"><span class="icon">◈</span> プロジェクトマネジメント</div>
+        <ul class="task-list">
+          <li><span class="task-name" style="color: var(--ink-blue);">運営ルール定義</span><span class="task-desc"><strong>最重要の初動</strong>。報告フォーマット・Q&Aプロセス・エスカレーション基準を全関係者（外部4〜5社 + 社内3〜4チーム）と合意</span></li>
+          <li><span class="task-name">DD体制設計</span><span class="task-desc">社内チーム編成、外部アドバイザー4社（BDD/FDD/TDD/LDD）+ バリュエーションベンダーの選定・契約</span></li>
+          <li><span class="task-name">スケジュール管理</span><span class="task-desc">全体スケジュール（4〜8週間）、5〜6モジュールの並走管理、マイルストーン・進捗トラッキング</span></li>
+          <li><span class="task-name">予算管理</span><span class="task-desc">外部アドバイザーフィー、出張費、VDR利用料等のコスト管理</span></li>
+          <li><span class="task-name">ステアリングコミッティ</span><span class="task-desc">週次/隔週の経営陣への進捗報告、Go/No-Go判断のための論点整理</span></li>
+          <li><span class="task-name">コンフリクト管理</span><span class="task-desc">売り手とのコミュニケーション管理、情報開示の交渉</span></li>
+        </ul>
+      </div>
+
+      <div class="cross-card">
+        <div class="cross-card-title"><span class="icon">◈</span> DD統合レポーティング</div>
+        <ul class="task-list">
+          <li><span class="task-name">エグゼクティブサマリー</span><span class="task-desc">全領域のDD結果を1枚サマリーに集約。Go/No-Go推奨、主要リスク</span></li>
+          <li><span class="task-name">リスクマトリクス</span><span class="task-desc">発見事項を「影響度×発生確率」で分類。Red/Amber/Green のトリアージ</span></li>
+          <li><span class="task-name">バリュエーション反映</span><span class="task-desc">EBITDA調整、ネットデット調整、特別補償請求</span></li>
+          <li><span class="task-name">SPA論点リスト</span><span class="task-desc">表明保証・補償条項・前提条件への反映論点</span></li>
+          <li><span class="task-name">取締役会付議資料</span><span class="task-desc">DDサマリー、バリュエーション、ストラクチャー、推奨事項を意思決定フォーマットに整形</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 4 — 事業会社DD特有の論点
+     ============================================================ -->
+<section id="issues" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">SECTION 04</span>
+      <h2 class="display-md">事業会社DD特有の論点</h2>
+      <p>FA・コンサルではなく事業会社が自社でDDを実行する際の特有の考慮事項。</p>
+    </div>
+
+    <div class="issue-grid">
+      <div class="issue-card">
+        <div class="issue-card-title">内製 vs 外注の線引き</div>
+        <div class="issue-card-text">BDDの戦略フィット評価・シナジー分析は<strong>内製</strong>（自社の戦略を最も理解している）。FDD・LDD・TDDは専門性が必要なため<strong>外注</strong>が一般的。HRDDは半内製（自社HR部門＋外部アドバイザー）</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">情報の非対称性</div>
+        <div class="issue-card-text">事業会社はFA・コンサルと比べて対象業界の知見が深い場合がある一方、DD実行の経験値が少ない。<strong>「何を聞くべきか知らない」リスク</strong>を認識する</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">バイアスの管理</div>
+        <div class="issue-card-text">事業部門が「買いたい」というバイアスを持ちやすい。DDはバイアスを排除して客観的にリスクを洗い出す機能。<strong>社内の推進者とDD担当を分離する設計</strong>が重要</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">秘密保持の範囲</div>
+        <div class="issue-card-text">社内でDD情報にアクセスできる人数を限定する（<strong>Need to Know原則</strong>）。上場企業の場合はインサイダー取引規制への配慮</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">PMIとの接続</div>
+        <div class="issue-card-text">事業会社のDDはPMI計画と連続的。DDで発見した課題がそのまま<strong>PMIの100日プランに引き継がれる</strong>。DD段階からPMI担当を巻き込む設計が理想</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">取締役会への付議</div>
+        <div class="issue-card-text">DD結果→バリュエーション→SPA条件の全てを取締役会が承認する。<strong>付議資料の品質（起案書フォーマット）</strong>がDD成果の実効性を左右する。DD前の社外取ブリーフィングで懸念を先に回収しておくことが決議の円滑化に直結する</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">キャパシティ制約</div>
+        <div class="issue-card-text">年間5件程度のディールが常に複数並走し、本DD・Pre-DD評価・ロングリスト更新の<strong>3ワークストリームが同時に走る</strong>。DDが重なると極めて高負荷であり、現在のチーム規模ではキャパシティが制約になっている</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">ジュニアスタッフの論点抽出力</div>
+        <div class="issue-card-text">シニアメンバーは経験的にDD資料の「臭いところ」にヒントを見つけられるが、DD経験の少ないメンバーは<strong>大量の資料を見ても何を見ればよいかわからない</strong>。業種×DDファンクション別のチェックポイント整備がジュニアの生産性向上に直結する</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">Q&A上限とディールの文脈依存性</div>
+        <div class="issue-card-text">DD期間はタイトで、セルサイドから<strong>Q&A数を制限される場合がある（例: 300問まで）</strong>。網羅的な論点リストを持つだけでは不十分で、ディールの成否に直結する論点を優先的に選別する判断力が必要。ここが優秀なアドバイザーの付加価値の源泉</div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">Q&A重複消込の実態</div>
+        <div class="issue-card-text">各アドバイザーから上がるQ&Aリストのモジュール間重複チェックに<strong>毎朝30分 × 2名</strong>を費やしている。漏れて重複質問を送ると「印象が悪くなる」ため見落とせない。機械的な類似度判定で対処可能な業務だが、現状は完全に目検。<span class="text-secondary">— 小室氏</span></div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">VDRの古さとファイルバージョン管理</div>
+        <div class="issue-card-text">IntraLinks等の既存VDRは<strong>古びたインターフェース</strong>で「フォルダと権限が提示されているだけ」。AI非対応でインテリジェントな表示機能もない。QAシートの同時並行やり取りで<strong>ファイルのバージョン管理が混乱</strong>する（追加質問を送った時点で先方が既に一部回答済み、どちらでマージするか不明）。<span class="text-secondary">— 平山氏</span></div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">情報分断（数十人のステークホルダー）</div>
+        <div class="issue-card-text">バイサイド・セルサイド合わせて<strong>ステークホルダーが数十人</strong>に及ぶが、全員が同じ情報を見ているとは限らない。個別ファイルを見に行く人は少なく、チーム間の情報分断が起きやすい。DD進捗の統合ビュー（ダッシュボード）のニーズが高い。<span class="text-secondary">— 長谷山氏</span></div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">「単価の高い人がやる仕事じゃない」問題</div>
+        <div class="issue-card-text">BDD 1ヶ月3,000万円、LDD 1,000万円級のアドバイザーと、買い手の役員・投資チーム数十人が集まりながら、<strong>ファイルの消し込み・バージョン管理・重複チェック</strong>等の雑務に時間を取られている。コストに見合わない作業が大量に存在する。<span class="text-secondary">— 長谷山氏</span></div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">事業計画モデルのミスチェック</div>
+        <div class="issue-card-text">月次展開×5年分の横長モデルで<strong>SUM範囲のずれ・参照範囲の間違い</strong>（決定論的エラー）に加え、<strong>コスト削減効果の二重計上</strong>等の意味合いエラー（推論的エラー）が混在。ディール終盤の多忙時にセル単位で目検チェックしている。<span class="text-secondary">— 長谷山氏・中林</span></div>
+      </div>
+      <div class="issue-card">
+        <div class="issue-card-title">コミュニケーションコストの心理的負荷</div>
+        <div class="issue-card-text">DDフェーズで<strong>心理的に最も重い</strong>のは各社とのリアルタイムコミュニケーション。案件が重なると件数が増え、マネジメントインタビューの日程調整もカレンダーの優先度交渉が伴う。AIよりも秘書的リソースが適する領域。<span class="text-secondary">— 平山氏</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 5 — AI活用の可能性
+     ============================================================ -->
+<section id="ai-opportunity">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">SECTION 05</span>
+      <h2 class="display-md">AI/LLM活用の可能性</h2>
+      <p>ヒアリングで検証されたペインポイントとAI活用が有望な領域を3カテゴリで整理。</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
+      <!-- High value targets -->
+      <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-green); margin-bottom: 16px;">高付加価値（推論力の外注）</div>
+        <ul class="task-list">
+          <li><span class="task-name">DD論点の網羅性担保</span><span class="task-desc">DD実務書20冊+を構造化し、ファンクション別×業種別の論点チェックリストを構築。<strong>1,000項目程度の網羅的チェック</strong>で「テーパーする90点→100点」を補完。<span class="text-secondary">— 関氏: 「AIはテーパーする上の10点で使い倒す」</span></span></li>
+          <li><span class="task-name">資料到着時の即時論点抽出</span><span class="task-desc">VDRに届く大量資料をタイムリーに読解し、DDモジュール別の論点候補・リスクシグナルを自動抽出。<strong>ジュニアスタッフのガイドとして機能</strong></span></li>
+          <li><span class="task-name">事業計画エラーチェック</span><span class="task-desc">月次展開×5年分モデルの<strong>決定論的エラー</strong>（SUM範囲ずれ・参照間違い）と<strong>推論的エラー</strong>（コスト削減効果の二重計上等）を二段階で検出。全アラート→人間が選別。<span class="text-secondary">— 長谷山氏: 「全部アラート出して人間がフィルタ」</span></span></li>
+          <li><span class="task-name">Q&A重複排除・優先度付け</span><span class="task-desc">各アドバイザーからの質問リストを横断分析し重複検出。現状<strong>毎朝30分×2名</strong>の目検。機械的類似度判定で代替可能。<span class="text-secondary">— 小室氏</span></span></li>
+          <li><span class="task-name">投資仮説の構造化</span><span class="task-desc">社外取ブリーフィング・取締役会付議資料のドラフト作成支援。投資意義の論理構成を強化</span></li>
+        </ul>
+      </div>
+
+      <!-- Low-hanging fruit -->
+      <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-blue); margin-bottom: 16px;">即効性（安価な労働力として）</div>
+        <ul class="task-list">
+          <li><span class="task-name">ロングリスト作成・調査</span><span class="task-desc">鮮度が落ちたロングリストをWeb情報で補完・更新。<strong>社保データから従業員数推移</strong>も自動取得可能。コスパの良い業務として最有望。<span class="text-secondary">— 長谷山氏: 「一番コスパがいい」</span></span></li>
+          <li><span class="task-name">IM初期分析</span><span class="task-desc">届いたIMの定型的な初期分析（KPI抽出、業界比較、戦略フィットの初期判定）を自動化</span></li>
+          <li><span class="task-name">業種別DDポイントの蓄積</span><span class="task-desc">SaaS/BPO等の投資対象業種に特化したDD論点を蓄積。<strong>インダストリーパートナーの暗黙知に相当する知識ベース</strong>の構築</span></li>
+          <li><span class="task-name">ドキュメンテーション補助</span><span class="task-desc">DD結果の統合レポート、リスクマトリクス、付議資料のドラフト生成。<strong>ストーリーラインが固定</strong>のものはデザインシステム準拠でAI生成可能。<span class="text-secondary">— 長谷山氏: 「ストーリーラインは固定したい」</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Workflow Reinvention -->
+      <div style="background: var(--bg-surface-raised); border: 1px solid var(--border-default); padding: 24px;">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-amber); margin-bottom: 16px;">ワークフロー再発明（LLM Native）</div>
+        <ul class="task-list">
+          <li><span class="task-name">NotebookLM的 資料Q&A</span><span class="task-desc">VDR資料に対して<strong>出典付きで気軽に質問・確認・論点整理</strong>ができるインターフェース。現状「個別ファイルを見に行く人は少ない」ため情報分断が発生。<span class="text-secondary">— 平山氏: 「NotebookLMみたいなやつ」</span></span></li>
+          <li><span class="task-name">資料到着→自動ビジュアライズ→ノーティス</span><span class="task-desc">財務データ到着時に<strong>自動でスライド数枚を生成しチームにプッシュ</strong>。全員が資料を読みに行く前にキーデータを把握。<span class="text-secondary">— 長谷山氏: 「財務データ集まったら自動でビジュアライズしてノーティス」</span></span></li>
+          <li><span class="task-name">DD進捗ダッシュボード</span><span class="task-desc">バイサイド・セルサイド含む<strong>数十人のステークホルダーが同じビュー</strong>を見る統合管理画面。QAシート最新状態・資料到着・残論点を一覧化。<span class="text-secondary">— 長谷山氏: 「全員が同じ情報を見ているとは限らない」</span></span></li>
+          <li><span class="task-name">バリュエーション自動化</span><span class="task-desc">コンプ分析（SPEEDA）・DCF・3パターン事業計画の<strong>フォーマットは既に確立</strong>。AI介入の余地はあるが外部ベンダー運用も定着。優先度は相対的に低い。<span class="text-secondary">— 小室氏: 「普通にできちゃうけどフォーマットがある」</span></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Constraint callout -->
+    <div style="margin-top: 24px; padding: 16px 20px; border-left: 3px solid var(--ink-amber); background: var(--wash-amber);">
+      <div style="font-size: 13px; font-weight: 600; color: var(--ink-amber); margin-bottom: 4px;">AI活用の制約</div>
+      <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">DD論点を網羅的にAIが理解するだけでは不十分。<strong>ディールのシチュエーション（期間制約・Q&A上限・売り手の開示姿勢）に応じて論点を絞り込む判断が必須</strong>。日程調整等のリアルタイムコミュニケーション業務はAIよりも秘書的な人的リソースが適している（<span class="text-secondary">平山氏: 「心理的に一番重い」</span>）。バリュエーションは「普通にできちゃう」がフォーマット・運用が確立しているため、AI化の優先度は相対的に低い。</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 6 — LLM介入マップ（バブルチャート）
+     ============================================================ -->
+<section id="llm-map">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">SECTION 06</span>
+      <h2 class="display-md">LLM介入マップ</h2>
+      <p>「AI投資を最初にどこに集中すべきか」を示す優先度マトリクス（全21業務）。X軸はタスクの認知的複雑性（定型→推論）、Y軸はディールアウトカムへの影響度（工程効率→意思決定品質）。バブルの大きさは案件あたりの投入時間、色は既存業務（青）vs 新規ケイパビリティ（琥珀）。実線は付加価値系、破線は雑務・消込系。</p>
+    </div>
+
+    <div class="bub-wrap">
+      <svg viewBox="0 0 960 540" style="min-width:800px;width:100%;font-family:var(--font-sans);">
+        <!-- Quadrant dividers -->
+        <line x1="500" y1="30" x2="500" y2="490" stroke="var(--slate-200)" stroke-dasharray="6 4"/>
+        <line x1="80" y1="270" x2="920" y2="270" stroke="var(--slate-200)" stroke-dasharray="6 4"/>
+
+        <!-- Quadrant labels -->
+        <text x="290" y="50" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="600" letter-spacing="0.5">成果物高度化</text>
+        <text x="290" y="64" text-anchor="middle" fill="var(--text-muted)" font-size="10" letter-spacing="0.3">Smart Templates</text>
+        <text x="710" y="50" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="600" letter-spacing="0.5">判断増幅</text>
+        <text x="710" y="64" text-anchor="middle" fill="var(--text-muted)" font-size="10" letter-spacing="0.3">Judgment Amplification</text>
+        <text x="290" y="484" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="600" letter-spacing="0.5">即効自動化</text>
+        <text x="290" y="498" text-anchor="middle" fill="var(--text-muted)" font-size="10" letter-spacing="0.3">Quick Automation</text>
+        <text x="710" y="484" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="600" letter-spacing="0.5">専門知の民主化</text>
+        <text x="710" y="498" text-anchor="middle" fill="var(--text-muted)" font-size="10" letter-spacing="0.3">Expertise Democratization</text>
+
+        <!-- Axis labels -->
+        <text x="500" y="530" text-anchor="middle" fill="var(--text-secondary)" font-size="12" font-weight="600">タスクの認知的複雑性 →</text>
+        <text x="94" y="530" text-anchor="start" fill="var(--text-muted)" font-size="11">パターンマッチ・定型</text>
+        <text x="906" y="530" text-anchor="end" fill="var(--text-muted)" font-size="11">推論・統合・暗黙知</text>
+        <text x="30" y="270" text-anchor="middle" fill="var(--text-secondary)" font-size="12" font-weight="600" transform="rotate(-90 30 270)">ディールアウトカムへの影響度 →</text>
+
+        <!-- ═══ 判断増幅（右上）— 認知的複雑性: 高 × アウトカム影響度: 高 ═══ -->
+
+        <!-- 資料読解・論点抽出 — 付加価値系 -->
+        <g class="bub" data-tip="資料読解・論点抽出｜VDRに届く大量資料から論点・リスクシグナルを抽出。ジュニアには「何を見ればよいかわからない」のが最大の壁。LLMによるOCR+推論でNative化の余地大｜付加価値系">
+          <circle cx="700" cy="100" r="34" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="700" y="97" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">資料読解</text>
+          <text x="700" y="109" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">論点抽出</text>
+        </g>
+
+        <!-- DD間横断統合 — 付加価値系 -->
+        <g class="bub" data-tip="DD間横断統合｜各DDモジュールのアウトカムが相互に連関。横断的にリスクを俯瞰しどこを掘るかアライメント。シニアの経験値が物を言う領域｜付加価値系">
+          <circle cx="780" cy="180" r="22" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="780" y="177" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">DD間</text>
+          <text x="780" y="188" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">横断統合</text>
+        </g>
+
+        <!-- 投資仮説・ブリーフィング — 付加価値系 -->
+        <g class="bub" data-tip="投資仮説・社外取ブリーフィング｜投資意義の深い論拠をGoogle Docs箇条書き+数枚スライドで共有。表面的カテゴライズではなくディール固有の論拠が求められる｜付加価値系">
+          <circle cx="560" cy="210" r="22" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="560" y="207" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">投資仮説</text>
+          <text x="560" y="218" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">ブリーフ</text>
+        </g>
+
+        <!-- 業種別DDチェックリスト自動生成 — 付加価値系（新規） -->
+        <g class="bub" data-tip="業種別DDチェックリスト自動生成｜DD実務書20冊+をOCR→構造化し、業種×ファンクション別の論点チェックリストを構築。1,000項目規模で「テーパーする90→100点」を補完。パートナーの暗黙知を外部化｜付加価値系（新規）">
+          <circle cx="830" cy="100" r="28" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2"/>
+          <text x="830" y="97" text-anchor="middle" fill="#92400e" font-size="10" font-weight="600">DDチェック</text>
+          <text x="830" y="109" text-anchor="middle" fill="#92400e" font-size="10" font-weight="600">リスト生成</text>
+        </g>
+
+        <!-- 論点抽出ガイド（ジュニア向け）— 付加価値系（新規） -->
+        <g class="bub" data-tip="論点抽出ガイド（ジュニア向け）｜資料到着時にLLMが即時論点候補・リスクシグナルを提示。シニアの「臭いところを見つける」経験則をガイドとして再現。ジュニアの生産性を飛躍的に向上｜付加価値系（新規）">
+          <circle cx="700" cy="200" r="24" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2"/>
+          <text x="700" y="197" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">論点抽出</text>
+          <text x="700" y="208" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">ガイド</text>
+        </g>
+
+        <!-- NotebookLM的 資料Q&A — 付加価値系（新規・ヒアリング検証済み） -->
+        <g class="bub" data-tip="NotebookLM的 資料Q&A｜VDR資料に出典付きで質問・確認・論点整理。現状「個別ファイルを見に行く人は少ない」ため情報分断が発生。資料読解の民主化ツール｜付加価値系（新規・ヒアリング検証済み）">
+          <circle cx="620" cy="160" r="22" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2"/>
+          <text x="620" y="157" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">資料Q&A</text>
+          <text x="620" y="168" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">(NLM型)</text>
+        </g>
+
+        <!-- DD論点優先度判定 — 付加価値系（新規） -->
+        <g class="bub" data-tip="DD論点の優先度判定｜Q&A上限（例: 300問）の制約下で、ディール成否に直結する論点を優先選別。コンテキスト依存の判断をLLMが補助｜付加価値系（新規）">
+          <circle cx="860" cy="190" r="20" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2"/>
+          <text x="860" y="187" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">論点優先</text>
+          <text x="860" y="198" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">度判定</text>
+        </g>
+
+        <!-- ═══ 成果物高度化（左上）— 認知的複雑性: 低〜中 × アウトカム影響度: 高 ═══ -->
+
+        <!-- DD統合レポート — 付加価値系 -->
+        <g class="bub" data-tip="DD統合レポート作成｜全DD領域の結果をエグゼクティブサマリー・リスクマトリクス・Val反映・SPA論点に統合。最も工数が重い成果物の一つ｜付加価値系">
+          <circle cx="320" cy="85" r="32" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="320" y="82" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">DD統合</text>
+          <text x="320" y="94" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">レポート</text>
+        </g>
+
+        <!-- 取締役会付議資料 — 付加価値系 -->
+        <g class="bub" data-tip="取締役会付議資料作成｜数十枚のデック作成。投資意義の論理構成・リスク俯瞰が求められる。DDサマリー・Val・ストラクチャーを統合｜付加価値系">
+          <circle cx="200" cy="110" r="30" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="200" y="107" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">取締役会</text>
+          <text x="200" y="119" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">付議資料</text>
+        </g>
+
+        <!-- DDプロジェクトセットアップ — 付加価値系 -->
+        <g class="bub" data-tip="DDプロジェクトセットアップ｜運営ルール定義・体制設計・VDR構築・アドバイザー選定を一気に立ち上げ。「めっちゃ大変」（ヒアリング原文）。初動の質がDD全体の成否を左右｜付加価値系">
+          <circle cx="400" cy="160" r="30" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="400" y="157" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">DDセット</text>
+          <text x="400" y="169" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">アップ</text>
+        </g>
+
+        <!-- DD進捗ダッシュボード — 付加価値系（新規・ヒアリング検証済み） -->
+        <g class="bub" data-tip="DD進捗ダッシュボード｜バイサイド・セルサイド数十人が同じビューを共有。QAシート最新状態・資料到着・残論点を一覧化。現状は情報分断で「全員が同じ情報を見ているとは限らない」｜付加価値系（新規・ヒアリング検証済み）">
+          <circle cx="440" cy="100" r="22" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2"/>
+          <text x="440" y="97" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">DD進捗</text>
+          <text x="440" y="108" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">ダッシュボード</text>
+        </g>
+
+        <!-- 事業計画エラーチェック — 付加価値系（新規・ヒアリング検証済み） -->
+        <g class="bub" data-tip="事業計画エラーチェック｜月次展開×5年分モデルの決定論的エラー（SUM範囲ずれ）と推論的エラー（二重計上）を二段階検出。全アラート→人間が選別。現状はディール終盤にセル単位で目検｜付加価値系（新規・ヒアリング検証済み）">
+          <circle cx="460" cy="200" r="22" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2"/>
+          <text x="460" y="197" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">事業計画</text>
+          <text x="460" y="208" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">エラー検出</text>
+        </g>
+
+        <!-- 資料自動ビジュアライズ — 付加価値系（新規・ヒアリング検証済み） -->
+        <g class="bub" data-tip="資料自動ビジュアライズ＋ノーティス｜財務データ到着時に自動でスライド数枚を生成しチームにプッシュ。全員が資料を読みに行く前にキーデータを把握。受動的な情報流通を実現｜付加価値系（新規・ヒアリング検証済み）">
+          <circle cx="360" cy="230" r="18" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2"/>
+          <text x="360" y="227" text-anchor="middle" fill="#92400e" font-size="8" font-weight="600">自動ビジュア</text>
+          <text x="360" y="237" text-anchor="middle" fill="#92400e" font-size="8" font-weight="600">ライズ</text>
+        </g>
+
+        <!-- ═══ 専門知の民主化（右下）— 認知的複雑性: 高 × アウトカム影響度: 低〜中 ═══ -->
+
+        <!-- SPA条項レビュー — 付加価値系 -->
+        <g class="bub" data-tip="SPA条項レビュー｜表明保証・補償条項・前提条件のレビュー。DDファインディングをSPA条項に反映｜付加価値系">
+          <circle cx="640" cy="340" r="18" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="640" y="337" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">SPA条項</text>
+          <text x="640" y="348" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">レビュー</text>
+        </g>
+
+        <!-- ═══ 即効自動化（左下）— 認知的複雑性: 低 × アウトカム影響度: 低〜中 ═══ -->
+
+        <!-- Q&A管理・重複消込 — 雑務系（dashed stroke） -->
+        <g class="bub" data-tip="Q&A管理・重複消込｜各アドバイザーからExcelで上がるQ&Aの集約・モジュール間重複の消し込み。週2-3回セルサイドに送付。財務×税務×ビジネスで重複多発｜雑務系">
+          <circle cx="380" cy="320" r="28" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2" stroke-dasharray="6 3"/>
+          <text x="380" y="317" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">Q&A管理</text>
+          <text x="380" y="329" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">重複消込</text>
+        </g>
+
+        <!-- ロングリスト作成・調査 — 雑務系 -->
+        <g class="bub" data-tip="ロングリスト作成・調査｜数十〜100社をWeb調査でリストアップ→色付け→上位10社を深掘り。労働集約的かつ鮮度が落ちるが打率が高い。ディールが埋まると後回しに｜雑務系">
+          <circle cx="260" cy="360" r="26" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2" stroke-dasharray="6 3"/>
+          <text x="260" y="357" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">ロング</text>
+          <text x="260" y="369" text-anchor="middle" fill="var(--ink-blue)" font-size="10" font-weight="600">リスト</text>
+        </g>
+
+        <!-- VDR構築・資料依頼 — 雑務系 -->
+        <g class="bub" data-tip="VDR構築・資料依頼｜フォルダ構成設計・アクセス権設定・200-500項目の依頼リスト作成・受領管理｜雑務系">
+          <circle cx="160" cy="340" r="20" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2" stroke-dasharray="6 3"/>
+          <text x="160" y="337" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">VDR構築</text>
+          <text x="160" y="348" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">資料依頼</text>
+        </g>
+
+        <!-- IMスクリーニング — 雑務系 -->
+        <g class="bub" data-tip="IMスクリーニング｜年間40件のIM受領→戦略フィット即時判定。半分以上は初期で弾く。事業部への展開判断も含む｜雑務系">
+          <circle cx="220" cy="420" r="20" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2" stroke-dasharray="6 3"/>
+          <text x="220" y="417" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">IMスクリ</text>
+          <text x="220" y="428" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">ーニング</text>
+        </g>
+
+        <!-- 簡易Val（DCF概算）— 付加価値系 -->
+        <g class="bub" data-tip="簡易バリュエーション（DCF概算）｜先方の事業計画にストレスシナリオ複数作成→簡易DCFでレンジ算出。精緻なフェアバリューではなく言い値がはまるレンジをバックキャスト｜付加価値系">
+          <circle cx="400" cy="400" r="22" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="2"/>
+          <text x="400" y="397" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">簡易Val</text>
+          <text x="400" y="408" text-anchor="middle" fill="var(--ink-blue)" font-size="9" font-weight="600">DCF概算</text>
+        </g>
+
+        <!-- ロングリスト鮮度管理 — 雑務系（新規） -->
+        <g class="bub" data-tip="ロングリスト鮮度管理｜鮮度が落ちたリストをWeb情報で定期補完・更新。ディールパイプラインに押されて後回しになる業務をLLMが自動化｜雑務系（新規）">
+          <circle cx="310" cy="430" r="16" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2" stroke-dasharray="6 3"/>
+          <text x="310" y="427" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">リスト鮮度</text>
+          <text x="310" y="438" text-anchor="middle" fill="#92400e" font-size="9" font-weight="600">管理</text>
+        </g>
+
+        <!-- 仲介向け情報発信 — 雑務系（新規） -->
+        <g class="bub" data-tip="仲介向け情報発信｜四半期ごとの投資戦略メルマガ、ターゲットリスト共有。ティアの高い仲介への個別対応｜雑務系（新規）">
+          <circle cx="140" cy="420" r="14" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="2" stroke-dasharray="6 3"/>
+          <text x="140" y="417" text-anchor="middle" fill="#92400e" font-size="8" font-weight="600">仲介向け</text>
+          <text x="140" y="427" text-anchor="middle" fill="#92400e" font-size="8" font-weight="600">情報発信</text>
+        </g>
+
+        <!-- Axis lines -->
+        <line x1="80" y1="500" x2="920" y2="500" stroke="var(--border-strong)" stroke-width="1.5"/>
+        <line x1="80" y1="30" x2="80" y2="500" stroke="var(--border-strong)" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+    <!-- Legend -->
+    <div class="bub-legend">
+      <div class="bub-legend-item"><svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="var(--wash-blue)" stroke="var(--ink-blue)" stroke-width="1.5"/></svg> 既存業務（今できている/工数大）</div>
+      <div class="bub-legend-item"><svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="var(--wash-amber)" stroke="var(--ink-amber)" stroke-width="1.5"/></svg> 新規ケイパビリティ（今できていない）</div>
+      <div class="bub-legend-item"><svg width="24" height="18"><line x1="0" y1="9" x2="24" y2="9" stroke="var(--ink-600)" stroke-width="2"/></svg> 付加価値系</div>
+      <div class="bub-legend-item"><svg width="24" height="18"><line x1="0" y1="9" x2="24" y2="9" stroke="var(--ink-600)" stroke-width="2" stroke-dasharray="6 3"/></svg> 雑務・消込系</div>
+      <div class="bub-legend-item"><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="var(--slate-100)" stroke="var(--slate-300)"/></svg> バブルの大きさ = 案件あたりの投入時間</div>
+    </div>
+
+    <!-- Insight callouts -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
+      <div style="padding: 16px 20px; border-left: 3px solid var(--ink-blue); background: var(--wash-blue);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--ink-blue); margin-bottom: 4px;">判断増幅（右上）— 最大の投資対効果</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">認知的複雑性が高くディールアウトカムに直結する領域。<strong>資料読解・論点抽出</strong>と<strong>DDチェックリスト自動生成</strong>はシニアの暗黙知をLLMで拡張する本丸。<strong>NotebookLM型資料Q&A</strong>と<strong>論点抽出ガイド</strong>でジュニアの情報アクセスを底上げすれば、チーム全体のDD品質が向上する。</div>
+      </div>
+      <div style="padding: 16px 20px; border-left: 3px solid var(--ink-amber); background: var(--wash-amber);">
+        <div style="font-size: 13px; font-weight: 600; color: var(--ink-amber); margin-bottom: 4px;">即効自動化（左下）— Quick Win の宝庫</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.6;">パターンマッチ可能な雑務が密集。<strong>Q&A重複消込</strong>（毎朝30分×2名）と<strong>ロングリスト鮮度管理</strong>は即日効果が出る。左上の<strong>成果物高度化</strong>（DD統合レポート・取締役会付議資料のテンプレート自動生成）と組み合わせれば、チームの時間を右上の「判断増幅」に再配分できる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-separator"></div>
+
+<!-- ============================================================
+     SECTION 7 — タイムライン
+     ============================================================ -->
+<section id="timeline">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">SECTION 07</span>
+      <h2 class="display-md">DDタイムライン（典型的な4〜8週間）</h2>
+      <p>DD開始からSPA交渉開始までの標準的なスケジュール。</p>
+    </div>
+
+    <!-- Legend -->
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; font-size: 12px;">
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:var(--ink-blue);display:inline-block;"></span> セットアップ</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:var(--ink-green);display:inline-block;"></span> 分析</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:var(--ink-amber);display:inline-block;"></span> 深化・検証</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:#7e22ce;display:inline-block;"></span> インタビュー</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:var(--ink-red);display:inline-block;"></span> 統合・レポート</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:var(--ink-1000);display:inline-block;"></span> 意思決定</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:var(--slate-600);display:inline-block;"></span> SPA交渉</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width:16px;height:12px;background:var(--slate-300);display:inline-block;"></span> SC（週次報告）</span>
+    </div>
+
+    <div class="gantt-container">
+      <table class="gantt">
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th><th>W7</th><th>W8</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>VDR構築・資料依頼</td>
+            <td><div class="gantt-bar setup"></div></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>体制構築・Kick-off</td>
+            <td><div class="gantt-bar setup"></div></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>資料分析・初期Q&A</td>
+            <td></td>
+            <td><div class="gantt-bar analysis"></div></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>初期分析</td>
+            <td></td>
+            <td><div class="gantt-bar analysis"></div></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>分析深化・追加Q&A</td>
+            <td></td><td></td>
+            <td><div class="gantt-bar deep"></div></td>
+            <td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>論点整理</td>
+            <td></td><td></td>
+            <td><div class="gantt-bar deep"></div></td>
+            <td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>Mgmtインタビュー</td>
+            <td></td><td></td><td></td>
+            <td><div class="gantt-bar interview"></div></td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>仮説検証</td>
+            <td></td><td></td><td></td>
+            <td><div class="gantt-bar interview"></div></td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>DD統合・レポート</td>
+            <td></td><td></td><td></td><td></td>
+            <td><div class="gantt-bar integration"></div></td>
+            <td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>Val調整</td>
+            <td></td><td></td><td></td><td></td>
+            <td><div class="gantt-bar integration"></div></td>
+            <td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td>取締役会付議（決議A）</td>
+            <td></td><td></td><td></td><td></td><td></td>
+            <td><div class="gantt-bar decision"></div></td>
+            <td></td><td></td>
+          </tr>
+          <tr>
+            <td>Go/No-Go・バインディングLOI</td>
+            <td></td><td></td><td></td><td></td><td></td>
+            <td><div class="gantt-bar decision"></div></td>
+            <td></td><td></td>
+          </tr>
+          <tr>
+            <td>SPA交渉・条件交渉</td>
+            <td></td><td></td><td></td><td></td><td></td><td></td>
+            <td><div class="gantt-bar negotiation"></div></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>取締役会付議（決議B）</td>
+            <td></td><td></td><td></td><td></td><td></td><td></td>
+            <td></td>
+            <td><div class="gantt-bar decision"></div></td>
+          </tr>
+          <tr>
+            <td>クロージング・PMI準備</td>
+            <td></td><td></td><td></td><td></td><td></td><td></td>
+            <td></td>
+            <td><div class="gantt-bar negotiation"></div></td>
+          </tr>
+          <tr style="border-top: 2px solid var(--border-heavy);">
+            <td style="color: var(--text-secondary); font-weight: 400;">ステアリングコミッティ</td>
+            <td><div class="gantt-bar sc">SC</div></td>
+            <td><div class="gantt-bar sc">SC</div></td>
+            <td><div class="gantt-bar sc">SC</div></td>
+            <td><div class="gantt-bar sc">SC</div></td>
+            <td><div class="gantt-bar sc">SC</div></td>
+            <td><div class="gantt-bar sc">SC</div></td>
+            <td></td><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body-sm" style="margin-top: 16px;">SC = ステアリングコミッティ（週次経営陣報告）、Mgmt = マネジメント、Val = バリュエーション</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <span class="footer-text">&copy; 2026 — M&A Due Diligence Business Process Reference</span>
+      <span class="footer-text">Confidential</span>
+    </div>
+  </div>
+</footer>
+
+<div class="bub-tooltip" id="bubTip"></div>
+
+<script>
+function toggleAccordion(trigger) {
+  const item = trigger.parentElement;
+  item.classList.toggle('open');
+}
+
+/* Bubble chart tooltip */
+(function(){
+  const tip = document.getElementById('bubTip');
+  document.querySelectorAll('.bub').forEach(function(g){
+    g.addEventListener('mouseenter', function(e){
+      const raw = g.getAttribute('data-tip');
+      if(!raw) return;
+      const parts = raw.split('｜');
+      tip.innerHTML = '<strong>' + parts[0] + '</strong>' + (parts[1] ? '<br>' + parts[1] : '') + (parts[2] ? '<br><span style="color:var(--slate-300);font-size:11px;">' + parts[2] + '</span>' : '');
+      tip.classList.add('visible');
+    });
+    g.addEventListener('mousemove', function(e){
+      var x = e.clientX + 12;
+      var y = e.clientY + 12;
+      if(x + 260 > window.innerWidth) x = e.clientX - 270;
+      if(y + 80 > window.innerHeight) y = e.clientY - 80;
+      tip.style.left = x + 'px';
+      tip.style.top = y + 'px';
+    });
+    g.addEventListener('mouseleave', function(){
+      tip.classList.remove('visible');
+    });
+  });
+})();
+</script>
+</body>
+</html>

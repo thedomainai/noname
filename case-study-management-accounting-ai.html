@@ -71,7 +71,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .lcl{font-family:var(--font-sans);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:16px}
 .ic{border-radius:10px;padding:22px;margin-bottom:14px;border-left:4px solid;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:box-shadow .2s,transform .15s}
 .ic:hover{box-shadow:0 6px 20px rgba(0,0,0,.08);transform:translateY(-1px)}
-.ic.cb{border-color:var(--ink-blue)}.ic.cg2{border-color:var(--ink-green)}.ic.ca{border-color:var(--ink-amber)}.ic.cr{border-color:var(--ink-red)}
+.ic.cb{border-color:var(--ink-blue)}.ic.cg2{border-color:var(--ink-blue)}.ic.ca{border-color:var(--ink-blue)}.ic.cr{border-color:var(--ink-blue)}
 .il{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:4px}
 .it{font-family:var(--font-serif);font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:6px}
 .id{font-size:13px;color:var(--text-secondary);margin-bottom:10px}
@@ -95,11 +95,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .bb{background:var(--slate-100)}.ba{background:#fff;border:1px solid var(--border-default)}
 .baw{display:flex;align-items:center;justify-content:center;width:56px;font-size:32px;color:var(--slate-300)}
 .bt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
-.bb .bt{color:var(--slate-400)}.ba .bt{color:var(--ink-green)}
+.bb .bt{color:var(--slate-400)}.ba .bt{color:var(--ink-blue)}
 .bn{font-family:var(--font-serif);font-weight:300;letter-spacing:-.03em;line-height:1;margin-bottom:8px}
 .bb .bn{font-size:56px;color:var(--slate-600)}
 .ba .bn{font-size:56px}
-.ba.ab .bn{color:var(--ink-blue)}.ba.ag .bn{color:var(--ink-green)}.ba.aa .bn{color:var(--ink-amber)}.ba.ar .bn{color:var(--ink-red)}
+.ba.ab .bn{color:var(--ink-blue)}.ba.ag .bn{color:var(--ink-blue)}.ba.aa .bn{color:var(--ink-blue)}.ba.ar .bn{color:var(--ink-blue)}
 .bd{font-size:15px;color:var(--text-secondary);line-height:1.6}
 .bb .bd{color:var(--slate-500)}
 .ac{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:28px}
@@ -126,7 +126,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .ml2{width:80px;flex-shrink:0;font-size:14px;font-weight:600;color:var(--text-secondary)}
 .mt{flex:1;height:52px;display:flex;border-radius:6px;overflow:hidden}
 .ms{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;white-space:nowrap}
-.msr{background:var(--wash-red);color:var(--ink-red)}.msd{background:var(--wash-blue);color:var(--ink-blue)}
+.msr{background:var(--slate-100);color:var(--slate-600)}.msd{background:var(--wash-blue);color:var(--ink-blue)}
 .mm{width:56px;flex-shrink:0;text-align:right;font-family:var(--font-mono);font-size:13px;color:var(--text-muted)}
 
 /* Prep compare */
@@ -146,10 +146,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .tc{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:32px 0}
 .tb{padding:24px;border-radius:10px;text-align:center}
 .tbf{background:var(--slate-100);border:1px solid var(--slate-200)}
-.taf{background:#fff;border:1px solid var(--ink-amber)}
+.taf{background:#fff;border:1px solid var(--ink-blue)}
 .tlb{height:8px;border-radius:4px;margin:16px 0}
-.tbf .tlb{background:linear-gradient(90deg,var(--slate-300) 0%,var(--slate-300) 85%,var(--ink-red) 85%,var(--ink-red) 100%)}
-.taf .tlb{background:repeating-linear-gradient(90deg,var(--ink-amber) 0%,var(--ink-amber) 6%,transparent 6%,transparent 10%)}
+.tbf .tlb{background:linear-gradient(90deg,var(--slate-300) 0%,var(--slate-300) 85%,var(--slate-500) 85%,var(--slate-500) 100%)}
+.taf .tlb{background:repeating-linear-gradient(90deg,var(--ink-blue) 0%,var(--ink-blue) 6%,transparent 6%,transparent 10%)}
 
 /* S8 Resource */
 .rt{display:flex;gap:0;margin-bottom:28px}
@@ -159,10 +159,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .rd{font-family:var(--font-mono);font-size:13px;margin-bottom:6px}
 .re{font-size:12px;opacity:.8}
 .r1{background:var(--wash-blue);color:var(--ink-blue);flex:2}
-.r2{background:var(--wash-green);color:var(--ink-green);flex:3.5}
-.r3{background:var(--wash-amber);color:var(--ink-amber);flex:8}
+.r2{background:var(--slate-100);color:var(--slate-700);flex:3.5}
+.r3{background:var(--slate-200);color:var(--slate-700);flex:8}
 .r4{background:var(--slate-900);color:#fff;flex:6}.r4 .re{color:var(--slate-300)}
-.rc{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:8px;border:2px solid var(--ink-green);background:var(--wash-green);font-weight:700;font-size:15px;color:var(--ink-green)}
+.rc{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:8px;border:2px solid var(--ink-blue);background:var(--wash-blue);font-weight:700;font-size:15px;color:var(--ink-blue)}
 
 /* S9 Changes */
 .c5g{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:24px}
@@ -236,15 +236,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 <section class="slide" id="s1b">
   <div class="sn">01-b</div>
   <div class="ch-hd">
-    <div class="d-md" style="margin-bottom:12px">最低限、回していたこと</div>
-    <div class="b-sm">以下はAI導入前から実行していた業務。ただし「回している」だけで、質・深さ・速度に課題があった。</div>
+    <div class="d-md" style="margin-bottom:12px">これだけで、もう手一杯だった</div>
+    <div class="b-sm">AI導入前から回していた業務。少人数チームでこれを毎月こなすだけで工数の大半が埋まり、質を上げる余裕が残らなかった。</div>
   </div>
   <div class="cg">
-    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">月次で売上・粗利・営業利益の3指標を集計</div><div class="cd2">数字は出せていた。ただし先行指標はなく、問題が数字に現れてから初めて気づく状態</div></div></div>
-    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">年次予算を10〜12月に策定</div><div class="cd2">3ヶ月かけて作るが、期中見直しは半期1回が限界。3ヶ月で陳腐化する予算と比較し続ける運用</div></div></div>
-    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">月次定例を毎月開催</div><div class="cd2">2時間のうち1.5時間が報告。事業部長は会議の場で初めて数字を見る。準備に毎月3〜4日</div></div></div>
-    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">エクイティストーリーを調達時に作成</div><div class="cd2">調達直前の突貫作業。終わると更新が止まり、半年後には現実と乖離</div></div></div>
-    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">議事録の作成</div><div class="cd2">書いてはいた。が、前回の決定事項を次回冒頭で確認する運用はなく、決めっぱなし</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">3事業部の月次実績を集計・突合</div><div class="cd2">各事業部がバラバラのExcelで提出。フォーマットも粒度も違うため、統一形式に転記・突合するだけで丸1日かかる</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">月次定例の準備・運営</div><div class="cd2">数字収集1日、サマリ資料作成1日、差異分析コメント0.5〜1日、フォーマット調整0.5日。合計3〜4日が毎月消える</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">予算比・前年比の差異レポート作成</div><div class="cd2">「売上未達△800万」までは出せる。ただし原因分析（案件ズレ？単価？件数？）を全項目で行う余力はなく、大きな差異だけ簡易コメント</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">年次予算を10〜12月にかけて策定</div><div class="cd2">3事業部のボトムアップ数字を集め、全社調整し、取締役会承認まで約3ヶ月。この間は予算策定にかかりきりで他が止まる</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">取締役会資料の作成</div><div class="cd2">毎回、前回資料をコピーして数字を差し替え、体裁を整え直す。構造は同じなのに毎回2日かかる</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">各事業部との個別ミーティング</div><div class="cd2">月次定例とは別に、事業部ごとの数字確認・課題ヒアリングを実施。3事業部×月1〜2回で月間6回前後</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">エクイティストーリーの作成・更新</div><div class="cd2">資金調達ラウンドの直前に2〜3週間で集中作成。市場データ収集、競合分析、財務モデル更新を一気にやる。通常業務と並行するため月次の質が落ちる</div></div></div>
+    <div class="cc"><div class="cn">&#x2713;</div><div><div class="ct">議事録の作成・管理</div><div class="cd2">月次定例・取締役会・個別MTGのすべてで議事録を作成。書くことはできていたが、前回の決定事項を追跡する運用はなかった</div></div></div>
   </div>
 </section>
 
@@ -371,7 +374,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     </div>
     <div class="baw">&#x2192;</div>
     <div class="bp ba ag">
-      <div class="bt" style="color:var(--ink-green)">After</div>
+      <div class="bt" style="color:var(--ink-blue)">After</div>
       <div class="bn">半日</div>
       <div class="bd">月次フォーキャスト更新にかかる時間が、ゼロベースで作る場合の推定3日→半日に短縮。AIが80%の下書きを作り、人間が20%の判断を入れる構造。人間は「これは違う」という部分だけ修正する（例: 大型案件のクロージング時期のズレ、価格改定の影響等）。</div>
     </div>
@@ -404,14 +407,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     </div>
     <div class="baw">&#x2192;</div>
     <div class="bp ba aa">
-      <div class="bt" style="color:var(--ink-amber)">After</div>
+      <div class="bt" style="color:var(--ink-blue)">After</div>
       <div class="bn">1-2日</div>
       <div class="bd">エクイティストーリー本体の書き換えは人間が行うが、「書き換えるべき箇所」の特定と、書き換えに必要な材料の収集がAIで自動化された。常に「半完成品」が手元にある状態。<br><br>投資家や取締役から突然「最新の市場環境を踏まえた事業計画の見通しは？」と聞かれても、1〜2日で更新版を出せる。</div>
     </div>
   </div>
   <div class="tc">
     <div class="tb tbf"><div class="h-sm" style="margin-bottom:8px">Before: 調達直前に集中</div><div class="tlb"></div><div class="b-sm">普段は放置 → 調達前に2〜3週間の突貫</div></div>
-    <div class="tb taf"><div class="h-sm" style="margin-bottom:8px;color:var(--ink-amber)">After: 常時アップデート</div><div class="tlb"></div><div class="b-sm">月次で競合・市場を自動収集 → 常に鮮度維持</div></div>
+    <div class="tb taf"><div class="h-sm" style="margin-bottom:8px;color:var(--ink-blue)">After: 常時アップデート</div><div class="tlb"></div><div class="b-sm">月次で競合・市場を自動収集 → 常に鮮度維持</div></div>
   </div>
   <div class="h-sm" style="margin-bottom:12px">AIが担うこと</div>
   <div class="ac">
@@ -454,7 +457,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
   <div class="pr">
     <div class="pb"><div class="h-sm">準備時間</div><span class="pv" style="color:var(--slate-500)">3-4日</span></div>
     <div class="pa">&#x2192;</div>
-    <div class="pb"><div class="h-sm" style="color:var(--ink-red)">準備時間</div><span class="pv" style="color:var(--ink-red)">1-1.5日</span><div class="b-sm">AIが集計・下書き → 人間はレビューのみ</div></div>
+    <div class="pb"><div class="h-sm" style="color:var(--ink-blue)">準備時間</div><span class="pv" style="color:var(--ink-blue)">1-1.5日</span><div class="b-sm">AIが集計・下書き → 人間はレビューのみ</div></div>
   </div>
   <div class="h-sm" style="margin-bottom:12px;margin-top:32px">AIが担うこと</div>
   <div class="ac">

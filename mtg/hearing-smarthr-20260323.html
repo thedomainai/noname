@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartHR コーポレートチーム ヒアリング — 2026.03.23</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── CSS Custom Properties (Paper DS — Web App context) ── */
+:root {
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040;  --ink-600: #525252;  --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a;  --ink-300: #a3a3a3;  --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0;  --ink-50:  #f0f0f0;
+
+  --slate-50:  #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155;
+
+  --paper-50:  #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600: #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+
+  --ink-blue: #2563eb;  --ink-green: #16a34a;
+  --ink-amber: #d97706; --ink-red: #dc2626;
+
+  --wash-blue: #dbeafe;  --wash-green: #dcfce7;
+  --wash-amber: #fef3c7; --wash-red: #fee2e2;
+
+  --bg-page: var(--paper-50);
+  --bg-surface: var(--paper-100);
+  --bg-surface-raised: var(--paper-50);
+  --bg-recessed: var(--paper-300);
+  --border-default: var(--slate-200);
+  --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000);
+  --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900);
+  --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500);
+  --text-muted: var(--slate-400);
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --separator: 1px solid var(--border-default);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ── */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(253, 253, 252, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--border-heavy);
+}
+
+.header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.header-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-blue);
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-heading);
+  letter-spacing: -0.3px;
+}
+
+.header-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.header-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Section Nav ── */
+.section-nav {
+  position: sticky;
+  top: 58px;
+  z-index: 90;
+  background: rgba(253, 253, 252, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: var(--separator);
+}
+
+.section-nav-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.section-nav a {
+  display: block;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.section-nav a:hover,
+.section-nav a.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--ink-blue);
+}
+
+/* ── Main Layout ── */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.section {
+  padding: 48px 0;
+  scroll-margin-top: 110px;
+}
+
+.section + .section {
+  border-top: var(--separator);
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-blue);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+  border-bottom: 2px solid var(--border-heavy);
+  padding-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* ── Agenda Timeline ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-default);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.timeline-item:hover {
+  background: var(--paper-200);
+}
+
+.timeline-item.active {
+  background: var(--wash-blue);
+}
+
+.timeline-item.completed .timeline-time {
+  color: var(--ink-green);
+}
+
+.timeline-item.completed .timeline-title {
+  color: var(--text-secondary);
+}
+
+.timeline-time {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding-top: 2px;
+}
+
+.timeline-content { }
+
+.timeline-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.timeline-detail {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.timeline-badge {
+  display: inline-block;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 2px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.badge-high { background: var(--wash-red); color: var(--ink-red); }
+.badge-medium { background: var(--wash-amber); color: var(--ink-amber); }
+.badge-info { background: var(--wash-blue); color: var(--ink-blue); }
+
+/* ── Cards ── */
+.card-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 20px;
+}
+
+.card-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+
+.card-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Member Table ── */
+.member-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.member-table th {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1.5px solid var(--ink-900);
+  background: var(--paper-300);
+}
+
+.member-table td {
+  font-size: 14px;
+  padding: 12px;
+  border-bottom: 0.5px solid var(--border-default);
+  vertical-align: top;
+}
+
+.member-table tr:hover {
+  background: var(--paper-300);
+}
+
+.member-table .editable {
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-default);
+  padding: 6px 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-primary);
+  width: 100%;
+  min-height: 32px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.member-table .editable:focus {
+  border-color: var(--ink-blue);
+}
+
+.member-table .editable::placeholder {
+  color: var(--text-muted);
+}
+
+.member-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  width: 32px;
+}
+
+/* ── Flow Framework ── */
+.flow-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.flow-block {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 20px;
+}
+
+.flow-block-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flow-row {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr 40px 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+.flow-step {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 16px;
+}
+
+.flow-step-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-300);
+  font-size: 20px;
+  padding-top: 20px;
+}
+
+.flow-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-default);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.flow-textarea:focus {
+  border-color: var(--ink-blue);
+}
+
+.flow-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Pain Ranking ── */
+.pain-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pain-item {
+  display: grid;
+  grid-template-columns: 40px 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  transition: border-color 0.15s ease;
+}
+
+.pain-item:hover {
+  border-color: var(--border-strong);
+}
+
+.pain-rank {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.pain-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-default);
+  outline: none;
+}
+
+.pain-input:focus {
+  border-color: var(--ink-blue);
+}
+
+.pain-input::placeholder {
+  color: var(--text-muted);
+}
+
+.pain-tag-select {
+  height: 36px;
+  padding: 0 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-recessed);
+  border: 1px solid var(--border-default);
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── Checklist ── */
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.checklist-item:hover {
+  background: var(--paper-200);
+}
+
+.checklist-item.checked {
+  background: var(--wash-green);
+  border-color: var(--ink-green);
+}
+
+.checklist-item.checked .checklist-text {
+  color: var(--text-secondary);
+}
+
+.checklist-check {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 12px;
+  color: transparent;
+  transition: all 0.15s ease;
+}
+
+.checklist-item.checked .checklist-check {
+  background: var(--ink-green);
+  border-color: var(--ink-green);
+  color: white;
+}
+
+.checklist-text {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.checklist-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ── Callout ── */
+.callout {
+  padding: 16px 20px;
+  border-left: 3px solid;
+}
+
+.callout-insight {
+  border-color: var(--ink-blue);
+  background: var(--wash-blue);
+}
+
+.callout-caution {
+  border-color: var(--ink-amber);
+  background: var(--wash-amber);
+}
+
+.callout-text {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.callout-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.callout-insight .callout-label { color: var(--ink-blue); }
+.callout-caution .callout-label { color: var(--ink-amber); }
+
+/* ── Notes area ── */
+.notes-area {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.notes-area:focus {
+  border-color: var(--ink-blue);
+}
+
+.notes-area::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Reference Panel ── */
+.ref-panel {
+  background: var(--paper-300);
+  border: 1px solid var(--border-default);
+  padding: 20px;
+}
+
+.ref-panel summary {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ref-panel summary::before {
+  content: '▶';
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.ref-panel[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.ref-panel .ref-content {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.ref-panel .ref-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.ref-panel .ref-content th {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ink-200);
+}
+
+.ref-panel .ref-content td {
+  font-size: 13px;
+  padding: 6px 8px;
+  border-bottom: 0.5px solid var(--border-default);
+  vertical-align: top;
+}
+
+/* ── Next Actions ── */
+.action-item {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 16px;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-default);
+}
+
+.action-owner {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+.action-owner.owner-us { color: var(--ink-blue); }
+.action-owner.owner-them { color: var(--ink-green); }
+
+.action-text {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.action-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: right;
+  padding: 4px 0;
+}
+
+/* ── Gap Matrix ── */
+.gap-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr auto;
+  gap: 0;
+}
+
+.gap-header {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-bottom: 1.5px solid var(--ink-900);
+  background: var(--paper-300);
+}
+
+.gap-cell {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-bottom: 0.5px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.gap-cell.gap-id {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* ── Footer ── */
+.page-footer {
+  border-top: var(--separator);
+  padding: 24px 0;
+  margin-top: 48px;
+}
+
+.footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Print ── */
+@media print {
+  .page-header, .section-nav { position: relative; }
+  .notes-area, .flow-textarea, .pain-input, .member-table .editable { border: 1px solid var(--ink-200); }
+  body { background-image: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .flow-row { grid-template-columns: 1fr; gap: 8px; }
+  .flow-arrow { transform: rotate(90deg); padding: 0; }
+  .header-inner { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+
+@media (max-width: 639px) {
+  .container { padding: 0 16px; }
+  .header-inner { padding: 12px 16px; }
+  .section-nav-inner { padding: 0 16px; }
+  .card-grid-3, .card-grid-2, .card-grid-4 { grid-template-columns: 1fr; }
+  .section { padding: 32px 0; }
+  .section-title { font-size: 18px; }
+  .member-table { font-size: 13px; }
+  .pain-item { grid-template-columns: 32px 1fr; }
+  .pain-tag-select { grid-column: 2; }
+  .action-item { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<div class="page-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <span class="header-label">HEARING SHEET</span>
+      <span class="header-title">SmartHR コーポレートチーム ヒアリング</span>
+    </div>
+    <div class="header-meta">
+      <span>2026.03.23</span>
+      <span>|</span>
+      <span>第2回</span>
+      <span>|</span>
+      <span>90 min</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION NAV
+     ============================================================ -->
+<div class="section-nav">
+  <div class="section-nav-inner">
+    <a href="#agenda" class="active">Agenda</a>
+    <a href="#dd">DD業務</a>
+    <a href="#keiei">経営企画</a>
+    <a href="#next">Next Actions</a>
+    <a href="#reference">Reference</a>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main class="container">
+
+<!-- ── Section: Meeting Info ── -->
+<div class="section" style="padding-top: 32px; padding-bottom: 24px; border-bottom: none;">
+  <div class="card-grid card-grid-4">
+    <div class="card">
+      <div class="card-header">参加者（SmartHR様）</div>
+      <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">長谷山京佑 VP</div>
+      <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">+ メンバーの方々 3名</div>
+    </div>
+    <div class="card">
+      <div class="card-header">参加者（当社）</div>
+      <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">中林・関</div>
+    </div>
+    <div class="card">
+      <div class="card-header">本日のゴール</div>
+      <div style="font-size: 13px; color: var(--text-primary); line-height: 1.5;">メンバーの方々の業務フロー・ペイン・工数を具体的に把握する</div>
+    </div>
+    <div class="card">
+      <div class="card-header">前提制約</div>
+      <div style="font-size: 13px; color: var(--ink-amber); font-weight: 600;">ローカルAIツール導入不可</div>
+      <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">→ BPOモデルで提案</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 1: Agenda ── -->
+<div class="section" id="agenda">
+  <div class="section-label">01 — AGENDA</div>
+  <div class="section-title">進行アジェンダ</div>
+  <div class="section-desc">クリックで進行中セクションをハイライトできます</div>
+
+  <div class="timeline">
+    <div class="timeline-item" onclick="toggleActive(this)">
+      <div class="timeline-time">0:00–0:02</div>
+      <div class="timeline-content">
+        <div class="timeline-title">
+          0. 前回の振り返り
+          <span class="timeline-badge badge-info">2 MIN</span>
+        </div>
+        <div class="timeline-detail">前回の理解を共有しズレを修正。「今日はメンバーの方々の業務をもっと具体的に教えてください」</div>
+      </div>
+    </div>
+
+    <div class="timeline-item" onclick="toggleActive(this)">
+      <div class="timeline-time">0:02–0:07</div>
+      <div class="timeline-content">
+        <div class="timeline-title">
+          1. メンバーの方々の自己紹介
+          <span class="timeline-badge badge-info">5 MIN</span>
+        </div>
+        <div class="timeline-detail">メンバーの方々の <strong>お名前 / 担当領域 / 入社時期</strong></div>
+      </div>
+    </div>
+
+    <div class="timeline-item" onclick="toggleActive(this)" style="background: var(--paper-200);">
+      <div class="timeline-time">0:07–0:47</div>
+      <div class="timeline-content">
+        <div class="timeline-title">
+          2. DD業務
+          <span class="timeline-badge badge-high">40 MIN</span>
+        </div>
+        <div class="timeline-detail">
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+            <div><strong>a. 棚卸し</strong> — 主要タスクの洗い出し・担当・頻度</div>
+            <div><strong>b. フロー/タスクの深掘り</strong> — 入力→処理→出力の具体的な流れ</div>
+            <div><strong>c. ペインポイント</strong> — 難易度・工数・ボトルネックの特定</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item" onclick="toggleActive(this)" style="background: var(--paper-200);">
+      <div class="timeline-time">0:47–1:12</div>
+      <div class="timeline-content">
+        <div class="timeline-title">
+          3. 経営企画業務
+          <span class="timeline-badge badge-high">25 MIN</span>
+        </div>
+        <div class="timeline-detail">
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+            <div><strong>a. 棚卸し</strong> — 主要タスクの洗い出し・担当・頻度</div>
+            <div><strong>b. フロー/タスクの深掘り</strong> — 入力→処理→出力の具体的な流れ</div>
+            <div><strong>c. ペインポイント</strong> — 難易度・工数・ボトルネックの特定</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item" onclick="toggleActive(this)">
+      <div class="timeline-time">1:12–1:15</div>
+      <div class="timeline-content">
+        <div class="timeline-title">
+          4. ネクストアクション
+          <span class="timeline-badge badge-info">3 MIN</span>
+        </div>
+        <div class="timeline-detail">次回に向けた分析対象業務の絞り込み。日程調整</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 2: DD業務 ── -->
+<div class="section" id="dd">
+  <div class="section-label">02 — DD業務</div>
+  <div class="section-title">DD業務（デューデリジェンス）</div>
+  <div class="section-desc">DD関連業務の棚卸し・フロー・ペインポイントを記録します</div>
+
+  <!-- 2a. 棚卸し -->
+  <div style="font-size: 13px; font-weight: 700; color: var(--ink-blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">a. 棚卸し</div>
+
+  <div class="callout callout-insight" style="margin-bottom: 16px;">
+    <div class="callout-label">聞き方のコツ</div>
+    <div class="callout-text">「直近のDD案件で、一番時間がかかった作業は何ですか？」から入ると具体的に出やすい</div>
+  </div>
+
+  <table class="member-table">
+    <thead>
+      <tr>
+        <th style="width: 32px;">#</th>
+        <th style="width: 180px;">タスク名</th>
+        <th style="width: 100px;">担当</th>
+        <th style="width: 80px;">頻度</th>
+        <th style="width: 80px;">工数/回</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-num">1</td>
+        <td><textarea class="editable" rows="1" placeholder="タスク名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">2</td>
+        <td><textarea class="editable" rows="1" placeholder="タスク名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">3</td>
+        <td><textarea class="editable" rows="1" placeholder="タスク名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="案件毎"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">4</td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">5</td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 2b. フロー/タスクの深掘り -->
+  <div style="font-size: 13px; font-weight: 700; color: var(--ink-blue); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 12px;">b. フロー/タスクの深掘り</div>
+
+  <div class="flow-container">
+    <div class="flow-block">
+      <div class="flow-block-title">
+        <span style="display: inline-flex; width: 24px; height: 24px; background: var(--ink-900); color: var(--paper-50); border-radius: 50%; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">1</span>
+        業務名: <input type="text" class="pain-input" style="max-width: 300px; margin-left: 4px;" placeholder="棚卸しから選択">
+        <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">担当:</span>
+        <input type="text" class="pain-input" style="max-width: 120px; margin-left: 4px;" placeholder="担当者名">
+      </div>
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="flow-step-label">入力 — 何を見て</div>
+          <textarea class="flow-textarea" placeholder="何を見て・何を受け取って"></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">処理 — 何をして</div>
+          <textarea class="flow-textarea" placeholder="何をして"></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">出力 — 何を作る</div>
+          <textarea class="flow-textarea" placeholder="何を作る・誰に渡す"></textarea>
+        </div>
+      </div>
+      <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">所要時間/回</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">頻度</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">ボトルネック</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-block">
+      <div class="flow-block-title">
+        <span style="display: inline-flex; width: 24px; height: 24px; background: var(--ink-900); color: var(--paper-50); border-radius: 50%; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">2</span>
+        業務名: <input type="text" class="pain-input" style="max-width: 300px; margin-left: 4px;" placeholder="棚卸しから選択">
+        <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">担当:</span>
+        <input type="text" class="pain-input" style="max-width: 120px; margin-left: 4px;" placeholder="担当者名">
+      </div>
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="flow-step-label">入力 — 何を見て</div>
+          <textarea class="flow-textarea" placeholder=""></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">処理 — 何をして</div>
+          <textarea class="flow-textarea" placeholder=""></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">出力 — 何を作る</div>
+          <textarea class="flow-textarea" placeholder=""></textarea>
+        </div>
+      </div>
+      <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">所要時間/回</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">頻度</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">ボトルネック</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-caution" style="margin-top: 16px;">
+    <div class="callout-label">深掘りキーワード</div>
+    <div class="callout-text">「コピペ」「転記」「突合」「集計」「待ち」のキーワードが出たら深掘り。BPO・自動化のレバレッジポイントになりやすい</div>
+  </div>
+
+  <!-- 2c. ペインポイント -->
+  <div style="font-size: 13px; font-weight: 700; color: var(--ink-blue); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 12px;">c. ペインポイント（難易度・工数）</div>
+
+  <div class="pain-list">
+    <div class="pain-item">
+      <div class="pain-rank">1</div>
+      <input type="text" class="pain-input" placeholder="業務名・ペイン内容を記録">
+      <select class="pain-tag-select">
+        <option value="">タグ</option>
+        <option value="high-effort">高工数</option>
+        <option value="high-difficulty">高難易度</option>
+        <option value="depend">属人化</option>
+        <option value="waiting">待ち発生</option>
+        <option value="manual">手作業</option>
+      </select>
+    </div>
+    <div class="pain-item">
+      <div class="pain-rank">2</div>
+      <input type="text" class="pain-input" placeholder="業務名・ペイン内容を記録">
+      <select class="pain-tag-select">
+        <option value="">タグ</option>
+        <option value="high-effort">高工数</option>
+        <option value="high-difficulty">高難易度</option>
+        <option value="depend">属人化</option>
+        <option value="waiting">待ち発生</option>
+        <option value="manual">手作業</option>
+      </select>
+    </div>
+    <div class="pain-item">
+      <div class="pain-rank">3</div>
+      <input type="text" class="pain-input" placeholder="業務名・ペイン内容を記録">
+      <select class="pain-tag-select">
+        <option value="">タグ</option>
+        <option value="high-effort">高工数</option>
+        <option value="high-difficulty">高難易度</option>
+        <option value="depend">属人化</option>
+        <option value="waiting">待ち発生</option>
+        <option value="manual">手作業</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 8px;">メモ</div>
+  <textarea class="notes-area" placeholder="DD業務に関する自由メモ..."></textarea>
+</div>
+
+<!-- ── Section 3: 経営企画業務 ── -->
+<div class="section" id="keiei">
+  <div class="section-label">03 — 経営企画業務</div>
+  <div class="section-title">経営企画業務</div>
+  <div class="section-desc">経営企画関連業務の棚卸し・フロー・ペインポイントを記録します</div>
+
+  <!-- 3a. 棚卸し -->
+  <div style="font-size: 13px; font-weight: 700; color: var(--ink-blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">a. 棚卸し</div>
+
+  <div class="callout callout-insight" style="margin-bottom: 16px;">
+    <div class="callout-label">聞き方のコツ</div>
+    <div class="callout-text">「先週一番時間がかかった経営企画系の仕事は何ですか？」から入ると具体的に出やすい</div>
+  </div>
+
+  <table class="member-table">
+    <thead>
+      <tr>
+        <th style="width: 32px;">#</th>
+        <th style="width: 180px;">タスク名</th>
+        <th style="width: 100px;">担当</th>
+        <th style="width: 80px;">頻度</th>
+        <th style="width: 80px;">工数/回</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-num">1</td>
+        <td><textarea class="editable" rows="1" placeholder="タスク名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">2</td>
+        <td><textarea class="editable" rows="1" placeholder="タスク名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">3</td>
+        <td><textarea class="editable" rows="1" placeholder="タスク名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">4</td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+      <tr>
+        <td class="member-num">5</td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="担当者名"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder="h"></textarea></td>
+        <td><textarea class="editable" rows="1" placeholder=""></textarea></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 3b. フロー/タスクの深掘り -->
+  <div style="font-size: 13px; font-weight: 700; color: var(--ink-blue); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 12px;">b. フロー/タスクの深掘り</div>
+
+  <div class="flow-container">
+    <div class="flow-block">
+      <div class="flow-block-title">
+        <span style="display: inline-flex; width: 24px; height: 24px; background: var(--ink-900); color: var(--paper-50); border-radius: 50%; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">1</span>
+        業務名: <input type="text" class="pain-input" style="max-width: 300px; margin-left: 4px;" placeholder="棚卸しから選択">
+        <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">担当:</span>
+        <input type="text" class="pain-input" style="max-width: 120px; margin-left: 4px;" placeholder="担当者名">
+      </div>
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="flow-step-label">入力 — 何を見て</div>
+          <textarea class="flow-textarea" placeholder="何を見て・何を受け取って"></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">処理 — 何をして</div>
+          <textarea class="flow-textarea" placeholder="何をして"></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">出力 — 何を作る</div>
+          <textarea class="flow-textarea" placeholder="何を作る・誰に渡す"></textarea>
+        </div>
+      </div>
+      <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">所要時間/回</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">頻度</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">ボトルネック</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-block">
+      <div class="flow-block-title">
+        <span style="display: inline-flex; width: 24px; height: 24px; background: var(--ink-900); color: var(--paper-50); border-radius: 50%; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">2</span>
+        業務名: <input type="text" class="pain-input" style="max-width: 300px; margin-left: 4px;" placeholder="棚卸しから選択">
+        <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">担当:</span>
+        <input type="text" class="pain-input" style="max-width: 120px; margin-left: 4px;" placeholder="担当者名">
+      </div>
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="flow-step-label">入力 — 何を見て</div>
+          <textarea class="flow-textarea" placeholder=""></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">処理 — 何をして</div>
+          <textarea class="flow-textarea" placeholder=""></textarea>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-step-label">出力 — 何を作る</div>
+          <textarea class="flow-textarea" placeholder=""></textarea>
+        </div>
+      </div>
+      <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">所要時間/回</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">頻度</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+        <div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">ボトルネック</div>
+          <input type="text" class="pain-input" placeholder="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3c. ペインポイント -->
+  <div style="font-size: 13px; font-weight: 700; color: var(--ink-blue); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 12px;">c. ペインポイント（難易度・工数）</div>
+
+  <div class="pain-list">
+    <div class="pain-item">
+      <div class="pain-rank">1</div>
+      <input type="text" class="pain-input" placeholder="業務名・ペイン内容を記録">
+      <select class="pain-tag-select">
+        <option value="">タグ</option>
+        <option value="high-effort">高工数</option>
+        <option value="high-difficulty">高難易度</option>
+        <option value="depend">属人化</option>
+        <option value="waiting">待ち発生</option>
+        <option value="manual">手作業</option>
+      </select>
+    </div>
+    <div class="pain-item">
+      <div class="pain-rank">2</div>
+      <input type="text" class="pain-input" placeholder="業務名・ペイン内容を記録">
+      <select class="pain-tag-select">
+        <option value="">タグ</option>
+        <option value="high-effort">高工数</option>
+        <option value="high-difficulty">高難易度</option>
+        <option value="depend">属人化</option>
+        <option value="waiting">待ち発生</option>
+        <option value="manual">手作業</option>
+      </select>
+    </div>
+    <div class="pain-item">
+      <div class="pain-rank">3</div>
+      <input type="text" class="pain-input" placeholder="業務名・ペイン内容を記録">
+      <select class="pain-tag-select">
+        <option value="">タグ</option>
+        <option value="high-effort">高工数</option>
+        <option value="high-difficulty">高難易度</option>
+        <option value="depend">属人化</option>
+        <option value="waiting">待ち発生</option>
+        <option value="manual">手作業</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 8px;">メモ</div>
+  <textarea class="notes-area" placeholder="経営企画業務に関する自由メモ..."></textarea>
+</div>
+
+<!-- ── Section 6: Next Actions ── -->
+<div class="section" id="next">
+  <div class="section-label">04 — NEXT ACTIONS</div>
+  <div class="section-title">ネクストアクション</div>
+  <div class="section-desc">本日の合意事項と次回に向けた具体的なアクションを記録します</div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
+    <div class="action-item">
+      <div class="action-owner owner-us">中林・関</div>
+      <div class="action-text">ヒアリング内容をもとに業務分析を実施し、BPO提案素材を作成する</div>
+      <div class="action-status">次回まで</div>
+    </div>
+    <div class="action-item">
+      <div class="action-owner owner-us">中林・関</div>
+      <div class="action-text">具体的な業務1〜2つにフォーカスした改善提案を持参する</div>
+      <div class="action-status">次回まで</div>
+    </div>
+    <div class="action-item">
+      <div class="action-owner owner-them">SmartHR</div>
+      <div class="action-text">次回ミーティングの日程調整</div>
+      <div class="action-status">1週間以内</div>
+    </div>
+  </div>
+
+  <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">追加アクション・メモ</div>
+  <textarea class="notes-area" placeholder="ミーティング中に決まった追加アクションを記録..."></textarea>
+</div>
+
+<!-- ── Section 7: Reference ── -->
+<div class="section" id="reference">
+  <div class="section-label">05 — REFERENCE</div>
+  <div class="section-title">リファレンス情報</div>
+  <div class="section-desc">ヒアリングの背景情報・過去の把握事項</div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+
+    <!-- Gap Matrix -->
+    <details class="ref-panel">
+      <summary>情報ギャップマトリクス（把握できていないこと）</summary>
+      <div class="ref-content">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40px;">ID</th>
+              <th>ギャップ</th>
+              <th style="width: 80px;">重要度</th>
+              <th>対応</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>G1</td><td>メンバーの方々3名の名前・担当領域</td><td><span style="color: var(--ink-red); font-weight: 600;">高</span></td><td>本日確認</td></tr>
+            <tr><td>G2</td><td>メンバーの方々の業務サイクルとトップ3作業</td><td><span style="color: var(--ink-red); font-weight: 600;">高</span></td><td>本日確認</td></tr>
+            <tr><td>G3</td><td>具体的な業務フロー（入力→処理→出力）</td><td><span style="color: var(--ink-red); font-weight: 600;">高</span></td><td>本日確認</td></tr>
+            <tr><td>G4</td><td>各作業の所要時間と頻度</td><td><span style="color: var(--ink-red); font-weight: 600;">高</span></td><td>本日確認</td></tr>
+            <tr><td>G5</td><td>繰り返し・手作業が多い業務の特定</td><td><span style="color: var(--ink-red); font-weight: 600;">高</span></td><td>本日確認</td></tr>
+            <tr><td>G6</td><td>属人化している業務の特定</td><td><span style="color: var(--ink-amber); font-weight: 600;">中</span></td><td>本日確認</td></tr>
+            <tr><td>G7</td><td>承認済みSaaS一覧</td><td><span style="color: var(--ink-amber); font-weight: 600;">中</span></td><td>第3回</td></tr>
+            <tr><td>G8</td><td>社外へのデータ受け渡し制約の粒度</td><td><span style="color: var(--ink-red); font-weight: 600;">高</span></td><td>第3回</td></tr>
+            <tr><td>G9</td><td>成果物の品質基準・合格ライン</td><td><span style="color: var(--ink-amber); font-weight: 600;">中</span></td><td>第3回</td></tr>
+            <tr><td>G10</td><td>「この作業がなくなったら一番嬉しい」の回答</td><td><span style="color: var(--ink-red); font-weight: 600;">高</span></td><td>本日確認</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <!-- Hearing Posture -->
+    <details class="ref-panel">
+      <summary>ヒアリングの姿勢（リマインダー）</summary>
+      <div class="ref-content">
+        <ul style="padding-left: 16px; display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>メンバーの方々が主役</strong>。長谷山さんではなくメンバーの方々に直接聞く。長谷山さんには補足をお願いする</li>
+          <li>抽象的な回答（「資料作成が大変」）には<strong>「具体的にどの資料ですか？」「何時間くらいかかりますか？」</strong>で掘る</li>
+          <li>3人いるので<strong>1人が話しすぎない</strong>よう、適宜「○○さんはいかがですか？」で回す</li>
+          <li>AIの話は最後。<strong>先に業務の解像度を上げることに集中する</strong></li>
+        </ul>
+      </div>
+    </details>
+
+  </div>
+</div>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<div class="page-footer">
+  <div class="footer-inner">
+    <span class="footer-text">SmartHR Hearing Sheet — Confidential</span>
+    <span class="footer-text">Confidential</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// Timeline: toggle active item
+function toggleActive(el) {
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    if (item !== el) {
+      if (item.classList.contains('active')) {
+        item.classList.remove('active');
+        item.classList.add('completed');
+      }
+    }
+  });
+  if (wasActive) {
+    el.classList.remove('active');
+    el.classList.add('completed');
+  } else {
+    el.classList.remove('completed');
+    el.classList.add('active');
+  }
+}
+
+// Checklist: toggle checked state
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+}
+
+// Section Nav: IntersectionObserver for scroll-based highlighting
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.section-nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+      });
+    }
+  });
+}, { rootMargin: '-120px 0px -60% 0px', threshold: 0 });
+
+sections.forEach(section => observer.observe(section));
+
+// Auto-save to localStorage
+const STORAGE_KEY = 'smarthr-hearing-20260323';
+
+function saveState() {
+  const state = {};
+  document.querySelectorAll('.editable, .flow-textarea, .pain-input, .notes-area, input[type="text"]').forEach((el, i) => {
+    if (el.value) state['field-' + i] = el.value;
+  });
+  document.querySelectorAll('.pain-tag-select').forEach((el, i) => {
+    if (el.value) state['select-' + i] = el.value;
+  });
+  document.querySelectorAll('.checklist-item').forEach((el, i) => {
+    if (el.classList.contains('checked')) state['check-' + i] = true;
+  });
+  document.querySelectorAll('.timeline-item').forEach((el, i) => {
+    if (el.classList.contains('active')) state['timeline-active-' + i] = true;
+    if (el.classList.contains('completed')) state['timeline-completed-' + i] = true;
+  });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const state = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!state) return;
+    document.querySelectorAll('.editable, .flow-textarea, .pain-input, .notes-area, input[type="text"]').forEach((el, i) => {
+      if (state['field-' + i]) el.value = state['field-' + i];
+    });
+    document.querySelectorAll('.pain-tag-select').forEach((el, i) => {
+      if (state['select-' + i]) el.value = state['select-' + i];
+    });
+    document.querySelectorAll('.checklist-item').forEach((el, i) => {
+      if (state['check-' + i]) el.classList.add('checked');
+    });
+    document.querySelectorAll('.timeline-item').forEach((el, i) => {
+      if (state['timeline-active-' + i]) el.classList.add('active');
+      if (state['timeline-completed-' + i]) el.classList.add('completed');
+    });
+  } catch(e) {}
+}
+
+loadState();
+
+// Debounced auto-save on input
+let saveTimeout;
+document.addEventListener('input', () => {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(saveState, 500);
+});
+document.addEventListener('change', saveState);
+document.addEventListener('click', () => setTimeout(saveState, 100));
+</script>
+
+</body>
+</html>
