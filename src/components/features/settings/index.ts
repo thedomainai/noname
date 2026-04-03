@@ -1,1 +1,0 @@
-export { WebhookList } from "./WebhookList";

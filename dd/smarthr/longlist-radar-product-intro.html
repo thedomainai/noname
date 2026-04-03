@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Longlist Radar — Product Introduction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Instrument+Sans:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --ink-1000: #000000; --ink-900: #1a1a1a; --ink-800: #2d2d2d;
+  --ink-700: #404040; --ink-600: #525252; --ink-500: #6b6b6b;
+  --ink-400: #8a8a8a; --ink-300: #a3a3a3; --ink-200: #c4c4c4;
+  --ink-100: #e0e0e0; --ink-50: #f0f0f0;
+
+  --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+  --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
+  --slate-900: #0f172a; --slate-1000: #020617;
+
+  --paper-50: #fdfdfc; --paper-100: #faf9f7; --paper-200: #f8f7f4;
+  --paper-300: #f5f4f0; --paper-400: #f1f0ec; --paper-500: #eeedea;
+  --paper-600: #e8e7e3; --paper-700: #e3e2de; --paper-800: #dddcd8;
+  --paper-900: #d5d4d0; --paper-1000: #cccbc7;
+
+  --ink-blue: #2563eb; --ink-green: #16a34a;
+  --ink-amber: #d97706; --ink-red: #dc2626;
+
+  --wash-blue: #dbeafe; --wash-green: #dcfce7;
+  --wash-amber: #fef3c7; --wash-red: #fee2e2;
+
+  --bg-page: var(--paper-50); --bg-surface: var(--paper-100);
+  --bg-surface-raised: var(--paper-50); --bg-recessed: var(--paper-300);
+  --border-default: var(--slate-200); --border-strong: var(--slate-300);
+  --border-heavy: var(--ink-1000);
+  --grid-line: var(--slate-100);
+  --text-primary: var(--ink-900); --text-heading: var(--ink-1000);
+  --text-secondary: var(--slate-500); --text-muted: var(--slate-400);
+  --text-caption: var(--slate-500);
+
+  --space-3: 8px; --space-4: 12px; --space-5: 16px; --space-6: 24px;
+  --space-7: 32px; --space-8: 48px; --space-9: 64px; --space-10: 96px;
+
+  --radius-none: 0px; --radius-sm: 2px; --radius-md: 4px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+
+  --separator: 1px solid var(--border-default);
+  --separator-strong: 1px solid var(--ink-1000);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Header ── */
+.site-header {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-8) var(--space-8);
+}
+
+.header-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-5);
+}
+
+.header-title {
+  font-family: var(--font-serif);
+  font-size: 56px;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  color: var(--text-heading);
+  margin-bottom: var(--space-5);
+}
+
+.header-title em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.header-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.header-rule {
+  border: none;
+  border-top: 2px solid var(--border-heavy);
+  margin-top: var(--space-7);
+}
+
+/* ── Sticky Nav ── */
+.section-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(253, 253, 252, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.section-nav-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.section-nav a {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 12px 16px;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.section-nav a:hover,
+.section-nav a.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--ink-900);
+}
+
+/* ── Main ── */
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--space-8) var(--space-10);
+}
+
+section {
+  padding-top: var(--space-9);
+  scroll-margin-top: 56px;
+}
+
+.section-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: var(--text-heading);
+  margin-bottom: var(--space-5);
+}
+
+.section-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+}
+
+/* ── Cards ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+.card-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-none);
+  padding: var(--space-6);
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: var(--space-5);
+  background: var(--paper-300);
+  color: var(--ink-700);
+}
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  color: var(--text-heading);
+  margin-bottom: var(--space-3);
+}
+
+.card-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.card-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.card-text li {
+  margin-bottom: 6px;
+  padding-left: 14px;
+  position: relative;
+  list-style: none;
+}
+
+.card-text li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-400);
+}
+
+/* ── Callout ── */
+.callout {
+  padding: 16px 0;
+  margin-bottom: var(--space-6);
+}
+
+.callout-quote .callout-text {
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--ink-800);
+}
+
+.callout-source {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* ── Pain Cards ── */
+.pain-number {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-600);
+  font-weight: 400;
+  margin-bottom: var(--space-3);
+}
+
+.pain-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-none);
+  padding: var(--space-6);
+}
+
+.pain-card .card-title {
+  font-size: 18px;
+}
+
+/* ── Feature cards ── */
+.feature-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-none);
+  padding: var(--space-6);
+}
+
+.feature-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.feature-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-heading);
+  margin-bottom: var(--space-4);
+}
+
+.feature-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: var(--space-5);
+}
+
+.feature-specs {
+  list-style: none;
+  border-top: var(--separator);
+  padding-top: var(--space-5);
+}
+
+.feature-specs li {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  padding-left: 16px;
+  position: relative;
+}
+
+.feature-specs li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--ink-400);
+}
+
+/* ── Flow ── */
+.flow-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: var(--space-8);
+}
+
+.flow-step {
+  flex: 1;
+  text-align: center;
+  padding: 0 var(--space-4);
+  position: relative;
+}
+
+.flow-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 18px;
+  width: 16px;
+  height: 2px;
+  background: var(--ink-200);
+}
+
+.flow-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ink-900);
+  color: var(--paper-50);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4);
+}
+
+.flow-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+
+.flow-desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* ── Cycle Tabs ── */
+.cycle-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-default);
+  margin-bottom: var(--space-7);
+}
+
+.cycle-tab {
+  padding: var(--space-4) var(--space-6);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-family: var(--font-sans);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.cycle-tab:hover {
+  color: var(--text-primary);
+}
+
+.cycle-tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--ink-900);
+}
+
+.cycle-panel {
+  display: none;
+}
+
+.cycle-panel.active {
+  display: block;
+}
+
+.cycle-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
+  border-bottom: var(--separator);
+}
+
+.cycle-item:last-child {
+  border-bottom: none;
+}
+
+.cycle-who {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+
+.cycle-story {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.cycle-story strong {
+  color: var(--ink-800);
+}
+
+/* ── Metric ── */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.metric-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-none);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.metric-value {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--text-heading);
+  line-height: 1.2;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: var(--space-3);
+}
+
+/* ── Principles ── */
+.principle-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-5);
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-8);
+}
+
+.principle-item {
+  padding: var(--space-5);
+  border-top: 2px solid var(--ink-900);
+}
+
+.principle-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.principle-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--space-3);
+}
+
+.principle-desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* ── Footer ── */
+footer {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-8);
+  border-top: var(--separator);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .metric-row { grid-template-columns: repeat(2, 1fr); }
+  .principle-list { grid-template-columns: repeat(3, 1fr); }
+  .site-header { padding: var(--space-8) var(--space-6) var(--space-7); }
+  main { padding: 0 var(--space-6) var(--space-8); }
+  .section-nav-inner { padding: 0 var(--space-6); }
+  .header-title { font-size: 44px; }
+  .section-title { font-size: 36px; }
+}
+
+@media (max-width: 639px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .card-grid-2 { grid-template-columns: 1fr; }
+  .metric-row { grid-template-columns: 1fr; }
+  .principle-list { grid-template-columns: repeat(2, 1fr); }
+  .flow-container { flex-direction: column; align-items: stretch; }
+  .flow-step:not(:last-child)::after { display: none; }
+  .flow-step { text-align: left; display: flex; gap: var(--space-4); align-items: center; padding: var(--space-3) 0; }
+  .flow-number { margin: 0; flex-shrink: 0; }
+  .site-header { padding: var(--space-7) var(--space-5) var(--space-6); }
+  main { padding: 0 var(--space-5) var(--space-7); }
+  .section-nav-inner { padding: 0 var(--space-5); }
+  .header-title { font-size: 36px; }
+  .section-title { font-size: 28px; }
+  footer { flex-direction: column; gap: var(--space-3); padding: var(--space-6) var(--space-5); }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- HEADER                                                 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-label">DD AX // Product 01</div>
+  <h1 class="header-title">Longlist <em>Radar</em></h1>
+  <p class="header-desc">ライブディールで手が埋まっても、ロングリストの鮮度と優先順位を維持する。M&Aチームの「探索の秘書」として、上流パイプラインの質を守り続けるプロダクト。</p>
+  <hr class="header-rule">
+</header>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- STICKY NAV                                             -->
+<!-- ════════════════════════════════════════════════════════ -->
+<nav class="section-nav">
+  <div class="section-nav-inner">
+    <a href="#target">ターゲット</a>
+    <a href="#problem">課題</a>
+    <a href="#deep-dive">課題の深掘り</a>
+    <a href="#solution">プロダクト</a>
+    <a href="#features">機能の詳細</a>
+    <a href="#user-flow">ユーザーフロー</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- 1. TARGET                                              -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="target">
+  <div class="section-label">01 — Target Users</div>
+  <h2 class="section-title">誰のためのプロダクトか</h2>
+  <p class="section-desc">事業会社のコーポレート戦略本部において、M&A案件のソーシングからPre-DDまでを担うチーム。ライブディールの実行と並行して、将来の案件パイプラインを構築・維持する人々が対象です。</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">H</div>
+      <div class="card-title">ディール統括責任者</div>
+      <div class="card-subtitle">週1回のパイプライン棚卸し</div>
+      <ul class="card-text">
+        <li>ライブディール4-5本の並走で、ロングリストに触れる余裕がなくなる</li>
+        <li>再開時に「何が変わったか」だけを5分で把握したい</li>
+        <li>上位10社への紹介ルート構築に自分の人脈を使う</li>
+        <li>投資仮説の深さにこだわり、浅いカテゴライズを嫌う</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">K</div>
+      <div class="card-title">PMO実務中核</div>
+      <div class="card-subtitle">日次のノンネーム処理</div>
+      <ul class="card-text">
+        <li>年間200件の紹介案件を捌く（営業日あたり約1件）</li>
+        <li>ノンネームが届くたびにロングリストとの手動突合が発生</li>
+        <li>100社規模の初期リスト作成は労働集約的なWeb検索</li>
+        <li>二重入力（既存スプレッドシート + 別ツール）を嫌う</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">T</div>
+      <div class="card-title">実務担当</div>
+      <div class="card-subtitle">公開情報の定期更新</div>
+      <ul class="card-text">
+        <li>採用動向・プレスリリース・資本政策を個社ごとに追跡</li>
+        <li>100社分の情報を1社ずつ手で調べ直す苦痛</li>
+        <li>「どこが変わったか」のdiff共有で効率化したい</li>
+        <li>DD本体と並行するため、更新は常に後回しになる</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-quote" style="margin-top: var(--space-7);">
+    <div class="callout-text">「AIっていうよりはやっぱ秘書さんにお願いするみたいな感じ」</div>
+    <div class="callout-source">— ディール統括責任者</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- 2. PROBLEM                                             -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="problem">
+  <div class="section-label">02 — Problem</div>
+  <h2 class="section-title">解決する課題</h2>
+  <p class="section-desc">ロングリストはM&Aパイプラインの最上流にあり、案件の質を決定づける。しかし、ライブディールが増えるほど更新が止まり、将来のパイプラインが痩せていく構造的な問題を抱えています。</p>
+
+  <div class="metric-row">
+    <div class="metric-card">
+      <div class="metric-value">100社</div>
+      <div class="metric-label">初期リスト作成規模</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">200件/年</div>
+      <div class="metric-label">仲介経由の紹介数</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">4-5本</div>
+      <div class="metric-label">同時並走ライブディール</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">2-3週</div>
+      <div class="metric-label">ロングリスト放置期間</div>
+    </div>
+  </div>
+
+  <div class="card-grid-2">
+    <div class="card">
+      <div class="card-title" style="font-size: 18px;">探索の停止</div>
+      <p class="card-text">ライブディールが重なると、ロングリストの更新が完全に止まる。将来の有望案件の探索が、目先の実行に食われる構造。</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size: 18px;">情報の陳腐化</div>
+      <p class="card-text">放置されたリストの従業員数・事業状況は古くなる。再開時に全件を見直すコストが高く、結局「前と同じ順」で進めてしまう。</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size: 18px;">判断根拠の揮発</div>
+      <p class="card-text">「なぜこの会社を今追うべきか」の理由が記録されず揮発する。担当者が変わると優先順位の根拠が失われる。</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size: 18px;">突合の手動負荷</div>
+      <p class="card-text">仲介からノンネームが届くたびに「これはロングリストにある会社か？」を手作業で照合。年間200件×手動突合。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- 3. DEEP DIVE                                           -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="deep-dive">
+  <div class="section-label">03 — Deep Dive</div>
+  <h2 class="section-title">課題の構造的分析</h2>
+  <p class="section-desc">表面的な「更新が止まる」の背後には、業務設計上の8つの構造的問題が存在します。これらを正しく捉えなければ、単なるリスト管理ツールに終わってしまいます。</p>
+
+  <div style="display: flex; flex-direction: column; gap: var(--space-6); margin-bottom: var(--space-8);">
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 01</div>
+      <div class="card-title">投資仮説の「タグ化」</div>
+      <p class="card-text">投資仮説を「HR Tech 隣接」「バーティカルSaaS」等のタグに矮小化すると、議論の土台にならない。統括責任者は「通常思いつくようなカテゴライズ程度のものだと全然議論にならない」と明言。投資仮説は設定可能なテーマであり、評価基準・カバレッジ状態を持つべきです。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 02</div>
+      <div class="card-title">変化の視認性不足</div>
+      <p class="card-text">統括責任者の最頻利用パターンは「2-3週ぶりに開く → 何が変わったかだけ見る」。しかし変化情報が通知欄に押し込まれており、主要動線になっていない。開いた瞬間に「前回からの差分」が見える設計が必要です。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 03</div>
+      <div class="card-title">ノンネーム突合の欠如</div>
+      <p class="card-text">PMO実務中核の日次業務で最も高頻度な「ノンネーム → ロングリストにいる会社か？」の突合動線が、既存ツールには存在しない。業種・規模・地域の断片情報から候補を信頼度付きで提示する仕組みが必要です。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 04</div>
+      <div class="card-title">紹介ルートの非構造化</div>
+      <p class="card-text">上位10社へのアプローチは「あの手この手でルートを作り」と語られるが、ルート候補（取引銀行・共通知人・仲介別担当・業界イベント）の管理が構造化されていない。属人的な記憶に依存しています。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 05</div>
+      <div class="card-title">陳腐化の不可視</div>
+      <p class="card-text">「時間がたてばロングリストも鮮度落ちていく」にもかかわらず、陳腐化の程度が視覚的に表現されていない。小さなテキスト（「15日前更新」）では認知負荷が高く、緊急度が伝わりません。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 06</div>
+      <div class="card-title">エクスポート導線の不在</div>
+      <p class="card-text">上位10社を事業部責任者に共有するためのエクスポート機能がない。「なぜこの会社を今追うべきか」の理由付きで出力し、社内の意思決定テーブルに載せる動線が欠落しています。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 07</div>
+      <div class="card-title">テーマ新規作成フローの欠如</div>
+      <p class="card-text">ロングリストは「まず投資仮説（テーマ）を定義する」から始まるが、テーマ定義 → 初期候補生成 → 人手精査のオンボーディングフローが存在しない。リストはあるがゼロイチの構築動線がありません。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-number">ISSUE 08</div>
+      <div class="card-title">キャパシティの不可視</div>
+      <p class="card-text">「検討したい会社なんだけど検討できません」というライブディール過負荷の状態を可視化する手段がない。新規アウトリーチを控えるべきかの判断が感覚的になります。</p>
+    </div>
+  </div>
+
+  <div class="callout callout-caution">
+    <div class="card-text"><strong>失敗コスト:</strong> 本来見るべき会社を見逃す。追うべきでない会社に面談工数を使う。上流の案件創出が目先のライブディールに食われ、ロングリスト起点の高打率案件が減る。</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- 4. SOLUTION                                            -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="solution">
+  <div class="section-label">04 — Solution</div>
+  <h2 class="section-title">Longlist Radar のアプローチ</h2>
+  <p class="section-desc">ダッシュボードではなく「インテリジェントな秘書」。ユーザーが見ていない間も情報を整理し、根拠付きで答え、今日見るべきものを準備してくれる。意思決定は人間が行い、ツールはその入力を整えます。</p>
+
+  <div class="principle-list">
+    <div class="principle-item">
+      <div class="principle-num">01</div>
+      <div class="principle-name">意思決定を代替しない</div>
+      <div class="principle-desc">結論を自動で出すのではなく、人が判断するための入力を整える</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">02</div>
+      <div class="principle-name">根拠が見える</div>
+      <div class="principle-desc">出力には必ずソース・元データとの対応を残す</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">03</div>
+      <div class="principle-name">薄く入る</div>
+      <div class="principle-desc">既存の Excel / Google スプレッドシートの上に乗る</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">04</div>
+      <div class="principle-name">人手運用を前提に</div>
+      <div class="principle-desc">最初から完全自動でなくてよい。人手確認込みで価値が出る</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">05</div>
+      <div class="principle-name">案件差異を扱える</div>
+      <div class="principle-desc">案件ごとの設定変更を前提にした柔軟な構造</div>
+    </div>
+  </div>
+
+  <div class="callout callout-insight">
+    <div class="card-text"><strong>「秘書」メタファーの設計含意:</strong> 自分が見ていない間も情報を整理してくれている。聞かれたことに根拠付きで答える（判断はしない）。「今日見るべきもの」を準備してくれている。自分の好みや基準を理解している。記録を正確に残してくれる。</div>
+  </div>
+
+  <h3 style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-top: var(--space-8); margin-bottom: var(--space-5);">As-Is → To-Be</h3>
+
+  <div class="card-grid-2">
+    <div class="card">
+      <div class="card-subtitle">BEFORE</div>
+      <ul class="card-text">
+        <li>手作業でWeb検索し100社を集める</li>
+        <li>人手で色分け・優先順位づけ</li>
+        <li>ライブディールが増えると更新が止まる</li>
+        <li>再開時に情報が古くなっている</li>
+        <li>ノンネーム照合は記憶頼み</li>
+        <li>上位10社の共有は都度作成</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-subtitle">AFTER</div>
+      <ul class="card-text">
+        <li>既存スプレッドシートに直接接続</li>
+        <li>投資仮説ベースのスコアリング</li>
+        <li>公開情報を自動巡回し差分を検出</li>
+        <li>再開時は「前回からの変化」を5分で把握</li>
+        <li>ノンネームのクイックマッチング</li>
+        <li>上位N社を理由付きでエクスポート</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- 5. FEATURES                                            -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="features">
+  <div class="section-label">05 — Features</div>
+  <h2 class="section-title">機能の詳細</h2>
+  <p class="section-desc">5つのコア機能で構成されます。各機能は独立して価値を提供しつつ、組み合わさることでロングリスト運用全体を支える設計です。</p>
+
+  <div class="card-grid-2" style="margin-bottom: var(--space-6);">
+    <div class="feature-card">
+      <div class="feature-label">FEATURE 01</div>
+      <div class="feature-title">Longlist Sync</div>
+      <div class="feature-desc">既存の Google スプレッドシートがデータの原本であり続けます。Longlist Radar は独自 DB にデータをコピーせず、スプレッドシートを直接読み書きします。生成した情報（スコア・シグナル・名寄せ結果）は追加列として書き戻します。</div>
+      <ul class="feature-specs">
+        <li>Google スプレッドシートの URL を指定して直接接続</li>
+        <li>法人番号（国税庁 API）をキーに企業を名寄せ</li>
+        <li>ユーザーの手動編集を Radar が上書きしない</li>
+        <li>誤った名寄せを人が修正可能</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">FEATURE 02</div>
+      <div class="feature-title">Thesis Config</div>
+      <div class="feature-desc">投資仮説を単なるタグではなく、評価基準とカバレッジ状態を持つ「テーマ」として設定します。テーマの深さが、このプロダクトの差別化ポイントです。</div>
+      <ul class="feature-specs">
+        <li>事業領域・規模感・顧客層・除外条件を設定</li>
+        <li>案件ごとにスコアリングの重みを変更</li>
+        <li>テーマ別カバレッジ状態の可視化</li>
+        <li>テーマ条件から初期候補リストを自動生成</li>
+        <li>自動生成候補は「未承認」状態で提示、人が承認するとスプレッドシートに追加</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">FEATURE 03</div>
+      <div class="feature-title">Signal Update</div>
+      <div class="feature-desc">公開情報を自動巡回し、前回取得時からの差分を検出します。実務担当は差分だけを確認・承認すればよく、100社の全件チェックから解放されます。</div>
+      <ul class="feature-specs">
+        <li>従業員数・事業説明・採用動向・資本政策のシグナル検出</li>
+        <li>前回取得時との差分を保持</li>
+        <li>差分の承認/棄却ワークフロー</li>
+        <li>更新日時の自動記録</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">FEATURE 04</div>
+      <div class="feature-title">Prioritization</div>
+      <div class="feature-desc">戦略フィット・情報鮮度・接触優先度の3軸でスコアリングし、「なぜ今この会社を追うべきか」を理由付きで表示します。ブラックボックスのスコアは出しません。</div>
+      <ul class="feature-specs">
+        <li>3軸スコアの分離表示（戦略/鮮度/接触）</li>
+        <li>総合スコアの根拠が追える</li>
+        <li>人が優先度を上書き可能</li>
+        <li>陳腐化企業の視覚的強調</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="feature-card" style="margin-bottom: var(--space-8);">
+    <div class="feature-label">FEATURE 05</div>
+    <div class="feature-title">Action Queue</div>
+    <div class="feature-desc">候補企業のステータス管理とアクション導線を提供します。紹介ルートの記録、エクスポート、キャパシティの可視化を含みます。</div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); margin-top: var(--space-5); border-top: var(--separator); padding-top: var(--space-5);">
+      <div>
+        <div style="font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px;">ステータス管理</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">未確認 → 調査中 → 紹介打診中 → 面談済 → 保留の状態遷移</div>
+      </div>
+      <div>
+        <div style="font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px;">接触ルート記録</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">取引銀行・共通知人・仲介別担当・業界イベントの管理</div>
+      </div>
+      <div>
+        <div style="font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px;">エクスポート</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">上位N社を理由・シグナル付きでCSV/PDF出力</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-bottom: var(--space-5);">意図的に含めないもの</h3>
+  <div class="card">
+    <ul class="card-text">
+      <li><strong>CRM化:</strong> Salesforceのような顧客管理機能は追加しない</li>
+      <li><strong>自動アウトリーチ:</strong> メール・電話の自動送信は行わない（統括責任者が嫌うもの）</li>
+      <li><strong>バリュエーション自動算出:</strong> Longlist Radarの範囲外</li>
+      <li><strong>仲介向け機能:</strong> ツールは社内向けに限定する</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- 6. USER FLOW                                           -->
+<!-- ════════════════════════════════════════════════════════ -->
+<section id="user-flow">
+  <div class="section-label">06 — User Flow</div>
+  <h2 class="section-title">使い方</h2>
+  <p class="section-desc">Longlist Radarは、日次・週次・月次・四半期の4つの業務サイクルに沿って利用されます。各サイクルでの典型的な操作フローを示します。</p>
+
+  <h3 style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-bottom: var(--space-6);">初期セットアップ</h3>
+
+  <div class="flow-container">
+    <div class="flow-step">
+      <div class="flow-number">1</div>
+      <div>
+        <div class="flow-label">テーマ定義</div>
+        <div class="flow-desc">投資仮説をテーマとして設定。評価基準と重みを定義</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-number">2</div>
+      <div>
+        <div class="flow-label">スプレッドシート接続</div>
+        <div class="flow-desc">既存の Google スプレッドシートに直接接続</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-number">3</div>
+      <div>
+        <div class="flow-label">企業名寄せ</div>
+        <div class="flow-desc">法人番号ベースで名寄せ。揺れ吸収と重複排除</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-number">4</div>
+      <div>
+        <div class="flow-label">初期スコアリング</div>
+        <div class="flow-desc">テーマに基づく戦略フィットスコアを自動算出</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-number">5</div>
+      <div>
+        <div class="flow-label">人手レビュー</div>
+        <div class="flow-desc">スコアと優先順位を確認・上書き。運用開始</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-bottom: var(--space-6);">業務サイクル別フロー</h3>
+
+  <div class="cycle-tabs">
+    <button class="cycle-tab active" data-panel="daily">Daily</button>
+    <button class="cycle-tab" data-panel="weekly">Weekly</button>
+    <button class="cycle-tab" data-panel="monthly">Monthly</button>
+    <button class="cycle-tab" data-panel="quarterly">Quarterly</button>
+  </div>
+
+  <div class="cycle-panel active" id="panel-daily">
+    <div class="cycle-item">
+      <div class="cycle-who">PMO</div>
+      <div class="cycle-story">ノンネームが届く → <strong>ノンネーム照合バー</strong>に業種・規模・地域を入力 → ロングリスト上の候補が信頼度付きで表示 → 既知の会社かどうかを30秒で判断</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-who">実務担当</div>
+      <div class="cycle-story">Signal Updateが差分を検出 → <strong>差分承認ワークフロー</strong>で「承認/棄却」を処理 → 確認済みのシグナルが企業情報に反映</div>
+    </div>
+  </div>
+
+  <div class="cycle-panel" id="panel-weekly">
+    <div class="cycle-item">
+      <div class="cycle-who">統括</div>
+      <div class="cycle-story">Longlist Radarを開く → <strong>Weekly Digestビュー</strong>に自動切替 → 「前回確認から7件の変化がありました」 → シグナルを時系列で確認 → 5分で状況を把握</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-who">統括</div>
+      <div class="cycle-story">リストビューに切替 → <strong>優先順位スコア</strong>で上位10社を確認 → 各社の「Why Now」理由を読む → 紹介資源の配分を決定</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-who">PMO</div>
+      <div class="cycle-story"><strong>ステータスフィルタ</strong>で「調査中」を表示 → 停滞している案件を発見 → アクションを更新または保留に変更</div>
+    </div>
+  </div>
+
+  <div class="cycle-panel" id="panel-monthly">
+    <div class="cycle-item">
+      <div class="cycle-who">統括</div>
+      <div class="cycle-story"><strong>テーマ詳細パネル</strong>を開く → テーマごとのカバレッジと空白を確認 → 候補が不足しているテーマを発見 → 探索方向を調整</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-who">PMO</div>
+      <div class="cycle-story"><strong>鮮度ソート</strong>で陳腐化企業を一覧表示 → 更新すべき企業を特定 → 実務担当に更新を依頼</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-who">全員</div>
+      <div class="cycle-story">上位10社を選択 → <strong>エクスポートボタン</strong>で理由・シグナル付きレポートを出力 → 事業部責任者に共有</div>
+    </div>
+  </div>
+
+  <div class="cycle-panel" id="panel-quarterly">
+    <div class="cycle-item">
+      <div class="cycle-who">統括</div>
+      <div class="cycle-story">新しい投資仮説を定義 → <strong>Thesis Config</strong>で評価基準と重みを設定 → 初期候補の自動生成 → 人手で精査してリスト化</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-who">統括</div>
+      <div class="cycle-story">事業環境の変化を受けて → 投資仮説の<strong>重みを更新</strong> → スコアが再計算 → 優先順位が自動で入れ替わる</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-who">経営陣</div>
+      <div class="cycle-story"><strong>パイプラインサマリー</strong>を確認 → 追跡社数・フィット分布・陳腐化率でM&A戦略の進捗を把握</div>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-heading); margin-top: var(--space-8); margin-bottom: var(--space-5);">成功指標</h3>
+
+  <div class="metric-row">
+    <div class="metric-card">
+      <div class="metric-value" style="font-size: 22px;">更新停止期間</div>
+      <div class="metric-label">ロングリスト更新の空白期間を短縮</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" style="font-size: 22px;">上位10社作成</div>
+      <div class="metric-label">リスト作成・共有までの時間を削減</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" style="font-size: 22px;">月次更新数</div>
+      <div class="metric-label">月次の更新対象会社数を維持</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" style="font-size: 22px;">面談創出</div>
+      <div class="metric-label">ロングリスト由来の面談数を増加</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<footer>
+  <span>DD AX — Longlist Radar Product Introduction</span>
+  <span>Confidential</span>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- SCRIPTS                                                -->
+<!-- ════════════════════════════════════════════════════════ -->
+<script>
+// Sticky nav active state
+const navLinks = document.querySelectorAll('.section-nav a');
+const sections = document.querySelectorAll('section[id]');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const activeLink = document.querySelector(`.section-nav a[href="#${entry.target.id}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(section => observer.observe(section));
+
+// Cycle tabs
+document.querySelectorAll('.cycle-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cycle-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.cycle-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>問題を解決する — 中林佑太</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   問題を解決する — Slide UI (Google Slides style)
+   ============================================================ */
+:root {
+  --ink-1000: #000000;
+  --ink-900:  #1a1a1a;
+  --ink-800:  #2d2d2d;
+  --ink-700:  #404040;
+  --ink-600:  #525252;
+  --ink-500:  #6b6b6b;
+  --ink-400:  #8a8a8a;
+  --ink-300:  #a3a3a3;
+  --ink-200:  #c4c4c4;
+  --ink-100:  #e0e0e0;
+  --ink-50:   #f0f0f0;
+
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+
+  --paper-white:  #fdfdfc;
+  --paper-cream:  #faf9f7;
+  --paper-warm:   #f5f4f0;
+  --paper-kraft:  #eeedea;
+  --paper-aged:   #e8e7e3;
+  --paper-shadow: #dddcd8;
+
+  --ink-blue:  #2563eb;
+  --ink-green: #16a34a;
+  --ink-amber: #d97706;
+  --ink-red:   #dc2626;
+
+  --wash-blue:  #dbeafe;
+  --wash-green: #dcfce7;
+  --wash-amber: #fef3c7;
+  --wash-red:   #fee2e2;
+
+  --bg-page:           var(--paper-white);
+  --bg-surface:        var(--paper-cream);
+  --bg-surface-raised: var(--paper-white);
+  --border-default:    var(--slate-200);
+  --border-strong:     var(--slate-300);
+  --border-heavy:      var(--ink-1000);
+  --grid-line:         var(--slate-100);
+  --text-primary:      var(--ink-900);
+  --text-heading:      var(--ink-1000);
+  --text-secondary:    var(--slate-500);
+  --text-muted:        var(--slate-400);
+  --text-caption:      var(--slate-500);
+  --interactive:       var(--ink-blue);
+  --separator:         1px solid var(--border-default);
+
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --accent-purple: #7c3aed;
+  --wash-purple: #ede9fe;
+  --accent-red: #dc2626;
+
+  --sidebar-width: 220px;
+  --toolbar-height: 48px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: #e8eaed;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  height: var(--toolbar-height);
+  background: #fff;
+  border-bottom: 1px solid #dadce0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+.toolbar-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-heading);
+  letter-spacing: -0.3px;
+}
+.toolbar-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.toolbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.toolbar-nav button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--ink-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.toolbar-nav button:hover { background: var(--slate-100); }
+.toolbar-nav .slide-counter {
+  font-size: 13px;
+  color: var(--text-secondary);
+  min-width: 60px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Layout ── */
+.app-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar-width);
+  background: #f8f9fa;
+  border-right: 1px solid #dadce0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 8px;
+  flex-shrink: 0;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #c4c4c4; border-radius: 2px; }
+
+.sidebar-slide {
+  position: relative;
+  margin-bottom: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+}
+.sidebar-slide:hover { border-color: #bdc1c6; }
+.sidebar-slide.active { border-color: var(--ink-blue); }
+.sidebar-slide .slide-number {
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 16px;
+  text-align: right;
+  padding-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.sidebar-slide .slide-thumb {
+  flex: 1;
+  aspect-ratio: 16 / 9;
+  background: #fff;
+  border-radius: 2px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  position: relative;
+}
+.sidebar-slide .slide-thumb-content {
+  transform: scale(0.14);
+  transform-origin: top left;
+  width: 714%;
+  height: 714%;
+  pointer-events: none;
+  overflow: hidden;
+  padding: 40px;
+}
+
+/* ── Main Area ── */
+.main-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background: #e8eaed;
+}
+
+.slide-viewport {
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  position: relative;
+}
+
+.slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  padding: 48px 56px;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.slide.active { display: flex; flex-direction: column; }
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-track { background: transparent; }
+.slide::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 2px; }
+
+/* ── Center Slide ── */
+.slide.center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Slide Typography ── */
+.slide .s-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink-blue);
+  margin-bottom: 12px;
+}
+.slide .s-title {
+  font-size: 32px; font-weight: 300; line-height: 1.15;
+  letter-spacing: -1px; color: var(--text-heading);
+  margin-bottom: 20px;
+}
+.slide .s-title-lg {
+  font-size: 42px; font-weight: 300; line-height: 1.1;
+  letter-spacing: -1.5px; color: var(--text-heading);
+  margin-bottom: 20px;
+}
+.slide .s-subtitle {
+  font-size: 17px; color: var(--text-secondary);
+  line-height: 1.6; max-width: 680px;
+}
+.slide .s-body {
+  font-size: 14px; line-height: 1.7; color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.slide .s-body:last-child { margin-bottom: 0; }
+.slide .s-heading {
+  font-size: 18px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 10px; letter-spacing: -0.2px;
+}
+.slide .s-heading-sm {
+  font-size: 15px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 8px;
+}
+
+/* ── Slide Materials ── */
+.slide .emphasis { color: var(--accent-red); font-weight: 600; }
+.slide .emphasis-purple { color: var(--accent-purple); font-weight: 600; }
+.slide .emphasis-blue { color: var(--ink-blue); font-weight: 600; }
+
+.slide .must-remember {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--wash-red); color: var(--accent-red);
+  border: 1px solid #fecaca; border-radius: 4px;
+  padding: 3px 8px; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.slide .must-remember::before {
+  content: "!"; display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent-red); color: #fff; font-size: 10px; font-weight: 700;
+}
+
+.slide .badge {
+  display: inline-block; height: 22px; padding: 0 8px;
+  font-size: 10px; font-weight: 700; line-height: 22px;
+  letter-spacing: 0.5px; border-radius: 4px;
+}
+.slide .badge-red { background: var(--wash-red); color: var(--accent-red); border: 1px solid #fecaca; }
+
+.slide .card {
+  background: var(--paper-cream); border: 1px solid var(--border-default);
+  padding: 20px 24px; margin-bottom: 12px; border-radius: 0;
+}
+.slide .card:last-child { margin-bottom: 0; }
+.slide .card-label {
+  font-size: 11px; font-weight: 600; color: var(--text-secondary);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
+}
+
+/* ── Comparison Grid ── */
+.slide .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+.slide .comparison-card {
+  padding: 16px 20px; border: 1px solid var(--border-default); border-radius: 0;
+}
+.slide .comparison-card.bad { border-left: 3px solid var(--accent-red); }
+.slide .comparison-card.good { border-left: 3px solid var(--ink-green); }
+.slide .comparison-card h4 {
+  font-size: 12px; font-weight: 700; margin-bottom: 8px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.slide .comparison-card.bad h4 { color: var(--accent-red); }
+.slide .comparison-card.good h4 { color: var(--ink-green); }
+.slide .comparison-card ul { list-style: none; padding: 0; }
+.slide .comparison-card li {
+  font-size: 13px; line-height: 1.7; padding-left: 16px; position: relative;
+}
+.slide .comparison-card li::before {
+  content: ""; position: absolute; left: 0; top: 8px;
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.slide .comparison-card.bad li::before { background: var(--wash-red); border: 1px solid #fecaca; }
+.slide .comparison-card.good li::before { background: var(--wash-green); border: 1px solid #bbf7d0; }
+.slide .comparison-card .note { margin-top: 8px; font-size: 11px; color: var(--text-secondary); }
+
+/* ── Framework Steps ── */
+.slide .framework-steps { display: flex; gap: 0; margin: 16px 0; }
+.slide .framework-step {
+  flex: 1; padding: 14px 10px; text-align: center;
+  background: var(--accent-purple); color: #fff; position: relative;
+}
+.slide .framework-step.dimmed { background: var(--paper-kraft); color: var(--text-muted); }
+.slide .framework-step .step-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; margin-bottom: 4px;
+}
+.slide .framework-step.dimmed .step-num { background: var(--paper-shadow); color: var(--text-muted); }
+.slide .framework-step .step-label { font-size: 12px; font-weight: 600; line-height: 1.3; }
+.slide .framework-step .step-arrow {
+  position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+  width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+  border-left: 8px solid var(--accent-purple); z-index: 1;
+}
+.slide .framework-step.dimmed .step-arrow { border-left-color: var(--paper-kraft); }
+.slide .framework-step:last-child .step-arrow { display: none; }
+
+/* ── Quote Block ── */
+.slide .quote-block {
+  background: var(--ink-900); color: var(--paper-white); padding: 28px 32px;
+  margin: 12px 0; position: relative;
+}
+.slide .quote-block blockquote {
+  font-size: 17px; font-weight: 400; line-height: 1.5; font-style: italic;
+}
+.slide .quote-block cite {
+  display: block; margin-top: 10px; font-size: 12px; font-style: normal;
+  color: var(--slate-400);
+}
+
+/* ── State Diagram ── */
+.slide .state-diagram { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 16px 0; }
+.slide .state-circle {
+  width: 100px; height: 100px; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; font-size: 12px; font-weight: 600; line-height: 1.3;
+}
+.slide .state-circle.success { background: var(--wash-green); border: 2px solid var(--ink-green); color: var(--ink-green); }
+.slide .state-circle.failure { background: var(--wash-red); border: 2px solid var(--accent-red); color: var(--accent-red); }
+.slide .state-circle.neutral { background: var(--paper-warm); border: 2px solid var(--border-strong); color: var(--text-primary); }
+.slide .state-arrow { font-size: 20px; color: var(--text-muted); }
+
+/* ── Numbered List ── */
+.slide .numbered-list { counter-reset: item; list-style: none; padding: 0; margin: 8px 0; }
+.slide .numbered-list li {
+  counter-increment: item; position: relative; padding: 8px 0 8px 36px;
+  font-size: 13px; line-height: 1.5; border-bottom: 1px solid var(--border-default);
+}
+.slide .numbered-list li:last-child { border-bottom: none; }
+.slide .numbered-list li::before {
+  content: counter(item) "."; position: absolute; left: 0; top: 8px;
+  font-size: 13px; font-weight: 700; color: var(--ink-blue);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Data Table ── */
+.slide .data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+.slide .data-table th { background: var(--paper-kraft); text-align: left; padding: 8px 12px; font-weight: 600; color: var(--text-heading); border-bottom: 2px solid var(--border-strong); }
+.slide .data-table td { padding: 8px 12px; border-bottom: 1px solid var(--border-default); color: var(--text-primary); }
+.slide .data-table td:first-child { font-weight: 600; color: var(--text-heading); background: var(--paper-cream); width: 80px; }
+
+/* ── Summary Card ── */
+.slide .summary-card {
+  background: var(--ink-900); color: var(--paper-white); padding: 28px 32px;
+  margin: 8px 0;
+}
+.slide .summary-card h3 { color: var(--paper-white); font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+.slide .summary-list { list-style: none; padding: 0; }
+.slide .summary-list > li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 13px; line-height: 1.5; }
+.slide .summary-list > li:last-child { border-bottom: none; }
+.slide .summary-list > li > strong { color: var(--paper-white); }
+.slide .summary-sub { list-style: none; padding: 0; margin-top: 6px; }
+.slide .summary-sub li { padding: 3px 0 3px 20px; font-size: 12px; color: var(--slate-300); position: relative; }
+.slide .summary-sub li::before { content: ""; position: absolute; left: 6px; top: 10px; width: 5px; height: 5px; border-radius: 50%; background: var(--slate-400); }
+.slide .summary-sub li .highlight { color: var(--wash-red); font-weight: 600; }
+
+/* ── Dark Slide ── */
+.slide.dark {
+  background: var(--ink-900); color: var(--paper-white);
+  justify-content: center; align-items: center; text-align: center;
+}
+.slide.dark .s-title-lg { color: var(--paper-white); }
+.slide.dark .s-subtitle { color: var(--slate-300); }
+
+/* ── Hero Slide ── */
+.slide.hero-slide {
+  background-color: var(--paper-white);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  justify-content: center;
+}
+.slide .hero-goals { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.slide .hero-goal {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-surface-raised); border: 1px solid var(--border-default);
+  padding: 10px 16px; border-radius: 4px; font-size: 13px; font-weight: 500;
+}
+.slide .hero-goal .goal-icon { color: var(--ink-blue); font-size: 14px; font-weight: 700; }
+
+/* ── Q&A ── */
+.slide .qa-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.slide .qa-card {
+  background: var(--paper-warm); border: 1px solid var(--border-default);
+  padding: 16px 20px; font-size: 15px; font-weight: 600; color: var(--text-heading);
+}
+.slide .qa-card .q-prefix { color: var(--ink-blue); margin-right: 6px; font-size: 16px; }
+
+/* ── Tree Text (for logic trees) ── */
+.slide .tree-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  background: var(--paper-cream);
+  border: 1px solid var(--border-default);
+  padding: 12px 16px;
+  white-space: pre;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+/* ── 2-col layout inside slide ── */
+.slide .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+
+/* ── Responsive ── */
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+  .slide { padding: 32px; }
+  .slide .s-title { font-size: 24px; }
+  .slide .s-title-lg { font-size: 30px; }
+  .slide .comparison-grid, .slide .two-col { grid-template-columns: 1fr; }
+  .slide .framework-steps { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Toolbar ── -->
+<div class="toolbar">
+  <span class="toolbar-title">問題を解決する</span>
+  <div class="toolbar-nav">
+    <button onclick="goSlide(currentSlide - 1)" title="Previous">‹</button>
+    <span class="slide-counter" id="slideCounter">1 / 89</span>
+    <button onclick="goSlide(currentSlide + 1)" title="Next">›</button>
+  </div>
+  <span class="toolbar-meta">中林佑太 — 2026/02/04</span>
+</div>
+
+<!-- ── Layout ── -->
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar"></div>
+
+  <!-- Main -->
+  <div class="main-area" id="mainArea">
+    <div class="slide-viewport" id="slideViewport">
+
+      <!-- Slide 1 -->
+      <div class="slide hero-slide" data-slide="1">
+        <div>
+          <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;">
+            <span style="font-size:13px;color:var(--text-secondary);">中林佑太</span>
+            <span style="font-size:13px;color:var(--text-secondary);">2026/02/04</span>
+          </div>
+          <h1 class="s-title-lg">問題を解決する</h1>
+          <p class="s-subtitle">問題を解決するためのフレームワークとして<br>論理的思考力を身につける</p>
+        </div>
+      </div>
+
+      <!-- Slide 2: Blank -->
+      <div class="slide" data-slide="2">
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="slide center" data-slide="3">
+        <h2 class="s-title">Goal</h2>
+        <p class="s-subtitle" style="margin-top:20px;">問題解決とは再現性のあるスキルであることを知る<br><br>問題解決の型を知り、実践で試せる</p>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="slide center" data-slide="4">
+        <h2 class="s-title">Commit</h2>
+        <p class="s-subtitle" style="margin-top:20px;max-width:700px;">ご参加いただいたみなさま全員に、最低1つ、中林の話を聞かなければ気づけなかった・知らなかった「新しい発見」をご提供することを約束します。</p>
+      </div>
+
+      <!-- Slide 5 -->
+      <div class="slide" data-slide="5">
+        <h2 class="s-title">前提</h2>
+        <p class="s-body" style="margin-top:20px;">おそらく研修で一番難しい内容だと思います。</p>
+        <p class="s-body">全部を集中して会得することは非常にハイカロリーですので</p>
+        <p class="s-body" style="margin-top:12px;">絶対に覚えて帰って欲しいスライドは <span class="must-remember" style="margin:0 6px;">絶対覚えて帰って!</span> タグを入れておりますので<br>そのスライドだけでも一生懸命お聞きいただけますと幸いです。</p>
+      </div>
+
+      <!-- Slide 6 -->
+      <div class="slide" data-slide="6">
+        <h2 class="s-title">アジェンダ</h2>
+        <ol class="numbered-list" style="margin-top:16px;">
+          <li>ワーク（10分）: 現在地と研修後の状態の差分を体感する</li>
+          <li>前提・背景（10分）: 重要な2つの考え方「期待値」と「再現性」について知る</li>
+          <li>問題解決の概要（20分）: 問題解決の全体像を知る</li>
+          <li>論点を定義する（20分）: 正しい問いの発射角度を担保する</li>
+          <li>論点を分解する（20分）: 問いの全体像を捉える</li>
+          <li>仮説を構築する（10分）: 問いに対しての答えを仮置きする</li>
+          <li>論点と仮説を検証する</li>
+          <li>問題解決におけるコミュニケーション</li>
+          <li>Q&A（30分）※4つ程度を想定</li>
+        </ol>
+      </div>
+
+      <!-- Slide 7 -->
+      <div class="slide dark center" data-slide="7">
+        <h2 class="s-title">Work</h2>
+        <p style="font-size:24px;margin-top:24px;">「美味しいハンバーガー」を分解してください</p>
+      </div>
+
+      <!-- Slide 8 -->
+      <div class="slide center" data-slide="8">
+        <h2 class="s-title">ロジックツリーをつくって回答してみてください</h2>
+      </div>
+
+      <!-- Slide 9 -->
+      <div class="slide" data-slide="9">
+        <h3 class="s-heading">Q. 美味しいハンバーガーをつくるにはどうすべきか？</h3>
+        <div class="tree-text">
+aaa
+├── ccc
+│   ├── ddd
+│   └── eee
+└── bbb
+    └── fff
+        </div>
+      </div>
+
+      <!-- Slide 10 -->
+      <div class="slide center" data-slide="10">
+        <h2 class="s-title">考えるタイム（1分）</h2>
+      </div>
+
+      <!-- Slide 11 -->
+      <div class="slide center" data-slide="11">
+        <h2 class="s-title">どのように考えましたか？</h2>
+      </div>
+
+      <!-- Slide 12 -->
+      <div class="slide center" data-slide="12">
+        <h3 class="s-heading">問題を解決する気のない人の分解</h3>
+      </div>
+
+      <!-- Slide 13 -->
+      <div class="slide" data-slide="13">
+        <h3 class="s-heading">「美味しいハンバーガー」とは</h3>
+        <div class="tree-text">
+バンズ
+├── 表面
+└── 中身
+お肉
+├── 焼き具合
+└── 味
+チーズ
+├── 味
+└── 溶け具合
+野菜
+├── レタス
+└── トマト
+ソース
+├── ケチャップ
+└── マスタード
+        </div>
+      </div>
+
+      <!-- Slide 14 -->
+      <div class="slide center" data-slide="14">
+        <h3 class="s-heading">問題を解決したい人の分解</h3>
+      </div>
+
+      <!-- Slide 15 -->
+      <div class="slide" data-slide="15">
+        <h3 class="s-heading">「美味しいハンバーガー」とは</h3>
+        <div class="tree-text">
+問いの分解
+├── 美味しい
+│   ├── 基準: 10人のプロが食べて8人が自分のお店で出せる
+│   └── 評価項目: 五感（視覚・聴覚・嗅覚・触覚・味覚）
+└── ハンバーガーとは
+    └── 一般的なフランチャイズ店舗の厨房で原価率3割で提供できるハンバーガー
+
+打ち手
+└── 視覚
+    ├── 物体
+    ├── レイアウト
+    ├── 色
+    └── ・・・
+        </div>
+      </div>
+
+      <!-- Slide 16 -->
+      <div class="slide center" data-slide="16">
+        <h2 class="s-title">何が違うと思いますか？</h2>
+      </div>
+
+      <!-- Slide 17 -->
+      <div class="slide" data-slide="17">
+        <div class="comparison-grid">
+          <div style="padding:16px 20px;border:1px solid var(--border-default);">
+            <h4 style="font-size:13px;font-weight:600;margin-bottom:12px;">問題を解決したい人の分解</h4>
+            <div class="tree-text" style="font-size:10px;line-height:1.5;">
+問いの分解
+├── 美味しい
+│   ├── 基準
+│   └── 評価項目
+└── ハンバーガーとは
+    └── 一般的なフランチャイズの厨房で
+        原価率3割で提供できる
+
+打ち手
+└── 視覚
+    ├── 物体
+    ├── レイアウト
+    └── ・・
+            </div>
+          </div>
+          <div style="padding:16px 20px;border:1px solid var(--border-default);">
+            <h4 style="font-size:13px;font-weight:600;margin-bottom:12px;">Q.「美味しいハンバーガー」とは</h4>
+            <div class="tree-text" style="font-size:10px;line-height:1.5;">
+バンズ
+├── 表面
+└── 中身
+お肉
+├── 焼き具合
+└── 味
+チーズ
+├── 味
+└── 溶け具合
+野菜
+├── レタス
+└── トマト
+ソース
+├── ケチャップ
+└── マスタード
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 18 -->
+      <div class="slide" data-slide="18">
+        <div class="comparison-grid">
+          <div style="padding:16px 20px;border:1px solid var(--border-default);">
+            <h4 style="font-size:13px;font-weight:600;margin-bottom:12px;">問題を解決したい人の分解</h4>
+            <div class="tree-text" style="font-size:10px;line-height:1.5;">
+問いの分解
+├── 美味しい
+│   ├── 基準
+│   └── 評価項目
+└── ハンバーガーとは
+
+打ち手
+└── 視覚
+    ├── 物体
+    ├── レイアウト
+    └── ・・
+            </div>
+          </div>
+          <div style="padding:16px 20px;border:1px solid var(--border-default);">
+            <h4 style="font-size:13px;font-weight:600;margin-bottom:12px;">Q.「美味しいハンバーガー」とは</h4>
+            <div class="tree-text" style="font-size:10px;line-height:1.5;">
+バンズ
+├── 表面
+└── 中身
+お肉
+├── 焼き具合
+└── 味
+チーズ
+野菜
+ソース
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 19 -->
+      <div class="slide center" data-slide="19">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title" style="margin-top:24px;">ゴールへの解像度を高める</h2>
+        <p style="font-size:18px;margin-top:32px;">何も考えていない人の分解<br>vs<br>問題を解決したい人の分解</p>
+        <p style="font-size:18px;margin-top:24px;">差分を理解する<br>どちらの人が勝つ可能性が高いかは明白</p>
+      </div>
+
+      <!-- Slide 20 -->
+      <div class="slide center" data-slide="20">
+        <h2 class="s-title">Q&A</h2>
+      </div>
+
+      <!-- Slide 21 -->
+      <div class="slide center" data-slide="21">
+        <h2 class="s-title">Goal</h2>
+        <p class="s-subtitle" style="margin-top:20px;">問題解決とは再現性のあるスキルであることを知る<br><br>問題解決の型を知り、実践で試せる</p>
+        <p style="font-size:14px;margin-top:16px;color:var(--text-secondary);">※この問題解決のスキル（型）が論理的思考力である</p>
+      </div>
+
+      <!-- Slide 22 -->
+      <div class="slide" data-slide="22">
+        <h2 class="s-title">前提/背景</h2>
+        <h3 class="s-heading" style="margin-top:20px;">ゴール<br>ゴールへの解像度を高める</h3>
+        <div class="tree-text" style="margin-top:12px;">
+ゴール
+├── 再現性のあるスキルであることを知る
+│   ├── 再現性: 誰でもできることを知る
+│   └── スキル: 「わかる→できる」のフェーズがある
+└── 型を知り、実践で試せる
+    ├── 型: 全体像と全体像を構成する各要素を知る
+    └── 試せる: 振り返り・フィードバックまで設計して動ける
+        </div>
+      </div>
+
+      <!-- Slide 23 -->
+      <div class="slide center" data-slide="23">
+        <h2 class="s-title">Q. 問題解決能力が高いとは？</h2>
+      </div>
+
+      <!-- Slide 24 -->
+      <div class="slide center" data-slide="24">
+        <h2 class="s-title">A. どんな問題も解決できる</h2>
+      </div>
+
+      <!-- Slide 25 -->
+      <div class="slide center" data-slide="25">
+        <h2 class="s-title">ではなく..</h2>
+      </div>
+
+      <!-- Slide 26 -->
+      <div class="slide center" data-slide="26">
+        <h2 class="s-title">どんな問題も解決できる<br>「可能性」が高い</h2>
+      </div>
+
+      <!-- Slide 27 -->
+      <div class="slide center" data-slide="27">
+        <h2 class="s-title">つまり、</h2>
+        <h1 class="s-title-lg" style="margin-top:32px;">期待値</h1>
+      </div>
+
+      <!-- Slide 28 -->
+      <div class="slide" data-slide="28">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">結果と行動を切り分ける</h2>
+        <p class="s-body" style="margin-top:20px;">現実世界の結果を左右する要素は膨大であり、全てにレバーを持ち切ることは不可能である。</p>
+        <p class="s-body">センターピンを間違えていないのに、結果が失敗だったことで行動を変えてしまう人がいる。</p>
+        <p class="s-body" style="margin-top:12px;"><span class="emphasis">結果が悪かったから思考/行動を変えるのではなく、思考/行動が悪かったことを以って思考/行動を変えるべきである。</span></p>
+      </div>
+
+      <!-- Slide 29 -->
+      <div class="slide center" data-slide="29">
+        <h2 class="s-title">「成功したか / 失敗したか」<br>ではない</h2>
+      </div>
+
+      <!-- Slide 30 -->
+      <div class="slide center" data-slide="30">
+        <h2 class="s-title">成功確度の高い意思決定であったか？<br><br>成功確度の高い実行であったか？</h2>
+      </div>
+
+      <!-- Slide 31 -->
+      <div class="slide center" data-slide="31">
+        <h2 class="s-title">100回やった際にどうなるか？</h2>
+      </div>
+
+      <!-- Slide 32 -->
+      <div class="slide center" data-slide="32">
+        <h3 class="s-heading">51回成功するのであれば、<br>49回失敗してもやるべき</h3>
+        <p style="font-size:14px;margin-top:16px;color:var(--text-secondary);">※勝ったら際に得るものと負けた際に失うものが同じ場合かつ、他に策がない場合</p>
+      </div>
+
+      <!-- Slide 33 -->
+      <div class="slide center" data-slide="33">
+        <h3 class="s-heading">51回成功するのであれば、<br>49回失敗してもやるべき</h3>
+        <p style="font-size:14px;margin-top:16px;color:var(--text-secondary);">※勝ったら際に得るものと負けた際に失うものが同じ場合かつ、他に策がない場合</p>
+      </div>
+
+      <!-- Slide 34 -->
+      <div class="slide center" data-slide="34">
+        <h2 class="s-title">この「51回」をできるだけ<br>100回に近づけること</h2>
+      </div>
+
+      <!-- Slide 35 -->
+      <div class="slide center" data-slide="35">
+        <h2 class="s-title">この「51回」をできるだけ<br>100回に近づけること</h2>
+        <div style="font-size:24px;margin-top:32px;">
+          <p>≒ 高い再現性の獲得</p>
+          <p style="margin-top:12px;">≒ 高い期待値の獲得</p>
+        </div>
+      </div>
+
+      <!-- Slide 36 -->
+      <div class="slide center" data-slide="36">
+        <h2 class="s-title">「如何に再現性を以って<br>問題を解決するか」</h2>
+        <p style="font-size:20px;margin-top:32px;">が、今日のテーマ</p>
+      </div>
+
+      <!-- Slide 37 -->
+      <div class="slide center" data-slide="37">
+        <h3 class="s-heading">その手法の1つが論理的思考である<br>（論理構造/ロジックツリー）</h3>
+      </div>
+
+      <!-- Slide 38 -->
+      <div class="slide center" data-slide="38">
+        <h2 class="s-title">「如何に再現性を以って<br>問題を解決するか」</h2>
+      </div>
+
+      <!-- Slide 39 -->
+      <div class="slide center" data-slide="39">
+        <h3 class="s-heading">問題が解決が成功する状態</h3>
+        <h3 class="s-heading" style="margin-top:40px;">問題が解決が失敗する状態</h3>
+      </div>
+
+      <!-- Slide 40 -->
+      <div class="slide center" data-slide="40">
+        <h3 class="s-heading">問題が解決が成功する状態</h3>
+        <h3 class="s-heading" style="margin-top:40px;">問題が解決が失敗する状態</h3>
+      </div>
+
+      <!-- Slide 41 -->
+      <div class="slide center" data-slide="41">
+        <h3 class="s-heading">問題が解決が成功する状態</h3>
+        <h3 class="s-heading" style="margin-top:40px;">問題が解決が失敗する状態</h3>
+      </div>
+
+      <!-- Slide 42 -->
+      <div class="slide" data-slide="42">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">論理構造（ロジックツリー）の重要性</h2>
+        <h3 class="s-heading" style="margin-top:16px;">問題解決力の再現性は論理的思考力によって担保される</h3>
+        <div class="two-col" style="margin-top:16px;">
+          <div class="card">
+            <h4 class="s-heading-sm">① できる限り早く/小さく、誤りを認識する</h4>
+            <p class="s-body">1ステップずつ間違える<br>左から右へ最速で進む<br>どこで間違えており、どこへ戻るべきかが明白</p>
+          </div>
+          <div class="card">
+            <h4 class="s-heading-sm">② できる限り早く、適切な場所へ戻る</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 43 -->
+      <div class="slide center" data-slide="43">
+        <h3 class="s-heading" style="max-width:700px;">小さく間違え、間違えた後に適切な場所に戻ることができれば、<br><br>それを繰り返すだけでいつかは成功する<br>（※理論的には）</h3>
+      </div>
+
+      <!-- Slide 44 -->
+      <div class="slide center" data-slide="44">
+        <h2 class="s-title">Q&A</h2>
+      </div>
+
+      <!-- Slide 45 -->
+      <div class="slide dark center" data-slide="45">
+        <h1 class="s-title-lg">ここからが研修です</h1>
+      </div>
+
+      <!-- Slide 46 -->
+      <div class="slide" data-slide="46">
+        <h2 class="s-title">アジェンダ</h2>
+        <ol class="numbered-list" style="margin-top:16px;">
+          <li>問題解決の概要</li>
+          <li>論点とは何か</li>
+          <li>論点を分解する</li>
+          <li>仮説を構築する</li>
+          <li>論点と仮説を検証する</li>
+          <li>問題解決におけるコミュニケーション</li>
+        </ol>
+      </div>
+
+      <!-- Slide 47 -->
+      <div class="slide" data-slide="47">
+        <h2 class="s-title">1. 問題解決の概要</h2>
+        <h3 class="s-heading" style="color:var(--ink-blue);margin-top:20px;">問題解決とは論点に対して答えを出すこと</h3>
+        <p class="s-body" style="margin-top:16px;">問題解決とは文字通り問題を解決することであるが、これは論点に答えを出すことと言い換えることもできる。</p>
+        <p class="s-body">論点とは行動を起こすための問いであり、それに答えを出すということは行動を決めることを意味する。</p>
+        <p class="s-body"><span class="emphasis">つまり問題解決とは行動を見つけることなのである。</span></p>
+        <p style="font-size:12px;margin-top:12px;color:var(--text-secondary);">※正しい行動を見つけられた時点で勝ち確であり、あとはやるだけという少し極端な前提はある<br>※実際の仕事では確度を高めるのではなく着地を合わせる必要がある<br>※一方で特に経営に近づけば近づくほど、1回の結果に執着しながらも100回やった際の成功確度を高めるというインパクトの大きな仕事をしなくてはならない。ここは企業内の役割分担が発生する</p>
+      </div>
+
+      <!-- Slide 48 -->
+      <div class="slide center" data-slide="48">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <div class="quote-block" style="margin-top:24px;">
+          <blockquote>"If I had an hour to solve a problem I'd spend 55 minutes thinking about the problem and five minutes thinking about solutions."</blockquote>
+          <cite>「私は地球を救うために1時間の時間を与えられたとしたら、55分を問題の定義に使い、5分を解決策の策定に使うだろう」</cite>
+        </div>
+      </div>
+
+      <!-- Slide 49 -->
+      <div class="slide center" data-slide="49">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title" style="margin-top:20px;">1. 問題解決の概要<br>問題を構成する要素</h2>
+        <h3 class="s-heading" style="margin-top:32px;">論点（問い）とは問題解決の根幹であり、<br>あらゆる問題解決は論点を定義することで始まる</h3>
+        <p style="font-size:20px;margin-top:24px;">論点とは何か？</p>
+      </div>
+
+      <!-- Slide 50 -->
+      <div class="slide" data-slide="50">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">1. 問題解決の概要<br>問題解決の型</h2>
+        <p class="s-body" style="margin-top:12px;">問題解決には定石ともいえる基本的な流れが存在する</p>
+        <div class="framework-steps" style="margin-top:16px;">
+          <div class="framework-step"><div class="step-num">1</div><div class="step-label">論点定義</div><div class="step-arrow"></div></div>
+          <div class="framework-step"><div class="step-num">2</div><div class="step-label">論点分解</div><div class="step-arrow"></div></div>
+          <div class="framework-step"><div class="step-num">3</div><div class="step-label">仮説構築</div><div class="step-arrow"></div></div>
+          <div class="framework-step"><div class="step-num">4</div><div class="step-label">仮説検証</div><div class="step-arrow"></div></div>
+          <div class="framework-step"><div class="step-num">5</div><div class="step-label">解を伝える</div></div>
+        </div>
+      </div>
+
+      <!-- Slide 51 -->
+      <div class="slide" data-slide="51">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">1. 問題解決の概要<br>問題解決の型</h2>
+        <p class="s-body" style="margin-top:12px;">問題解決には定石ともいえる基本的な流れが存在する</p>
+        <div class="framework-steps" style="margin-top:16px;">
+          <div class="framework-step"><div class="step-num">1</div><div class="step-label">論点定義</div><div class="step-arrow"></div></div>
+          <div class="framework-step"><div class="step-num">2</div><div class="step-label">論点分解</div><div class="step-arrow"></div></div>
+          <div class="framework-step"><div class="step-num">3</div><div class="step-label">仮説構築</div><div class="step-arrow"></div></div>
+          <div class="framework-step dimmed"><div class="step-num">4</div><div class="step-label">仮説検証</div><div class="step-arrow"></div></div>
+          <div class="framework-step dimmed"><div class="step-num">5</div><div class="step-label">解を伝える</div></div>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-top:12px;">本日のスコープ</p>
+      </div>
+
+      <!-- Slide 52 -->
+      <div class="slide" data-slide="52">
+        <h2 class="s-title">1. 問題解決の概要<br>メタ認知</h2>
+        <p class="s-body" style="margin-top:20px;">問題解決に取り組むにあたっては、定石と呼べる流れのどの段階に自分がいるかを意識するべきである。</p>
+        <p class="s-body">この問題解決の流れが頭に入っていると難しい問題に直面したときにも途方に暮れることなく、何に取り組むべきかが少なくとも理屈の上では理解できるはずである。</p>
+        <p style="font-size:12px;margin-top:12px;color:var(--text-secondary);">※もちろん理屈として問題解決のどの段階に取り組むべきかを理解していることと、実際にそれが解けることには大きな差が存在する。</p>
+        <h3 class="s-heading" style="margin-top:20px;">問題解決のどの段階にいるのかを理解する</h3>
+      </div>
+
+      <!-- Slide 53 -->
+      <div class="slide" data-slide="53">
+        <h2 class="s-title">1. 問題解決の概要<br>運用</h2>
+        <p class="s-body" style="margin-top:20px;">問題解決には流れはあるものの現実には何度も問題解決のステップを行き来するということを認識するべきである。</p>
+        <p class="s-body">問題解決に流れはあるものの、実務では二段階目の論点の分解をしている途中にも一段階目の論点の設定に戻ることもあるし、その論点を検証をする中で論点の分解をし直すこともある。</p>
+        <p class="s-body">つまりひと回ししないことも多いのである。</p>
+        <p class="s-body" style="margin-top:12px;"><span class="emphasis">このサイクルを早めることで問題解決の精度とスピードを担保するべきである。</span></p>
+        <h3 class="s-heading" style="margin-top:20px;">流れを理解した上で、そのプロセスを何度も回す</h3>
+      </div>
+
+      <!-- Slide 54 -->
+      <div class="slide center" data-slide="54">
+        <h2 class="s-title">Q&A</h2>
+      </div>
+
+      <!-- Slide 55 -->
+      <div class="slide" data-slide="55">
+        <h2 class="s-title">アジェンダ</h2>
+        <ol class="numbered-list" style="margin-top:16px;">
+          <li>問題解決の概要</li>
+          <li>論点とは何か</li>
+          <li>論点を分解する</li>
+          <li>仮説を構築する</li>
+          <li>論点と仮説を検証する</li>
+          <li>問題解決におけるコミュニケーション</li>
+        </ol>
+      </div>
+
+      <!-- Slide 56 -->
+      <div class="slide" data-slide="56">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">2. 論点とは何か</h2>
+        <h3 class="s-heading" style="color:var(--ink-blue);margin-top:20px;">論点とは行動を決めるための問いであり、<br>必ず「べき」が含まれる</h3>
+        <p class="s-body" style="margin-top:16px;">いかなる活動であっても原則として問を立てる目的は行動を起こすことであり、行動を伴わない問は自己満足なものであり無意味である。</p>
+        <p class="s-body">行動を決める問いには「べき」が入り、「べき」が入っていない問いは一見論点のように見えてもそうではない「なんちゃって論点」であるといえる。</p>
+        <p class="s-body" style="margin-top:12px;"><span class="emphasis">論点は一文で明文化するべきである。</span></p>
+      </div>
+
+      <!-- Slide 57 -->
+      <div class="slide center" data-slide="57">
+        <h3 class="s-heading" style="margin-bottom:32px;">よくある、なんちゃってでやる気のない論点</h3>
+        <p style="font-size:18px;line-height:1.8;">A社は買収対象として魅力的なのか?</p>
+        <p style="font-size:18px;line-height:1.8;">新製品のターゲット顧客セグメントは誰か?</p>
+        <p style="font-size:18px;line-height:1.8;">どのようにすれば売上は伸びるか?</p>
+      </div>
+
+      <!-- Slide 58 -->
+      <div class="slide center" data-slide="58">
+        <div style="max-width:800px;">
+          <h4 style="font-size:14px;margin-bottom:20px;color:var(--text-muted);">よくある、なんちゃってでやる気のない論点</h4>
+          <p style="font-size:16px;line-height:1.8;color:var(--text-muted);text-decoration:line-through;">A社は買収対象として魅力的なのか?</p>
+          <p style="font-size:16px;line-height:1.8;color:var(--text-muted);text-decoration:line-through;">新製品のターゲット顧客セグメントは誰か?</p>
+          <p style="font-size:16px;line-height:1.8;color:var(--text-muted);text-decoration:line-through;">どのようにすれば売上は伸びるか?</p>
+
+          <h4 style="margin:32px 0 20px;font-size:14px;">問題を解決する気がある論点</h4>
+          <p style="font-size:18px;line-height:1.8;font-weight:600;">A社を買収するべきか？</p>
+          <p style="font-size:18px;line-height:1.8;font-weight:600;">新製品はどの顧客セグメントを狙うべきか？</p>
+          <p style="font-size:18px;line-height:1.8;font-weight:600;">売上を伸ばすためには何をするべきか？</p>
+        </div>
+      </div>
+
+      <!-- Slide 59 -->
+      <div class="slide" data-slide="59">
+        <h2 class="s-title">2. 論点とは何か<br>ルール</h2>
+        <h3 class="s-heading" style="margin-top:20px;">苦しい場合であっても「べき」を入れる規律は必ず守る</h3>
+        <p class="s-body" style="margin-top:16px;">現実にはいくつかの状況でなかなか苦しい時もある</p>
+        <p class="s-body">例えば、大論点を検証している際の小論点として市場の伸びや市場シェアの推移を見たい場合、以下のようになる</p>
+        <div class="tree-text" style="margin-top:12px;">
+X市場に参入するべきか？
+├── これまで市場はどのくらいのペースで伸びてきたのか？
+└── 市場シェアはどのように推移してきたのか？
+        </div>
+      </div>
+
+      <!-- Slide 60 -->
+      <div class="slide" data-slide="60">
+        <h2 class="s-title">2. 論点とは何か<br>ルール</h2>
+        <h3 class="s-heading" style="margin-top:20px;">苦しい場合であっても「べき」を入れる規律は必ず守る</h3>
+        <p class="s-body" style="margin-top:16px;">現実にはいくつかの状況でなかなか苦しい時もある</p>
+        <p class="s-body">例えば、大論点を検証している際の小論点として市場の伸びや市場シェアの推移を見たい場合、以下のようになる</p>
+        <div class="tree-text" style="margin-top:12px;">
+X市場に参入するべきか？
+├── これまで市場はどのくらいのペースで伸びてきた<span class="emphasis">と想定するべきか</span>？
+└── 市場シェアはどのように推移してきた<span class="emphasis">と想定するべきか</span>？
+        </div>
+      </div>
+
+      <!-- Slide 61 -->
+      <div class="slide" data-slide="61">
+        <h2 class="s-title">2. 論点とは何か<br>実践</h2>
+        <h3 class="s-heading" style="margin-top:20px;">論点は一文で明文化する</h3>
+        <p style="font-size:13px;line-height:1.7;margin-top:16px;">「べき」の入った論点を明確にすることは簡単なことではない。</p>
+        <p style="font-size:13px;line-height:1.7;">特にちょっとした問題であれば論点を曖昧にしたまま行動に移ってしまうことが多い。</p>
+        <p style="font-size:13px;line-height:1.7;">日常生活であればそれで問題ないかもしれないが、ビジネスシーンであればこれは極めて非効率な行為である。論点が明文化されていないままぼんやりと考えて行動を起こすと結局のところ本当に欲しい答えに辿り着くのに不必要に多くの時間が費やされてしまったり、あるいは間違った結論に辿り着き行動が無駄になってしまったりすることが往々にしてある。<span class="emphasis">どんなに細かいことであっても僅かでも迷いが生じたならば、自分がどのような論点を解こうとしているのかを明文化するべきなのである。</span></p>
+      </div>
+
+      <!-- Slide 62 -->
+      <div class="slide" data-slide="62">
+        <h2 class="s-title">2. 論点とは何か<br>まとめ</h2>
+        <ul class="numbered-list" style="margin-top:20px;">
+          <li>問題解決の初めには必ず論点を立てるべきである</li>
+          <li>論点には必ず「べき」を入れるべきである</li>
+          <li>苦しい場合であっても「べき」を入れる規律は守るべきである</li>
+          <li>どんなに細かいことでも論点はあると認識するべきである</li>
+          <li>論点は簡潔な一文で明文化するべきである</li>
+        </ul>
+      </div>
+
+      <!-- Slide 63 -->
+      <div class="slide center" data-slide="63">
+        <h2 class="s-title">Q&A</h2>
+      </div>
+
+      <!-- Slide 64 -->
+      <div class="slide" data-slide="64">
+        <h2 class="s-title">アジェンダ</h2>
+        <ol class="numbered-list" style="margin-top:16px;">
+          <li>問題解決の概要</li>
+          <li>論点とは何か</li>
+          <li>論点を分解する</li>
+          <li>仮説を構築する</li>
+          <li>論点と仮説を検証する</li>
+          <li>問題解決におけるコミュニケーション</li>
+        </ol>
+      </div>
+
+      <!-- Slide 65 -->
+      <div class="slide" data-slide="65">
+        <h2 class="s-title">3. 論点を分解する<br>How</h2>
+        <h3 class="s-heading" style="margin-top:20px;">論点はツリー上に分解する</h3>
+        <p class="s-body" style="margin-top:16px;">「べき」の入った論点を一文で定義したとしてもその論点によっては直接的に答えを出すことは難しいことが多い。</p>
+        <p class="s-body">直接検証することができない論点はより細かい論点に分解する必要がある。</p>
+      </div>
+
+      <!-- Slide 66 -->
+      <div class="slide" data-slide="66">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">3. 論点を分解する<br>How</h2>
+        <h3 class="s-heading" style="margin-top:20px;">論点は網羅的かつ、MECEに分解する</h3>
+        <div style="margin-top:32px;font-size:18px;line-height:1.8;">
+          <p>下の階層の要素で上の階層を全て説明しきれる</p>
+          <p style="margin-top:12px;">下の階層の要素間で重なり（被り）がない</p>
+        </div>
+      </div>
+
+      <!-- Slide 67 -->
+      <div class="slide" data-slide="67">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">3. 論点を分解する<br>How</h2>
+        <h3 class="s-heading" style="margin-top:20px;">論点はモデル（式）で考える</h3>
+        <p style="font-size:20px;margin-top:40px;text-align:center;">四則演算で上の要素を成立させる</p>
+      </div>
+
+      <!-- Slide 68 -->
+      <div class="slide" data-slide="68">
+        <h2 class="s-title">3. 論点を分解する<br>How</h2>
+        <h3 class="s-heading" style="margin-top:20px;">5分以上1つの論点を考えない</h3>
+        <p class="s-body" style="margin-top:20px;">1つの論点に費やす時間はせいぜい5分から10分程度であり、それ以上の時間が必要であればそもそも論点が間違えている or 直接検証不可能であることを意味しており、いずれにせよその論点の検証に時間を費やすことは無意味である。</p>
+      </div>
+
+      <!-- Slide 69 -->
+      <div class="slide" data-slide="69">
+        <h2 class="s-title">3. 論点を分解する<br>How</h2>
+        <h3 class="s-heading" style="margin-top:20px;">イシューツリーは「真ん中あたり」からつくるべきである</h3>
+        <p style="font-size:13px;line-height:1.7;margin-top:16px;">結局のところイシューツリーはスパッとトップダウンで大論点から中論点、小論点という順番で作ることはまずできない。そのような人がいたら余程の天才か論点が簡単かのどちらかだろう。通常は小論点を考えてその上位にある論点を考えたり、逆に大論点を考えてそれを分解してみたりしながら上位階層と下位階層を行ったり来たりしながら考えるというのが現実である。</p>
+        <p style="font-size:13px;line-height:1.7;margin-top:8px;">トップダウン的に大論点を分解すると多くの場合は色彩が失われてしまい論理的には正しいけれども一般論であり個別論になっていないという事態に陥りがちである。このような状況になってしまうのは本来はプロジェクトに固有の論点が存在しているが、一般論はなまじ論理的に正しいためにそれを用いてMECEにイシューツリーを作ると固有の論点が埋もれてしまうためである。</p>
+      </div>
+
+      <!-- Slide 70 -->
+      <div class="slide" data-slide="70">
+        <h2 class="s-title">3. 論点を分解する<br>How</h2>
+        <h3 class="s-heading" style="margin-top:20px;">トップダウンとボトムアップの両者で整合性を取る</h3>
+        <p style="font-size:12px;line-height:1.7;margin-top:16px;">トップダウン的な手法だけでなくボトムアップ的なアプローチも併せて採るべきである。大論点に答えを出すためには、検証が必要な小論点を構造などにこだわらずに思いつくままに列挙してみるのである。この際には関係者が特に気にしていた点を論点に転換してみると無味乾燥とした一般論ではなく個別の論点が浮かび上がってくる。</p>
+        <p style="font-size:12px;line-height:1.7;margin-top:8px;">しかしこれでは構造化されていないためにモレがあったりダブりがあったりあるいはレベル感が揃っていなかったりする。</p>
+        <p style="font-size:12px;line-height:1.7;margin-top:8px;">そのためにボトムアップで思いついた個別論点が出尽くした段階で今度はそれらを構造化してツリーに落とし込んでいくプロセスが生じる。この際にはトップダウンで作った無味乾燥としたイシューツリーとも照らし合わせ両者の整合性を取っていくことになる。</p>
+        <p style="font-size:12px;line-height:1.7;margin-top:8px;">このようにイシューツリーを策定するときは教科書的にはトップダウン的なアプローチを取るが現実にはボトムアップとトップダウンの両方を行き来しながら作り込むことになる。</p>
+      </div>
+
+      <!-- Slide 71 -->
+      <div class="slide" data-slide="71">
+        <h2 class="s-title">3. 論点を分解する<br>まとめ</h2>
+        <ul class="numbered-list" style="margin-top:20px;">
+          <li>論点はツリー上に分解するべきである</li>
+          <li>5分以上は一つの論点を考えるべきではない</li>
+          <li>論点は手を動かしながら考えるべきである</li>
+          <li>論点を考える上でMECEやフレームワークを補助線として活用するべきである</li>
+          <li>イシューツリーはトップダウン・ボトムアップに検討するべきである</li>
+        </ul>
+      </div>
+
+      <!-- Slide 72 -->
+      <div class="slide center" data-slide="72">
+        <h2 class="s-title">Q&A</h2>
+      </div>
+
+      <!-- Slide 73 -->
+      <div class="slide" data-slide="73">
+        <h2 class="s-title">アジェンダ</h2>
+        <ol class="numbered-list" style="margin-top:16px;">
+          <li>問題解決の概要</li>
+          <li>論点とは何か</li>
+          <li>論点を分解する</li>
+          <li>仮説を構築する</li>
+          <li>論点と仮説を検証する</li>
+          <li>問題解決におけるコミュニケーション</li>
+        </ol>
+      </div>
+
+      <!-- Slide 74 -->
+      <div class="slide" data-slide="74">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">4. 仮説を構築する<br>前提</h2>
+        <h3 class="s-heading" style="margin-top:20px;">仮説とはベストエフォートの答えであり、<br>必ずつくることができる</h3>
+        <p style="font-size:13px;line-height:1.7;margin-top:16px;">仮説とは文字通り「仮の答え」であり、言い換えるとその時点でのベストエフォートでの答えである</p>
+        <p style="font-size:13px;line-height:1.7;">ベストエフォートということは、その時点に持ち合わせている情報だけを用いて足りない情報は仮定を置いて構築された論理体系であるということである。</p>
+        <p style="font-size:13px;line-height:1.7;">これは見方を変えるというと仮説を作れないということはあり得ないのである。</p>
+        <p style="font-size:13px;line-height:1.7;margin-top:8px;">持っている情報がゼロであったとしても分からないことには全て前提をおけば一つの論理体系はできるはずであり、それをできないというのは能力の問題ではなく意思の問題であり、厳しい表現を使えば知的に怠惰であるともいえる。</p>
+      </div>
+
+      <!-- Slide 75 -->
+      <div class="slide" data-slide="75">
+        <span class="must-remember">絶対覚えて帰って!</span>
+        <h2 class="s-title">4. 仮説を構築する<br>前提</h2>
+        <h3 class="s-heading" style="margin-top:20px;">仮の答えを出すことから逃げない</h3>
+        <p style="font-size:13px;line-height:1.7;margin-top:16px;">人間にとって何かを決めるということは脳にとって非常に負荷のかかる行為であり無意識のうちに決断することから逃げる傾向があると自覚する</p>
+        <p style="font-size:13px;line-height:1.7;">特に今すぐ仮の答えを出す必要がない場合は、後で判断しようと思ってしまうし、またそもそも情報がないことを言い訳に調べてから答えを出そうと考える人も多い</p>
+        <p style="font-size:13px;line-height:1.7;">その場で仮の答えを出さずにあとで決めようとするともう一度、論点を思い出したりする必要があるしまたそもそもその論点を検証するということを忘れてしまうリスクも存在する</p>
+        <p style="font-size:13px;line-height:1.7;margin-top:8px;"><span class="emphasis">何らかの論点がでたらその場で仮の答えを出して指示を出す規律を持つべきである</span></p>
+      </div>
+
+      <!-- Slide 76 -->
+      <div class="slide" data-slide="76">
+        <h2 class="s-title">4. 仮説を構築する<br>仮説思考の罠</h2>
+        <h3 class="s-heading" style="margin-top:20px;">一方で難易度の高い論点への仮説は<br>一定の知見が必要になることを知る</h3>
+        <p style="font-size:13px;line-height:1.7;margin-top:16px;">それなりに難易度の高い論点の仮説を構築するときにこの論点に関連した知見を持っている人物がいない場合には仮説が極めて浅いものになってしまう。このような状況では論点に対して表層的な仮説を構築しそれを検証したところで説得力が全くない結論しか出てこないリスクがある。</p>
+        <p style="font-size:13px;line-height:1.7;margin-top:8px;">そのため仮説を構築するときには、そもそも自分自身あるいは一緒に働いている人にこの論点に関する知見があるかを客観的に認識するべきである。客観的に、とは現実と願望を区別して、とも言い換えられる。もしもこの問いに対する答えがノーなのであれば稚拙な仮説の構築に時間を投入するよりも<span class="emphasis">「筋のいい仮説を構築するためには何をするべきか？」という論点を立てるべきである。</span></p>
+      </div>
+
+      <!-- Slide 77 -->
+      <div class="slide" data-slide="77">
+        <h2 class="s-title">4. 仮説を構築する<br>仮説思考の罠の解決</h2>
+        <h3 class="s-heading" style="margin-top:20px;">Deep Dive - 思いのままに情報を収集する</h3>
+        <p class="s-body" style="margin-top:20px;">ここでのコツはいくつかある。</p>
+        <p class="s-body">一つ目は自分の感情の赴くままに「情報の海に潜る」ことを意識することである。</p>
+        <p class="s-body">論点などは頭の片隅に置きはしつつも、この情報は面白い、これは驚きだ、これは当たり前でつまらない、といった素朴な感情に耳を傾けながら情報収集をするのである。</p>
+      </div>
+
+      <!-- Slide 78 -->
+      <div class="slide center" data-slide="78">
+        <h2 class="s-title">4. 仮説を構築する<br>How</h2>
+        <h3 class="s-heading" style="margin-top:20px;">アナリティカル思考とコンセプチュアル思考</h3>
+        <p class="s-body" style="margin-top:16px;">仮説に限らずに何かを考えるときは大きくはアナリティカル思考（分析思考）とコンセプチュアル思考（概念思考）の二種類がある。</p>
+      </div>
+
+      <!-- Slide 79 -->
+      <div class="slide" data-slide="79">
+        <h2 class="s-title">4. 仮説を構築する<br>まとめ</h2>
+        <ul class="numbered-list" style="margin-top:20px;">
+          <li>仮説とはその時点でのベストエフォートの答えであると認識するべきである</li>
+          <li>仮説を出すことからは逃げるべきではない</li>
+          <li>仮説を出すことで検証点を明確にするべきである</li>
+          <li>筋のいい仮説が出なければ時間を区切って「情報の海を潜る」べきである</li>
+          <li>アナリティカル思考とコンセプチュアル思考を意識的に使い分けるべきである</li>
+        </ul>
+      </div>
+
+      <!-- Slide 80 -->
+      <div class="slide center" data-slide="80">
+        <h2 class="s-title">Q&A</h2>
+      </div>
+
+      <!-- Slide 81 -->
+      <div class="slide dark center" data-slide="81">
+        <h1 class="s-title-lg">本日のまとめ</h1>
+      </div>
+
+      <!-- Slide 82 -->
+      <div class="slide" data-slide="82">
+        <h2 class="s-title">まとめ<br>絶対に覚える内容</h2>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px;font-size:12px;">
+          <div>
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">前提編</h4>
+            <p style="line-height:1.6;">行動と結果は切り離す</p>
+            <p style="line-height:1.6;">正しい行動をすることで結果の再現性を高めることに注力する</p>
+            <p style="line-height:1.6;">再現性とは正しく間違えること = 繰り返せば必ず成功できる（勝ち確な）状態にする</p>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">概要編</h4>
+            <p style="line-height:1.6;">問題解決とは論点に解を出すこと = 行動を決めること（正しい行動が決まれば勝ち確）</p>
+            <p style="line-height:1.6;">問題解決の流れは「論点定義→論点分解→仮説構築→仮説検証→解を伝える」</p>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">論点定義編</h4>
+            <p style="line-height:1.6;">論点定義（問いの定義）が最も大事 = 問いが間違えていたら当然行動は間違える（負け確）</p>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">論点分解編</h4>
+            <p style="line-height:1.6;">論点分解は1階層ずつやり、網羅的かつMECEにする（天才を除いてこのルールを死守する）</p>
+            <p style="line-height:1.6;">論点分解は上下の階層を行き来しながら行う</p>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">仮説構築編</h4>
+            <p style="line-height:1.6;">仮説はかならず出す → 正しい仮説を出すことが重要なのではなく、どこで何が間違えたかが検証可能な状態になっていることが重要→正しく軌道修正できる</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 83 -->
+      <div class="slide center" data-slide="83">
+        <h3 class="s-heading" style="max-width:800px;">（大袈裟ではなく、）<br><br>問題を再現性高く解決する能力が身につけば、<br><br>世の中の全てが問題と論点に見え、<br><br>理論的には何事も上手くいきます。</h3>
+      </div>
+
+      <!-- Slide 84 -->
+      <div class="slide center" data-slide="84">
+        <h1 class="s-title-lg">問題を解決しましょう。</h1>
+      </div>
+
+      <!-- Slide 85 -->
+      <div class="slide dark center" data-slide="85">
+        <h1 class="s-title-lg">終.</h1>
+      </div>
+
+      <!-- Slide 86 -->
+      <div class="slide center" data-slide="86">
+        <h2 class="s-title">Q&A</h2>
+      </div>
+
+      <!-- Slide 87 -->
+      <div class="slide center" data-slide="87">
+        <h3 class="s-heading">Q. 理論はわかったとして、<br>どのようにできるようになったか？</h3>
+      </div>
+
+      <!-- Slide 88 -->
+      <div class="slide center" data-slide="88">
+        <h3 class="s-heading">Q. 正しい問いを設定するには<br>どうすべきか？</h3>
+      </div>
+
+      <!-- Slide 89 -->
+      <div class="slide center" data-slide="89">
+        <h3 class="s-heading">Q. 網羅的かつMECEにわけるには<br>どうすべきか？</h3>
+      </div>
+
+    </div><!-- /slide-viewport -->
+  </div><!-- /main-area -->
+</div><!-- /app-layout -->
+
+<script>
+(function() {
+  let currentSlide = 1;
+  const slides = document.querySelectorAll('.slide[data-slide]');
+  const totalSlides = slides.length;
+  const sidebar = document.getElementById('sidebar');
+  const counter = document.getElementById('slideCounter');
+
+  // Build sidebar thumbnails
+  slides.forEach(function(slide, i) {
+    const num = i + 1;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'sidebar-slide' + (num === 1 ? ' active' : '');
+    wrapper.dataset.target = num;
+
+    const numEl = document.createElement('div');
+    numEl.className = 'slide-number';
+    numEl.textContent = num;
+
+    const thumb = document.createElement('div');
+    thumb.className = 'slide-thumb';
+
+    const thumbContent = document.createElement('div');
+    thumbContent.className = 'slide-thumb-content';
+    thumbContent.innerHTML = slide.innerHTML;
+
+    // Copy dark class for styling
+    if (slide.classList.contains('dark')) {
+      thumbContent.style.background = '#1a1a1a';
+      thumbContent.style.color = '#fdfdfc';
+    }
+    if (slide.classList.contains('hero-slide')) {
+      thumbContent.style.backgroundImage = 'linear-gradient(#f1f5f9 1px, transparent 1px), linear-gradient(90deg, #f1f5f9 1px, transparent 1px)';
+      thumbContent.style.backgroundSize = '40px 40px';
+    }
+
+    thumb.appendChild(thumbContent);
+    wrapper.appendChild(numEl);
+    wrapper.appendChild(thumb);
+    sidebar.appendChild(wrapper);
+
+    wrapper.addEventListener('click', function() {
+      goSlide(num);
+    });
+  });
+
+  function goSlide(n) {
+    if (n < 1 || n > totalSlides) return;
+    currentSlide = n;
+
+    slides.forEach(function(s) { s.classList.remove('active'); });
+    slides[n - 1].classList.add('active');
+
+    document.querySelectorAll('.sidebar-slide').forEach(function(el) {
+      el.classList.toggle('active', parseInt(el.dataset.target) === n);
+    });
+
+    // Scroll sidebar to keep active visible
+    const activeThumb = sidebar.querySelector('.sidebar-slide.active');
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    counter.textContent = n + ' / ' + totalSlides;
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      goSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goSlide(currentSlide - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goSlide(1);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goSlide(totalSlides);
+    }
+  });
+
+  // Expose for toolbar buttons
+  window.currentSlide = currentSlide;
+  window.goSlide = function(n) {
+    goSlide(n);
+    window.currentSlide = n;
+  };
+
+  // Init
+  goSlide(1);
+})();
+</script>
+
+</body>
+</html>

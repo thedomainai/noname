@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Longlist Radar — SmartHR M&A Pipeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink-1000:#000;--ink-900:#1a1a1a;--ink-800:#2d2d2d;--ink-700:#404040;
+  --ink-600:#525252;--ink-500:#6b6b6b;--ink-400:#8a8a8a;--ink-300:#a3a3a3;
+  --ink-200:#c4c4c4;--ink-100:#e0e0e0;--ink-50:#f0f0f0;
+  --slate-600:#475569;--slate-500:#64748b;--slate-400:#94a3b8;
+  --slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;
+  --paper-white:#fdfdfc;--paper-cream:#faf9f7;--paper-warm:#f5f4f0;
+  --paper-kraft:#eeedea;--paper-aged:#e8e7e3;
+  --ink-blue:#2563eb;--ink-green:#16a34a;--ink-amber:#d97706;--ink-red:#dc2626;
+  --wash-blue:#dbeafe;--wash-green:#dcfce7;--wash-amber:#fef3c7;--wash-red:#fee2e2;
+  --font-sans:'Instrument Sans',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-800);line-height:1.5;min-height:100vh}
+
+/* Header */
+.header{background:var(--paper-white);border-bottom:1px solid var(--ink-100);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap}
+.header-left{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.header h1{font-size:18px;font-weight:700;color:var(--ink-900);letter-spacing:-0.02em}
+.header .subtitle{font-size:13px;color:var(--ink-400);margin-left:4px}
+.header-center{flex:1;max-width:400px;min-width:200px}
+.search-bar{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--ink-200);border-radius:8px;background:var(--paper-white);transition:border-color .15s}
+.search-bar:focus-within{border-color:var(--ink-blue);box-shadow:0 0 0 2px var(--wash-blue)}
+.search-bar input{border:none;outline:none;font-size:13px;font-family:var(--font-sans);color:var(--ink-700);flex:1;background:transparent}
+.search-bar input::placeholder{color:var(--ink-300)}
+.search-icon{color:var(--ink-300);flex-shrink:0;font-size:14px}
+.header-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.last-sync{font-size:11px;color:var(--ink-400);font-family:var(--font-mono)}
+.btn{padding:6px 14px;border-radius:6px;border:1px solid var(--ink-200);background:var(--paper-white);font-size:13px;font-weight:500;cursor:pointer;color:var(--ink-700);transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--slate-50);border-color:var(--ink-300)}
+.btn-primary{background:var(--ink-900);color:white;border-color:var(--ink-900)}
+.btn-primary:hover{background:var(--ink-800)}
+
+/* Capacity indicator */
+.capacity{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-500);padding:4px 10px;border-radius:6px;background:var(--slate-50)}
+.capacity-bar{width:48px;height:6px;background:var(--ink-100);border-radius:3px;overflow:hidden}
+.capacity-fill{height:100%;border-radius:3px;transition:width .3s}
+.capacity-ok{background:var(--ink-green)}
+.capacity-warn{background:var(--ink-amber)}
+.capacity-over{background:var(--ink-red)}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:260px 1fr 300px;gap:0;min-height:calc(100vh - 53px)}
+.sidebar-left{background:var(--paper-white);border-right:1px solid var(--ink-100);padding:20px;overflow-y:auto}
+.main{padding:20px;overflow-y:auto}
+.sidebar-right{background:var(--paper-white);border-left:1px solid var(--ink-100);padding:20px;overflow-y:auto}
+
+/* Welcome Banner */
+.welcome-banner{background:var(--wash-blue);border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px}
+.welcome-icon{font-size:20px;flex-shrink:0;line-height:1}
+.welcome-body{flex:1}
+.welcome-title{font-size:14px;font-weight:600;color:var(--ink-900);margin-bottom:2px}
+.welcome-text{font-size:13px;color:var(--ink-700);line-height:1.5}
+.welcome-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.welcome-action{font-size:12px;padding:3px 10px;border-radius:4px;background:var(--paper-white);border:1px solid #bfdbfe;color:var(--ink-blue);cursor:pointer;font-weight:500;transition:all .15s}
+.welcome-action:hover{background:var(--wash-blue);border-color:var(--ink-blue)}
+.welcome-dismiss{font-size:12px;color:var(--ink-400);cursor:pointer;text-decoration:underline;flex-shrink:0;align-self:flex-start}
+
+/* Sidebar Sections */
+.sidebar-section{margin-bottom:24px}
+.sidebar-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-400);margin-bottom:10px}
+
+/* Thesis tags — redesigned as expandable theme cards */
+.thesis-tag{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:6px;font-size:12px;font-weight:500;margin-bottom:4px;cursor:pointer;border:1px solid var(--ink-100);background:var(--paper-white);color:var(--ink-600);transition:all .15s;user-select:none}
+.thesis-tag:hover{background:var(--slate-50);border-color:var(--ink-200)}
+.thesis-tag.active{background:var(--wash-blue);border-color:var(--ink-blue);color:var(--ink-blue)}
+.thesis-tag .tag-count{margin-left:auto;font-size:11px;font-family:var(--font-mono);color:var(--ink-300)}
+.thesis-tag.active .tag-count{color:var(--ink-blue)}
+.thesis-tag .tag-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* Theme detail panel (below thesis list) */
+.theme-detail{display:none;padding:12px;background:var(--slate-50);border-radius:6px;margin-top:8px;margin-bottom:12px;border:1px solid var(--slate-200)}
+.theme-detail.open{display:block}
+.theme-detail-title{font-size:13px;font-weight:600;color:var(--ink-900);margin-bottom:4px}
+.theme-detail-desc{font-size:12px;color:var(--ink-600);line-height:1.5;margin-bottom:8px}
+.theme-detail-metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.theme-metric{font-size:11px;color:var(--ink-500)}
+.theme-metric strong{font-family:var(--font-mono);color:var(--ink-800)}
+
+.status-filter{display:flex;flex-direction:column;gap:4px}
+.status-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:13px;color:var(--ink-600);cursor:pointer;transition:background .15s}
+.status-item:hover{background:var(--slate-50)}
+.status-item.active{background:var(--wash-blue);color:var(--ink-blue);font-weight:500}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-count{margin-left:auto;font-size:12px;font-family:var(--font-mono);color:var(--ink-300)}
+
+/* View Tabs */
+.view-tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--ink-100)}
+.view-tab{padding:8px 16px;font-size:13px;font-weight:500;color:var(--ink-500);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none}
+.view-tab:hover{color:var(--ink-700)}
+.view-tab.active{color:var(--ink-900);border-bottom-color:var(--ink-900)}
+.view-tab .tab-badge{font-size:11px;font-family:var(--font-mono);background:var(--ink-blue);color:white;padding:1px 6px;border-radius:8px;margin-left:6px}
+
+/* Sort Bar */
+.sort-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.sort-bar .label{font-size:12px;color:var(--ink-400);font-weight:500}
+.sort-btn{padding:4px 10px;border-radius:4px;border:none;background:none;font-size:12px;font-weight:500;cursor:pointer;color:var(--ink-500);transition:all .15s}
+.sort-btn:hover{background:var(--slate-100)}
+.sort-btn.active{background:var(--ink-900);color:white;border-radius:4px}
+.result-count{margin-left:auto;font-size:12px;color:var(--ink-400);font-family:var(--font-mono)}
+.export-btn{margin-left:8px}
+
+/* Company Cards */
+.card-grid{display:flex;flex-direction:column;gap:10px}
+.company-card{background:var(--paper-white);border:1px solid var(--ink-100);border-radius:8px;padding:16px 18px;cursor:pointer;transition:all .15s;position:relative}
+.company-card:hover{border-color:var(--ink-300);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.company-card.has-change{}
+.company-card.stale-card{opacity:.65;border-style:dashed}
+.company-card.stale-card:hover{opacity:.85}
+.stale-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:8px;background:var(--wash-red);color:var(--ink-red);margin-left:8px}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.card-top-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.company-name{font-size:15px;font-weight:600;color:var(--ink-900)}
+.fit-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:0.02em}
+.fit-high{background:var(--wash-green);color:var(--ink-green)}
+.fit-mid{background:var(--wash-amber);color:var(--ink-amber)}
+.fit-low{background:var(--wash-red);color:var(--ink-red)}
+.priority-score{font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--ink-900);line-height:1}
+.priority-label{font-size:10px;color:var(--ink-400);text-align:right}
+.card-meta{display:flex;gap:16px;font-size:12px;color:var(--ink-500);margin-bottom:8px;flex-wrap:wrap}
+.card-meta span{display:flex;align-items:center;gap:4px}
+.card-reason{font-size:13px;color:var(--ink-700);line-height:1.5;margin-bottom:8px;padding:6px 10px;background:var(--slate-50);border-radius:4px}
+.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.signal-tags{display:flex;gap:4px;flex-wrap:wrap}
+.signal-tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--wash-blue);color:var(--ink-blue);font-weight:500}
+.signal-tag.new{background:var(--wash-green);color:var(--ink-green)}
+.signal-tag.trigger{font-weight:600}
+.signal-tag .trigger-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-right:4px}
+.card-status{font-size:12px;padding:4px 10px;border-radius:4px;border:1px solid var(--ink-200);background:var(--paper-white);font-weight:500;cursor:pointer;color:var(--ink-600)}
+.freshness{font-size:11px;color:var(--ink-400);font-family:var(--font-mono)}
+.freshness.stale{color:var(--ink-red)}
+.freshness.recent{color:var(--ink-green)}
+.thesis-pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.thesis-pill{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--paper-kraft);color:var(--ink-500)}
+
+/* Digest View */
+.digest-view{display:none}
+.digest-view.active{display:block}
+.list-view{display:none}
+.list-view.active{display:block}
+.digest-day{margin-bottom:20px}
+.digest-day-label{font-size:12px;font-weight:600;color:var(--ink-400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--ink-100)}
+.digest-item{display:flex;gap:12px;padding:12px 14px;background:var(--paper-white);border:1px solid var(--ink-100);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .15s;align-items:flex-start}
+.digest-item:hover{border-color:var(--ink-300);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.digest-type-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:0.02em;flex-shrink:0;font-family:var(--font-mono)}
+.digest-type-icon.hiring{background:var(--wash-green);color:var(--ink-green)}
+.digest-type-icon.funding{background:var(--wash-blue);color:var(--ink-blue)}
+.digest-type-icon.expansion{background:var(--wash-amber);color:var(--ink-amber)}
+.digest-type-icon.product{background:#f3e8ff;color:#7c3aed}
+.digest-type-icon.partnership{background:#e0f2fe;color:#0284c7}
+.digest-type-icon.recognition{background:var(--wash-green);color:var(--ink-green)}
+.digest-type-icon.leadership{background:var(--wash-amber);color:var(--ink-amber)}
+.digest-type-icon.capital{background:var(--wash-red);color:var(--ink-red)}
+.digest-type-icon.founder{background:#f3e8ff;color:#7c3aed}
+.digest-type-icon.market{background:var(--wash-amber);color:var(--ink-amber)}
+.digest-body{flex:1;min-width:0}
+.digest-company{font-size:14px;font-weight:600;color:var(--ink-900)}
+.digest-signal{font-size:13px;color:var(--ink-700);margin-top:2px}
+.digest-meta{font-size:11px;color:var(--ink-400);margin-top:4px;display:flex;gap:12px}
+.digest-check{display:flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 6px;border-radius:4px;border:1px solid var(--ink-200);cursor:pointer;flex-shrink:0;align-self:center;transition:all .15s;background:var(--paper-white);font-size:10px;font-weight:600;font-family:var(--font-mono)}
+.digest-check:hover{border-color:var(--ink-blue);background:var(--wash-blue)}
+.digest-check.checked{background:var(--ink-blue);border-color:var(--ink-blue);color:white}
+
+/* Right Sidebar — Notifications */
+.notif-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.notif-title{font-size:14px;font-weight:600;color:var(--ink-900)}
+.notif-count{font-size:12px;font-family:var(--font-mono);background:var(--ink-blue);color:white;padding:1px 7px;border-radius:10px}
+.notif-list{display:flex;flex-direction:column;gap:8px}
+.notif-item{padding:10px 12px;border-radius:6px;background:var(--slate-50);border:1px solid var(--slate-200);cursor:pointer;transition:all .15s}
+.notif-item:hover{border-color:var(--ink-300)}
+.notif-company{font-size:13px;font-weight:600;color:var(--ink-900);margin-bottom:2px}
+.notif-detail{font-size:12px;color:var(--ink-600);line-height:1.4}
+.notif-date{font-size:11px;color:var(--ink-300);font-family:var(--font-mono);margin-top:4px}
+.notif-type{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
+.notif-type.hiring{color:var(--ink-green)}
+.notif-type.funding{color:var(--ink-blue)}
+.notif-type.expansion{color:var(--ink-amber)}
+.notif-type.product{color:#7c3aed}
+.notif-type.capital{color:var(--ink-red)}
+.notif-type.founder{color:#7c3aed}
+.notif-type.market{color:var(--ink-amber)}
+
+/* Sidebar Action Suggestion */
+.sidebar-suggestion{padding:12px;background:var(--paper-cream);border:1px solid var(--paper-kraft);border-radius:8px;margin-bottom:16px}
+.sidebar-suggestion-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-amber);margin-bottom:6px}
+.sidebar-suggestion-text{font-size:12px;color:var(--ink-700);line-height:1.5}
+
+/* Detail Panel (Modal) */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.overlay.open{display:flex}
+.detail-panel{background:var(--paper-white);border-radius:12px;width:100%;max-width:760px;padding:28px 32px;box-shadow:0 8px 32px rgba(0,0,0,.12);position:relative}
+.detail-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:6px;border:none;background:var(--slate-100);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--ink-500)}
+.detail-close:hover{background:var(--slate-200)}
+.detail-header{margin-bottom:20px}
+.detail-name{font-size:22px;font-weight:700;color:var(--ink-900);margin-bottom:4px}
+.detail-desc{font-size:14px;color:var(--ink-600);line-height:1.5;margin-bottom:12px}
+.detail-since{font-size:12px;color:var(--ink-blue);background:var(--wash-blue);padding:4px 10px;border-radius:4px;display:inline-block;margin-bottom:12px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.detail-stat{padding:12px;background:var(--slate-50);border-radius:6px}
+.detail-stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-400);margin-bottom:4px}
+.detail-stat-value{font-size:16px;font-weight:600;color:var(--ink-900);font-family:var(--font-mono)}
+.detail-section{margin-bottom:16px}
+.detail-section-title{font-size:13px;font-weight:600;color:var(--ink-700);margin-bottom:6px}
+.detail-reason-box{padding:12px 16px;background:var(--wash-blue);border-radius:6px;font-size:14px;color:var(--ink-800);line-height:1.5}
+.detail-signals{display:flex;flex-wrap:wrap;gap:6px}
+.detail-signal{padding:4px 12px;border-radius:14px;font-size:12px;font-weight:500;background:var(--wash-green);color:var(--ink-green)}
+.detail-timeline{display:flex;flex-direction:column;gap:8px}
+.timeline-item{display:flex;gap:10px;font-size:13px}
+.timeline-date{font-family:var(--font-mono);color:var(--ink-400);flex-shrink:0;width:60px;font-size:12px}
+.timeline-text{color:var(--ink-700)}
+
+/* Contact Routes */
+.route-list{display:flex;flex-direction:column;gap:6px}
+.route-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--slate-50);border-radius:6px;font-size:13px}
+.route-type{font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;background:var(--paper-kraft);color:var(--ink-600);flex-shrink:0;min-width:72px;text-align:center}
+.route-text{color:var(--ink-700);flex:1}
+.route-status{font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;flex-shrink:0}
+.route-status.pending{background:var(--wash-amber);color:var(--ink-amber)}
+.route-status.active{background:var(--wash-blue);color:var(--ink-blue)}
+.route-status.done{background:var(--wash-green);color:var(--ink-green)}
+
+.detail-actions{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--ink-100);flex-wrap:wrap}
+.status-select{padding:6px 10px;border-radius:6px;border:1px solid var(--ink-200);font-size:13px;font-weight:500;background:var(--paper-white);color:var(--ink-700);cursor:pointer}
+.detail-memo{width:100%;min-height:60px;border:1px solid var(--ink-200);border-radius:6px;padding:8px 12px;font-size:13px;font-family:var(--font-sans);color:var(--ink-700);resize:vertical;margin-top:8px}
+.detail-memo::placeholder{color:var(--ink-300)}
+
+/* Responsive */
+@media(max-width:1100px){.layout{grid-template-columns:1fr;}.sidebar-left,.sidebar-right{display:none}}
+@media(max-width:600px){.header{padding:12px 16px}.main{padding:12px}.header-center{display:none}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Longlist Radar</h1>
+    <span class="subtitle">M&A Pipeline</span>
+  </div>
+  <div class="header-center">
+    <div class="search-bar">
+      <span class="search-icon" style="font-style:normal;font-size:13px;color:var(--ink-300)">/</span>
+      <input type="text" placeholder="ノンネーム照合: 業種・規模・地域で検索..." id="nonname-search">
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="capacity">
+      <span>ライブ案件</span>
+      <div class="capacity-bar"><div class="capacity-fill capacity-warn" style="width:60%"></div></div>
+      <span style="font-family:var(--font-mono)">3/5</span>
+    </div>
+    <span class="last-sync">sync 03-30 09:15</span>
+    <button class="btn btn-primary" onclick="alert('新規テーマ定義 → 初期候補生成フローを起動します（実装予定）')">+ テーマ作成</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- Left Sidebar -->
+  <div class="sidebar-left">
+    <div class="sidebar-section">
+      <div class="sidebar-title">投資仮説テーマ</div>
+      <div id="thesis-filters"></div>
+      <div class="theme-detail" id="theme-detail"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">ステータス</div>
+      <div class="status-filter" id="status-filters">
+        <div class="status-item active" data-status="all">
+          <div class="status-dot" style="background:var(--ink-400)"></div>
+          すべて
+          <span class="status-count" id="count-all">13</span>
+        </div>
+        <div class="status-item" data-status="unreviewed">
+          <div class="status-dot" style="background:var(--slate-400)"></div>
+          未確認
+          <span class="status-count" id="count-unreviewed">0</span>
+        </div>
+        <div class="status-item" data-status="researching">
+          <div class="status-dot" style="background:var(--ink-blue)"></div>
+          調査中
+          <span class="status-count" id="count-researching">0</span>
+        </div>
+        <div class="status-item" data-status="outreach">
+          <div class="status-dot" style="background:var(--ink-amber)"></div>
+          紹介打診中
+          <span class="status-count" id="count-outreach">0</span>
+        </div>
+        <div class="status-item" data-status="met">
+          <div class="status-dot" style="background:var(--ink-green)"></div>
+          面談済
+          <span class="status-count" id="count-met">0</span>
+        </div>
+        <div class="status-item" data-status="hold">
+          <div class="status-dot" style="background:var(--ink-300)"></div>
+          保留
+          <span class="status-count" id="count-hold">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">サマリー</div>
+      <div style="font-size:13px;color:var(--ink-600);line-height:1.6" id="sidebar-summary"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner" id="welcome-banner">
+      <span class="welcome-icon" style="font-size:14px;font-weight:700;color:var(--ink-blue)">i</span>
+      <div class="welcome-body">
+        <div class="welcome-title">前回確認（3/23）から <strong style="color:var(--ink-blue)">10件</strong> の変化があります</div>
+        <div class="welcome-text">8社で新規シグナルを検出。2社の情報が陳腐化しています。</div>
+        <div class="welcome-actions">
+          <span class="welcome-action" onclick="switchView('digest')">変化を確認する</span>
+          <span class="welcome-action" onclick="switchView('list')">リストを見る</span>
+        </div>
+      </div>
+      <span class="welcome-dismiss" onclick="this.closest('.welcome-banner').style.display='none'">閉じる</span>
+    </div>
+
+    <!-- View Tabs -->
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="list" onclick="switchView('list')">リスト</button>
+      <button class="view-tab" data-view="digest" onclick="switchView('digest')">今週の変化 <span class="tab-badge" id="digest-badge">7</span></button>
+    </div>
+
+    <!-- List View -->
+    <div class="list-view active" id="list-view">
+      <div class="sort-bar">
+        <span class="label">並び替え:</span>
+        <button class="sort-btn active" data-sort="priority">接触優先度</button>
+        <button class="sort-btn" data-sort="fit">戦略フィット</button>
+        <button class="sort-btn" data-sort="freshness">情報鮮度</button>
+        <button class="sort-btn" data-sort="change">変化あり</button>
+        <span class="result-count" id="result-count">13 社</span>
+        <button class="btn export-btn" onclick="alert('上位10社をPDF/CSVでエクスポートします（実装予定）')">Export 上位10社</button>
+      </div>
+      <div class="card-grid" id="card-grid"></div>
+    </div>
+
+    <!-- Digest View -->
+    <div class="digest-view" id="digest-view">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span class="label" style="font-size:13px;color:var(--ink-600)">前回確認（3/23）以降の変化シグナル</span>
+        <button class="btn" style="font-size:12px" onclick="markAllRead()">すべて確認済みにする</button>
+      </div>
+      <div id="digest-list"></div>
+    </div>
+  </div>
+
+  <!-- Right Sidebar -->
+  <div class="sidebar-right">
+    <div class="sidebar-suggestion">
+      <div class="sidebar-suggestion-title">おすすめアクション</div>
+      <div class="sidebar-suggestion-text"><strong>ペイフロー</strong> の創業者がプラットフォーム統合志向を公言。売却意向が高い可能性があります。共通知人（元MF C氏）経由のルートが進行中 — 初回面談の設定を検討してください。</div>
+    </div>
+    <div class="notif-header">
+      <span class="notif-title">最新シグナル</span>
+      <span class="notif-count" id="notif-count">7</span>
+    </div>
+    <div class="notif-list" id="notif-list"></div>
+  </div>
+</div>
+
+<!-- Detail Panel -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-panel" id="detail-panel"></div>
+</div>
+
+<script>
+const THESES = {
+  "full-suite":{name:"人事労務フルスイート化",color:"#2563eb",desc:"勤怠・給与計算を統合し、人事労務のワンストップ基盤を完成させる。SmartHR単体ではカバーしきれない給与・勤怠の機能ギャップを買収で埋める。"},
+  "vertical-entry":{name:"業界特化HR展開",color:"#16a34a",desc:"建設・医療など特定業界のHR/労務管理で支配的地位を持つプレーヤーを獲得し、SmartHRの業界別展開を加速する。"},
+  "backoffice-platform":{name:"バックオフィス統合基盤",color:"#d97706",desc:"経費精算・ワークフロー・申請承認を統合し、人事起点のバックオフィスプラットフォームへ拡張する。"},
+  "talent-mgmt":{name:"タレマネ・育成強化",color:"#7c3aed",desc:"採用・評価・研修のタレントマネジメント領域を獲得し、SmartHRの「人材データ活用」ストーリーを強化する。"}
+};
+
+const COMPANIES = [
+  {
+    id:1, name:"クロノスHR", industry:"勤怠管理SaaS",
+    revenue:"ARR 12億円", stage:"Series B",
+    fitScore:92, fitLevel:"high", priority:95,
+    theses:["full-suite"],
+    ownership:"創業者45% / GB 25% / JAFCO 20% / その他10%",
+    valuation:"Post 60億円（2026/3 Series B）",
+    sellability:"中 — Series B直後でファンドの出口圧力は低い。ただし創業者は将来的なIPO/M&Aに柔軟な姿勢",
+    integration:"勤怠データ×SmartHRの人事DBを統合。給与計算への自動連携で人事労務フルスイートが完成",
+    status:"researching", lastUpdated:"2026-03-28",
+    reason:"勤怠管理で中堅企業シェア急拡大中。SmartHRの勤怠モジュールを買収で一気に補完できる最有力候補",
+    signals:[{text:"Series B 15億円調達完了 — Post 60億円",type:"funding",isNew:true,isTrigger:true},{text:"建設・物流・小売の3業界で導入加速",type:"expansion",isNew:false,isTrigger:false}],
+    desc:"中堅企業向け勤怠管理SaaS。独自の勤務パターン学習で、シフト最適化と労務コンプライアンスを自動化。建設・物流・小売の3業界に強み。",
+    routes:[{type:"取引銀行",text:"みずほ銀行 — A部長経由で接触可能性あり",status:"pending"},{type:"仲介",text:"MAVIS — 別担当が同社と接点あり",status:"active"}],
+    timeline:[{date:"03/28",text:"Series B 15億円調達（グローバルブレイン、JAFCO）"},{date:"03/10",text:"建設業界向け新機能リリース"},{date:"01/20",text:"ARR 10億円突破"}]
+  },
+  {
+    id:2, name:"ペイフロー", industry:"給与計算SaaS",
+    revenue:"ARR 8億円", stage:"Series A",
+    fitScore:88, fitLevel:"high", priority:90,
+    theses:["full-suite"],
+    ownership:"創業者60% / Coral Capital 20% / エンジェル他20%",
+    valuation:"推定 30-40億円（Series Aの2倍成長から逆算）",
+    sellability:"高 — 創業者が「プラットフォームに乗りたい」と複数メディアで発言。単独上場より統合を志向か",
+    integration:"給与計算エンジン＋社労士BPOネットワークを獲得。SmartHRの給与計算を自前開発から一気に完成形へ",
+    status:"outreach", lastUpdated:"2026-03-26",
+    reason:"給与計算の完全自動化に最も近い。創業者の統合志向が強く、売却可能性が高い",
+    signals:[{text:"創業者がプラットフォーム統合志向を公言",type:"founder",isNew:true,isTrigger:true},{text:"社労士パートナー200事務所到達",type:"expansion",isNew:false,isTrigger:false}],
+    desc:"クラウド給与計算プラットフォーム。社労士向けBPO機能を持ち、アウトソーシング企業との連携が強み。API-firstアーキテクチャ。",
+    routes:[{type:"共通知人",text:"元マネーフォワードのC氏 — FacebookでCEOと接続",status:"active"}],
+    timeline:[{date:"03/26",text:"CEOインタビュー記事でプラットフォーム統合への前向き姿勢"},{date:"03/05",text:"社労士パートナー200事務所到達"},{date:"01/15",text:"Series A から2年経過、次ラウンドの方向性が未定"}]
+  },
+  {
+    id:3, name:"サイトコネクト", industry:"建設DX / 労務安全管理",
+    revenue:"ARR 20億円", stage:"Series C",
+    fitScore:85, fitLevel:"high", priority:88,
+    theses:["vertical-entry"],
+    ownership:"創業者30% / DNX Ventures 20% / WiL 15% / 事業会社CVC 15% / その他20%",
+    valuation:"Post 120億円（2025/9 Series C）",
+    sellability:"低〜中 — IPO準備中との情報あり。ただし建設業界の景気減速で計画に遅延の可能性",
+    integration:"建設業の人事・安全管理で支配的地位。SmartHRの建設業展開を買収で即座に確立",
+    status:"researching", lastUpdated:"2026-03-29",
+    reason:"ゼネコン上位10社中7社が導入。建設業HR展開の最も確実な橋頭堡だが、バリュエーションが高い",
+    signals:[{text:"ゼネコン上位10社の7社が導入 — 市場支配的地位",type:"expansion",isNew:true,isTrigger:true},{text:"IPO準備に遅延の兆候（幹事証券の変更情報）",type:"capital",isNew:true,isTrigger:true}],
+    desc:"建設現場の施工管理・安全管理・労務管理を統合するバーティカルSaaS。現場作業員のスマホアプリが高い定着率。",
+    routes:[{type:"業界イベント",text:"建設DXカンファレンス（4/15）で接触機会あり",status:"pending"}],
+    timeline:[{date:"03/29",text:"幹事証券の変更情報（IPO計画の見直し示唆）"},{date:"03/20",text:"大林組が全現場導入を決定"},{date:"2025/09",text:"Series C 30億円調達、Post 120億円"}]
+  },
+  {
+    id:4, name:"タレントベース", industry:"採用管理SaaS",
+    revenue:"ARR 10億円", stage:"Series B",
+    fitScore:82, fitLevel:"high", priority:82,
+    theses:["talent-mgmt"],
+    ownership:"創業者50% / Eight Roads 25% / 既存VC 25%",
+    valuation:"Post 50億円（2025/6 Series B）",
+    sellability:"中 — 創業者は事業継続志向だが、Eight Roadsのファンド期限（2029）が接近する局面で選択肢が広がる",
+    integration:"採用管理＋AI評価エンジンを獲得。SmartHRの「採用→入社→在籍→退職」の一気通貫化",
+    status:"unreviewed", lastUpdated:"2026-03-25",
+    reason:"採用管理領域でSmartHRの弱点を補完。ファンドの出口時期を見据えた中期的な候補",
+    signals:[{text:"Eight Roadsのファンド期限2029年 — 出口圧力が徐々に高まる局面",type:"capital",isNew:true,isTrigger:true}],
+    desc:"AI搭載の採用管理プラットフォーム。応募者スクリーニング、面接スケジューリング、評価支援を統合。中堅〜大手企業が主要顧客。",
+    routes:[],
+    timeline:[{date:"03/25",text:"Eight Roadsのファンド残存期間が3年を切る"},{date:"2025/06",text:"Series B 12億円調達"},{date:"2025/01",text:"ARR 8億円突破"}]
+  },
+  {
+    id:5, name:"メディカルリンク", industry:"医療向け勤怠・シフト管理",
+    revenue:"ARR 18億円", stage:"Series B",
+    fitScore:70, fitLevel:"mid", priority:72,
+    theses:["vertical-entry"],
+    ownership:"創業者（医師）40% / ANRI 20% / 医療系CVC 20% / その他20%",
+    valuation:"推定 70-80億円",
+    sellability:"低 — 創業者が医師で事業への思い入れが強い。IPO志向が明確",
+    integration:"医療業界の勤怠・シフト管理で独占的ポジション。SmartHRの医療業界展開の足がかり",
+    status:"researching", lastUpdated:"2026-03-20",
+    reason:"医療機関の人事・シフト管理に特化。魅力的だが創業者の売却意向が低く、タイミングは遠い",
+    signals:[{text:"導入病院数500施設突破 — 医療勤怠でNo.1ポジション確立",type:"expansion",isNew:false,isTrigger:false}],
+    desc:"病院・クリニック向けの勤怠・シフト管理SaaS。看護師の夜勤シフト最適化に強み。電子カルテとの連携を推進中。",
+    routes:[{type:"仲介",text:"GCA — ヘルスケアチームが同社をカバー",status:"pending"}],
+    timeline:[{date:"03/20",text:"電子カルテベンダー2社とAPI連携開始"},{date:"02/25",text:"導入病院数500施設突破"},{date:"2025/08",text:"黒字化達成"}]
+  },
+  {
+    id:6, name:"エステートクラウド", industry:"不動産管理向け業務SaaS",
+    revenue:"ARR 6億円", stage:"Series A",
+    fitScore:55, fitLevel:"mid", priority:52,
+    theses:["vertical-entry"],
+    ownership:"創業者55% / 三井不動産CVC 20% / 個人投資家25%",
+    valuation:"推定 20-25億円",
+    sellability:"中 — 三井不動産CVCがストラテジック投資家。三井Gによる100%取得の可能性もあり、競合入札になる恐れ",
+    integration:"不動産管理業界のHR展開は可能だが、SmartHRの事業戦略の中心軸からは遠い",
+    status:"unreviewed", lastUpdated:"2026-03-15",
+    reason:"不動産業界特化で成長中だが、SmartHRとの戦略シナジーが間接的。三井Gとの競合リスクもある",
+    signals:[{text:"三井不動産CVCからの追加出資 — ストラテジック投資家の存在",type:"capital",isNew:false,isTrigger:false}],
+    desc:"不動産管理会社向けの業務統合SaaS。物件管理・入居者管理・経理・人事を一元化。地方中堅管理会社の導入が急増。",
+    routes:[],
+    timeline:[{date:"03/15",text:"三井不動産グループCVCからの追加出資"},{date:"02/20",text:"導入管理会社100社到達"}]
+  },
+  {
+    id:7, name:"ワークフローAI", industry:"BPM / 承認ワークフローSaaS",
+    revenue:"ARR 11億円", stage:"Series B",
+    fitScore:80, fitLevel:"high", priority:85,
+    theses:["backoffice-platform"],
+    ownership:"創業者35% / Globis Capital 25% / SBI Investment 20% / その他20%",
+    valuation:"Post 55億円（2025/11 Series B）",
+    sellability:"中〜高 — Globisファンドの期限が2028年。創業者はプロダクト志向で経営に執着がないタイプ",
+    integration:"承認ワークフロー×SmartHRの申請機能を統合。入退社・異動・経費の承認フローをAIで自動化",
+    status:"met", lastUpdated:"2026-03-29",
+    reason:"承認ワークフローのAI自動化で独走。SmartHRの申請・承認フローを次世代化する最有力候補。ファンド期限も近い",
+    signals:[{text:"大手金融3社のエンタープライズ契約獲得 — ARR成長加速",type:"expansion",isNew:true,isTrigger:true},{text:"Globisファンド期限2028年 — 出口検討が本格化する時期",type:"capital",isNew:true,isTrigger:true}],
+    desc:"AI搭載のワークフロー・BPM SaaS。承認フローの自動ルーティング、異常検知、プロセスマイニングを統合。",
+    routes:[{type:"面談済",text:"3/20に初回面談実施。CTO同席。技術的補完性を確認",status:"done"},{type:"共通知人",text:"D氏（元UiPath Japan）が双方と接点",status:"active"}],
+    timeline:[{date:"03/29",text:"大手金融3社のエンタープライズ契約を獲得"},{date:"03/20",text:"初回面談実施（CTO同席、技術的補完性を確認）"},{date:"2025/11",text:"Series B 15億円調達"}]
+  },
+  {
+    id:8, name:"スマート経理", industry:"経費精算・請求書処理SaaS",
+    revenue:"ARR 5億円", stage:"Series A",
+    fitScore:78, fitLevel:"high", priority:76,
+    theses:["backoffice-platform"],
+    ownership:"創業者70% / エンジェル30%",
+    valuation:"推定 15-20億円",
+    sellability:"高 — 創業者持分が大きく意思決定が速い。VCが入っていないため外部の出口圧力なし。ただし「売らなくてもいい」状態でもある",
+    integration:"経費精算＋請求書処理をSmartHRに統合。年末調整→経費精算→給与の一連のフローが完成",
+    status:"unreviewed", lastUpdated:"2026-03-22",
+    reason:"経費精算のAI自動化率が業界トップ。創業者持分が大きく、交渉相手がシンプル",
+    signals:[{text:"創業者持分70% — VCフリーで意思決定がシンプル",type:"founder",isNew:false,isTrigger:true}],
+    desc:"AI-firstの経費精算・請求書処理SaaS。独自OCRエンジンとLLMによる仕訳自動化。インボイス制度対応で中堅企業の導入が急増。",
+    routes:[],
+    timeline:[{date:"03/22",text:"月間処理請求書数100万件突破"},{date:"02/15",text:"インボイス制度対応で新規導入が前年比2倍"},{date:"2025/06",text:"Series A 3億円調達（エンジェルのみ）"}]
+  },
+  {
+    id:9, name:"ラーニングハブ", industry:"LMS / 研修管理SaaS",
+    revenue:"ARR 4億円", stage:"Series A",
+    fitScore:75, fitLevel:"mid", priority:74,
+    theses:["talent-mgmt"],
+    ownership:"創業者55% / Incubate Fund 25% / KDDI他20%",
+    valuation:"推定 15-18億円",
+    sellability:"中 — まだ規模が小さくIPOは遠い。事業拡大のためにプラットフォーム企業との統合は合理的な選択肢",
+    integration:"SmartHRの人材データ×研修管理を接続。スキル可視化→育成計画のタレマネストーリーが完成",
+    status:"unreviewed", lastUpdated:"2026-03-18",
+    reason:"タレマネ「育成」軸の補完候補。規模はまだ小さいが、SmartHRの人材データと接続する価値は高い",
+    signals:[{text:"トヨタ系3社が一斉導入 — エンタープライズ浸透が始まった",type:"expansion",isNew:true,isTrigger:false}],
+    desc:"AI搭載のLMS。社員の学習行動データから最適な研修プログラムを自動生成。スキル可視化ダッシュボードが好評。",
+    routes:[],
+    timeline:[{date:"03/18",text:"トヨタ系3社が一斉導入決定"},{date:"03/10",text:"エンタープライズ向け価格プラン新設"},{date:"2025/04",text:"Series A 5億円調達"}]
+  },
+  {
+    id:10, name:"ロジフロー", industry:"物流向け配車・運行管理SaaS",
+    revenue:"ARR 14億円", stage:"Series B",
+    fitScore:45, fitLevel:"low", priority:40,
+    theses:["vertical-entry"],
+    ownership:"PE（ポラリスCF）60% / 創業者20% / 経営陣20%",
+    valuation:"推定 50-60億円",
+    sellability:"高 — PEが過半。ファンド期限内の出口が確実。ただしSmartHRとの戦略適合性が低い",
+    integration:"物流業界のHR展開は可能だが、ドライバー勤怠以外のシナジーが乏しい",
+    status:"hold", lastUpdated:"2026-02-28",
+    reason:"PE保有で売却は確実だが、SmartHRとのシナジーが間接的。保留",
+    signals:[{text:"PE（ポラリス）が過半保有 — ファンド期限内の出口が確実",type:"capital",isNew:false,isTrigger:true}],
+    desc:"中堅物流会社向けの配車・運行管理SaaS。ドライバーの勤怠管理機能も持つが、HR Tech色は薄い。",
+    routes:[],
+    timeline:[{date:"02/28",text:"新料金プランへの移行完了"},{date:"2025/03",text:"ポラリスCFがMBO実施"}]
+  },
+  {
+    id:11, name:"フィールドフォース", industry:"建設DX / 現場労務管理",
+    revenue:"ARR 7億円", stage:"Series A",
+    fitScore:68, fitLevel:"mid", priority:65,
+    theses:["vertical-entry"],
+    ownership:"創業者65% / 建設系CVC 20% / その他15%",
+    valuation:"推定 25-30億円",
+    sellability:"中 — 創業者持分が大きい。サイトコネクトが買収される場合、競合環境の変化で売却意向が生じる可能性",
+    integration:"サイトコネクトの代替候補。規模は小さいがバリュエーションが手頃",
+    status:"unreviewed", lastUpdated:"2026-03-24",
+    reason:"建設現場の労務安全管理で急伸。サイトコネクトとの比較検討対象として継続ウォッチ",
+    signals:[{text:"サイトコネクトのIPO遅延 — 競合環境の変化で市場再編の可能性",type:"market",isNew:true,isTrigger:true}],
+    desc:"建設現場向け安全管理・日報・労務管理SaaS。スマホアプリの使いやすさで現場監督の支持が高い。",
+    routes:[],
+    timeline:[{date:"03/24",text:"国交省のBIM連携モデル事業に採択"},{date:"03/05",text:"月間アクティブ現場数5,000突破"}]
+  },
+  {
+    id:12, name:"ビズクラウド", industry:"販売管理・請求管理SaaS",
+    revenue:"ARR 25億円", stage:"Series C",
+    fitScore:62, fitLevel:"mid", priority:58,
+    theses:["backoffice-platform"],
+    ownership:"創業者20% / DCM 25% / 伊藤忠テクノロジーV 20% / その他35%",
+    valuation:"Post 150億円（2025/3 Series C）",
+    sellability:"低 — IPO準備が進行中。バリュエーションも高く、SmartHRの買収レンジを超える可能性",
+    integration:"バックオフィス統合の理想型だが、規模・バリュエーションともにSmartHRの現実的な買収対象としては重い",
+    status:"met", lastUpdated:"2026-03-27",
+    reason:"バックオフィス基盤として魅力的だが、Post 150億円はSmartHRの買収レンジを超える。提携検討に切り替えか",
+    signals:[{text:"IPO準備が進行中 — 買収ウィンドウが閉じつつある",type:"capital",isNew:true,isTrigger:true}],
+    desc:"中堅企業向け販売管理・請求管理SaaS。CRM連携とBIダッシュボードに強み。IPO準備中。",
+    routes:[{type:"面談済",text:"3/15に初回面談実施。経営企画部長と接続",status:"done"}],
+    timeline:[{date:"03/27",text:"新CTO就任（元Salesforce Japan VP of Engineering）"},{date:"03/15",text:"初回面談実施"},{date:"2025/03",text:"Series C 40億円調達、Post 150億円"}]
+  },
+  {
+    id:13, name:"ヘルスケアHR", industry:"健康管理・福利厚生SaaS",
+    revenue:"ARR 3億円", stage:"Seed",
+    fitScore:64, fitLevel:"mid", priority:60,
+    theses:["full-suite"],
+    ownership:"創業者75% / エンジェル25%",
+    valuation:"推定 8-10億円",
+    sellability:"高 — 創業者持分が大きく、規模的にアクハイヤーに近い。SmartHRの福利厚生機能を一気に獲得",
+    integration:"健康診断・ストレスチェック・福利厚生をSmartHR上で提供。労務→健康管理の導線が完成",
+    status:"outreach", lastUpdated:"2026-03-23",
+    reason:"アクハイヤー候補。小規模だが福利厚生のデジタル化で独自のポジション。創業者持分が大きく交渉がシンプル",
+    signals:[{text:"創業者持分75% — アクハイヤーの交渉がシンプル",type:"founder",isNew:false,isTrigger:true}],
+    desc:"従業員の健康管理・福利厚生を統合するプラットフォーム。健康診断データ管理、ストレスチェック、福利厚生ポイント制度を一元化。",
+    routes:[{type:"取引銀行",text:"三菱UFJ — 融資担当がCEOと旧知",status:"pending"}],
+    timeline:[{date:"03/23",text:"健康経営銘柄企業20社が導入"},{date:"02/15",text:"Seed追加調達を検討中との情報"}]
+  }
+];
+
+const STATUS_MAP = {
+  unreviewed:{label:"未確認",color:"var(--slate-400)"},
+  researching:{label:"調査中",color:"var(--ink-blue)"},
+  outreach:{label:"紹介打診中",color:"var(--ink-amber)"},
+  met:{label:"面談済",color:"var(--ink-green)"},
+  hold:{label:"保留",color:"var(--ink-300)"}
+};
+
+const TYPE_ICONS = {
+  hiring:"HR",funding:"FD",expansion:"EX",product:"PR",
+  partnership:"PT",recognition:"AW",leadership:"LD",capital:"CA",
+  founder:"FO",market:"MK"
+};
+
+const TRIGGER_LABELS = {
+  funding:"資金調達",capital:"出口圧力",founder:"創業者意向",market:"市場変動",expansion:"市場拡大"
+};
+
+let currentSort = "priority";
+let currentThesis = "all";
+let currentStatus = "all";
+let currentView = "list";
+let checkedSignals = new Set();
+
+function daysSince(dateStr){
+  const d = new Date(dateStr);
+  const now = new Date("2026-03-30");
+  return Math.floor((now - d) / (1000*60*60*24));
+}
+
+function freshnessClass(days){
+  if(days <= 3) return "recent";
+  if(days >= 14) return "stale";
+  return "";
+}
+
+function freshnessLabel(days){
+  if(days === 0) return "今日";
+  if(days === 1) return "昨日";
+  return days + "日前";
+}
+
+function getFiltered(){
+  let list = [...COMPANIES];
+  if(currentThesis !== "all") list = list.filter(c => c.theses.includes(currentThesis));
+  if(currentStatus !== "all") list = list.filter(c => c.status === currentStatus);
+  if(currentSort === "priority") list.sort((a,b) => b.priority - a.priority);
+  else if(currentSort === "fit") list.sort((a,b) => b.fitScore - a.fitScore);
+  else if(currentSort === "freshness") list.sort((a,b) => daysSince(a.lastUpdated) - daysSince(b.lastUpdated));
+  else if(currentSort === "change") list.sort((a,b) => {
+    const aNew = a.signals.filter(s=>s.isNew).length;
+    const bNew = b.signals.filter(s=>s.isNew).length;
+    return bNew - aNew;
+  });
+  return list;
+}
+
+function renderThesisFilters(){
+  const el = document.getElementById("thesis-filters");
+  const allCount = COMPANIES.length;
+  let html = `<div class="thesis-tag active" data-thesis="all"><span class="tag-dot" style="background:var(--ink-400)"></span>すべて<span class="tag-count">${allCount}</span></div>`;
+  for(const [key,val] of Object.entries(THESES)){
+    const count = COMPANIES.filter(c=>c.theses.includes(key)).length;
+    html += `<div class="thesis-tag" data-thesis="${key}"><span class="tag-dot" style="background:${val.color}"></span>${val.name}<span class="tag-count">${count}</span></div>`;
+  }
+  el.innerHTML = html;
+
+  el.querySelectorAll(".thesis-tag").forEach(tag => {
+    tag.addEventListener("click", () => {
+      el.querySelectorAll(".thesis-tag").forEach(t => t.classList.remove("active"));
+      tag.classList.add("active");
+      currentThesis = tag.dataset.thesis;
+      renderCards();
+      renderThemeDetail();
+    });
+  });
+}
+
+function renderThemeDetail(){
+  const el = document.getElementById("theme-detail");
+  if(currentThesis === "all"){
+    el.classList.remove("open");
+    return;
+  }
+  const t = THESES[currentThesis];
+  if(!t){ el.classList.remove("open"); return; }
+  const companies = COMPANIES.filter(c=>c.theses.includes(currentThesis));
+  const highFit = companies.filter(c=>c.fitLevel==="high").length;
+  const staleCount = companies.filter(c=>daysSince(c.lastUpdated)>=14).length;
+  el.innerHTML = `
+    <div class="theme-detail-title">${t.name}</div>
+    <div class="theme-detail-desc">${t.desc}</div>
+    <div class="theme-detail-metrics">
+      <div class="theme-metric">候補社数: <strong>${companies.length}</strong></div>
+      <div class="theme-metric">高フィット: <strong>${highFit}</strong></div>
+      <div class="theme-metric">陳腐化: <strong style="color:var(--ink-red)">${staleCount}</strong></div>
+      <div class="theme-metric">打診中: <strong>${companies.filter(c=>c.status==="outreach").length}</strong></div>
+    </div>`;
+  el.classList.add("open");
+}
+
+function renderCardHTML(c){
+  const days = daysSince(c.lastUpdated);
+  const hasNew = c.signals.some(s => s.isNew);
+  const isStale = days >= 14;
+  return `
+  <div class="company-card ${hasNew ? 'has-change' : ''} ${isStale ? 'stale-card' : ''}" onclick="openDetail(${c.id})">
+    <div class="thesis-pills">${c.theses.map(t=>`<span class="thesis-pill">${THESES[t]?.name||t}</span>`).join("")}</div>
+    <div class="card-top">
+      <div class="card-top-left">
+        <span class="company-name">${c.name}</span>
+        <span class="fit-badge fit-${c.fitLevel}">${c.fitLevel==="high"?"高フィット":c.fitLevel==="mid"?"中フィット":"低フィット"}</span>
+        ${isStale ? '<span class="stale-badge">情報陳腐化</span>' : ''}
+      </div>
+      <div style="text-align:right">
+        <div class="priority-score">${c.priority}</div>
+        <div class="priority-label">優先度</div>
+      </div>
+    </div>
+    <div class="card-meta">
+      <span>${c.industry}</span>
+      <span>${c.revenue}</span>
+      <span>${c.stage}</span>
+      <span class="freshness ${freshnessClass(days)}">${freshnessLabel(days)}更新</span>
+    </div>
+    <div class="card-reason">${c.reason}</div>
+    <div class="card-bottom">
+      <div class="signal-tags">
+        ${c.signals.map(s=>`<span class="signal-tag ${s.isTrigger?'trigger':''}${s.isNew?' new':''}">${s.isTrigger?'<span class="trigger-label">'+(TRIGGER_LABELS[s.type]||s.type)+'</span>':''}${s.isNew?'NEW: ':''}${s.text}</span>`).join("")}
+      </div>
+      <span class="card-status" style="border-color:${STATUS_MAP[c.status].color};color:${STATUS_MAP[c.status].color}">${STATUS_MAP[c.status].label}</span>
+    </div>
+  </div>`;
+}
+
+function renderCards(){
+  const grid = document.getElementById("card-grid");
+  const list = getFiltered();
+  document.getElementById("result-count").textContent = list.length + " 社";
+  grid.innerHTML = list.map(c => renderCardHTML(c)).join("");
+}
+
+function renderDigest(){
+  const list = document.getElementById("digest-list");
+  const changes = [];
+  COMPANIES.forEach(c => {
+    c.signals.filter(s => s.isNew).forEach(s => {
+      changes.push({company:c.name, companyId:c.id, signal:s, date:c.lastUpdated, industry:c.industry, fitLevel:c.fitLevel});
+    });
+  });
+  changes.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  // Group by date
+  const groups = {};
+  changes.forEach(ch => {
+    const d = ch.date;
+    if(!groups[d]) groups[d] = [];
+    groups[d].push(ch);
+  });
+
+  let html = "";
+  for(const [date, items] of Object.entries(groups)){
+    const days = daysSince(date);
+    const label = days === 0 ? "今日" : days === 1 ? "昨日" : `${date}（${days}日前）`;
+    html += `<div class="digest-day"><div class="digest-day-label">${label}</div>`;
+    items.forEach((ch, idx) => {
+      const sigId = `${ch.companyId}-${idx}`;
+      const isChecked = checkedSignals.has(sigId);
+      html += `
+      <div class="digest-item" onclick="openDetail(${ch.companyId})">
+        <div class="digest-type-icon ${ch.signal.type}">${TYPE_ICONS[ch.signal.type]||"--"}</div>
+        <div class="digest-body">
+          <div class="digest-company">${ch.company}</div>
+          <div class="digest-signal">${ch.signal.text}</div>
+          <div class="digest-meta">
+            <span>${ch.industry}</span>
+            <span class="fit-badge fit-${ch.fitLevel}" style="font-size:10px;padding:1px 6px">${ch.fitLevel==="high"?"高フィット":ch.fitLevel==="mid"?"中フィット":"低フィット"}</span>
+          </div>
+        </div>
+        <div class="digest-check ${isChecked?'checked':''}" onclick="event.stopPropagation();toggleCheck('${sigId}',this)" title="確認済みにする">${isChecked?"Done":""}</div>
+      </div>`;
+    });
+    html += "</div>";
+  }
+  list.innerHTML = html;
+  document.getElementById("digest-badge").textContent = changes.length - checkedSignals.size;
+}
+
+function toggleCheck(sigId, el){
+  if(checkedSignals.has(sigId)){
+    checkedSignals.delete(sigId);
+    el.classList.remove("checked");
+    el.innerHTML = "";
+  } else {
+    checkedSignals.add(sigId);
+    el.classList.add("checked");
+    el.innerHTML = "Done";
+  }
+  const total = COMPANIES.reduce((s,c) => s + c.signals.filter(sig=>sig.isNew).length, 0);
+  document.getElementById("digest-badge").textContent = total - checkedSignals.size;
+}
+
+function markAllRead(){
+  COMPANIES.forEach(c => {
+    c.signals.filter(s=>s.isNew).forEach((_,idx) => {
+      checkedSignals.add(`${c.id}-${idx}`);
+    });
+  });
+  renderDigest();
+}
+
+function switchView(view){
+  currentView = view;
+  document.querySelectorAll(".view-tab").forEach(t => t.classList.toggle("active", t.dataset.view === view));
+  document.getElementById("list-view").classList.toggle("active", view === "list");
+  document.getElementById("digest-view").classList.toggle("active", view === "digest");
+  if(view === "digest") renderDigest();
+}
+
+function renderNotifications(){
+  const list = document.getElementById("notif-list");
+  const changes = [];
+  COMPANIES.forEach(c => {
+    c.signals.filter(s => s.isNew).forEach(s => {
+      changes.push({company:c.name, signal:s, date:c.lastUpdated, id:c.id});
+    });
+  });
+  changes.sort((a,b) => new Date(b.date) - new Date(a.date));
+  document.getElementById("notif-count").textContent = changes.length;
+  list.innerHTML = changes.slice(0,8).map(ch => {
+    let typeClass = ch.signal.type;
+    return `
+    <div class="notif-item" onclick="openDetail(${ch.id})">
+      <div class="notif-type ${typeClass}">${ch.signal.type}</div>
+      <div class="notif-company">${ch.company}</div>
+      <div class="notif-detail">${ch.signal.text}</div>
+      <div class="notif-date">${ch.date}</div>
+    </div>`;
+  }).join("");
+}
+
+function updateCounts(){
+  const counts = {all:COMPANIES.length};
+  Object.keys(STATUS_MAP).forEach(s => counts[s] = COMPANIES.filter(c=>c.status===s).length);
+  document.getElementById("count-all").textContent = counts.all;
+  Object.keys(STATUS_MAP).forEach(s => {
+    const el = document.getElementById("count-"+s);
+    if(el) el.textContent = counts[s];
+  });
+}
+
+function renderSummary(){
+  const highFit = COMPANIES.filter(c=>c.fitLevel==="high").length;
+  const newSignals = COMPANIES.reduce((s,c) => s + c.signals.filter(sig=>sig.isNew).length, 0);
+  const stale = COMPANIES.filter(c=>daysSince(c.lastUpdated)>=14).length;
+  document.getElementById("sidebar-summary").innerHTML = `
+    <div style="margin-bottom:8px"><strong style="font-family:var(--font-mono);font-size:18px;color:var(--ink-900)">${COMPANIES.length}</strong> 社をトラック中</div>
+    <div style="margin-bottom:4px">高フィット: <strong style="font-family:var(--font-mono)">${highFit}</strong></div>
+    <div style="margin-bottom:4px">今週の変化: <strong style="font-family:var(--font-mono);color:var(--ink-blue)">${newSignals}</strong></div>
+    <div>情報陳腐化: <strong style="font-family:var(--font-mono);color:var(--ink-red)">${stale}</strong></div>`;
+}
+
+function openDetail(id){
+  const c = COMPANIES.find(x=>x.id===id);
+  if(!c) return;
+  const days = daysSince(c.lastUpdated);
+  const sinceSignals = c.signals.filter(s=>s.isNew).length;
+  const panel = document.getElementById("detail-panel");
+  panel.innerHTML = `
+    <button class="detail-close" onclick="closeDetail()">&times;</button>
+    <div class="detail-header">
+      <div class="detail-name">${c.name}</div>
+      <div class="detail-desc">${c.desc}</div>
+      ${sinceSignals > 0 ? `<div class="detail-since">前回確認以降の変化: ${sinceSignals}件</div>` : ''}
+    </div>
+    <div class="detail-grid">
+      <div class="detail-stat"><div class="detail-stat-label">戦略フィット</div><div class="detail-stat-value">${c.fitScore} / 100</div></div>
+      <div class="detail-stat"><div class="detail-stat-label">接触優先度</div><div class="detail-stat-value">${c.priority} / 100</div></div>
+      <div class="detail-stat"><div class="detail-stat-label">売上規模</div><div class="detail-stat-value">${c.revenue}</div></div>
+      <div class="detail-stat"><div class="detail-stat-label">ステージ</div><div class="detail-stat-value">${c.stage}</div></div>
+      <div class="detail-stat"><div class="detail-stat-label">推定バリュエーション</div><div class="detail-stat-value" style="font-size:13px">${c.valuation}</div></div>
+      <div class="detail-stat"><div class="detail-stat-label">情報鮮度</div><div class="detail-stat-value ${freshnessClass(days)}">${freshnessLabel(days)}</div></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">なぜ今この会社を追うべきか</div>
+      <div class="detail-reason-box">${c.reason}</div>
+    </div>
+    <div class="detail-section" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div class="detail-section-title">株主構成</div>
+        <div style="font-size:13px;color:var(--ink-700);line-height:1.6;padding:8px 12px;background:var(--slate-50);border-radius:6px">${c.ownership}</div>
+      </div>
+      <div>
+        <div class="detail-section-title">売却可能性</div>
+        <div style="font-size:13px;color:var(--ink-700);line-height:1.6;padding:8px 12px;background:var(--slate-50);border-radius:6px">${c.sellability}</div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">統合シナリオ</div>
+      <div style="font-size:13px;color:var(--ink-700);line-height:1.6;padding:8px 12px;background:var(--wash-blue);border-radius:6px">${c.integration}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">変化シグナル</div>
+      <div class="detail-signals">${c.signals.map(s=>{
+        const bg = s.isNew ? '' : 'background:var(--slate-100);color:var(--ink-500)';
+        const label = s.isTrigger ? '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-right:4px">'+(TRIGGER_LABELS[s.type]||s.type)+'</span>' : '';
+        return `<span class="detail-signal" style="${bg}">${label}${s.isNew?'NEW: ':''}${s.text}</span>`;
+      }).join("")||'<span style="color:var(--ink-400);font-size:13px">直近の変化なし</span>'}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">接触ルート</div>
+      ${c.routes && c.routes.length > 0 ? `
+      <div class="route-list">
+        ${c.routes.map(r=>`
+          <div class="route-item">
+            <span class="route-type">${r.type}</span>
+            <span class="route-text">${r.text}</span>
+            <span class="route-status ${r.status}">${r.status==="pending"?"未着手":r.status==="active"?"進行中":"完了"}</span>
+          </div>`).join("")}
+      </div>` : '<div style="font-size:13px;color:var(--ink-400);padding:8px 12px;background:var(--slate-50);border-radius:6px">接触ルート未設定 — 取引銀行・共通知人・仲介別担当を検討してください</div>'}
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">タイムライン</div>
+      <div class="detail-timeline">${c.timeline.map(t=>`<div class="timeline-item"><span class="timeline-date">${t.date}</span><span class="timeline-text">${t.text}</span></div>`).join("")}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">メモ</div>
+      <textarea class="detail-memo" placeholder="社内メモを記録..."></textarea>
+    </div>
+    <div class="detail-actions">
+      <select class="status-select" onchange="changeStatus(${c.id}, this.value)">
+        ${Object.entries(STATUS_MAP).map(([k,v])=>`<option value="${k}" ${c.status===k?'selected':''}>${v.label}</option>`).join("")}
+      </select>
+      <button class="btn" onclick="alert('ルート追加フォームを表示します（実装予定）')">+ ルート追加</button>
+      <button class="btn" onclick="alert('この企業のレポートをPDF出力します（実装予定）')">レポート出力</button>
+    </div>
+  `;
+  document.getElementById("overlay").classList.add("open");
+}
+
+function closeDetail(){
+  document.getElementById("overlay").classList.remove("open");
+}
+
+function changeStatus(id, newStatus){
+  const c = COMPANIES.find(x=>x.id===id);
+  if(c) c.status = newStatus;
+  renderCards();
+  updateCounts();
+}
+
+// Non-name search
+document.getElementById("nonname-search").addEventListener("input", function(e){
+  const q = e.target.value.toLowerCase();
+  if(q.length < 2){ renderCards(); return; }
+  const grid = document.getElementById("card-grid");
+  const matches = COMPANIES.filter(c =>
+    c.name.toLowerCase().includes(q) ||
+    c.industry.toLowerCase().includes(q) ||
+    c.desc.toLowerCase().includes(q) ||
+    c.reason.toLowerCase().includes(q)
+  );
+  document.getElementById("result-count").textContent = matches.length + " 社 (検索中)";
+  // Re-render with filtered list — delegate to shared card renderer
+  grid.innerHTML = matches.map(c => renderCardHTML(c)).join("");
+});
+
+// Sort buttons
+document.querySelectorAll(".sort-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentSort = btn.dataset.sort;
+    renderCards();
+  });
+});
+
+// Status filters
+document.querySelectorAll(".status-item").forEach(item => {
+  item.addEventListener("click", () => {
+    document.querySelectorAll(".status-item").forEach(i => i.classList.remove("active"));
+    item.classList.add("active");
+    currentStatus = item.dataset.status;
+    renderCards();
+  });
+});
+
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeDetail(); });
+
+// Init
+renderThesisFilters();
+renderCards();
+renderNotifications();
+updateCounts();
+renderSummary();
+</script>
+</body>
+</html>
