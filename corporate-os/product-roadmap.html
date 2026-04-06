@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corporate OS — Product Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5f0e8;
+    --paper-dark: #ece5d8;
+    --ink: #1a1612;
+    --ink-light: #4a4438;
+    --ink-faint: #8a8274;
+    --ink-ghost: #b8b0a2;
+    --red: #8b2500;
+    --blue: #1a3a5c;
+    --blue-light: #2d5f8a;
+    --gold: #8b7335;
+    --green-dark: #2d4a2e;
+    --rule: #c4b99a;
+    --rule-light: #d9d0bd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 920px; margin: 0 auto; padding: 80px 60px 120px; }
+  .header { text-align: center; padding-bottom: 48px; border-bottom: 1px solid var(--rule); margin-bottom: 56px; }
+  .header-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 24px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 8px; }
+  .header-sub { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; font-style: italic; color: var(--ink-light); margin-top: 12px; }
+  .header-date { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-ghost); margin-top: 20px; letter-spacing: 2px; }
+  .thesis { background: var(--paper-dark); border-left: 3px solid var(--ink); padding: 28px 32px; margin-bottom: 56px; position: relative; }
+  .thesis::before { content: 'THESIS'; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--ink-faint); position: absolute; top: -18px; left: 32px; background: var(--paper); padding: 0 8px; }
+  .thesis p { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 400; line-height: 1.65; }
+  .thesis p + p { margin-top: 12px; }
+  .thesis strong { font-weight: 600; }
+  .centerpin { text-align: center; padding: 40px 20px; margin-bottom: 56px; border-top: 1px solid var(--rule-light); border-bottom: 1px solid var(--rule-light); }
+  .centerpin-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 4px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; }
+  .centerpin h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; margin-bottom: 12px; }
+  .centerpin p { font-size: 14px; color: var(--ink-light); max-width: 560px; margin: 0 auto; line-height: 1.7; }
+  .centerpin-analogy { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-faint); margin-top: 20px; }
+  .centerpin-analogy span { color: var(--ink-light); }
+  .timeline { position: relative; padding-left: 140px; margin-bottom: 64px; }
+  .timeline::before { content: ''; position: absolute; left: 120px; top: 0; bottom: 0; width: 1px; background: var(--rule); }
+  .phase { position: relative; margin-bottom: 56px; opacity: 0; animation: fadeUp 0.6s ease forwards; }
+  .phase:nth-child(1) { animation-delay: 0.2s; }
+  .phase:nth-child(2) { animation-delay: 0.4s; }
+  .phase:nth-child(3) { animation-delay: 0.6s; }
+  .phase:nth-child(4) { animation-delay: 0.8s; }
+  .phase:nth-child(5) { animation-delay: 1.0s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .phase-marker { position: absolute; left: -140px; top: 0; width: 120px; text-align: right; }
+  .phase-dot { position: absolute; left: -24px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink-light); }
+  .phase-dot.active { background: var(--red); border-color: var(--red); }
+  .phase-time { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-faint); }
+  .phase-number { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--ink-ghost); line-height: 1; margin-top: 2px; }
+  .phase-content { padding-left: 20px; }
+  .phase-tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .phase-tag.market-entry { color: var(--red); }
+  .phase-tag.build { color: var(--blue); }
+  .phase-tag.integrate { color: var(--gold); }
+  .phase-tag.infra { color: var(--ink-faint); }
+  .phase-tag.evolve { color: var(--green-dark); }
+  .phase h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; margin-bottom: 4px; line-height: 1.3; }
+  .phase-desc { font-size: 13.5px; color: var(--ink-light); margin-bottom: 16px; line-height: 1.65; }
+  .phase-detail { background: var(--paper-dark); padding: 20px 24px; margin-bottom: 12px; }
+  .phase-detail-section { margin-bottom: 14px; }
+  .phase-detail-section:last-child { margin-bottom: 0; }
+  .phase-detail-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .phase-detail p { font-size: 13px; color: var(--ink-light); line-height: 1.6; }
+  .dim-ref { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--blue-light); background: rgba(29,58,92,0.06); padding: 2px 6px; border-radius: 2px; margin-right: 4px; display: inline-block; margin-bottom: 4px; }
+  .phase-gain { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule-light); }
+  .phase-gain-arrow { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--gold); line-height: 1.3; flex-shrink: 0; }
+  .phase-gain p { font-size: 12px; color: var(--ink-faint); line-height: 1.6; font-style: italic; }
+  .phase-time-mobile { display: none; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-faint); margin-bottom: 6px; }
+  .strategy-section { margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--rule); }
+  .strategy-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 32px; text-align: center; }
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .strategy-col h4 { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--rule-light); }
+  .strategy-col.abandon h4 { color: var(--ink-faint); }
+  .strategy-col.keep h4 { color: var(--red); }
+  .strategy-item { margin-bottom: 16px; }
+  .strategy-item-title { font-size: 13.5px; font-weight: 500; margin-bottom: 4px; }
+  .strategy-item p { font-size: 12.5px; color: var(--ink-faint); line-height: 1.55; }
+  .strategy-item.faded .strategy-item-title { color: var(--ink-ghost); text-decoration: line-through; text-decoration-color: var(--rule); }
+  .arch-section { margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--rule); }
+  .arch-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 32px; text-align: center; }
+  .arch-stack { display: flex; flex-direction: column; gap: 2px; max-width: 640px; margin: 0 auto; }
+  .arch-layer { display: flex; align-items: stretch; min-height: 64px; }
+  .arch-phase-label { width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: flex-end; padding-right: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-ghost); letter-spacing: 1px; }
+  .arch-box { flex: 1; padding: 16px 24px; border: 1px solid var(--rule); background: var(--paper); transition: background 0.2s; min-width: 0; }
+  .arch-box:hover { background: var(--paper-dark); }
+  .arch-box-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+  .arch-box-sub { font-size: 11.5px; color: var(--ink-faint); line-height: 1.5; word-break: break-word; overflow-wrap: break-word; }
+  .arch-box.centerpin-box { border-color: var(--red); border-width: 1.5px; background: rgba(139,37,0,0.02); }
+  .arch-center-line { display: flex; align-items: center; justify-content: center; padding: 8px 0 8px 80px; }
+  .arch-center-line span { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--ink-ghost); }
+  .arch-box-dashed { border-style: dashed; background: transparent; }
+  .arch-box-dashed .arch-box-title { color: var(--ink-ghost); }
+  .colophon { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--rule); text-align: center; }
+  .colophon p { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-ghost); letter-spacing: 1px; line-height: 2; }
+
+  @media (max-width: 768px) {
+    .page { padding: 48px 28px 80px; }
+    .header { padding-bottom: 36px; margin-bottom: 40px; }
+    .header h1 { font-size: 32px; }
+    .header-sub { font-size: 16px; }
+    .thesis { padding: 22px 24px; margin-bottom: 40px; }
+    .thesis::before { left: 24px; }
+    .thesis p { font-size: 17px; }
+    .centerpin { padding: 32px 16px; margin-bottom: 40px; }
+    .centerpin h2 { font-size: 26px; }
+    .centerpin p { font-size: 13px; }
+    .timeline { padding-left: 28px; margin-bottom: 48px; }
+    .timeline::before { left: 6px; }
+    .phase-marker { display: none; }
+    .phase-dot { left: -26px; top: 4px; width: 8px; height: 8px; }
+    .phase-time-mobile { display: block; }
+    .phase-content { padding-left: 8px; }
+    .phase h3 { font-size: 20px; }
+    .phase-desc { font-size: 13px; }
+    .phase-detail { padding: 16px 18px; }
+    .phase-detail p { font-size: 12.5px; }
+    .phase { margin-bottom: 44px; }
+    .strategy-grid { grid-template-columns: 1fr; gap: 28px; }
+    .strategy-section { margin-top: 48px; padding-top: 36px; }
+    .arch-section { margin-top: 48px; padding-top: 36px; }
+    .arch-phase-label { width: 48px; padding-right: 10px; font-size: 9px; }
+    .arch-center-line { padding-left: 48px; }
+    .arch-center-line span { font-size: 12px; }
+    .arch-box { padding: 14px 16px; }
+    .arch-box-title { font-size: 14px; }
+    .arch-box-sub { font-size: 10.5px; }
+  }
+
+  @media (max-width: 480px) {
+    .page { padding: 28px 16px 52px; }
+    .header-label { font-size: 8px; letter-spacing: 3px; margin-bottom: 16px; }
+    .header h1 { font-size: 24px; }
+    .header-sub { font-size: 14px; margin-top: 8px; }
+    .header-date { font-size: 9px; }
+    .thesis { padding: 16px 16px; border-left-width: 2px; }
+    .thesis::before { left: 16px; font-size: 8px; }
+    .thesis p { font-size: 15px; line-height: 1.6; }
+    .centerpin h2 { font-size: 21px; }
+    .centerpin p { font-size: 12px; }
+    .centerpin-analogy { font-size: 9px; line-height: 1.8; }
+    .centerpin-label { font-size: 8px; letter-spacing: 3px; }
+    .timeline { padding-left: 22px; }
+    .timeline::before { left: 3px; }
+    .phase-dot { left: -22px; width: 7px; height: 7px; }
+    .phase-time-mobile { font-size: 9px; }
+    .phase-tag { font-size: 8px; letter-spacing: 2px; }
+    .phase h3 { font-size: 17px; }
+    .phase-desc { font-size: 12px; }
+    .phase-detail { padding: 12px 12px; }
+    .phase-detail-label { font-size: 8px; }
+    .phase-detail p { font-size: 11.5px; }
+    .dim-ref { font-size: 9px; padding: 1px 4px; }
+    .phase-gain { gap: 8px; }
+    .phase-gain-arrow { font-size: 16px; }
+    .phase-gain p { font-size: 11px; }
+    .strategy-section h2 { font-size: 21px; }
+    .strategy-item-title { font-size: 12.5px; }
+    .strategy-item p { font-size: 11.5px; }
+    .arch-section h2 { font-size: 21px; }
+    .arch-phase-label { width: 32px; padding-right: 6px; font-size: 8px; }
+    .arch-center-line { padding-left: 32px; }
+    .arch-center-line span { font-size: 10px; }
+    .arch-box { padding: 10px 10px; }
+    .arch-box-title { font-size: 12.5px; }
+    .arch-box-sub { font-size: 9.5px; }
+    .colophon p { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="header-label">Corporate OS — Product Strategy</div>
+    <h1>System of Governance</h1>
+    <div class="header-sub">AI時代の企業基幹システム　プロダクトロードマップ</div>
+    <div class="header-date">April 2026 · The Domain AI</div>
+  </header>
+
+  <div class="thesis">
+    <p>ERPが「取引の文法」を標準化してコンピュータ時代の基幹になったように、<strong>AI時代には「判断の文法」を標準化する基幹システム</strong>が必要になる。</p>
+    <p>パチョーリが532年前に複式簿記を体系化したように、我々は<strong>13次元×5要素</strong>で組織の判断を体系化する。</p>
+  </div>
+
+  <div class="centerpin">
+    <div class="centerpin-label">センターピン — 全Phaseを貫く不変の核</div>
+    <h2>Decision Ledger</h2>
+    <p>すべての重要判断に authority, accountability, traceability を付与し、判断の整合性が検証可能であること。データの蓄積源であり、ネットワーク効果の基盤であり、13次元の実装起点。</p>
+    <div class="centerpin-analogy">
+      <span>Pacioli : Journal Entry</span> ＝ <span>Corporate OS : Decision Ledger</span>
+    </div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="phase">
+      <div class="phase-marker"><div class="phase-time">即日 — 3ヶ月</div><div class="phase-number">0</div></div>
+      <div class="phase-dot active"></div>
+      <div class="phase-content">
+        <div class="phase-time-mobile">Phase 0 · 即日 — 3ヶ月</div>
+        <div class="phase-tag market-entry">Market Entry</div>
+        <h3>制度設計コンサルティング</h3>
+        <p class="phase-desc">13次元を使った組織診断・設計をサービスとして提供する。ソフトウェアはまだ作らない。</p>
+        <div class="phase-detail">
+          <div class="phase-detail-section"><div class="phase-detail-label">提供価値</div><p>AI時代の組織設計を13次元で診断し、destination（将来像）とtransition（移行設計）を提供。顧客企業の生の痛みを理解し、プロダクト設計の具体的なユースケースを獲得する。</p></div>
+          <div class="phase-detail-section"><div class="phase-detail-label">購買者</div><p>CEO / COO直下のtransformation office、経営企画部長</p></div>
+          <div class="phase-gain"><div class="phase-gain-arrow">→</div><p>最初のキャッシュフロー。13次元のどこに需要が集中するかの実データ。プロダクト仕様の素材。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-marker"><div class="phase-time">3 — 9ヶ月</div><div class="phase-number">1</div></div>
+      <div class="phase-dot"></div>
+      <div class="phase-content">
+        <div class="phase-time-mobile">Phase 1 · 3 — 9ヶ月</div>
+        <div class="phase-tag build">Build MVP</div>
+        <h3>権限配分エンジン</h3>
+        <p class="phase-desc">AIエージェントと人間の間の権限を動的に管理するシステム。最初のソフトウェアプロダクト。</p>
+        <div class="phase-detail">
+          <div class="phase-detail-section"><div class="phase-detail-label">最小構成</div><p>AgentCard（AIエージェント登録）、Composite Riskの8次元スコアリング、Autonomy Mode（A0–A5）自動判定、人間介入ポイントの設計UI、基本ダッシュボード</p></div>
+          <div class="phase-detail-section"><div class="phase-detail-label">対応次元</div><p><span class="dim-ref">D4</span><span class="dim-ref">D12</span></p></div>
+          <div class="phase-detail-section"><div class="phase-detail-label">購買者 · 予算枠</div><p>CIO / CTO / CDO → IT・セキュリティ予算</p></div>
+          <div class="phase-gain"><div class="phase-gain-arrow">→</div><p>Decision Ledgerへのデータ蓄積が始まる。Trust Scoreの初期値が形成される。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-marker"><div class="phase-time">9 — 18ヶ月</div><div class="phase-number">2</div></div>
+      <div class="phase-dot"></div>
+      <div class="phase-content">
+        <div class="phase-time-mobile">Phase 2 · 9 — 18ヶ月</div>
+        <div class="phase-tag integrate">Integration</div>
+        <h3>判断の記録・統治</h3>
+        <p class="phase-desc">権限配分エンジンに判断の記録・監査・改善機能を統合。事実上のSystem of Governanceが成立。</p>
+        <div class="phase-detail">
+          <div class="phase-detail-section"><div class="phase-detail-label">追加構成</div><p>Decision Ledger（全重要判断の記録）、Authority basisとaccountable ownerの紐付け、事前検証ゲート（判断実行前のpolicy / risk照合）、監査トレイル自動生成、判断パターン分析・レポート</p></div>
+          <div class="phase-detail-section"><div class="phase-detail-label">対応次元</div><p><span class="dim-ref">D4</span><span class="dim-ref">D8</span><span class="dim-ref">D10</span><span class="dim-ref">D11</span><span class="dim-ref">D12</span><span class="dim-ref">D13</span></p></div>
+          <div class="phase-detail-section"><div class="phase-detail-label">購買者 · 予算枠</div><p>COO / CFO → GRC・コンプライアンス予算。監査法人連携が視野に入る。</p></div>
+          <div class="phase-gain"><div class="phase-gain-arrow">→</div><p>判断データの蓄積が加速。複数企業のベンチマークが可能になり始める。ネットワーク効果の萌芽。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-marker"><div class="phase-time">18 — 30ヶ月</div><div class="phase-number">3</div></div>
+      <div class="phase-dot"></div>
+      <div class="phase-content">
+        <div class="phase-time-mobile">Phase 3 · 18 — 30ヶ月</div>
+        <div class="phase-tag infra">Internal Infra</div>
+        <h3>Organizational World Model</h3>
+        <p class="phase-desc">蓄積されたデータを基盤に、組織の世界モデルを内部コンポーネントとして構築。外販はしない。</p>
+        <div class="phase-detail">
+          <div class="phase-detail-section"><div class="phase-detail-label">構成</div><p>既存SaaS群からの状態統合。6面構造の段階的実装（まずDecision PlaneとGovernance Planeから）。組織状態のリアルタイム可視化。</p></div>
+          <div class="phase-detail-section"><div class="phase-detail-label">対応次元</div><p><span class="dim-ref">D9</span><span class="dim-ref">D10</span></p></div>
+          <div class="phase-gain"><div class="phase-gain-arrow">→</div><p>Phase 4（組織運営エンジン）の基盤が整う。判断の統治が「状況の理解」に裏打ちされるようになる。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-marker"><div class="phase-time">30ヶ月 —</div><div class="phase-number">4</div></div>
+      <div class="phase-dot"></div>
+      <div class="phase-content">
+        <div class="phase-time-mobile">Phase 4 · 30ヶ月 —</div>
+        <div class="phase-tag evolve">Evolution</div>
+        <h3>組織運営エンジン</h3>
+        <p class="phase-desc">World Modelの上に業務ループ（Sense → Evolve）を載せ、「組織のOS」へ進化する。</p>
+        <div class="phase-detail">
+          <div class="phase-detail-section"><div class="phase-detail-label">構成</div><p>Constitution Load → Sense → Understand → Deliberate → Gate → Act → Observe → Reflect → Evolve の8ステップループ。Autonomy Modeに基づく動的な人間介入。Human-AI Collaboration機能（D3, D5, D7）の統合。</p></div>
+          <div class="phase-detail-section"><div class="phase-detail-label">対応次元</div><p><span class="dim-ref">D1</span><span class="dim-ref">D2</span><span class="dim-ref">D3</span><span class="dim-ref">D4</span><span class="dim-ref">D5</span><span class="dim-ref">D6</span><span class="dim-ref">D7</span><span class="dim-ref">D8</span><span class="dim-ref">D9</span><span class="dim-ref">D10</span><span class="dim-ref">D11</span><span class="dim-ref">D12</span><span class="dim-ref">D13</span></p></div>
+          <div class="phase-gain"><div class="phase-gain-arrow">→</div><p>13次元の完全なソフトウェア実装。組織OS設計ツールは運営エンジンの設定UIとして自然発生する。</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="strategy-section">
+    <h2>戦略的取捨</h2>
+    <div class="strategy-grid">
+      <div class="strategy-col abandon">
+        <h4>諦めるもの</h4>
+        <div class="strategy-item faded"><div class="strategy-item-title">組織OS設計ツールの独立化</div><p>Phase 4で運営エンジンの設定UIとして自然に生まれる。コンサル（Phase 0）で同じことを人力でやれば十分。</p></div>
+        <div class="strategy-item faded"><div class="strategy-item-title">世界モデル基盤の外販</div><p>内部インフラとして構築する。データ基盤市場で戦う必要はない。</p></div>
+        <div class="strategy-item faded"><div class="strategy-item-title">最初から全13次元のカバー</div><p>Phase 1はD4+D12の一部だけでよい。完全性はPhaseが進むにつれ段階的に達成する。</p></div>
+      </div>
+      <div class="strategy-col keep">
+        <h4>絶対に諦めないもの</h4>
+        <div class="strategy-item"><div class="strategy-item-title">Decision Ledger</div><p>全Phaseを貫くセンターピン。データの蓄積源、ネットワーク効果の基盤、13次元の実装起点。これなしにはPhase 2以降が空回りする。</p></div>
+        <div class="strategy-item"><div class="strategy-item-title">13次元×5要素の知的体系</div><p>プロダクトの設計言語であり、競合が模倣できない構造的優位。各Phaseで段階的に実装に落とす。</p></div>
+        <div class="strategy-item"><div class="strategy-item-title">コンサルとソフトウェアのフライホイール</div><p>コンサルの経験がソフトウェアを改善し、ソフトウェアの利用データがコンサルの質を上げる循環。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-section">
+    <h2>プロダクト積層構造</h2>
+    <div class="arch-stack">
+      <div class="arch-layer"><div class="arch-phase-label">Ph.4</div><div class="arch-box"><div class="arch-box-title">組織運営エンジン</div><div class="arch-box-sub">Constitution Load → Sense → Understand → Deliberate → Gate → Act → Observe → Reflect → Evolve</div></div></div>
+      <div class="arch-center-line"><span>↑ 業務ループが世界モデルの上で動く</span></div>
+      <div class="arch-layer"><div class="arch-phase-label">Ph.3</div><div class="arch-box"><div class="arch-box-title">Organizational World Model</div><div class="arch-box-sub">Reality · Semantic · Memory · Decision · Action · Governance — 6面構造</div></div></div>
+      <div class="arch-center-line"><span>↑ 蓄積データが世界モデルを形成</span></div>
+      <div class="arch-layer"><div class="arch-phase-label">Ph.2</div><div class="arch-box"><div class="arch-box-title">判断の記録・統治</div><div class="arch-box-sub">Decision Ledger · 事前検証ゲート · 監査トレイル · パターン分析</div></div></div>
+      <div class="arch-center-line"><span>↑ 権限判定の結果が判断として記録</span></div>
+      <div class="arch-layer"><div class="arch-phase-label">Ph.1</div><div class="arch-box centerpin-box"><div class="arch-box-title">権限配分エンジン</div><div class="arch-box-sub">AgentCard · Trust Score · Composite Risk · Autonomy Mode (A0–A5)</div></div></div>
+      <div class="arch-center-line"><span>↑ 既存SaaSからデータを吸い上げ</span></div>
+      <div class="arch-layer"><div class="arch-phase-label"></div><div class="arch-box arch-box-dashed"><div class="arch-box-title">既存SaaS群</div><div class="arch-box-sub">Slack · Notion · Jira · Salesforce · ERP · GitHub · …</div></div></div>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <p>Corporate OS · 13 Dimensions × 5 Elements</p>
+    <p>The Domain AI — System of Governance Product Thesis</p>
+  </div>
+
+</div>
+</body>
+</html>
