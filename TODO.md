@@ -19,4 +19,4 @@
 - Supabase マイグレーション実行（`20260330000006`〜`20260330000007`）
 - `.env.local` 設定
 - `team_members` に name/email 列がないため assignee が UUID 表示
-- `src/middleware.ts` → `proxy.ts` リネーム（Next.js 16 非推奨警告）
+- ~~`src/middleware.ts` → `proxy.ts` リネーム（Next.js 16 非推奨警告）~~ ✅ 完了（2026-04-07）
