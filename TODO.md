@@ -11,6 +11,8 @@
 | @vitest/coverage-v8 | 3.2.4 | 4.1.2 | major |
 | tailwind-merge | 2.6.1 | 3.5.0 | major |
 | typescript | 5.9.3 | 6.0.2 | major |
+| vitest | 3.2.4 | 4.1.2 | major |
+| zod | 3.25.76 | 4.3.6 | major |
 
 破壊的変更を含む可能性があるため、手動でアップグレードガイドを確認してから適用する。
 
