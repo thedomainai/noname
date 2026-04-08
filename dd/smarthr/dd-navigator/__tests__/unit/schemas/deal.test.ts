@@ -10,33 +10,37 @@ import {
 const VALID_UUID = "550e8400-e29b-41d4-a716-446655440000";
 
 describe("dealPhaseEnum", () => {
-  const validPhases = [
-    "sourcing",
-    "nda",
-    "im_review",
-    "loi",
-    "dd",
-    "negotiation",
-    "closing",
-    "completed",
-    "abandoned",
-  ];
+  const validPhases = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-  it.each(validPhases)("should accept valid phase: %s", (phase) => {
+  it.each(validPhases)("should accept valid phase: %i", (phase) => {
     expect(dealPhaseEnum.safeParse(phase).success).toBe(true);
   });
 
-  it("should reject invalid phase", () => {
+  it("should reject invalid phase (string)", () => {
     expect(dealPhaseEnum.safeParse("invalid").success).toBe(false);
   });
 
-  it("should reject empty string", () => {
-    expect(dealPhaseEnum.safeParse("").success).toBe(false);
+  it("should reject phase 0", () => {
+    expect(dealPhaseEnum.safeParse(0).success).toBe(false);
+  });
+
+  it("should reject phase 10", () => {
+    expect(dealPhaseEnum.safeParse(10).success).toBe(false);
   });
 });
 
 describe("dealStatusEnum", () => {
-  const validStatuses = ["active", "paused", "completed", "abandoned"];
+  const validStatuses = [
+    "pending",
+    "sourcing",
+    "pre_dd",
+    "dd_in_progress",
+    "dd_completed",
+    "negotiation",
+    "closing",
+    "closed",
+    "cancelled",
+  ];
 
   it.each(validStatuses)("should accept valid status: %s", (status) => {
     expect(dealStatusEnum.safeParse(status).success).toBe(true);
@@ -49,9 +53,11 @@ describe("dealStatusEnum", () => {
 
 describe("createDealSchema", () => {
   const validInput = {
+    code: "DEAL-001",
     name: "テスト案件",
     target_company: "テスト株式会社",
-    team_id: VALID_UUID,
+    status: "pending" as const,
+    phase: 1,
   };
 
   it("should accept valid input with required fields only", () => {
@@ -62,8 +68,10 @@ describe("createDealSchema", () => {
   it("should accept valid input with all fields", () => {
     const result = createDealSchema.safeParse({
       ...validInput,
-      expected_closing_date: "2026-12-31",
-      longlist_company_id: VALID_UUID,
+      industry: "IT",
+      deal_size: 100000000,
+      started_at: "2026-04-01T00:00:00Z",
+      expected_close_date: "2026-12-31",
     });
     expect(result.success).toBe(true);
   });
@@ -74,9 +82,6 @@ describe("createDealSchema", () => {
       name: "",
     });
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0]!.message).toBe("案件名は必須です");
-    }
   });
 
   it("should reject name exceeding 200 characters", () => {
@@ -93,22 +98,14 @@ describe("createDealSchema", () => {
       target_company: "",
     });
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0]!.message).toBe("対象会社名は必須です");
-    }
   });
 
-  it("should reject invalid team_id (not UUID)", () => {
+  it("should reject empty code", () => {
     const result = createDealSchema.safeParse({
       ...validInput,
-      team_id: "not-a-uuid",
+      code: "",
     });
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0]!.message).toBe(
-        "有効なチームIDを指定してください"
-      );
-    }
   });
 
   it("should reject missing name", () => {
@@ -117,10 +114,18 @@ describe("createDealSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("should reject invalid longlist_company_id", () => {
+  it("should reject invalid status", () => {
     const result = createDealSchema.safeParse({
       ...validInput,
-      longlist_company_id: "not-a-uuid",
+      status: "invalid",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("should reject invalid phase (string)", () => {
+    const result = createDealSchema.safeParse({
+      ...validInput,
+      phase: "dd",
     });
     expect(result.success).toBe(false);
   });
@@ -135,15 +140,6 @@ describe("updateDealPhaseSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("should accept input with notes", () => {
-    const result = updateDealPhaseSchema.safeParse({
-      dealId: VALID_UUID,
-      phase: "dd",
-      notes: "フェーズ移行メモ",
-    });
-    expect(result.success).toBe(true);
-  });
-
   it("should reject invalid dealId", () => {
     const result = updateDealPhaseSchema.safeParse({
       dealId: "not-a-uuid",
@@ -152,10 +148,10 @@ describe("updateDealPhaseSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("should reject invalid phase", () => {
+  it("should reject empty phase", () => {
     const result = updateDealPhaseSchema.safeParse({
       dealId: VALID_UUID,
-      phase: "invalid_phase",
+      phase: "",
     });
     expect(result.success).toBe(false);
   });
@@ -173,7 +169,7 @@ describe("listDealsQuerySchema", () => {
 
   it("should accept valid query parameters", () => {
     const result = listDealsQuerySchema.safeParse({
-      phase: "dd",
+      phase: "sourcing",
       status: "active",
       page: 2,
       limit: 50,

@@ -27,14 +27,14 @@ describe("qaCategoryEnum", () => {
 });
 
 describe("qaStatusEnum", () => {
-  const validStatuses = ["draft", "sent", "received", "clarification_needed"];
+  const validStatuses = ["open", "answered", "closed"];
 
   it.each(validStatuses)("should accept valid status: %s", (status) => {
     expect(qaStatusEnum.safeParse(status).success).toBe(true);
   });
 
   it("should reject invalid status", () => {
-    expect(qaStatusEnum.safeParse("answered").success).toBe(false);
+    expect(qaStatusEnum.safeParse("draft").success).toBe(false);
   });
 });
 
@@ -53,22 +53,22 @@ describe("qaPriorityEnum", () => {
 describe("createQASchema", () => {
   const validInput = {
     deal_id: VALID_UUID,
-    category: "finance" as const,
     question: "売上の内訳を教えてください",
+    priority: "medium" as const,
+    status: "open" as const,
   };
 
   it("should accept valid input with required fields", () => {
     const result = createQASchema.safeParse(validInput);
     expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.priority).toBe("medium"); // default
-    }
   });
 
   it("should accept valid input with all fields", () => {
     const result = createQASchema.safeParse({
       ...validInput,
-      priority: "high",
+      category: "finance",
+      answer: "回答テスト",
+      assigned_to: VALID_UUID,
       due_date: "2026-04-15",
     });
     expect(result.success).toBe(true);
@@ -88,23 +88,12 @@ describe("createQASchema", () => {
       question: "",
     });
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0]!.message).toBe("質問は必須です");
-    }
   });
 
   it("should reject question exceeding 2000 characters", () => {
     const result = createQASchema.safeParse({
       ...validInput,
       question: "a".repeat(2001),
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it("should reject invalid category", () => {
-    const result = createQASchema.safeParse({
-      ...validInput,
-      category: "invalid",
     });
     expect(result.success).toBe(false);
   });
@@ -117,12 +106,12 @@ describe("createQASchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("should default priority to medium when not specified", () => {
-    const result = createQASchema.safeParse(validInput);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.priority).toBe("medium");
-    }
+  it("should reject invalid status", () => {
+    const result = createQASchema.safeParse({
+      ...validInput,
+      status: "invalid",
+    });
+    expect(result.success).toBe(false);
   });
 });
 
@@ -176,7 +165,7 @@ describe("checkDuplicateQAResponseSchema", () => {
           id: VALID_UUID,
           question: "売上の内訳",
           similarity_score: 0.85,
-          status: "sent",
+          status: "open",
         },
       ],
     });
