@@ -67,6 +67,23 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
 .welcome-action:hover{background:var(--wash-blue);border-color:var(--ink-blue)}
 .welcome-dismiss{font-size:12px;color:var(--ink-400);cursor:pointer;text-decoration:underline;flex-shrink:0;align-self:flex-start}
 
+/* Intent + Resume */
+.main-intent{background:var(--paper-cream);border:1px solid var(--slate-200);border-radius:8px;padding:16px 18px;margin-bottom:16px}
+.intent-kicker{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-blue);margin-bottom:6px}
+.intent-title{font-size:20px;font-weight:700;color:var(--ink-900);letter-spacing:-.02em;margin-bottom:6px}
+.intent-text{font-size:13px;color:var(--ink-600);line-height:1.6;max-width:860px}
+.intent-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+.resume-marker{background:var(--paper-white);border:1px solid var(--slate-200);border-radius:8px;padding:14px 16px;margin-bottom:16px}
+.resume-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.resume-kicker{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin-bottom:4px}
+.resume-title{font-size:15px;font-weight:600;color:var(--ink-900);margin-bottom:4px}
+.resume-text{font-size:13px;color:var(--ink-600);line-height:1.5}
+.resume-actions{display:flex;gap:8px;flex-wrap:wrap}
+.resume-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.resume-chip{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--slate-50);border:1px solid var(--slate-200);font-size:12px;color:var(--ink-600)}
+.resume-chip strong{font-family:var(--font-mono);color:var(--ink-900);font-size:12px}
+
 /* Sidebar Sections */
 .sidebar-section{margin-bottom:24px}
 .sidebar-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-400);margin-bottom:10px}
@@ -131,18 +148,24 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
 .card-meta{display:flex;gap:16px;font-size:12px;color:var(--ink-500);margin-bottom:8px;flex-wrap:wrap}
 .card-meta span{display:flex;align-items:center;gap:4px}
 .card-reason{font-size:13px;color:var(--ink-700);line-height:1.5;margin-bottom:8px;padding:6px 10px;background:var(--slate-50);border-radius:4px}
-.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.card-bottom{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .signal-tags{display:flex;gap:4px;flex-wrap:wrap}
 .signal-tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--wash-blue);color:var(--ink-blue);font-weight:500}
 .signal-tag.new{background:var(--wash-green);color:var(--ink-green)}
 .signal-tag.trigger{font-weight:600}
 .signal-tag .trigger-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-right:4px}
+.card-operating{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-left:auto}
 .card-status{font-size:12px;padding:4px 10px;border-radius:4px;border:1px solid var(--ink-200);background:var(--paper-white);font-weight:500;cursor:pointer;color:var(--ink-600)}
+.card-next-action{font-size:11px;color:var(--ink-600);padding:4px 10px;border-radius:999px;background:var(--paper-cream);border:1px solid var(--paper-kraft);line-height:1.4}
+.card-next-action strong{color:var(--ink-800);font-weight:600}
 .freshness{font-size:11px;color:var(--ink-400);font-family:var(--font-mono)}
 .freshness.stale{color:var(--ink-red)}
 .freshness.recent{color:var(--ink-green)}
 .thesis-pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
 .thesis-pill{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--paper-kraft);color:var(--ink-500)}
+.empty-state{padding:28px 20px;border:1px dashed var(--slate-300);border-radius:8px;background:var(--slate-50)}
+.empty-state-title{font-size:14px;font-weight:600;color:var(--ink-800);margin-bottom:4px}
+.empty-state-text{font-size:12px;color:var(--ink-500);line-height:1.6}
 
 /* Digest View */
 .digest-view{display:none}
@@ -196,16 +219,23 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
 .sidebar-suggestion-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-amber);margin-bottom:6px}
 .sidebar-suggestion-text{font-size:12px;color:var(--ink-700);line-height:1.5}
 
-/* Detail Panel (Modal) */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+/* Detail Panel (Side Sheet) */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;display:none;align-items:stretch;justify-content:flex-end;padding:0}
 .overlay.open{display:flex}
-.detail-panel{background:var(--paper-white);border-radius:12px;width:100%;max-width:760px;padding:28px 32px;box-shadow:0 8px 32px rgba(0,0,0,.12);position:relative}
-.detail-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:6px;border:none;background:var(--slate-100);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--ink-500)}
+.detail-panel{background:var(--paper-white);width:100%;max-width:680px;height:100vh;padding:22px 24px 32px;box-shadow:-8px 0 32px rgba(0,0,0,.12);position:relative;overflow-y:auto}
+.detail-panel.thesis-mode{max-width:min(1040px,calc(100vw - 40px))}
+.detail-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--ink-100);margin-bottom:18px}
+.detail-flow-kicker{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin-bottom:4px}
+.detail-flow-title{font-size:15px;font-weight:600;color:var(--ink-900);margin-bottom:4px}
+.detail-flow-text{font-size:13px;color:var(--ink-600);line-height:1.5}
+.detail-top-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.detail-close{width:28px;height:28px;border-radius:6px;border:none;background:var(--slate-100);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--ink-500)}
 .detail-close:hover{background:var(--slate-200)}
 .detail-header{margin-bottom:20px}
 .detail-name{font-size:22px;font-weight:700;color:var(--ink-900);margin-bottom:4px}
 .detail-desc{font-size:14px;color:var(--ink-600);line-height:1.5;margin-bottom:12px}
 .detail-since{font-size:12px;color:var(--ink-blue);background:var(--wash-blue);padding:4px 10px;border-radius:4px;display:inline-block;margin-bottom:12px}
+.detail-context-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
 .detail-stat{padding:12px;background:var(--slate-50);border-radius:6px}
 .detail-stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-400);margin-bottom:4px}
@@ -213,6 +243,9 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
 .detail-section{margin-bottom:16px}
 .detail-section-title{font-size:13px;font-weight:600;color:var(--ink-700);margin-bottom:6px}
 .detail-reason-box{padding:12px 16px;background:var(--wash-blue);border-radius:6px;font-size:14px;color:var(--ink-800);line-height:1.5}
+.detail-next-action{padding:12px 16px;background:var(--paper-cream);border:1px solid var(--paper-kraft);border-radius:8px}
+.detail-next-action-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-amber);margin-bottom:6px}
+.detail-next-action-text{font-size:13px;color:var(--ink-800);line-height:1.6}
 .detail-signals{display:flex;flex-wrap:wrap;gap:6px}
 .detail-signal{padding:4px 12px;border-radius:14px;font-size:12px;font-weight:500;background:var(--wash-green);color:var(--ink-green)}
 .detail-timeline{display:flex;flex-direction:column;gap:8px}
@@ -231,13 +264,49 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
 .route-status.done{background:var(--wash-green);color:var(--ink-green)}
 
 .detail-actions{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--ink-100);flex-wrap:wrap}
+.detail-nav-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--ink-200);background:var(--paper-white);font-size:12px;font-weight:500;cursor:pointer;color:var(--ink-700)}
+.detail-nav-btn:disabled{opacity:.45;cursor:not-allowed}
 .status-select{padding:6px 10px;border-radius:6px;border:1px solid var(--ink-200);font-size:13px;font-weight:500;background:var(--paper-white);color:var(--ink-700);cursor:pointer}
 .detail-memo{width:100%;min-height:60px;border:1px solid var(--ink-200);border-radius:6px;padding:8px 12px;font-size:13px;font-family:var(--font-sans);color:var(--ink-700);resize:vertical;margin-top:8px}
 .detail-memo::placeholder{color:var(--ink-300)}
 
+/* Thesis Config */
+.thesis-config-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:20px}
+.thesis-selector{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.thesis-switch{padding:7px 12px;border-radius:999px;border:1px solid var(--slate-200);background:var(--paper-white);font-size:12px;font-weight:500;color:var(--ink-600);cursor:pointer}
+.thesis-switch.active{background:var(--wash-blue);border-color:var(--ink-blue);color:var(--ink-blue)}
+.config-section{padding:16px;border:1px solid var(--slate-200);border-radius:8px;background:var(--paper-white);margin-bottom:12px}
+.config-section-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin-bottom:8px}
+.config-section-body{font-size:13px;color:var(--ink-700);line-height:1.6}
+.config-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.config-list-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-700)}
+.config-bullet{width:18px;height:18px;border-radius:999px;background:var(--slate-100);color:var(--ink-500);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--font-mono);flex-shrink:0;margin-top:1px}
+.weight-list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.weight-row{display:grid;grid-template-columns:140px 1fr 40px;gap:10px;align-items:center}
+.weight-label{font-size:12px;color:var(--ink-600)}
+.weight-track{height:10px;border-radius:999px;background:var(--slate-100);overflow:hidden}
+.weight-fill{height:100%;border-radius:999px}
+.weight-value{font-size:12px;color:var(--ink-800);font-family:var(--font-mono);text-align:right}
+.config-note{font-size:12px;color:var(--ink-500);margin-top:10px;line-height:1.6}
+.candidate-table{border:1px solid var(--slate-200);border-radius:8px;overflow:hidden;background:var(--paper-white)}
+.candidate-table-header,.candidate-row{display:grid;grid-template-columns:1.2fr 1.6fr .7fr .7fr;gap:12px;padding:12px 14px;align-items:start}
+.candidate-table-header{background:var(--slate-50);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-400)}
+.candidate-row{border-top:1px solid var(--slate-100)}
+.candidate-company{font-size:13px;font-weight:600;color:var(--ink-900)}
+.candidate-why{font-size:12px;color:var(--ink-600);line-height:1.5}
+.candidate-score{font-size:12px;color:var(--ink-800);font-family:var(--font-mono)}
+.candidate-state{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--slate-200);background:var(--slate-50);color:var(--ink-600);display:inline-flex;align-items:center;justify-content:center}
+.candidate-state.pending{background:var(--wash-amber);border-color:#f59e0b33;color:var(--ink-amber)}
+.candidate-state.approved{background:var(--wash-green);border-color:#16a34a33;color:var(--ink-green)}
+.candidate-summary{padding:14px 16px;background:var(--paper-cream);border:1px solid var(--paper-kraft);border-radius:8px;margin-bottom:12px}
+.candidate-summary-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-amber);margin-bottom:6px}
+.candidate-summary-text{font-size:13px;color:var(--ink-700);line-height:1.6}
+.thesis-footer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--ink-100)}
+
 /* Responsive */
 @media(max-width:1100px){.layout{grid-template-columns:1fr;}.sidebar-left,.sidebar-right{display:none}}
-@media(max-width:600px){.header{padding:12px 16px}.main{padding:12px}.header-center{display:none}}
+@media(max-width:900px){.thesis-config-grid{grid-template-columns:1fr}.detail-panel.thesis-mode{max-width:100%}}
+@media(max-width:600px){.header{padding:12px 16px}.main{padding:12px}.header-center{display:none}.detail-panel{max-width:100%;padding:18px 16px 24px}.detail-grid,.detail-context-grid,.candidate-table-header,.candidate-row,.weight-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -260,7 +329,7 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
       <span style="font-family:var(--font-mono)">3/5</span>
     </div>
     <span class="last-sync">sync 03-30 09:15</span>
-    <button class="btn btn-primary" onclick="alert('新規テーマ定義 → 初期候補生成フローを起動します（実装予定）')">+ テーマ作成</button>
+    <button class="btn btn-primary" onclick="openThesisConfig()">+ テーマ作成</button>
   </div>
 </div>
 
@@ -315,6 +384,18 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
 
   <!-- Main Content -->
   <div class="main">
+    <div class="main-intent">
+      <div class="intent-kicker">Weekly Operating Home</div>
+      <div class="intent-title">今週優先して追う会社を決める</div>
+      <div class="intent-text">Longlist Radar は、週次の見直し、投資仮説の更新、既知企業の即時確認が合流するホームです。比較の主役は社名ではなく、優先理由、情報鮮度、接触可能性です。</div>
+      <div class="intent-actions">
+        <button class="btn btn-primary" onclick="switchView('digest')">今週の変化から見る</button>
+        <button class="btn" onclick="openThesisConfig()">仮説を見直す</button>
+      </div>
+    </div>
+
+    <div class="resume-marker" id="resume-marker"></div>
+
     <!-- Welcome Banner -->
     <div class="welcome-banner" id="welcome-banner">
       <span class="welcome-icon" style="font-size:14px;font-weight:700;color:var(--ink-blue)">i</span>
@@ -363,7 +444,7 @@ body{font-family:var(--font-sans);background:var(--paper-white);color:var(--ink-
   <div class="sidebar-right">
     <div class="sidebar-suggestion">
       <div class="sidebar-suggestion-title">おすすめアクション</div>
-      <div class="sidebar-suggestion-text"><strong>ペイフロー</strong> の創業者がプラットフォーム統合志向を公言。売却意向が高い可能性があります。共通知人（元MF C氏）経由のルートが進行中 — 初回面談の設定を検討してください。</div>
+      <div class="sidebar-suggestion-text" id="sidebar-suggestion-text"></div>
     </div>
     <div class="notif-header">
       <span class="notif-title">最新シグナル</span>
@@ -384,6 +465,37 @@ const THESES = {
   "vertical-entry":{name:"業界特化HR展開",color:"#16a34a",desc:"建設・医療など特定業界のHR/労務管理で支配的地位を持つプレーヤーを獲得し、SmartHRの業界別展開を加速する。"},
   "backoffice-platform":{name:"バックオフィス統合基盤",color:"#d97706",desc:"経費精算・ワークフロー・申請承認を統合し、人事起点のバックオフィスプラットフォームへ拡張する。"},
   "talent-mgmt":{name:"タレマネ・育成強化",color:"#7c3aed",desc:"採用・評価・研修のタレントマネジメント領域を獲得し、SmartHRの「人材データ活用」ストーリーを強化する。"}
+};
+
+const THESIS_CONFIGS = {
+  "full-suite":{
+    intent:"勤怠・給与・労務周辺を一気通貫でつなぎ、SmartHR が労務領域で第一想起になる状態をつくる。",
+    include:["給与計算 SaaS", "勤怠・就業管理", "従業員マスタ連携", "社労士ネットワーク"],
+    exclude:["BPO 専業でプロダクト薄い会社", "海外 payroll 依存", "PMF 前で ARR 3億円未満"],
+    weights:[["戦略フィット",92,"var(--ink-blue)"],["接触可能性",74,"var(--ink-amber)"],["情報鮮度",81,"var(--ink-green)"],["統合難易度",58,"#7c3aed"]],
+    note:"給与計算の完成度だけでなく、導入基盤の乗せ換えや既存顧客へのクロスセル余地を強めに評価する。"
+  },
+  "vertical-entry":{
+    intent:"建設・医療など SmartHR が単独で入り切れていない業界へ、既存の勝ち筋を持つ事業を買収で獲りにいく。",
+    include:["業界特化の人事・労務機能", "現場運用で高い定着率", "上位顧客の継続利用", "規制対応ノウハウ"],
+    exclude:["業界特化だが汎用 ERP の受託比率が高い会社", "大型 SI 前提", "業界外売上が主力の会社"],
+    weights:[["戦略フィット",88,"var(--ink-blue)"],["市場支配力",84,"var(--ink-green)"],["接触可能性",55,"var(--ink-amber)"],["バリュエーション許容度",49,"#7c3aed"]],
+    note:"業界でのシェアと定着率を重視し、一般 SaaS と同じ成長率比較には寄せすぎない。"
+  },
+  "backoffice-platform":{
+    intent:"人事起点でワークフロー・経費・申請承認までつなぎ、SmartHR のバックオフィス基盤化を加速する。",
+    include:["ワークフロー SaaS", "経費精算", "申請承認エンジン", "API 連携前提の設計"],
+    exclude:["会計システム依存が極端に強い会社", "オンプレ移行案件が主力", "SMB 比率が低すぎる会社"],
+    weights:[["戦略フィット",82,"var(--ink-blue)"],["横展開余地",79,"var(--ink-green)"],["接触可能性",63,"var(--ink-amber)"],["統合難易度",52,"#7c3aed"]],
+    note:"単機能の強さよりも、SmartHR データ基盤に乗せた時の拡張性を優先して候補を残す。"
+  },
+  "talent-mgmt":{
+    intent:"採用・評価・育成を獲得し、SmartHR の人材データ活用ストーリーを HRBP や事業部長まで届く形に広げる。",
+    include:["採用管理", "評価・1on1", "研修・スキル管理", "人材データ可視化"],
+    exclude:["運用代行比率が高い会社", "単発研修売上が主力", "エンタープライズ個別開発に偏る会社"],
+    weights:[["戦略フィット",80,"var(--ink-blue)"],["データ連携価値",86,"var(--ink-green)"],["接触可能性",57,"var(--ink-amber)"],["営業相乗効果",73,"#7c3aed"]],
+    note:"単体 ARR よりも、人材データ統合により SmartHR のアップセル余地がどれだけ広がるかを重視する。"
+  }
 };
 
 const COMPANIES = [
@@ -620,6 +732,9 @@ let currentThesis = "all";
 let currentStatus = "all";
 let currentView = "list";
 let checkedSignals = new Set();
+let currentSearch = "";
+let selectedCompanyId = null;
+let selectedSource = "list";
 
 function daysSince(dateStr){
   const d = new Date(dateStr);
@@ -639,10 +754,25 @@ function freshnessLabel(days){
   return days + "日前";
 }
 
+function matchesSearch(company, query){
+  if(!query) return true;
+  const q = query.toLowerCase();
+  return [
+    company.name,
+    company.industry,
+    company.desc,
+    company.reason,
+    company.integration,
+    company.ownership,
+    company.sellability
+  ].some(value => (value || "").toLowerCase().includes(q));
+}
+
 function getFiltered(){
   let list = [...COMPANIES];
   if(currentThesis !== "all") list = list.filter(c => c.theses.includes(currentThesis));
   if(currentStatus !== "all") list = list.filter(c => c.status === currentStatus);
+  if(currentSearch) list = list.filter(c => matchesSearch(c, currentSearch));
   if(currentSort === "priority") list.sort((a,b) => b.priority - a.priority);
   else if(currentSort === "fit") list.sort((a,b) => b.fitScore - a.fitScore);
   else if(currentSort === "freshness") list.sort((a,b) => daysSince(a.lastUpdated) - daysSince(b.lastUpdated));
@@ -652,6 +782,112 @@ function getFiltered(){
     return bNew - aNew;
   });
   return list;
+}
+
+function getDigestQueue(){
+  const seen = new Set();
+  const queue = [];
+  const changes = [];
+  COMPANIES.forEach(c => {
+    c.signals.filter(s => s.isNew).forEach(s => {
+      changes.push({company:c, date:c.lastUpdated, type:s.type, signal:s.text});
+    });
+  });
+  changes.sort((a,b) => new Date(b.date) - new Date(a.date));
+  changes.forEach(item => {
+    if(matchesSearch(item.company, currentSearch) && !seen.has(item.company.id)){
+      seen.add(item.company.id);
+      queue.push(item.company);
+    }
+  });
+  return queue;
+}
+
+function getQueueForSource(source){
+  if(source === "digest" || source === "signal") return getDigestQueue();
+  return getFiltered();
+}
+
+function getResumeTarget(){
+  const queue = currentView === "digest" ? getDigestQueue() : getFiltered();
+  if(queue.length === 0) return null;
+  return queue.find(c => c.status === "unreviewed")
+    || queue.find(c => !c.routes || c.routes.length === 0)
+    || queue.find(c => c.signals.some(s => s.isNew))
+    || queue[0];
+}
+
+function getRecommendedAction(company){
+  if(!company.routes || company.routes.length === 0){
+    return {
+      title:"接触ルートを追加する",
+      text:"戦略フィットや変化シグナルは十分に見えている一方で、接触ルートが未設定です。まず取引銀行、共通知人、仲介別担当の順でルートを洗い出します。"
+    };
+  }
+  if(company.status === "unreviewed"){
+    return {
+      title:"初回レビューを完了する",
+      text:"情報は揃っているため、今週中に追うか保留にするかを判定します。変化シグナルの意味を確認したら優先度を更新します。"
+    };
+  }
+  if(company.status === "researching" && company.signals.some(s => s.isTrigger)){
+    return {
+      title:"接触準備に進む",
+      text:"優先度を押し上げるシグナルが出ており、接触ルートも存在します。紹介打診に進む前提で面談仮説を作ります。"
+    };
+  }
+  if(company.status === "outreach"){
+    return {
+      title:"面談設定を前進させる",
+      text:"すでに打診フェーズに入っているため、今週は面談化の確度を上げることが最優先です。ボトルネックとなるルートを特定します。"
+    };
+  }
+  if(company.status === "met"){
+    return {
+      title:"面談後の優先順位を更新する",
+      text:"面談で得た情報を踏まえ、全体順位の中で追い続けるかを見直します。統合シナリオと売却可能性を一覧へ戻して再比較します。"
+    };
+  }
+  return {
+    title:"保留理由を明確にする",
+    text:"再開時に迷わないよう、なぜ今は見送るのか、何が変われば再開するのかを一文で残します。"
+  };
+}
+
+function renderResumeMarker(){
+  const el = document.getElementById("resume-marker");
+  const filtered = getFiltered();
+  const digestQueue = getDigestQueue();
+  const unreviewed = filtered.filter(c => c.status === "unreviewed").length;
+  const routeGaps = filtered.filter(c => !c.routes || c.routes.length === 0).length;
+  const newSignals = COMPANIES.reduce((sum, c) => sum + c.signals.filter(sig => sig.isNew).length, 0) - checkedSignals.size;
+  const target = getResumeTarget();
+  const modeText = currentView === "digest"
+    ? "今週の変化から優先度を見直す"
+    : "一覧から次に見る候補を再開する";
+  const targetText = target
+    ? `<strong>${target.name}</strong> を次に開くと、${!target.routes || target.routes.length === 0 ? "接触ルートの不足" : target.status === "unreviewed" ? "初回レビュー未完了" : "優先度再確認"} を先に処理できます。`
+    : "現在の条件では候補がありません。テーマまたは検索条件を見直してください。";
+
+  el.innerHTML = `
+    <div class="resume-head">
+      <div>
+        <div class="resume-kicker">Resume Review</div>
+        <div class="resume-title">${modeText}</div>
+        <div class="resume-text">${targetText}</div>
+      </div>
+      <div class="resume-actions">
+        <button class="btn btn-primary" ${target ? `onclick="openDetail(${target.id}, '${currentView}')" ` : "disabled"}>次の候補を開く</button>
+        <button class="btn" onclick="switchView('digest')">今週の変化へ</button>
+        <button class="btn" onclick="alert('投資仮説の見直しフローを開きます（Thesis Config mock を別画面で実装予定）')">仮説を更新</button>
+      </div>
+    </div>
+    <div class="resume-stats">
+      <span class="resume-chip">未確認候補 <strong>${unreviewed}</strong></span>
+      <span class="resume-chip">未確認シグナル <strong>${Math.max(newSignals, 0)}</strong></span>
+      <span class="resume-chip">ルート未設定 <strong>${routeGaps}</strong></span>
+      <span class="resume-chip">${currentView === "digest" ? "変化キュー" : "レビューキュー"} <strong>${currentView === "digest" ? digestQueue.length : filtered.length}</strong></span>
+    </div>`;
 }
 
 function renderThesisFilters(){
@@ -703,7 +939,7 @@ function renderCardHTML(c){
   const hasNew = c.signals.some(s => s.isNew);
   const isStale = days >= 14;
   return `
-  <div class="company-card ${hasNew ? 'has-change' : ''} ${isStale ? 'stale-card' : ''}" onclick="openDetail(${c.id})">
+  <div class="company-card ${hasNew ? 'has-change' : ''} ${isStale ? 'stale-card' : ''}" onclick="openDetail(${c.id}, 'list')">
     <div class="thesis-pills">${c.theses.map(t=>`<span class="thesis-pill">${THESES[t]?.name||t}</span>`).join("")}</div>
     <div class="card-top">
       <div class="card-top-left">
@@ -735,14 +971,16 @@ function renderCardHTML(c){
 function renderCards(){
   const grid = document.getElementById("card-grid");
   const list = getFiltered();
-  document.getElementById("result-count").textContent = list.length + " 社";
+  document.getElementById("result-count").textContent = currentSearch ? `${list.length} 社 (検索中)` : `${list.length} 社`;
   grid.innerHTML = list.map(c => renderCardHTML(c)).join("");
+  renderResumeMarker();
 }
 
 function renderDigest(){
   const list = document.getElementById("digest-list");
   const changes = [];
   COMPANIES.forEach(c => {
+    if(!matchesSearch(c, currentSearch)) return;
     c.signals.filter(s => s.isNew).forEach(s => {
       changes.push({company:c.name, companyId:c.id, signal:s, date:c.lastUpdated, industry:c.industry, fitLevel:c.fitLevel});
     });
@@ -766,7 +1004,7 @@ function renderDigest(){
       const sigId = `${ch.companyId}-${idx}`;
       const isChecked = checkedSignals.has(sigId);
       html += `
-      <div class="digest-item" onclick="openDetail(${ch.companyId})">
+      <div class="digest-item" onclick="openDetail(${ch.companyId}, 'digest')">
         <div class="digest-type-icon ${ch.signal.type}">${TYPE_ICONS[ch.signal.type]||"--"}</div>
         <div class="digest-body">
           <div class="digest-company">${ch.company}</div>
@@ -783,6 +1021,7 @@ function renderDigest(){
   }
   list.innerHTML = html;
   document.getElementById("digest-badge").textContent = changes.length - checkedSignals.size;
+  renderResumeMarker();
 }
 
 function toggleCheck(sigId, el){
@@ -797,6 +1036,7 @@ function toggleCheck(sigId, el){
   }
   const total = COMPANIES.reduce((s,c) => s + c.signals.filter(sig=>sig.isNew).length, 0);
   document.getElementById("digest-badge").textContent = total - checkedSignals.size;
+  renderResumeMarker();
 }
 
 function markAllRead(){
@@ -814,12 +1054,14 @@ function switchView(view){
   document.getElementById("list-view").classList.toggle("active", view === "list");
   document.getElementById("digest-view").classList.toggle("active", view === "digest");
   if(view === "digest") renderDigest();
+  else renderResumeMarker();
 }
 
 function renderNotifications(){
   const list = document.getElementById("notif-list");
   const changes = [];
   COMPANIES.forEach(c => {
+    if(!matchesSearch(c, currentSearch)) return;
     c.signals.filter(s => s.isNew).forEach(s => {
       changes.push({company:c.name, signal:s, date:c.lastUpdated, id:c.id});
     });
@@ -829,7 +1071,7 @@ function renderNotifications(){
   list.innerHTML = changes.slice(0,8).map(ch => {
     let typeClass = ch.signal.type;
     return `
-    <div class="notif-item" onclick="openDetail(${ch.id})">
+    <div class="notif-item" onclick="openDetail(${ch.id}, 'signal')">
       <div class="notif-type ${typeClass}">${ch.signal.type}</div>
       <div class="notif-company">${ch.company}</div>
       <div class="notif-detail">${ch.signal.text}</div>
@@ -859,14 +1101,41 @@ function renderSummary(){
     <div>情報陳腐化: <strong style="font-family:var(--font-mono);color:var(--ink-red)">${stale}</strong></div>`;
 }
 
-function openDetail(id){
+function getQueueNeighbors(id, source){
+  const queue = getQueueForSource(source);
+  const index = queue.findIndex(item => item.id === id);
+  return {
+    queue,
+    index,
+    prev: index > 0 ? queue[index - 1] : null,
+    next: index >= 0 && index < queue.length - 1 ? queue[index + 1] : null
+  };
+}
+
+function openDetail(id, source = currentView){
   const c = COMPANIES.find(x=>x.id===id);
   if(!c) return;
+  selectedCompanyId = id;
+  selectedSource = source;
   const days = daysSince(c.lastUpdated);
   const sinceSignals = c.signals.filter(s=>s.isNew).length;
+  const nextAction = getRecommendedAction(c);
+  const neighbors = getQueueNeighbors(id, source);
+  const sourceLabel = source === "digest" ? "今週の変化から確認中" : source === "signal" ? "最新シグナルから確認中" : "優先候補を確認中";
+  const queuePosition = neighbors.index >= 0 ? `${neighbors.index + 1} / ${neighbors.queue.length}` : "単独確認";
   const panel = document.getElementById("detail-panel");
   panel.innerHTML = `
-    <button class="detail-close" onclick="closeDetail()">&times;</button>
+    <div class="detail-topbar">
+      <div>
+        <div class="detail-flow-kicker">${sourceLabel}</div>
+        <div class="detail-flow-title">${queuePosition} 件目をレビュー中</div>
+        <div class="detail-flow-text">この画面で決めることは、今週追い続けるか、保留にするか、接触ルートを足すかです。</div>
+      </div>
+      <div class="detail-top-actions">
+        <button class="btn" onclick="closeDetail()">${source === "digest" ? "今週の変化へ戻る" : "一覧へ戻る"}</button>
+        <button class="detail-close" onclick="closeDetail()">&times;</button>
+      </div>
+    </div>
     <div class="detail-header">
       <div class="detail-name">${c.name}</div>
       <div class="detail-desc">${c.desc}</div>
@@ -879,6 +1148,12 @@ function openDetail(id){
       <div class="detail-stat"><div class="detail-stat-label">ステージ</div><div class="detail-stat-value">${c.stage}</div></div>
       <div class="detail-stat"><div class="detail-stat-label">推定バリュエーション</div><div class="detail-stat-value" style="font-size:13px">${c.valuation}</div></div>
       <div class="detail-stat"><div class="detail-stat-label">情報鮮度</div><div class="detail-stat-value ${freshnessClass(days)}">${freshnessLabel(days)}</div></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-next-action">
+        <div class="detail-next-action-title">次にやること</div>
+        <div class="detail-next-action-text"><strong style="display:block;margin-bottom:4px">${nextAction.title}</strong>${nextAction.text}</div>
+      </div>
     </div>
     <div class="detail-section">
       <div class="detail-section-title">なぜ今この会社を追うべきか</div>
@@ -927,6 +1202,8 @@ function openDetail(id){
       <textarea class="detail-memo" placeholder="社内メモを記録..."></textarea>
     </div>
     <div class="detail-actions">
+      <button class="detail-nav-btn" ${neighbors.prev ? `onclick="openDetail(${neighbors.prev.id}, '${source}')"` : "disabled"}>← 前の候補</button>
+      <button class="detail-nav-btn" ${neighbors.next ? `onclick="openDetail(${neighbors.next.id}, '${source}')"` : "disabled"}>次の候補 →</button>
       <select class="status-select" onchange="changeStatus(${c.id}, this.value)">
         ${Object.entries(STATUS_MAP).map(([k,v])=>`<option value="${k}" ${c.status===k?'selected':''}>${v.label}</option>`).join("")}
       </select>
@@ -938,6 +1215,7 @@ function openDetail(id){
 }
 
 function closeDetail(){
+  selectedCompanyId = null;
   document.getElementById("overlay").classList.remove("open");
 }
 
@@ -946,22 +1224,17 @@ function changeStatus(id, newStatus){
   if(c) c.status = newStatus;
   renderCards();
   updateCounts();
+  renderSummary();
+  renderNotifications();
+  if(selectedCompanyId === id) openDetail(id, selectedSource);
 }
 
 // Non-name search
 document.getElementById("nonname-search").addEventListener("input", function(e){
-  const q = e.target.value.toLowerCase();
-  if(q.length < 2){ renderCards(); return; }
-  const grid = document.getElementById("card-grid");
-  const matches = COMPANIES.filter(c =>
-    c.name.toLowerCase().includes(q) ||
-    c.industry.toLowerCase().includes(q) ||
-    c.desc.toLowerCase().includes(q) ||
-    c.reason.toLowerCase().includes(q)
-  );
-  document.getElementById("result-count").textContent = matches.length + " 社 (検索中)";
-  // Re-render with filtered list — delegate to shared card renderer
-  grid.innerHTML = matches.map(c => renderCardHTML(c)).join("");
+  currentSearch = e.target.value.trim();
+  renderCards();
+  if(currentView === "digest") renderDigest();
+  renderNotifications();
 });
 
 // Sort buttons
@@ -992,6 +1265,7 @@ renderCards();
 renderNotifications();
 updateCounts();
 renderSummary();
+renderResumeMarker();
 </script>
 </body>
 </html>

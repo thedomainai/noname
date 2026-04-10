@@ -1363,11 +1363,15 @@ Step 5: Act → Step 6: Observe → Step 7: Reflect → Step 8: Evolve</div>
     <div class="grid-3">
       <div class="card"><div class="card-label">1</div><div class="card-title">Reality Plane</div><div class="card-body">現実データ。immutable event log。追記のみで履歴を保全。</div></div>
       <div class="card"><div class="card-label">2</div><div class="card-title">Semantic Plane</div><div class="card-body">エンティティと関係。Knowledge Graphが基盤。</div></div>
-      <div class="card"><div class="card-label">3</div><div class="card-title">Memory Plane</div><div class="card-body">5種の組織記憶: Semantic / Episodic / Procedural / Evaluative / Normative。</div></div>
+      <div class="card"><div class="card-label">3</div><div class="card-title">Memory Plane</div><div class="card-body">5種の組織記憶: Semantic / Episodic / Procedural / Evaluative / Normative。Procedural memory は reusable skill package へ昇格しうる。</div></div>
       <div class="card"><div class="card-label">4</div><div class="card-title">Decision Plane</div><div class="card-body">Goal、仮説、候補案、選択理由。「思考の可観測化」。</div></div>
       <div class="card"><div class="card-label">5</div><div class="card-title">Action Plane</div><div class="card-body">ツール実行、APIコール、通知。Workflow stateとrollback plan。</div></div>
       <div class="card"><div class="card-label">6</div><div class="card-title">Governance Plane</div><div class="card-body">権限、ポリシー、Trust Score、Composite Risk、監査証跡。</div></div>
     </div>
+
+    <blockquote>
+      <p><strong>重要な区別:</strong> workflow は制度運用の流れ、memory は制度が保持する知識と履歴、skill は memory を executable にし workflow に再注入する再利用単位である。playbook やコードが存在するだけでは足りず、discoverability、relation、quality gate を持って初めて制度資産になる。</p>
+    </blockquote>
   </div>
 
   <!-- §3.4 -->
@@ -1387,6 +1391,9 @@ Step 5: Act → Step 6: Observe → Step 7: Reflect → Step 8: Evolve</div>
         </tbody>
       </table>
     </div>
+
+    <div class="h5">reusable skill の評価ゲート</div>
+    <p>OSが reusable skill package を扱う場合、活性化前に少なくとも <strong>Safety / Completeness / Executability / Maintainability / Cost-awareness</strong> の5軸で評価する。未評価 skill や低品質 skill は sandbox か human-reviewed mode に制限する。</p>
   </div>
 
   <!-- §3.5 -->

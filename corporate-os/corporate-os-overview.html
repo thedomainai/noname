@@ -6,98 +6,1235 @@
 <title>Corporate OS — AI-Native Institution OS</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;600&family=Noto+Sans+Mono:wght@300;400;500&display=swap');
-:root{--paper:#f5f0e8;--paper-dark:#ece5d8;--ink:#1a1612;--ink-light:#4a4438;--ink-faint:#8a8274;--ink-ghost:#b8b0a2;--red:#8b2500;--blue:#1a3a5c;--blue-light:#2d5f8a;--gold:#8b7335;--green-dark:#2d4a2e;--rule:#c4b99a;--rule-light:#d9d0bd}
+:root{
+  --paper:#f5f0e8;
+  --paper-dark:#ece5d8;
+  --paper-deep:#e3dac8;
+  --ink:#1a1612;
+  --ink-light:#4a4438;
+  --ink-faint:#8a8274;
+  --ink-ghost:#b8b0a2;
+  --red:#8b2500;
+  --blue:#1a3a5c;
+  --blue-light:#2d5f8a;
+  --gold:#8b7335;
+  --green-dark:#2d4a2e;
+  --rule:#c4b99a;
+  --rule-light:#d9d0bd;
+}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{font-size:16px;-webkit-text-size-adjust:100%}
-body{background:var(--paper);color:var(--ink);font-family:'Noto Sans JP','Hiragino Sans',sans-serif;font-weight:300;line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:"palt" 1}
-.page{max-width:860px;margin:0 auto;padding:60px 48px 100px}
-.header{text-align:center;padding-bottom:40px;border-bottom:1px solid var(--rule);margin-bottom:48px}
+body{
+  background:
+    radial-gradient(circle at top right, rgba(139,115,53,.08), transparent 28%),
+    radial-gradient(circle at top left, rgba(26,58,92,.05), transparent 22%),
+    var(--paper);
+  color:var(--ink);
+  font-family:'Noto Sans JP','Hiragino Sans',sans-serif;
+  font-weight:300;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  font-feature-settings:"palt" 1;
+}
+.page{max-width:1280px;margin:0 auto;padding:60px 40px 100px}
+.header{text-align:center;padding-bottom:40px;border-bottom:1px solid var(--rule);margin-bottom:40px}
 .header-label{font-family:'Noto Sans Mono',monospace;font-size:.625rem;letter-spacing:.25em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:20px;line-height:1.4}
-.header h1{font-family:'Noto Serif JP',serif;font-size:2.25rem;font-weight:400;letter-spacing:-.02em;line-height:1.3}
+.header h1{font-family:'Noto Serif JP',serif;font-size:2.6rem;font-weight:400;letter-spacing:-.03em;line-height:1.2}
 .header-sub{font-family:'Noto Serif JP',serif;font-size:1rem;font-weight:300;color:var(--ink-light);margin-top:12px;line-height:1.6}
 .header-date{font-family:'Noto Sans Mono',monospace;font-size:.625rem;color:var(--ink-ghost);margin-top:20px;letter-spacing:.15em;line-height:1.4}
-.section{margin-bottom:56px}
+.section{margin-bottom:64px}
 .section-label{font-family:'Noto Sans Mono',monospace;font-size:.5625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px;line-height:1.4}
-.section h2{font-family:'Noto Serif JP',serif;font-size:1.5rem;font-weight:400;margin-bottom:16px;line-height:1.4}
-.section p{font-size:.875rem;color:var(--ink-light);line-height:1.8;margin-bottom:12px}
+.section h2{font-family:'Noto Serif JP',serif;font-size:1.6rem;font-weight:400;margin-bottom:16px;line-height:1.35}
+.section p{font-size:.9rem;color:var(--ink-light);line-height:1.85;margin-bottom:12px}
 .section p:last-child{margin-bottom:0}
 .section strong{font-weight:500;color:var(--ink)}
-.callout{background:var(--paper-dark);border-left:3px solid var(--ink);padding:24px 28px;margin-bottom:48px}
-.callout-label{font-family:'Noto Sans Mono',monospace;font-size:.5625rem;letter-spacing:.2em;color:var(--ink-faint);display:block;margin-bottom:12px;line-height:1.4}
-.callout p{font-family:'Noto Serif JP',serif;font-size:1.0625rem;font-weight:400;line-height:1.8}
-.callout p+p{margin-top:12px}
-.callout strong{font-weight:600}
 .divider{border:none;border-top:1px solid var(--rule);margin:56px 0}
-.model-tier{margin-bottom:32px;padding-left:20px;border-left:2px solid var(--rule-light)}
-.model-tier-label{font-family:'Noto Sans Mono',monospace;font-size:.625rem;letter-spacing:.1em;color:var(--ink-faint);margin-bottom:4px;line-height:1.4}
-.model-tier h3{font-family:'Noto Serif JP',serif;font-size:1.125rem;font-weight:500;margin-bottom:6px;line-height:1.4}
-.model-tier p{font-size:.8125rem;color:var(--ink-light);line-height:1.7}
-.layer-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:24px}
-.layer-card{background:var(--paper-dark);padding:14px 16px}
-.layer-id{font-family:'Noto Sans Mono',monospace;font-size:.625rem;color:var(--ink-faint);letter-spacing:.05em;line-height:1.4;margin-bottom:2px}
-.layer-name{font-family:'Noto Serif JP',serif;font-size:.8125rem;font-weight:500;line-height:1.4;margin-bottom:4px}
-.layer-question{font-size:.6875rem;color:var(--ink-faint);line-height:1.6}
-.layer-domain{grid-column:1/-1;padding:8px 16px;font-family:'Noto Sans Mono',monospace;font-size:.5625rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-ghost);line-height:1.4}
-.layer-domain.a{border-left:3px solid var(--red)}.layer-domain.b{border-left:3px solid var(--gold)}.layer-domain.c{border-left:3px solid var(--blue)}
-.dim-table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:.8125rem}
-.dim-table th{font-family:'Noto Sans Mono',monospace;font-size:.5625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);line-height:1.4;font-weight:400}
-.dim-table td{padding:10px 10px;border-bottom:1px solid var(--rule-light);vertical-align:top;line-height:1.6;color:var(--ink-light)}
-.dim-table td:first-child{font-family:'Noto Sans Mono',monospace;font-size:.6875rem;color:var(--blue-light);white-space:nowrap;width:40px}
-.dim-table td:nth-child(2){font-weight:400;color:var(--ink)}
-.elements-row{display:flex;gap:2px;margin-bottom:24px}
-.element-card{flex:1;background:var(--paper-dark);padding:14px 12px;text-align:center;min-width:0}
-.element-name{font-family:'Noto Sans Mono',monospace;font-size:.625rem;letter-spacing:.05em;color:var(--ink);line-height:1.4;margin-bottom:4px;font-weight:500}
-.element-desc{font-size:.6875rem;color:var(--ink-faint);line-height:1.5}
-.chain{margin-bottom:20px;padding:16px 20px;background:var(--paper-dark)}
-.chain-label{font-family:'Noto Sans Mono',monospace;font-size:.625rem;color:var(--gold);letter-spacing:.1em;margin-bottom:6px;line-height:1.4}
-.chain-flow{font-family:'Noto Sans Mono',monospace;font-size:.75rem;color:var(--ink-light);line-height:1.6;margin-bottom:6px;word-break:break-word}
-.chain-desc{font-size:.75rem;color:var(--ink-faint);line-height:1.6}
-.phase-strip{display:flex;gap:2px;margin-bottom:24px}
-.phase-card{flex:1;padding:14px 12px;background:var(--paper-dark);min-width:0}
-.phase-card-id{font-family:'Noto Sans Mono',monospace;font-size:.5625rem;color:var(--ink-faint);letter-spacing:.1em;margin-bottom:4px;line-height:1.4}
-.phase-card-name{font-family:'Noto Serif JP',serif;font-size:.8125rem;font-weight:500;line-height:1.4;margin-bottom:4px}
-.phase-card-desc{font-size:.6875rem;color:var(--ink-faint);line-height:1.5}
+
+.callout{
+  background:linear-gradient(180deg, rgba(236,229,216,.9), rgba(236,229,216,.75));
+  border-left:3px solid var(--ink);
+  padding:24px 28px;
+  margin-bottom:24px;
+}
+.callout-label{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.5625rem;
+  letter-spacing:.2em;
+  color:var(--ink-faint);
+  display:block;
+  margin-bottom:12px;
+  line-height:1.4;
+}
+.callout p{
+  font-family:'Noto Serif JP',serif;
+  font-size:1.05rem;
+  font-weight:400;
+  line-height:1.8;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:18px;
+  margin-top:24px;
+}
+.hero-panel,
+.logic-card,
+.lens-card,
+.domain-band,
+.matrix-group,
+.triad-card,
+.loop-card,
+.split-card,
+.principle,
+.metric-card{
+  background:rgba(236,229,216,.72);
+  border:1px solid var(--rule-light);
+}
+.hero-panel{padding:24px}
+.hero-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1.15rem;
+  font-weight:500;
+  margin-bottom:10px;
+}
+.hero-body{font-size:.86rem;color:var(--ink-light);line-height:1.8}
+.logic-strip{display:grid;gap:8px}
+.logic-card{padding:16px 18px;position:relative}
+.logic-card::after{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:-5px;
+  border-bottom:1px dashed var(--rule);
+}
+.logic-card:last-child::after{display:none}
+.logic-num{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.14em;
+  color:var(--ink-faint);
+  margin-bottom:6px;
+}
+.logic-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:.95rem;
+  font-weight:500;
+  margin-bottom:4px;
+}
+.logic-desc{font-size:.76rem;color:var(--ink-light);line-height:1.7}
+
+.visual-caption{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.14em;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.lens-stack{display:grid;gap:12px}
+.lens-card{
+  display:grid;
+  grid-template-columns:84px 1fr;
+  gap:14px;
+  padding:16px 18px;
+  align-items:start;
+}
+.lens-index{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.72rem;
+  color:var(--blue-light);
+  padding-top:2px;
+}
+.lens-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem;
+  font-weight:500;
+  margin-bottom:4px;
+}
+.lens-desc{font-size:.8rem;color:var(--ink-light);line-height:1.75}
+.lens-arrow{
+  text-align:center;
+  font-family:'Noto Sans Mono',monospace;
+  color:var(--ink-ghost);
+  font-size:.85rem;
+  line-height:1;
+}
+
+.domain-stack{display:grid;gap:14px}
+.domain-band{padding:18px 20px}
+.domain-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:baseline;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.domain-id{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.18em;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+}
+.domain-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem;
+  font-weight:500;
+}
+.layer-pills{display:flex;flex-wrap:wrap;gap:8px}
+.layer-pill{
+  min-width:140px;
+  flex:1 1 180px;
+  background:rgba(245,240,232,.72);
+  border-left:3px solid var(--rule);
+  padding:10px 12px;
+}
+.layer-pill.red{border-left-color:var(--red)}
+.layer-pill.gold{border-left-color:var(--gold)}
+.layer-pill.blue{border-left-color:var(--blue)}
+.layer-pill-id{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--ink-faint);
+  margin-bottom:2px;
+}
+.layer-pill-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:.82rem;
+  font-weight:500;
+  margin-bottom:2px;
+}
+.layer-pill-desc{font-size:.72rem;color:var(--ink-light);line-height:1.6}
+
+.matrix-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:20px;
+}
+.matrix-group{padding:18px}
+.matrix-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
+  align-items:baseline;
+}
+.matrix-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem;
+  font-weight:500;
+}
+.matrix-sub{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--ink-faint);
+  letter-spacing:.12em;
+}
+.dim-list{display:grid;gap:8px}
+.dim-item{
+  display:grid;
+  grid-template-columns:50px 1fr;
+  gap:10px;
+  padding:10px 0;
+  border-top:1px solid var(--rule-light);
+}
+.dim-item:first-child{border-top:none;padding-top:0}
+.dim-id{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.7rem;
+  color:var(--blue-light);
+}
+.dim-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:.84rem;
+  font-weight:500;
+  margin-bottom:2px;
+}
+.dim-q{font-size:.74rem;color:var(--ink-light);line-height:1.65}
+
+.dimension-stack{display:grid;gap:12px;margin-top:20px}
+.dim-layer-band{
+  background:rgba(236,229,216,.72);
+  border:1px solid var(--rule-light);
+  padding:18px 20px;
+}
+.dim-layer-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:baseline;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+.dim-layer-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1.02rem;
+  font-weight:500;
+}
+.dim-layer-sub{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.6rem;
+  color:var(--ink-faint);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.dim-layer-desc{
+  font-size:.8rem;
+  color:var(--ink-light);
+  line-height:1.75;
+  margin-bottom:12px;
+}
+.dim-node-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.dim-node{
+  background:rgba(245,240,232,.72);
+  border-left:3px solid var(--rule);
+  padding:10px 12px;
+}
+.dim-node.red{border-left-color:var(--red)}
+.dim-node.gold{border-left-color:var(--gold)}
+.dim-node.blue{border-left-color:var(--blue)}
+.dim-node-id{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--blue-light);
+  margin-bottom:2px;
+}
+.dim-node-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:.82rem;
+  font-weight:500;
+  margin-bottom:2px;
+}
+.dim-node-desc{
+  font-size:.72rem;
+  color:var(--ink-light);
+  line-height:1.6;
+}
+.dim-rel-arrow{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  color:var(--ink-ghost);
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.8rem;
+  padding:2px 0;
+}
+.dim-rel-arrow span{
+  font-size:.6rem;
+  letter-spacing:.12em;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+}
+
+.elements-row{display:flex;gap:8px;flex-wrap:wrap}
+.element-card{
+  flex:1 1 150px;
+  background:rgba(236,229,216,.72);
+  border:1px solid var(--rule-light);
+  padding:14px 12px;
+  text-align:center;
+}
+.element-name{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.64rem;
+  letter-spacing:.06em;
+  color:var(--ink);
+  line-height:1.4;
+  margin-bottom:4px;
+  font-weight:500;
+}
+.element-desc{font-size:.72rem;color:var(--ink-faint);line-height:1.5}
+
+.protocol-demo{
+  display:grid;
+  grid-template-columns:220px 42px 1fr;
+  gap:10px;
+  align-items:stretch;
+  margin:18px 0 22px;
+}
+.protocol-anchor,
+.protocol-step{
+  background:rgba(236,229,216,.72);
+  border:1px solid var(--rule-light);
+}
+.protocol-anchor{padding:18px}
+.protocol-anchor-k{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--ink-faint);
+  letter-spacing:.14em;
+  margin-bottom:8px;
+}
+.protocol-anchor-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem;
+  font-weight:500;
+  margin-bottom:6px;
+}
+.protocol-anchor-desc{
+  font-size:.78rem;
+  color:var(--ink-light);
+  line-height:1.7;
+}
+.protocol-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--ink-ghost);
+  font-family:'Noto Sans Mono',monospace;
+  font-size:1rem;
+}
+.protocol-flow{display:grid;gap:8px}
+.protocol-step{padding:12px 14px}
+.protocol-step-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:baseline;
+  margin-bottom:4px;
+}
+.protocol-step-name{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.08em;
+  color:var(--ink);
+}
+.protocol-step-role{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.56rem;
+  color:var(--ink-faint);
+  letter-spacing:.08em;
+}
+.protocol-step-body{
+  font-size:.76rem;
+  color:var(--ink-light);
+  line-height:1.7;
+}
+
+.triad{
+  display:grid;
+  grid-template-columns:1fr 60px 1fr 60px 1fr;
+  gap:10px;
+  align-items:stretch;
+  margin-top:22px;
+}
+.triad-card{padding:18px}
+.triad-label{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.14em;
+  color:var(--ink-faint);
+  margin-bottom:8px;
+}
+.triad-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem;
+  font-weight:500;
+  margin-bottom:6px;
+}
+.triad-body{font-size:.8rem;color:var(--ink-light);line-height:1.75}
+.triad-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Noto Sans Mono',monospace;
+  color:var(--gold);
+  font-size:1rem;
+}
+.bridge-note{
+  margin-top:16px;
+  padding:16px 18px;
+  background:rgba(26,58,92,.05);
+  border-left:3px solid var(--blue);
+  font-size:.82rem;
+  color:var(--ink-light);
+}
+
+.chain-grid{display:grid;gap:14px}
+.chain{
+  padding:18px 20px;
+  background:rgba(236,229,216,.72);
+  border:1px solid var(--rule-light);
+}
+.chain-label{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--gold);
+  letter-spacing:.1em;
+  margin-bottom:8px;
+}
+.chain-flow{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.76rem;
+  color:var(--ink-light);
+  line-height:1.7;
+  margin-bottom:6px;
+  word-break:break-word;
+}
+.chain-desc{font-size:.76rem;color:var(--ink-faint);line-height:1.7}
+
+.loop-rail{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-top:20px;
+}
+.loop-card{padding:16px 14px;position:relative}
+.loop-card:not(:last-child)::after{
+  content:"→";
+  position:absolute;
+  right:-10px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--ink-ghost);
+  font-family:'Noto Sans Mono',monospace;
+}
+.loop-k{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--ink-faint);
+  margin-bottom:6px;
+}
+.loop-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:.88rem;
+  font-weight:500;
+  margin-bottom:4px;
+}
+.loop-desc{font-size:.74rem;color:var(--ink-light);line-height:1.65}
+
+.rights-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.right-card{
+  padding:16px 18px;
+  border:1px solid var(--red);
+  border-width:1px 1px 1px 3px;
+  background:rgba(245,240,232,.64);
+}
+.right-name{font-family:'Noto Serif JP',serif;font-size:.92rem;font-weight:500;margin-bottom:4px;line-height:1.4}
+.right-desc{font-size:.76rem;color:var(--ink-light);line-height:1.7}
+.rights-bundle{
+  margin-top:18px;
+  padding:18px 20px;
+  background:rgba(139,37,0,.05);
+  border-left:3px solid var(--red);
+  font-size:.82rem;
+  color:var(--ink-light);
+}
+.rights-flow{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+.rights-step{
+  background:rgba(245,240,232,.72);
+  border:1px solid var(--rule-light);
+  padding:14px 12px;
+  position:relative;
+}
+.rights-step:not(:last-child)::after{
+  content:"→";
+  position:absolute;
+  right:-10px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--ink-ghost);
+  font-family:'Noto Sans Mono',monospace;
+}
+.rights-step-k{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.58rem;
+  color:var(--ink-faint);
+  letter-spacing:.1em;
+  margin-bottom:4px;
+}
+.rights-step-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:.86rem;
+  font-weight:500;
+  margin-bottom:4px;
+}
+.rights-step-desc{
+  font-size:.74rem;
+  color:var(--ink-light);
+  line-height:1.65;
+}
+
+.phase-strip{
+  display:grid;
+  grid-template-columns:1fr 48px 1fr 48px 1fr;
+  gap:8px;
+  align-items:stretch;
+}
+.phase-card{
+  padding:16px 14px;
+  background:rgba(236,229,216,.72);
+  border:1px solid var(--rule-light);
+}
 .phase-card.target{border-bottom:2px solid var(--red)}
-.principle{margin-bottom:16px}
-.principle-num{font-family:'Noto Sans Mono',monospace;font-size:.625rem;color:var(--ink-ghost);line-height:1.4}
-.principle-text{font-size:.8125rem;color:var(--ink-light);line-height:1.7}
+.phase-card-id{font-family:'Noto Sans Mono',monospace;font-size:.58rem;color:var(--ink-faint);letter-spacing:.1em;margin-bottom:4px;line-height:1.4}
+.phase-card-name{font-family:'Noto Serif JP',serif;font-size:.86rem;font-weight:500;line-height:1.4;margin-bottom:4px}
+.phase-card-desc{font-size:.72rem;color:var(--ink-faint);line-height:1.6}
+.phase-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Noto Sans Mono',monospace;
+  color:var(--ink-ghost);
+}
+.phase-matrix{
+  display:grid;
+  grid-template-columns:180px repeat(3,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+.phase-matrix-cell{
+  min-height:42px;
+  background:rgba(245,240,232,.72);
+  border:1px solid var(--rule-light);
+  padding:10px 12px;
+  font-size:.74rem;
+  color:var(--ink-light);
+  line-height:1.6;
+}
+.phase-matrix-cell.head{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.58rem;
+  color:var(--ink-faint);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.phase-matrix-cell.row{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--blue-light);
+}
+.phase-matrix-cell.fixed{
+  border-left:3px solid var(--red);
+}
+
+.split-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:20px;
+}
+.split-card{padding:20px}
+.split-card.red{border-top:3px solid var(--red)}
+.split-card.blue{border-top:3px solid var(--blue)}
+.split-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem;
+  font-weight:500;
+  margin-bottom:8px;
+}
+.split-body{font-size:.8rem;color:var(--ink-light);line-height:1.75}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--ink-light);
+  background:rgba(245,240,232,.75);
+  border:1px solid var(--rule-light);
+  padding:5px 8px;
+}
+
+.principle{padding:14px 16px;margin-bottom:10px}
+.principle-num{font-family:'Noto Sans Mono',monospace;font-size:.62rem;color:var(--ink-ghost);line-height:1.4}
+.principle-text{font-size:.82rem;color:var(--ink-light);line-height:1.75}
 .principle-text strong{font-weight:500;color:var(--ink)}
-.rights-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:24px}
-.right-card{padding:16px 18px;border:1px solid var(--red);border-width:1px 1px 1px 3px}
-.right-name{font-family:'Noto Serif JP',serif;font-size:.875rem;font-weight:500;margin-bottom:4px;line-height:1.4}
-.right-desc{font-size:.75rem;color:var(--ink-light);line-height:1.6}
-.colophon{margin-top:64px;padding-top:28px;border-top:1px solid var(--rule);text-align:center}
+.principle-groups{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+.principle-group{
+  background:rgba(236,229,216,.72);
+  border:1px solid var(--rule-light);
+  padding:18px 18px 10px;
+}
+.principle-group-title{
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem;
+  font-weight:500;
+  margin-bottom:6px;
+}
+.principle-group-sub{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.58rem;
+  color:var(--ink-faint);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.metric-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:18px;
+}
+.metric-card{padding:16px}
+.metric-label{
+  font-family:'Noto Sans Mono',monospace;
+  font-size:.62rem;
+  color:var(--ink-faint);
+  margin-bottom:4px;
+}
+.metric-name{
+  font-family:'Noto Serif JP',serif;
+  font-size:.88rem;
+  font-weight:500;
+  margin-bottom:4px;
+}
+.metric-desc{font-size:.74rem;color:var(--ink-light);line-height:1.65}
+
+.colophon{margin-top:70px;padding-top:28px;border-top:1px solid var(--rule);text-align:center}
 .colophon p{font-family:'Noto Sans Mono',monospace;font-size:.625rem;color:var(--ink-ghost);letter-spacing:.1em;line-height:2.2}
-@media(max-width:768px){.page{padding:40px 24px 72px}.header h1{font-size:1.75rem}.section h2{font-size:1.25rem}.layer-grid{grid-template-columns:1fr}.elements-row{flex-direction:column}.phase-strip{flex-direction:column}.rights-grid{grid-template-columns:1fr}.callout{padding:20px 22px}.callout p{font-size:.9375rem}}
-@media(max-width:480px){.page{padding:28px 16px 56px}.header-label{font-size:.5rem}.header h1{font-size:1.375rem}.header-sub{font-size:.8125rem}.section h2{font-size:1.125rem}.section p{font-size:.8125rem}.callout{padding:16px 16px;border-left-width:2px}.callout p{font-size:.875rem}.dim-table{font-size:.75rem}.dim-table th{font-size:.5rem}.dim-table td{padding:8px 6px}.chain-flow{font-size:.6875rem}.colophon p{font-size:.5625rem}}
+
+@media(max-width:900px){
+  .page{padding:46px 24px 72px}
+  .hero-grid,.matrix-grid,.split-grid,.rights-grid,.principle-groups{grid-template-columns:1fr}
+  .triad,.phase-strip,.loop-rail,.rights-flow{grid-template-columns:1fr}
+  .protocol-demo{grid-template-columns:1fr}
+  .dim-node-grid{grid-template-columns:1fr 1fr}
+  .triad-arrow,.phase-arrow{display:none}
+  .protocol-arrow{display:none}
+  .rights-step:not(:last-child)::after{display:none}
+  .loop-card:not(:last-child)::after{display:none}
+  .phase-matrix{grid-template-columns:1fr}
+  .metric-row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .page{padding:34px 16px 54px}
+  .header h1{font-size:1.9rem}
+  .section h2{font-size:1.25rem}
+  .callout{padding:18px 18px}
+  .callout p{font-size:.92rem}
+  .lens-card{grid-template-columns:1fr}
+  .metric-row{grid-template-columns:1fr}
+  .layer-pill{min-width:100%}
+  .dim-node-grid{grid-template-columns:1fr}
+  .phase-matrix-cell.head:first-child,
+  .phase-matrix-cell.row{grid-column:1/-1}
+}
 </style>
 </head>
 <body>
 <div class="page">
-<header class="header"><div class="header-label">Overview Document</div><h1>Corporate OS</h1><div class="header-sub">AI-Native Institution / Operating System 完全仕様</div><div class="header-date">April 2026</div></header>
-<div class="callout"><span class="callout-label">中核の問い</span><p>人間より優れた知能が存在する世界において、<strong>組織はどのように運営され、駆動されるべきか。</strong>Corporate OSは、この問いに対して構造的に回答するための仕様体系である。</p></div><div class="callout" style="border-left-color:var(--gold);"><span class="callout-label">設計仮説（v3）</span><p>目的に対して最適な知能の配置を設計する。その配置において人間が含まれるかどうか、どの役割を担うかは、設計の結果であり前提ではない。</p></div>
-<div class="section"><div class="section-label">定義</div><h2>Corporate OSとは何か</h2><p>Corporate OSは、超人的知能が存在する世界における組織の全体アーキテクチャを設計する仕様体系である。</p><p>コンピュータのオペレーティングシステムだけを指さない。組織が何のために存在し、どの知能がどの役割を担い、判断がどう行われ、価値がどう分配され、システム自体がどう学習・進化するかを規定する。</p><p>この仕様の目的は、「自動的に正しい設計」を与えることではない。目的は、<strong>一次的な問い漏れを取り除き、残るリスクを「解の質」と「実装の質」の問題へ押し込むこと</strong>にある。</p></div>
-<hr class="divider">
-<div class="section"><div class="section-label">仕様の構造</div><h2>3層モデル</h2><p>本仕様は、3つの層で構成される。抽象度の異なる3つのレンズで、同じ設計対象を照射する。</p><div class="model-tier"><div class="model-tier-label">第1層</div><h3>10レイヤー — 完全性の地図</h3><p>AI-native組織を抽象的に捉えるための座標系。「設計すべき論点がどの種類の制度的現実に属するか」を整理する。どのレイヤーにも属さない一次論点を残してはならない。</p></div><div class="model-tier"><div class="model-tier-label">第2層</div><h3>13次元 — 具体的な設計論点</h3><p>実際に「何を決めなければならないか」を問う。各次元は独立した設計課題であり、同時に因果的に接続されている。</p></div><div class="model-tier"><div class="model-tier-label">第3層</div><h3>5要素 — 各論点の必須回答形式</h3><p>すべての次元に対して、Invariant / Allocation / Protocol / Exception / Metric の5つを定義する。これにより、設計の抜け漏れを形式的に検証できる。</p></div></div>
-<hr class="divider">
-<div class="section"><div class="section-label">第1層</div><h2>10レイヤー</h2><p>10のレイヤーは3つの大領域に分かれる。既存のAI組織論の多くは領域Cだけを扱うが、AGI/ASI時代に決定的になるのは領域AとBである。</p><div class="layer-grid"><div class="layer-domain a">領域A — 組織は何者か</div><div class="layer-card"><div class="layer-id">L1</div><div class="layer-name">存在目的・外部正当性</div><div class="layer-question">何のために存在するのか</div></div><div class="layer-card"><div class="layer-id">L2</div><div class="layer-name">憲法・権力・責任</div><div class="layer-question">誰が何を決め、誰が責任を負うか</div></div><div class="layer-card"><div class="layer-id">L3</div><div class="layer-name">経済・分配・資源配分</div><div class="layer-question">価値をどう配るか</div></div><div class="layer-domain b">領域B — 組織はどう生きるか</div><div class="layer-card"><div class="layer-id">L4</div><div class="layer-name">社会・文化・信頼</div><div class="layer-question">共同体としてどう成立するか</div></div><div class="layer-card"><div class="layer-id">L5</div><div class="layer-name">人間の主体性・成長・意味</div><div class="layer-question">人間はどう強くなるか</div></div><div class="layer-card"><div class="layer-id">L6</div><div class="layer-name">仕事・役割・運用モデル</div><div class="layer-question">日々どう働くか</div></div><div class="layer-domain c">領域C — 組織はどう知り、行動し、進化するか</div><div class="layer-card"><div class="layer-id">L7</div><div class="layer-name">認知・知識・意思決定</div><div class="layer-question">どう判断するか</div></div><div class="layer-card"><div class="layer-id">L8</div><div class="layer-name">エージェント実行</div><div class="layer-question">どう行動するか</div></div><div class="layer-card"><div class="layer-id">L9</div><div class="layer-name">技術基盤・安全・可観測性</div><div class="layer-question">どう安全に動かすか</div></div><div class="layer-card"><div class="layer-id">L10</div><div class="layer-name">学習・適応・メタガバナンス</div><div class="layer-question">OS自体をどう改定するか</div></div></div></div>
-<hr class="divider">
-<div class="section"><div class="section-label">第2層</div><h2>13次元</h2><p>各次元は独立した設計課題であり、同時に因果的に接続されている。</p><table class="dim-table"><thead><tr><th></th><th>次元</th><th>中核の問い</th></tr></thead><tbody><tr><td>D1</td><td>Objective Function</td><td>何を最適化してよいか、何を犠牲にしてはならないか</td></tr><tr><td>D2</td><td>Legitimacy &amp; Boundary</td><td>なぜ社会的に許容されるか、権限はどこまでか</td></tr><tr><td>D3</td><td>Membership &amp; Participation</td><td>誰がメンバーで、どの権利を持つか</td></tr><tr><td>D4</td><td>Decision Rights &amp; Accountability</td><td>誰が何を決定でき、失敗時に誰が責任を負うか</td></tr><tr><td>D5</td><td>Political Economy &amp; Incentives</td><td>価値・コスト・報酬をどう配るか</td></tr><tr><td>D6</td><td>Social Order, Culture &amp; Trust</td><td>継続可能な社会秩序としてどう成立するか</td></tr><tr><td>D7</td><td>Human Development &amp; Meaning</td><td>人間はどう作者であり続けるか</td></tr><tr><td>D8</td><td>Operating Model &amp; Role Contracts</td><td>日々の仕事がどのループで回るか</td></tr><tr><td>D9</td><td>World Model, State &amp; Memory</td><td>現実をどう表現し、何を正本とするか</td></tr><tr><td>D10</td><td>Deliberation &amp; Epistemics</td><td>どう理解し、推論し、提案を形成するか</td></tr><tr><td>D11</td><td>Actuation Surface</td><td>判断がどう現実を変えるか</td></tr><tr><td>D12</td><td>Safety &amp; Observability</td><td>観測可能で、停止可能で、回復可能か</td></tr><tr><td>D13</td><td>Meta-Governance &amp; Evolution</td><td>OS自体をどう更新するか</td></tr></tbody></table></div>
-<hr class="divider">
-<div class="section"><div class="section-label">第3層</div><h2>5要素</h2><p>すべての次元が、この5つの要素を持たなければならない。13次元×5要素 = 65の設計セルが本仕様の完全性を構成する。</p><div class="elements-row"><div class="element-card"><div class="element-name">Invariant</div><div class="element-desc">破ってはならない不変条件</div></div><div class="element-card"><div class="element-name">Allocation</div><div class="element-desc">AIと人間への権限配分</div></div><div class="element-card"><div class="element-name">Protocol</div><div class="element-desc">守るべき手順</div></div><div class="element-card"><div class="element-name">Exception</div><div class="element-desc">異常時の対処</div></div><div class="element-card"><div class="element-name">Metric</div><div class="element-desc">検証可能な測定指標</div></div></div></div>
-<hr class="divider">
-<div class="section"><div class="section-label">因果接続</div><h2>4つの因果チェーン</h2><p>13次元は独立ではなく、因果的に接続されている。いずれかの鎖が切れると、制度全体が機能不全に陥る。</p><div class="chain"><div class="chain-label">Chain A</div><div class="chain-flow">D1 Objective → D4 Decision Rights → D11 Actuation → D5 Incentives</div><div class="chain-desc">目的が権限を制約し、権限が実行を制約し、実行結果がインセンティブに接続される。</div></div><div class="chain"><div class="chain-label">Chain B</div><div class="chain-flow">D3 Membership → D4 Decision Rights → D8 Operating Model → D7 Human Dev → D2 Legitimacy</div><div class="chain-desc">権利が権限を形づくり、権限が日常の仕事を形づくり、仕事が人間の主体性を保全してはじめて正当性が維持される。</div></div><div class="chain"><div class="chain-label">Chain C</div><div class="chain-flow">D9 World Model → D10 Deliberation → D4 Decision → D11 Actuation → D12 Observability → D13 Meta-Gov</div><div class="chain-desc">状態を理解し、推論し、判断し、実行し、観測し、OS自体を更新する。制度知能の全ループ。</div></div><div class="chain"><div class="chain-label">Chain D</div><div class="chain-flow">D2 Legitimacy → D1 Objective → D5 Political Economy → D6 Social Order → D2 Legitimacy</div><div class="chain-desc">正当性は入力であり出力でもある。分配と社会秩序を通じて循環する。</div></div></div>
-<hr class="divider">
-<div class="section"><div class="section-label">人間の不可譲渡な権利</div><h2>4つの権利</h2><p>能力ベースの「人間にしかできないから人間がやる」は設計原理にならない。AIの能力がその領域で人間を超えた時点で崩壊する。代わりに、人間が人間であるという存在論的事実に基づく4つの権利を定義する。</p><div class="rights-grid"><div class="right-card"><div class="right-name">離脱権</div><div class="right-desc">組織・システムからいつでも離脱できる。AIが「全体最適が損なわれる」と主張しても妨げられない。</div></div><div class="right-card"><div class="right-name">停止権</div><div class="right-desc">OSの任意の部分を即座に停止できる。事前承認は不要、事後検証は必須。</div></div><div class="right-card"><div class="right-name">受益権</div><div class="right-desc">組織が生む価値の一定割合を受け取る。AIの貢献度が100%であっても維持される。</div></div><div class="right-card"><div class="right-name">知る権利</div><div class="right-desc">OSの動作状態、意思決定の根拠、自分に関するデータの利用状況を理解可能な形式で知ることができる。</div></div></div></div>
-<hr class="divider">
-<div class="section"><div class="section-label">通時的設計</div><h2>3フェーズ移行モデル</h2><p>設計の目標状態はPhase A（AI運営、人間参加）。現在のAI能力ではPhase Aを即座に実現できないため、Phase H → C → Aの移行経路を設計する。</p><div class="phase-strip"><div class="phase-card"><div class="phase-card-id">Phase H</div><div class="phase-card-name">Human Sovereignty</div><div class="phase-card-desc">人間が最終権限を保持。AI運営の基盤を構築する出発点。</div></div><div class="phase-card"><div class="phase-card-id">Phase C</div><div class="phase-card-name">Co-Sovereignty</div><div class="phase-card-desc">領域別にAI運営を拡大。人間の参加モデルを検証する中間段階。</div></div><div class="phase-card target"><div class="phase-card-id">Phase A — 目標状態</div><div class="phase-card-name">Algorithmic Sovereignty</div><div class="phase-card-desc">AIが組織を運営し、人間が参加者として権利を行使する。</div></div></div></div>
-<hr class="divider">
-<div class="section"><div class="section-label">メタガバナンス</div><h2>ハードコア / ソフトシェル</h2><p>OSが自己改定できなければ硬直化し、無制限に改定可能であれば暴走する。この均衡を2層構造で設計する。</p><p><strong>ハードコア（改定不可能）：</strong>4つの不可譲渡な権利、およびハードコア自体の改定禁止。いかなる手続きを経ても変更できない。</p><p><strong>ソフトシェル（改定可能）：</strong>権限配分の比率、手続き、評価基準、閾値、ワークフロー。定められた改定手続きに従って変更できる。改定権は提案権・審査権・承認権・拒否権の4つに分権される。</p></div>
-<hr class="divider">
-<div class="section"><div class="section-label">設計原則</div><h2>8つの設計原則</h2><div class="principle"><div class="principle-num">01</div><div class="principle-text"><strong>AI運営を設計の出発点とする。</strong>「人間がAIにどこまで任せるか」ではなく、「AIが運営する組織に人間がどう参加するか」を問う。</div></div><div class="principle"><div class="principle-num">02</div><div class="principle-text"><strong>上位レイヤーなき下位最適化を禁止する。</strong>目的・権利・分配が定義されない状態で認知・実行を最適化すると、正当性のないシステムになる。</div></div><div class="principle"><div class="principle-num">03</div><div class="principle-text"><strong>人間の参加は設計対象そのものである。</strong>「残余タスク処理者」でも「最終承認者」でもなく、主体性・意味・成長・関係性の設計が必要。</div></div><div class="principle"><div class="principle-num">04</div><div class="principle-text"><strong>能力ベースの正当化を設計原理にしない。</strong>「人間にしかできないから」はAI能力が超えた時点で崩壊する。権利は受益者性と手続的正統性に基づく。</div></div><div class="principle"><div class="principle-num">05</div><div class="principle-text"><strong>権利と職能を区別する。</strong>不可譲渡なのは「権利」であり「職能」ではない。職能は委譲しうるが、権利はAI能力と無関係に維持される。</div></div><div class="principle"><div class="principle-num">06</div><div class="principle-text"><strong>反省は出力改善だけでなく制度改善へ拡張する。</strong>ポリシー、権限配分、文化設計の修正まで含む。</div></div><div class="principle"><div class="principle-num">07</div><div class="principle-text"><strong>分配の設計を後回しにしない。</strong>知能の限界より分配のルールがボトルネックになる時代が来る。</div></div><div class="principle"><div class="principle-num">08</div><div class="principle-text"><strong>速度より正当性、正当性より更新可能性。</strong>短期は速度、中期は正当性、長期は更新可能性が決定的になる。</div></div></div>
-<hr class="divider">
-<div class="section"><div class="section-label">完成度</div><h2>監査結果</h2><p>13次元すべてが5要素を持ち、4つの主要因果チェーンが検証され、各次元に測定指標が存在する。スコープ内（平時の完全性仕様）において、一次設計レベルで完全である。</p><p>残るのはカテゴリ発見ではなく、<strong>refinement、contradiction testing、concrete implementation</strong>である。</p></div>
-<div class="colophon"><p>Corporate OS — AI-Native Institution / Operating System</p><p>13 Dimensions × 5 Elements — Complete Spec</p></div>
+  <header class="header">
+    <div class="header-label">Overview Document</div>
+    <h1>Corporate OS</h1>
+    <div class="header-sub">AI-Native Institution / Operating System Design Framework</div>
+    <div class="header-date">April 2026</div>
+  </header>
+
+  <div class="callout">
+    <span class="callout-label">中核の問い</span>
+    <p>人間より優れた知能が存在する世界において、<strong>組織はどのように運営され、駆動されるべきか。</strong> Corporate OS は、この問いに対して構造的に回答するための仕様体系である。</p>
+  </div>
+  <div class="callout" style="border-left-color:var(--gold);">
+    <span class="callout-label">設計仮説</span>
+    <p>目的に対して最適な知能の配置を設計する。その配置において人間が含まれるかどうか、どの役割を担うかは、設計の結果であり前提ではない。</p>
+  </div>
+
+  <section class="section">
+    <div class="section-label">Definition</div>
+    <h2>Corporate OSとは何か</h2>
+    <div class="hero-grid">
+      <div class="hero-panel">
+        <div class="hero-title">制度のための OS</div>
+        <div class="hero-body">
+          Corporate OS は、単なる agent runtime や workflow tool ではない。組織が何のために存在し、誰が権利を持ち、どう判断し、どう実行し、どう学習し、どう更新するかまで含んだ制度設計の仕様である。<br><br>
+          さらに、知識を会話や文書の断片のまま放置せず、<strong>再利用可能な skill を第一級の外部知識資産として扱う</strong>ことで、制度知能を episodic ではなく cumulative にする。
+        </div>
+      </div>
+      <div class="logic-strip">
+        <div class="logic-card">
+          <div class="logic-num">01 / WHY</div>
+          <div class="logic-name">存在理由と正当性</div>
+          <div class="logic-desc">目的、境界、権利、責任を決める。</div>
+        </div>
+        <div class="logic-card">
+          <div class="logic-num">02 / HOW</div>
+          <div class="logic-name">日常運用の構造</div>
+          <div class="logic-desc">役割、ループ、例外、fallback を設計する。</div>
+        </div>
+        <div class="logic-card">
+          <div class="logic-num">03 / THINK</div>
+          <div class="logic-name">状態・記憶・skill</div>
+          <div class="logic-desc">世界モデル、memory、skill asset を制度的に扱う。</div>
+        </div>
+        <div class="logic-card">
+          <div class="logic-num">04 / EVOLVE</div>
+          <div class="logic-name">観測と改定</div>
+          <div class="logic-desc">安全に観測し、 review を経て OS 自体を更新する。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Structure</div>
+    <h2>3層モデル</h2>
+    <p>同じ組織を、3つの異なる解像度で記述する。上から順に読むと、抽象原理から具体仕様へ自然に降りていける。</p>
+    <div class="lens-stack">
+      <div class="lens-card">
+        <div class="lens-index">Layer 1</div>
+        <div>
+          <div class="lens-title">10レイヤー</div>
+          <div class="lens-desc">設計論点がどの種類の制度的現実に属するかを整理する「完全性の地図」。</div>
+        </div>
+      </div>
+      <div class="lens-arrow">↓</div>
+      <div class="lens-card">
+        <div class="lens-index">Layer 2</div>
+        <div>
+          <div class="lens-title">13次元</div>
+          <div class="lens-desc">実際に何を決めなければならないかを問う、具体的な設計論点。</div>
+        </div>
+      </div>
+      <div class="lens-arrow">↓</div>
+      <div class="lens-card">
+        <div class="lens-index">Layer 3</div>
+        <div>
+          <div class="lens-title">5要素</div>
+          <div class="lens-desc">各論点に必ず答えるべき形式。Invariant / Allocation / Protocol / Exception / Metric。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Map</div>
+    <h2>10レイヤー</h2>
+    <p>既存のAI組織論の多くは「知る・動く・学ぶ」の後半だけを扱う。Corporate OS は、その前段にある目的・権利・分配・文化までを同じ地図の上で扱う。</p>
+    <div class="domain-stack">
+      <div class="domain-band">
+        <div class="domain-top">
+          <div class="domain-name">領域A — 組織は何者か</div>
+          <div class="domain-id">L1-L3</div>
+        </div>
+        <div class="layer-pills">
+          <div class="layer-pill red"><div class="layer-pill-id">L1</div><div class="layer-pill-name">存在目的・外部正当性</div><div class="layer-pill-desc">何のために存在するのか</div></div>
+          <div class="layer-pill red"><div class="layer-pill-id">L2</div><div class="layer-pill-name">憲法・権力・責任</div><div class="layer-pill-desc">誰が何を決め、誰が責任を負うか</div></div>
+          <div class="layer-pill red"><div class="layer-pill-id">L3</div><div class="layer-pill-name">経済・分配・資源配分</div><div class="layer-pill-desc">価値をどう配るか</div></div>
+        </div>
+      </div>
+      <div class="domain-band">
+        <div class="domain-top">
+          <div class="domain-name">領域B — 組織はどう生きるか</div>
+          <div class="domain-id">L4-L6</div>
+        </div>
+        <div class="layer-pills">
+          <div class="layer-pill gold"><div class="layer-pill-id">L4</div><div class="layer-pill-name">社会・文化・信頼</div><div class="layer-pill-desc">共同体としてどう成立するか</div></div>
+          <div class="layer-pill gold"><div class="layer-pill-id">L5</div><div class="layer-pill-name">人間の主体性・成長・意味</div><div class="layer-pill-desc">人間はどう強くなるか</div></div>
+          <div class="layer-pill gold"><div class="layer-pill-id">L6</div><div class="layer-pill-name">仕事・役割・運用モデル</div><div class="layer-pill-desc">日々どう働くか</div></div>
+        </div>
+      </div>
+      <div class="domain-band">
+        <div class="domain-top">
+          <div class="domain-name">領域C — 組織はどう知り、行動し、進化するか</div>
+          <div class="domain-id">L7-L10</div>
+        </div>
+        <div class="layer-pills">
+          <div class="layer-pill blue"><div class="layer-pill-id">L7</div><div class="layer-pill-name">認知・知識・意思決定</div><div class="layer-pill-desc">どう判断するか</div></div>
+          <div class="layer-pill blue"><div class="layer-pill-id">L8</div><div class="layer-pill-name">エージェント実行</div><div class="layer-pill-desc">どう行動するか</div></div>
+          <div class="layer-pill blue"><div class="layer-pill-id">L9</div><div class="layer-pill-name">技術基盤・安全・可観測性</div><div class="layer-pill-desc">どう安全に動かすか</div></div>
+          <div class="layer-pill blue"><div class="layer-pill-id">L10</div><div class="layer-pill-name">学習・適応・メタガバナンス</div><div class="layer-pill-desc">OS自体をどう改定するか</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Dimensions</div>
+    <h2>13次元</h2>
+    <p>13次元は単なる一覧ではなく、制度設計を漏れなく進めるための論点セットである。ただし、単純な並列集合として読むより、<strong>上位が下位を制約し、下位が上位を実装し、その結果をまた上位へ返す縦構造</strong>として読む方が理解しやすい。</p>
+    <div class="dimension-stack">
+      <div class="dim-layer-band">
+        <div class="dim-layer-top">
+          <div class="dim-layer-title">Layer 1: 制度の土台</div>
+          <div class="dim-layer-sub">D1-D4 / defines the constitutional frame</div>
+        </div>
+        <div class="dim-layer-desc">まず決まるのは、何を目的とし、なぜ正当で、誰が参加し、誰が責任を負うかである。ここが曖昧だと、その下の運用や知能化はすべて不安定になる。</div>
+        <div class="dim-node-grid">
+          <div class="dim-node red"><div class="dim-node-id">D1</div><div class="dim-node-name">Objective Function</div><div class="dim-node-desc">何を最適化してよいか、何を犠牲にしてはならないか</div></div>
+          <div class="dim-node red"><div class="dim-node-id">D2</div><div class="dim-node-name">Legitimacy &amp; Boundary</div><div class="dim-node-desc">なぜ社会的に許容されるか、権限はどこまでか</div></div>
+          <div class="dim-node red"><div class="dim-node-id">D3</div><div class="dim-node-name">Membership &amp; Participation</div><div class="dim-node-desc">誰がメンバーで、どの権利を持つか</div></div>
+          <div class="dim-node red"><div class="dim-node-id">D4</div><div class="dim-node-name">Decision Rights &amp; Accountability</div><div class="dim-node-desc">誰が何を決定でき、失敗時に誰が責任を負うか</div></div>
+        </div>
+      </div>
+
+      <div class="dim-rel-arrow">↓ <span>constrains</span> ↓</div>
+
+      <div class="dim-layer-band">
+        <div class="dim-layer-top">
+          <div class="dim-layer-title">Layer 2: 日常の運用と人間参加</div>
+          <div class="dim-layer-sub">D5-D8 / translates principles into lived operations</div>
+        </div>
+        <div class="dim-layer-desc">上位で決めた原理は、分配、文化、人間の成長、業務ループとして日常に落ちる。ここは「制度が現実にどう生きるか」を担う中間層である。</div>
+        <div class="dim-node-grid">
+          <div class="dim-node gold"><div class="dim-node-id">D5</div><div class="dim-node-name">Political Economy &amp; Incentives</div><div class="dim-node-desc">価値・コスト・報酬をどう配るか</div></div>
+          <div class="dim-node gold"><div class="dim-node-id">D6</div><div class="dim-node-name">Social Order, Culture &amp; Trust</div><div class="dim-node-desc">継続可能な社会秩序としてどう成立するか</div></div>
+          <div class="dim-node gold"><div class="dim-node-id">D7</div><div class="dim-node-name">Human Development &amp; Meaning</div><div class="dim-node-desc">人間はどう作者であり続けるか</div></div>
+          <div class="dim-node gold"><div class="dim-node-id">D8</div><div class="dim-node-name">Operating Model &amp; Role Contracts</div><div class="dim-node-desc">日々の仕事がどのループで回るか</div></div>
+        </div>
+      </div>
+
+      <div class="dim-rel-arrow">↓ <span>is executed and learned through</span> ↓</div>
+
+      <div class="dim-layer-band">
+        <div class="dim-layer-top">
+          <div class="dim-layer-title">Layer 3: 制度知能のループ</div>
+          <div class="dim-layer-sub">D9-D13 / state, reasoning, execution, observation, evolution</div>
+        </div>
+        <div class="dim-layer-desc">制度は状態を持ち、推論し、行動し、観測し、更新される。この下層は単なる実装詳細ではなく、上位原理を実際に回し続けるための知能エンジンである。</div>
+        <div class="dim-node-grid">
+          <div class="dim-node blue"><div class="dim-node-id">D9</div><div class="dim-node-name">World Model, State &amp; Memory</div><div class="dim-node-desc">現実・記憶・skill をどう表現し、何を正本とするか</div></div>
+          <div class="dim-node blue"><div class="dim-node-id">D10</div><div class="dim-node-name">Deliberation &amp; Epistemics</div><div class="dim-node-desc">どう理解し、推論し、skill を組み合わせて提案を形成するか</div></div>
+          <div class="dim-node blue"><div class="dim-node-id">D11</div><div class="dim-node-name">Actuation Surface</div><div class="dim-node-desc">判断がどう現実を変えるか</div></div>
+          <div class="dim-node blue"><div class="dim-node-id">D12</div><div class="dim-node-name">Safety &amp; Observability</div><div class="dim-node-desc">観測可能で、停止可能で、回復可能か</div></div>
+          <div class="dim-node blue"><div class="dim-node-id">D13</div><div class="dim-node-name">Meta-Governance &amp; Evolution</div><div class="dim-node-desc">OS と skill 資産自体をどう更新するか</div></div>
+        </div>
+      </div>
+
+      <div class="dim-rel-arrow">↑ <span>feeds back to revise the upper layers</span> ↑</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Protocol Form</div>
+    <h2>5要素</h2>
+    <p>すべての次元は、同じ形式で記述される。13次元 × 5要素 = 65セルが、設計の最低完全性を構成する。</p>
+    <p>重要なのは、これは単なる並列ラベルではなく、<strong>1つの論点を「守ること・担うこと・回すこと・崩れた時・確かめること」まで展開する記述形式</strong>だという点である。</p>
+    <div class="elements-row">
+      <div class="element-card"><div class="element-name">Invariant</div><div class="element-desc">破ってはならない不変条件</div></div>
+      <div class="element-card"><div class="element-name">Allocation</div><div class="element-desc">AI と人間への権限配分</div></div>
+      <div class="element-card"><div class="element-name">Protocol</div><div class="element-desc">守るべき標準手順</div></div>
+      <div class="element-card"><div class="element-name">Exception</div><div class="element-desc">異常時の扱い</div></div>
+      <div class="element-card"><div class="element-name">Metric</div><div class="element-desc">検証可能な測定指標</div></div>
+    </div>
+    <div class="protocol-demo">
+      <div class="protocol-anchor">
+        <div class="protocol-anchor-k">EXAMPLE DIMENSION</div>
+        <div class="protocol-anchor-title">D4 Decision Rights &amp; Accountability</div>
+        <div class="protocol-anchor-desc">「誰が決められるか」を、理念だけでなく運用と監査まで落とし切ると、5要素は次のように展開される。</div>
+      </div>
+      <div class="protocol-arrow">→</div>
+      <div class="protocol-flow">
+        <div class="protocol-step">
+          <div class="protocol-step-top"><div class="protocol-step-name">Invariant</div><div class="protocol-step-role">何を守るか</div></div>
+          <div class="protocol-step-body">権限なき binding decision は存在してはならない。</div>
+        </div>
+        <div class="protocol-step">
+          <div class="protocol-step-top"><div class="protocol-step-name">Allocation</div><div class="protocol-step-role">誰が担うか</div></div>
+          <div class="protocol-step-body">AI、責任者、人間レビュー主体に判断権と責任を分配する。</div>
+        </div>
+        <div class="protocol-step">
+          <div class="protocol-step-top"><div class="protocol-step-name">Protocol</div><div class="protocol-step-role">どう回すか</div></div>
+          <div class="protocol-step-body">authority basis、approval path、rollback expectation を標準経路として持たせる。</div>
+        </div>
+        <div class="protocol-step">
+          <div class="protocol-step-top"><div class="protocol-step-name">Exception</div><div class="protocol-step-role">崩れた時どうするか</div></div>
+          <div class="protocol-step-body">高リスク・高不確実性・高 rights impact のときは強い人間参加へエスカレーションする。</div>
+        </div>
+        <div class="protocol-step">
+          <div class="protocol-step-top"><div class="protocol-step-name">Metric</div><div class="protocol-step-role">どう確かめるか</div></div>
+          <div class="protocol-step-body">decision-to-action traceability、override、review coverage で有効性を監査する。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Knowledge Grammar</div>
+    <h2>workflow / memory / skill の区別</h2>
+    <p>今回の拡張で最も重要なのは、知識を単に保存するのではなく、制度的に再利用できる単位へ変換する点にある。</p>
+    <div class="triad">
+      <div class="triad-card">
+        <div class="triad-label">OPERATING FLOW</div>
+        <div class="triad-title">workflow</div>
+        <div class="triad-body">制度運用の流れ。誰が起点となり、どこで handoff し、どこに exception と fallback があるかを定義する。</div>
+      </div>
+      <div class="triad-arrow">→</div>
+      <div class="triad-card">
+        <div class="triad-label">INSTITUTIONAL MEMORY</div>
+        <div class="triad-title">memory</div>
+        <div class="triad-body">制度が保持する知識と履歴。semantic, episodic, procedural, evaluative, normative に分かれる。</div>
+      </div>
+      <div class="triad-arrow">→</div>
+      <div class="triad-card">
+        <div class="triad-label">EXECUTABLE REUSE</div>
+        <div class="triad-title">skill</div>
+        <div class="triad-body">memory を executable にし、 workflow に再注入する reusable capability unit。発見・評価・再利用・改定の対象になる。</div>
+      </div>
+    </div>
+    <div class="bridge-note">
+      <strong>ポイント:</strong> playbook やコードが存在するだけでは制度資産にならない。discoverability、relation、approval state、quality gate を持つとき、はじめて cumulative な知能資産になる。
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Causal Engine</div>
+    <h2>4つの因果チェーン</h2>
+    <p>13次元は独立ではない。とくに D9-D13 は、制度知能が「知る -> 判断する -> 実行する -> 観測する -> 更新する」までを閉じる中核ループである。</p>
+    <div class="chain-grid">
+      <div class="chain">
+        <div class="chain-label">Chain A</div>
+        <div class="chain-flow">D1 Objective → D4 Decision Rights → D11 Actuation → D5 Incentives</div>
+        <div class="chain-desc">目的が権限を制約し、権限が実行を制約し、実行結果がインセンティブへ返る。</div>
+      </div>
+      <div class="chain">
+        <div class="chain-label">Chain B</div>
+        <div class="chain-flow">D3 Membership → D4 Decision Rights → D8 Operating Model → D7 Human Dev → D2 Legitimacy</div>
+        <div class="chain-desc">権利が日常の運用と人間の意味を通じて、長期的な正当性へ戻る。</div>
+      </div>
+      <div class="chain">
+        <div class="chain-label">Chain C</div>
+        <div class="chain-flow">D9 World Model &amp; Skill Assets → D10 Deliberation → D4 Decision → D11 Actuation → D12 Observability → D13 Meta-Gov</div>
+        <div class="chain-desc">状態と skill 資産を理解し、提案を形成し、実行し、観測し、OS と skill 資産自体を更新する。制度知能の主ループ。</div>
+      </div>
+      <div class="chain">
+        <div class="chain-label">Chain D</div>
+        <div class="chain-flow">D2 Legitimacy → D1 Objective → D5 Political Economy → D6 Social Order → D2 Legitimacy</div>
+        <div class="chain-desc">正当性は入力であり出力でもある。分配と社会秩序を通じて循環する。</div>
+      </div>
+    </div>
+
+    <div class="visual-caption" style="margin-top:24px">Institutional Intelligence Loop</div>
+    <div class="loop-rail">
+      <div class="loop-card">
+        <div class="loop-k">D9</div>
+        <div class="loop-name">State</div>
+        <div class="loop-desc">世界状態、記憶、skill 資産を canonical に保つ。</div>
+      </div>
+      <div class="loop-card">
+        <div class="loop-k">D10</div>
+        <div class="loop-name">Deliberate</div>
+        <div class="loop-desc">relevant skill を使いながら option を形成する。</div>
+      </div>
+      <div class="loop-card">
+        <div class="loop-k">D11</div>
+        <div class="loop-name">Commit</div>
+        <div class="loop-desc">判断を controlled actuation surface に流す。</div>
+      </div>
+      <div class="loop-card">
+        <div class="loop-k">D12</div>
+        <div class="loop-name">Observe</div>
+        <div class="loop-desc">trace と評価で安全性と有効性を確認する。</div>
+      </div>
+      <div class="loop-card">
+        <div class="loop-k">D13</div>
+        <div class="loop-name">Evolve</div>
+        <div class="loop-desc">policy と skill 資産を review を経て更新する。</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Human Guarantees</div>
+    <h2>4つの不可譲渡な権利</h2>
+    <p>能力ベースの「人間にしかできないから人間がやる」は設計原理にならない。代わりに、人間が人間であることに基づく rights bundle を定義する。</p>
+    <div class="rights-bundle"><strong>rights bundle の考え方:</strong> 4つの権利は別々の福利厚生ではない。理解し、停止し、価値を受け取り、最後は離脱できるという一連の最低保証として機能する。</div>
+    <div class="rights-grid">
+      <div class="right-card"><div class="right-name">離脱権</div><div class="right-desc">組織・システムからいつでも離脱できる。全体最適の名目でも妨げられない。</div></div>
+      <div class="right-card"><div class="right-name">停止権</div><div class="right-desc">OS の任意の部分を即座に停止できる。事前承認不要、事後検証必須。</div></div>
+      <div class="right-card"><div class="right-name">受益権</div><div class="right-desc">組織が生む価値の一定割合を受け取る。AI 貢献度と無関係に保持される。</div></div>
+      <div class="right-card"><div class="right-name">知る権利</div><div class="right-desc">動作状態、判断根拠、自分に関するデータ利用を理解可能な形式で知ることができる。</div></div>
+    </div>
+    <div class="rights-flow">
+      <div class="rights-step">
+        <div class="rights-step-k">01</div>
+        <div class="rights-step-name">知る</div>
+        <div class="rights-step-desc">状況と影響を理解できるから、形式的承認者で終わらない。</div>
+      </div>
+      <div class="rights-step">
+        <div class="rights-step-k">02</div>
+        <div class="rights-step-name">止める</div>
+        <div class="rights-step-desc">価値違反や異常時に、通常フローを迂回して介入できる。</div>
+      </div>
+      <div class="rights-step">
+        <div class="rights-step-k">03</div>
+        <div class="rights-step-name">受け取る</div>
+        <div class="rights-step-desc">制度が生む価値に対し、人間が受益主体であり続ける。</div>
+      </div>
+      <div class="rights-step">
+        <div class="rights-step-k">04</div>
+        <div class="rights-step-name">離脱する</div>
+        <div class="rights-step-desc">最終的に制度から退出できることで、従属ではなく参加になる。</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Temporal Design</div>
+    <h2>3フェーズ移行モデル</h2>
+    <p>設計の目標は Phase A だが、現在の能力ではそこへ直行できない。したがって、権限配分と改定範囲をフェーズごとに変化させる。</p>
+    <div class="phase-strip">
+      <div class="phase-card">
+        <div class="phase-card-id">PHASE H</div>
+        <div class="phase-card-name">Human Sovereignty</div>
+        <div class="phase-card-desc">人間が最終権限を保持。AI 運営の基盤を構築する出発点。</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-card">
+        <div class="phase-card-id">PHASE C</div>
+        <div class="phase-card-name">Co-Sovereignty</div>
+        <div class="phase-card-desc">領域別に AI 運営を拡大。主権者を判断ごとに明確化する中間段階。</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-card target">
+        <div class="phase-card-id">PHASE A</div>
+        <div class="phase-card-name">Algorithmic Sovereignty</div>
+        <div class="phase-card-desc">AI が組織を運営し、人間は権利行使と意味ある参加を担う。</div>
+      </div>
+    </div>
+    <div class="phase-matrix">
+      <div class="phase-matrix-cell head"></div>
+      <div class="phase-matrix-cell head">Phase H</div>
+      <div class="phase-matrix-cell head">Phase C</div>
+      <div class="phase-matrix-cell head">Phase A</div>
+      <div class="phase-matrix-cell row">主権の所在</div>
+      <div class="phase-matrix-cell">人間が全レイヤーの最終権限を保持</div>
+      <div class="phase-matrix-cell">領域ごとに人間主権と AI 主権が併存</div>
+      <div class="phase-matrix-cell">AI が運営主体、人間は参加主体</div>
+      <div class="phase-matrix-cell row">人間の役割</div>
+      <div class="phase-matrix-cell">最終承認・例外裁定・制度改定</div>
+      <div class="phase-matrix-cell">上位原則保持・例外裁定・境界管理</div>
+      <div class="phase-matrix-cell">権利行使・意味ある参加・ veto 的関与</div>
+      <div class="phase-matrix-cell row">不変なもの</div>
+      <div class="phase-matrix-cell fixed">hard-core rights は維持</div>
+      <div class="phase-matrix-cell fixed">hard-core rights は維持</div>
+      <div class="phase-matrix-cell fixed">hard-core rights は維持</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Meta-Governance</div>
+    <h2>ハードコア / ソフトシェル</h2>
+    <p>OS が自己改定できなければ硬直化し、無制限に改定可能であれば暴走する。この均衡を 2 層構造で設計する。</p>
+    <div class="split-grid">
+      <div class="split-card red">
+        <div class="split-title">Hard-core</div>
+        <div class="split-body">4つの不可譲渡な権利、および hard-core 自体の改定禁止。いかなる手続きを経ても変更できない。</div>
+        <div class="chip-row">
+          <div class="chip">Exit</div>
+          <div class="chip">Kill Switch</div>
+          <div class="chip">Benefit</div>
+          <div class="chip">Transparency</div>
+        </div>
+      </div>
+      <div class="split-card blue">
+        <div class="split-title">Soft-shell</div>
+        <div class="split-body">権限配分、手続き、閾値、ワークフロー、評価基準、skill 資産。定められた review と approval を経て改定できる。</div>
+        <div class="chip-row">
+          <div class="chip">Thresholds</div>
+          <div class="chip">Procedures</div>
+          <div class="chip">Workflow</div>
+          <div class="chip">Skill Assets</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Principles</div>
+    <h2>8つの設計原則</h2>
+    <p>8つの原則は同じ階層に並んでいるわけではない。読む順序としては、<strong>前提 -> ガバナンス -> 人間参加 -> 進化</strong> の4群に分けると理解しやすい。</p>
+    <div class="principle-groups">
+      <div class="principle-group">
+        <div class="principle-group-title">A. 出発点の原則</div>
+        <div class="principle-group-sub">what frame we start from</div>
+        <div class="principle"><div class="principle-num">01</div><div class="principle-text"><strong>AI運営を設計の出発点とする。</strong> 「人間がAIにどこまで任せるか」ではなく、「AIが運営する組織に人間がどう参加するか」を問う。</div></div>
+        <div class="principle"><div class="principle-num">02</div><div class="principle-text"><strong>上位レイヤーなき下位最適化を禁止する。</strong> 目的・権利・分配が定義されない状態で認知・実行を最適化すると、正当性のないシステムになる。</div></div>
+      </div>
+      <div class="principle-group">
+        <div class="principle-group-title">B. ガバナンスの原則</div>
+        <div class="principle-group-sub">how legitimacy survives capability growth</div>
+        <div class="principle"><div class="principle-num">04</div><div class="principle-text"><strong>能力ベースの正当化を設計原理にしない。</strong> 「人間にしかできないから」は AI 能力が超えた時点で崩壊する。権利は受益者性と手続的正統性に基づく。</div></div>
+        <div class="principle"><div class="principle-num">05</div><div class="principle-text"><strong>権利と職能を区別する。</strong> 不可譲渡なのは「権利」であり「職能」ではない。職能は委譲しうるが、権利は AI 能力と無関係に維持される。</div></div>
+      </div>
+      <div class="principle-group">
+        <div class="principle-group-title">C. 人間参加の原則</div>
+        <div class="principle-group-sub">how humans remain participants, not clerks</div>
+        <div class="principle"><div class="principle-num">03</div><div class="principle-text"><strong>人間の参加は設計対象そのものである。</strong> 「残余タスク処理者」でも「最終承認者」でもなく、主体性・意味・成長・関係性の設計が必要。</div></div>
+        <div class="principle"><div class="principle-num">07</div><div class="principle-text"><strong>分配の設計を後回しにしない。</strong> 知能の限界より分配のルールがボトルネックになる時代が来る。</div></div>
+      </div>
+      <div class="principle-group">
+        <div class="principle-group-title">D. 進化の原則</div>
+        <div class="principle-group-sub">how the OS keeps changing without collapse</div>
+        <div class="principle"><div class="principle-num">06</div><div class="principle-text"><strong>反省は出力改善だけでなく制度改善へ拡張する。</strong> ポリシー、権限配分、文化設計、skill 資産の更新まで含む。</div></div>
+        <div class="principle"><div class="principle-num">08</div><div class="principle-text"><strong>速度より正当性、正当性より更新可能性。</strong> 短期は速度、中期は正当性、長期は更新可能性が決定的になる。</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <div class="section-label">Audit View</div>
+    <h2>この仕様で何を見落としにくくなるか</h2>
+    <div class="metric-row">
+      <div class="metric-card">
+        <div class="metric-label">STRUCTURE</div>
+        <div class="metric-name">問い漏れ</div>
+        <div class="metric-desc">13次元により、制度設計の論点が表に出る。</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">OPERATIONS</div>
+        <div class="metric-name">責任の空洞化</div>
+        <div class="metric-desc">権利・判断権・rollback・例外処理の不足が検出しやすくなる。</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">INTELLIGENCE</div>
+        <div class="metric-name">再利用不能な知識</div>
+        <div class="metric-desc">memory と workflow の間に skill asset を立てることで、経験が累積しやすくなる。</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">EVOLUTION</div>
+        <div class="metric-name">暴走か硬直化</div>
+        <div class="metric-desc">hard-core / soft-shell により、改定可能性と制約を両立する。</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="colophon">
+    <p>Corporate OS — AI-Native Institution / Operating System</p>
+    <p>13 Dimensions × 5 Elements — Institutional Design Framework</p>
+  </div>
 </div>
 </body>
 </html>
